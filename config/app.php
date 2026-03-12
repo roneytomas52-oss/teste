@@ -54,9 +54,11 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => rtrim(preg_replace('#/public/?$#', '', env('APP_URL', 'http://localhost')), '/'),
 
-    'asset_url' => env('ASSET_URL', null),
+    'asset_url' => env('ASSET_URL')
+        ? rtrim(preg_replace('#/public/?$#', '', env('ASSET_URL')), '/')
+        : null,
 
     /*
     |--------------------------------------------------------------------------
