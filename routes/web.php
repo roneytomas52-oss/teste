@@ -29,6 +29,18 @@ use Illuminate\Support\Facades\Http;
 */
 
 
+Route::get('public/assets/{path}', function ($path) {
+    $normalizedPath = ltrim($path, '/');
+    $assetPath = 'assets/' . $normalizedPath;
+
+    if (file_exists(public_path($assetPath))) {
+        return redirect('/' . $assetPath, 301);
+    }
+
+    abort(404);
+})->where('path', '.*');
+
+
 Route::post('/subscribeToTopic', [FirebaseController::class, 'subscribeToTopic']);
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('lang/{locale}', 'HomeController@lang')->name('lang');
