@@ -10,31 +10,8 @@ $phone = get_business_setting('phone', '(11) 9999-9999');
 $email = get_business_setting('email_address', 'contato@foxdelivery.com.br');
 $address = get_business_setting('address', 'São Paulo - SP');
 $download = get_data_setting('admin_landing_page', 'download_user_app_links', []);
-$flutter = get_data_settings_by_type('flutter_landing_page');
-$social = get_social_media();
-$landingPageLinks = get_business_setting('landing_page_links', []);
 
-$logoUrl = $logo ? storage_url('business', (string) $logo) : '';
-
-$menu = [
-    ['label' => 'Início', 'url' => './index.php', 'key' => 'home'],
-    ['label' => 'Sobre Nós', 'url' => './sobre.php', 'key' => 'about'],
-    ['label' => 'Contato', 'url' => './contato.php', 'key' => 'contact'],
-    ['label' => 'Cadastro Loja', 'url' => './cadastro-loja.php', 'key' => 'store'],
-    ['label' => 'Cadastro Entregador', 'url' => './cadastro-entregador.php', 'key' => 'delivery'],
-];
-
-$orderUrl = is_array($landingPageLinks) && !empty($landingPageLinks['web_app_url'])
-    ? (string) $landingPageLinks['web_app_url']
-    : sixammart_url('/');
-
-$storeRegisterUrl = !empty($flutter['join_seller_button_url'])
-    ? (string) $flutter['join_seller_button_url']
-    : sixammart_url('vendor/apply');
-
-$deliveryRegisterUrl = !empty($flutter['join_delivery_man_button_url'])
-    ? (string) $flutter['join_delivery_man_button_url']
-    : sixammart_url('deliveryman/apply');
+$logoUrl = $logo ? sixammart_url('storage/app/public/business/' . ltrim((string) $logo, '/')) : '';
 
 $pageTitle = $pageTitle ?? 'Fox Delivery';
 $current = $current ?? 'home';
@@ -59,9 +36,11 @@ $content = $content ?? '';
             <?php endif; ?>
         </a>
         <nav>
-            <?php foreach ($menu as $item): ?>
-                <a class="<?= $current === $item['key'] ? 'active' : '' ?>" href="<?= e($item['url']) ?>"><?= e($item['label']) ?></a>
-            <?php endforeach; ?>
+            <a class="<?= $current === 'home' ? 'active' : '' ?>" href="./index.php">Início</a>
+            <a class="<?= $current === 'about' ? 'active' : '' ?>" href="./sobre.php">Sobre Nós</a>
+            <a class="<?= $current === 'contact' ? 'active' : '' ?>" href="./contato.php">Contato</a>
+            <a class="<?= $current === 'store' ? 'active' : '' ?>" href="./cadastro-loja.php">Cadastro Loja</a>
+            <a class="<?= $current === 'delivery' ? 'active' : '' ?>" href="./cadastro-entregador.php">Cadastro Entregador</a>
         </nav>
         <div class="actions">
             <a class="btn ghost" href="<?= e(sixammart_url('login/admin')) ?>">Entrar</a>
@@ -77,19 +56,11 @@ $content = $content ?? '';
         <div>
             <strong><?= e((string) $businessName) ?></strong>
             <p>Landing standalone sincronizada com 6amMart (admin + banco)</p>
-            <?php if ($social): ?>
-                <div class="social">
-                    <?php foreach ($social as $sm): ?>
-                        <a href="<?= e((string) ($sm['link'] ?? '#')) ?>" target="_blank"><?= e((string) ($sm['name'] ?? 'Rede')) ?></a>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
         </div>
         <div>
             <p>📞 <?= e((string) $phone) ?></p>
             <p>✉️ <?= e((string) $email) ?></p>
             <p>📍 <?= e((string) $address) ?></p>
-            <p><a class="order-link" href="<?= e($orderUrl) ?>">Peça agora no app/web</a></p>
         </div>
     </div>
 </footer>
