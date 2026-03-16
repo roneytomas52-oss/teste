@@ -9,7 +9,6 @@ $logo = get_business_setting('logo', '');
 $phone = get_business_setting('phone', '(11) 9999-9999');
 $email = get_business_setting('email_address', 'contato@foxdelivery.com.br');
 $address = get_business_setting('address', 'São Paulo - SP');
-$download = get_data_setting('admin_landing_page', 'download_user_app_links', []);
 
 $logoUrl = $logo ? sixammart_url('storage/app/public/business/' . ltrim((string) $logo, '/')) : '';
 
@@ -39,11 +38,11 @@ $content = $content ?? '';
             <a class="<?= $current === 'home' ? 'active' : '' ?>" href="./index.php">Início</a>
             <a class="<?= $current === 'about' ? 'active' : '' ?>" href="./sobre.php">Sobre Nós</a>
             <a class="<?= $current === 'contact' ? 'active' : '' ?>" href="./contato.php">Contato</a>
-            <a class="<?= $current === 'store' ? 'active' : '' ?>" href="./cadastro-loja.php">Cadastro Loja</a>
+            <a class="<?= $current === 'store' ? 'active' : '' ?>" href="./cadastro-loja.php">Cadastro de Lojas</a>
             <a class="<?= $current === 'delivery' ? 'active' : '' ?>" href="./cadastro-entregador.php">Cadastro Entregador</a>
         </nav>
         <div class="actions">
-            <a class="btn ghost" href="<?= e(sixammart_url('login/admin')) ?>">Entrar</a>
+            <a class="btn ghost" href="<?= e(sixammart_url('login')) ?>">Entrar</a>
             <a class="btn" href="#apps">Baixar App</a>
         </div>
     </div>
@@ -55,7 +54,7 @@ $content = $content ?? '';
     <div class="container footer-grid">
         <div>
             <strong><?= e((string) $businessName) ?></strong>
-            <p>Landing standalone sincronizada com 6amMart (admin + banco)</p>
+            <p>Mercado, restaurantes, farmácia e conveniência em um só app.</p>
         </div>
         <div>
             <p>📞 <?= e((string) $phone) ?></p>
