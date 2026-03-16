@@ -15,6 +15,8 @@ $logoUrl = $logo ? sixammart_url('storage/app/public/business/' . ltrim((string)
 $pageTitle = $pageTitle ?? 'Fox Delivery';
 $current = $current ?? 'home';
 $content = $content ?? '';
+$hidePageHeader = $hidePageHeader ?? false;
+$hidePageFooter = $hidePageFooter ?? false;
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -25,6 +27,7 @@ $content = $content ?? '';
     <link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
+<?php if (!$hidePageHeader): ?>
 <header class="header">
     <div class="container nav">
         <a class="brand" href="./index.php">
@@ -47,9 +50,11 @@ $content = $content ?? '';
         </div>
     </div>
 </header>
+<?php endif; ?>
 
 <main><?= $content ?></main>
 
+<?php if (!$hidePageFooter): ?>
 <footer>
     <div class="container footer-grid">
         <div>
@@ -63,5 +68,6 @@ $content = $content ?? '';
         </div>
     </div>
 </footer>
+<?php endif; ?>
 </body>
 </html>

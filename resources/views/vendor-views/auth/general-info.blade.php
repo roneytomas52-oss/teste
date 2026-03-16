@@ -1,4 +1,5 @@
 @extends('layouts.landing.app')
+@php($hideLandingChrome = true)
 @section('title', translate('messages.vendor_registration'))
 @push('css_or_js')
     <link rel="stylesheet" href="{{ asset('public/assets/admin/css/toastr.css') }}">
