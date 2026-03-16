@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$errors) {
         try {
             save_contact($name, $email, $message);
-            $success = 'Mensagem enviada e sincronizada no banco do 6amMart.';
+            $success = 'Mensagem enviada com sucesso.';
         } catch (Throwable) {
             $errors[] = 'Não foi possível salvar agora. Verifique as configurações do banco no .env.';
         }
@@ -36,8 +36,8 @@ ob_start();
 ?>
 <section class="container section contact">
     <div>
-        <h1>Entre em contato conosco</h1>
-        <p>Use o formulário para enviar mensagens diretamente para a tabela <code>contacts</code> do 6amMart.</p>
+        <h1>Contato</h1>
+        <p>Fale com o time da Fox Delivery para suporte, parcerias e dúvidas comerciais.</p>
     </div>
     <form method="POST" class="panel form">
         <?php if ($errors): ?>
