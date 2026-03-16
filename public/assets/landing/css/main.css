@@ -4078,3 +4078,69 @@ input[type=text] ~ .show-password .icon-1 {
     }
 }
 
+
+/* Fox Delivery Landing Redesign */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+body {font-family:'Inter',sans-serif;background:#fff;color:#111827;}
+.fox-landing {overflow:hidden;}
+.fox-header {position:sticky;top:0;z-index:99;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.08);}
+.fox-logo img{max-height:58px;width:auto;}
+.fox-menu a{font-weight:600;color:#111827 !important;}
+.fox-menu a.active,.fox-menu a:hover{color:#e11d2e !important;}
+.fox-header-actions{display:flex;align-items:center;gap:.5rem;}
+.fox-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.8rem 1.5rem;font-weight:700;text-decoration:none;transition:.2s ease;}
+.fox-btn-sm{padding:.55rem 1rem;font-size:.86rem;}
+.fox-btn-primary{background:linear-gradient(90deg,#e11d2e,#ff5a1f);color:#fff;}
+.fox-btn-primary:hover{color:#fff;transform:translateY(-2px);}
+.fox-btn-outline{border:2px solid #e11d2e;color:#e11d2e;background:#fff;}
+.fox-btn-dark{background:#111827;color:#fff;}
+.fox-btn-light{background:#fff;color:#111827;}
+
+.fox-hero{padding:4.5rem 0;background:radial-gradient(circle at top right,#ffedd5 0,#fff 45%,#fff 100%);}
+.fox-badge{display:inline-block;background:#fee2e2;color:#b91c1c;border-radius:999px;padding:.35rem .8rem;font-weight:700;margin-bottom:1rem;}
+.fox-hero h1{font-size:clamp(2rem,4vw,3.6rem);font-weight:800;line-height:1.08;margin-bottom:1rem;color:#111827;}
+.fox-hero p{font-size:1.15rem;max-width:520px;color:#4b5563;}
+.fox-hero-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.4rem;}
+.fox-store-buttons{margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap;}
+.fox-store-buttons img{height:45px;}
+.fox-hero-image{position:relative;background:linear-gradient(135deg,#ffe4e6,#fff7ed);padding:1rem;border-radius:24px;border:1px solid #fed7aa;}
+.fox-hero-image img{width:100%;max-height:420px;object-fit:contain;}
+.fox-logo-chip{position:absolute;right:16px;bottom:16px;background:#fff;padding:.35rem;border-radius:50%;box-shadow:0 6px 20px rgba(0,0,0,.2);}
+.fox-logo-chip img{width:64px;height:64px;object-fit:contain;}
+
+.fox-section{padding:4.2rem 0;}
+.fox-section-title{text-align:center;max-width:700px;margin:0 auto 2rem;}
+.fox-section-title h2{font-weight:800;color:#111827;margin-bottom:.5rem;}
+.fox-section-title p{color:#6b7280;}
+.fox-grid{display:grid;gap:1rem;}
+.fox-grid-5{grid-template-columns:repeat(5,minmax(0,1fr));}
+.fox-grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.fox-grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+
+.fox-card,.fox-step,.fox-counter{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:1.25rem;text-align:center;box-shadow:0 10px 22px rgba(17,24,39,.06);}
+.fox-card-icon{font-size:2rem;}
+.fox-card h3,.fox-step h3{font-size:1.1rem;margin-top:.6rem;font-weight:700;color:#111827;}
+.fox-how{background:#f9fafb;}
+.fox-step span{display:inline-flex;width:38px;height:38px;border-radius:50%;background:#e11d2e;color:#fff;align-items:center;justify-content:center;font-weight:800;}
+.fox-step p{margin-top:.7rem;color:#6b7280;}
+
+.fox-partner-card{background:linear-gradient(145deg,#fff,#fff4f2);border:1px solid #fed7aa;border-radius:20px;padding:2rem;}
+.fox-partner-card-dark{background:linear-gradient(145deg,#111827,#1f2937);color:#fff;border-color:transparent;}
+.fox-partner-card p{margin:.8rem 0 1.2rem;color:inherit;opacity:.9;}
+
+.fox-proof{background:#111827;}
+.fox-proof .fox-counter{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#fff;}
+.fox-counter strong{display:block;font-size:1.9rem;line-height:1.1;}
+.fox-counter span{color:#d1d5db;text-transform:uppercase;letter-spacing:.04em;font-size:.8rem;}
+.fox-app{background:#fff7ed;}
+
+.fox-footer{background:#0f172a;color:#e2e8f0;padding:2rem 0;}
+.fox-footer-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+.fox-footer-top img{max-height:52px;}
+.fox-footer-bottom{display:flex;gap:1rem;flex-wrap:wrap;font-size:.92rem;color:#cbd5e1;}
+
+@media (max-width: 991px){
+  .fox-grid-5{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .fox-grid-3,.fox-grid-2{grid-template-columns:1fr;}
+  .fox-header-actions{display:none;}
+}
