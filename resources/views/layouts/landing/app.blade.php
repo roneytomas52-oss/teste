@@ -36,8 +36,11 @@
     @stack('css_or_js')
 </head>
 <body>
+    @php($hideLandingChrome = $hideLandingChrome ?? false)
+
     <div id="landing-loader"></div>
 
+    @if(!$hideLandingChrome)
     <header class="fox-header fox-header-overlay">
         <div class="container">
             <div class="navbar-bottom-wrapper">
@@ -86,9 +89,11 @@
             </div>
         </div>
     </header>
+    @endif
 
     @yield('content')
 
+    @if(!$hideLandingChrome)
     <footer class="fox-footer">
         <div class="container">
             <div class="fox-footer-top">
@@ -102,6 +107,7 @@
             </div>
         </div>
     </footer>
+    @endif
 
     <script src="{{asset('public/assets/landing/js/jquery-3.6.0.min.js')}}"></script>
     <script src="{{asset('public/assets/landing/js/viewport.jquery.js')}}"></script>

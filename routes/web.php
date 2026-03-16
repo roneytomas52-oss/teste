@@ -233,6 +233,7 @@ Route::group(['prefix' => 'vendor', 'as' => 'restaurant.'], function () {
 Route::group(['prefix' => 'deliveryman', 'as' => 'deliveryman.'], function () {
     Route::get('apply', 'DeliveryManController@create')->name('create');
     Route::post('apply', 'DeliveryManController@store')->name('store');
+    Route::get('final-step', 'DeliveryManController@final_step')->name('final_step');
 
 });
 

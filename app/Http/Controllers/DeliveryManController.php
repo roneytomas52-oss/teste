@@ -144,6 +144,11 @@ class DeliveryManController extends Controller
             info($ex->getMessage());
         }
         Toastr::success(translate('messages.application_placed_successfully'));
-        return back();
+        return to_route('deliveryman.final_step');
+    }
+
+    public function final_step()
+    {
+        return view('dm-registration-complete');
     }
 }

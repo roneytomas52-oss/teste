@@ -1,4 +1,5 @@
 @extends('layouts.landing.app')
+@php($hideLandingChrome = true)
 @section('title', translate('messages.deliveryman_registration'))
 
 
@@ -11,11 +12,6 @@ $countryCode= strtolower($country?$country->value:'auto');
 ?>
     <section class="about-section py-5 position-relative">
         <div class="container">
-            <!-- Page Header -->
-            <div class="section-header">
-                <h2 class="title mb-2">{{translate("messages.Deliveryman")}} <span class="text--base">{{translate("messages.Application")}}</span></h2>
-            </div>
-            <!-- End Page Header -->
                 <form class="validate-form" action="{{ route('deliveryman.store') }}" method="post" enctype="multipart/form-data" id="form-id">
                     @csrf
                     <div class="card __card mb-3">

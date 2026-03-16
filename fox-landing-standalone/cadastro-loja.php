@@ -8,40 +8,8 @@ $vendorApplyUrl = sixammart_url('vendor/apply');
 
 ob_start();
 ?>
-<section class="hero small">
-    <div class="container">
-        <h1>Cadastro de Lojas</h1>
-        <p>Fluxo completo com os mesmos campos oficiais do 6amMart, incluindo mapa, etapas e captcha nativo.</p>
-    </div>
-</section>
-
-<section class="container section contact registration-layout">
-    <div class="panel">
-        <h3>Requisitos obrigatórios (Brasil)</h3>
-        <ul class="requirements">
-            <li>CNPJ ativo e válido.</li>
-            <li>Responsável legal e dados de contato.</li>
-            <li>Endereço comercial com geolocalização no mapa.</li>
-            <li>Inscrição estadual (quando aplicável).</li>
-            <li>Documentos, dados bancários e captcha obrigatório.</li>
-        </ul>
-
-        <div class="steps-inline">
-            <span class="step active">1. Informações gerais</span>
-            <span class="step">2. Plano de negócio</span>
-            <span class="step">3. Conclusão</span>
-        </div>
-
-        <p>O formulário oficial está carregado ao lado, sem redirecionar para outra página. Assim, a validação acontece aqui com o padrão completo do 6amMart.</p>
-
-        <p>
-            <a class="btn ghost" href="<?= e($vendorApplyUrl) ?>" target="_blank" rel="noopener noreferrer">
-                Abrir em nova aba (fallback)
-            </a>
-        </p>
-    </div>
-
-    <div class="panel embedded-panel">
+<section class="container section">
+    <div class="panel embedded-panel" style="max-width: 980px; margin: 0 auto;">
         <iframe
             class="official-frame"
             src="<?= e($vendorApplyUrl) ?>"
@@ -50,9 +18,48 @@ ob_start();
             referrerpolicy="no-referrer-when-downgrade">
         </iframe>
     </div>
+
+    <div id="registration-complete-message" class="panel" style="max-width: 980px; margin: 0 auto; display:none; text-align:center;">
+        <h2 style="margin-bottom: 14px;">Cadastro finalizado</h2>
+        <p style="font-size: 18px; line-height:1.6;">
+            Obrigado! Logo um agente entrará em contato pelo número de telefone e e-mail cadastrado.
+        </p>
+    </div>
 </section>
+
+<script>
+    (function () {
+        const frame = document.querySelector('.official-frame');
+        const completeMessage = document.getElementById('registration-complete-message');
+
+        if (!frame || !completeMessage) {
+            return;
+        }
+
+        const showCompleteMessage = () => {
+            frame.closest('.embedded-panel').style.display = 'none';
+            completeMessage.style.display = 'block';
+        };
+
+        const checkCompletion = () => {
+            try {
+                const currentUrl = frame.contentWindow.location.href;
+                if (currentUrl.includes('/vendor/final-step')) {
+                    showCompleteMessage();
+                }
+            } catch (error) {
+                // Ignore cross-origin access errors and keep polling.
+            }
+        };
+
+        frame.addEventListener('load', checkCompletion);
+        setInterval(checkCompletion, 1200);
+    })();
+</script>
 <?php
 $content = ob_get_clean();
 $pageTitle = 'Fox Delivery - Cadastro de Loja';
 $current = 'store';
+$hidePageHeader = true;
+$hidePageFooter = true;
 require __DIR__ . '/includes/layout.php';
