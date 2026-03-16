@@ -3,17 +3,15 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/database.php';
-require_once __DIR__ . '/includes/official_embed.php';
 
 $vendorApplyUrl = sixammart_url('vendor/apply');
-[$embeddedForm, $embedError] = build_embedded_official_form($vendorApplyUrl);
 
 ob_start();
 ?>
 <section class="hero small">
     <div class="container">
         <h1>Cadastro de Lojas</h1>
-        <p>Mesmo cadastro oficial do 6amMart dentro desta página, mantendo mapa, etapas, captcha e validações nativas.</p>
+        <p>Fluxo completo com os mesmos campos oficiais do 6amMart, incluindo mapa, etapas e captcha nativo.</p>
     </div>
 </section>
 
@@ -34,7 +32,7 @@ ob_start();
             <span class="step">3. Conclusão</span>
         </div>
 
-        <p>Fluxo oficial incorporado na própria página para finalizar o cadastro sem sair do layout Fox Delivery.</p>
+        <p>O formulário oficial está carregado ao lado, sem redirecionar para outra página. Assim, a validação acontece aqui com o padrão completo do 6amMart.</p>
 
         <p>
             <a class="btn ghost" href="<?= e($vendorApplyUrl) ?>" target="_blank" rel="noopener noreferrer">
@@ -44,11 +42,13 @@ ob_start();
     </div>
 
     <div class="panel embedded-panel">
-        <?php if ($embedError !== null): ?>
-            <div class="alert error"><?= e($embedError) ?></div>
-        <?php else: ?>
-            <div class="official-embed"><?= $embeddedForm ?></div>
-        <?php endif; ?>
+        <iframe
+            class="official-frame"
+            src="<?= e($vendorApplyUrl) ?>"
+            title="Cadastro oficial de loja"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
     </div>
 </section>
 <?php

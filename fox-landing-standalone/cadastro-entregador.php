@@ -3,17 +3,15 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/database.php';
-require_once __DIR__ . '/includes/official_embed.php';
 
 $deliveryApplyUrl = sixammart_url('deliveryman/apply');
-[$embeddedForm, $embedError] = build_embedded_official_form($deliveryApplyUrl);
 
 ob_start();
 ?>
 <section class="hero small">
     <div class="container">
         <h1>Cadastro de Entregador</h1>
-        <p>Mesmo cadastro oficial do 6amMart dentro desta página, mantendo mapa, etapas, captcha e validações nativas.</p>
+        <p>Fluxo completo com os mesmos campos oficiais do 6amMart, incluindo mapa de atuação e captcha nativo.</p>
     </div>
 </section>
 
@@ -34,7 +32,7 @@ ob_start();
             <span class="step">3. Conclusão</span>
         </div>
 
-        <p>Fluxo oficial incorporado na própria página para finalizar o cadastro sem redirecionamento externo.</p>
+        <p>O cadastro oficial está incorporado nesta página, mantendo o padrão profissional sem redirecionamento externo.</p>
 
         <p>
             <a class="btn ghost" href="<?= e($deliveryApplyUrl) ?>" target="_blank" rel="noopener noreferrer">
@@ -44,11 +42,13 @@ ob_start();
     </div>
 
     <div class="panel embedded-panel">
-        <?php if ($embedError !== null): ?>
-            <div class="alert error"><?= e($embedError) ?></div>
-        <?php else: ?>
-            <div class="official-embed"><?= $embeddedForm ?></div>
-        <?php endif; ?>
+        <iframe
+            class="official-frame"
+            src="<?= e($deliveryApplyUrl) ?>"
+            title="Cadastro oficial de entregador"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
     </div>
 </section>
 <?php
