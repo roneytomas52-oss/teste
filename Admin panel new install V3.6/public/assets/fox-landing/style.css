@@ -1,0 +1,16 @@
+:root{--r:#e42920;--o:#ff7a00;--w:#fff;--d:#2d1210}
+*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}body{margin:0;background:#fff;color:var(--d)}
+.container{max-width:1180px;margin:0 auto;padding:0 20px}.fox-header{background:linear-gradient(90deg,var(--r),var(--o));position:sticky;top:0;z-index:5}
+.nav-wrap{display:flex;align-items:center;gap:16px;justify-content:space-between;padding:14px 20px}.brand img{height:46px}
+nav{display:flex;gap:16px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;font-weight:600}.actions{display:flex;gap:10px}
+.btn{display:inline-block;background:var(--r);color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;font-weight:700}
+.btn.light{background:#fff;color:var(--r)}.btn.yellow{background:#ffc107;color:#402000}
+.hero{background:radial-gradient(circle at 70% 20%,#ffb26a 0,#ff7a00 35%,#cf1f1f 100%);padding:72px 0;color:#fff}.hero.small{padding:40px 0}
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}.hero h1{font-size:54px;line-height:1.05;margin:0 0 16px}
+.hero p{font-size:22px;max-width:660px}.hero-card{background:#fff1;border:1px solid #fff5;border-radius:24px;min-height:280px;display:grid;place-items:center;font-size:42px;font-weight:800}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}.store{background:#111;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none}
+.cards,.how{padding:48px 20px}.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.grid5 article,.grid3 article,.panel,.form-card{background:#fff;border:1px solid #f0d7d3;border-radius:16px;padding:20px;box-shadow:0 8px 25px #e0542030}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.split{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:60px}.panel{text-decoration:none;color:#411}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:48px 20px}.form-card input,.form-card textarea{width:100%;padding:12px;border:1px solid #e6d1ca;border-radius:10px;margin:8px 0}
+.form-card textarea{min-height:120px}.narrow{padding:64px 20px;max-width:800px}.fox-footer{background:#2a0f0f;color:#fff;padding:22px 0}
+@media (max-width:900px){.hero-grid,.grid5,.grid3,.split,.contact-grid{grid-template-columns:1fr}.hero h1{font-size:38px}}
