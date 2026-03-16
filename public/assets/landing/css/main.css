@@ -4080,67 +4080,77 @@ input[type=text] ~ .show-password .icon-1 {
 
 
 /* Fox Delivery Landing Redesign */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-body {font-family:'Inter',sans-serif;background:#fff;color:#111827;}
-.fox-landing {overflow:hidden;}
-.fox-header {position:sticky;top:0;z-index:99;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.08);}
-.fox-logo img{max-height:58px;width:auto;}
-.fox-menu a{font-weight:600;color:#111827 !important;}
-.fox-menu a.active,.fox-menu a:hover{color:#e11d2e !important;}
-.fox-header-actions{display:flex;align-items:center;gap:.5rem;}
-.fox-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.8rem 1.5rem;font-weight:700;text-decoration:none;transition:.2s ease;}
-.fox-btn-sm{padding:.55rem 1rem;font-size:.86rem;}
-.fox-btn-primary{background:linear-gradient(90deg,#e11d2e,#ff5a1f);color:#fff;}
-.fox-btn-primary:hover{color:#fff;transform:translateY(-2px);}
-.fox-btn-outline{border:2px solid #e11d2e;color:#e11d2e;background:#fff;}
-.fox-btn-dark{background:#111827;color:#fff;}
-.fox-btn-light{background:#fff;color:#111827;}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+body{font-family:'Inter',sans-serif;background:#fff;color:#111827}
+.fox-landing{overflow:hidden}
+.fox-redesign .container{position:relative;z-index:2}
+.fox-header.fox-header-overlay{position:fixed;inset:0 0 auto 0;z-index:100;background:transparent;box-shadow:none;padding-top:16px}
+.fox-header.fox-header-overlay .navbar-bottom-wrapper{background:rgba(185,18,23,.4);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px);border-radius:999px;padding:12px 22px}
+.fox-logo img{max-height:52px}
+.fox-menu{display:flex;gap:1.5rem;align-items:center;margin:0}
+.fox-menu a{color:#fff!important;font-weight:700}
+.fox-menu a.active,.fox-menu a:hover{color:#ffe066!important}
+.fox-header-actions{display:flex;align-items:center;gap:.6rem}
+.fox-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.8rem 1.5rem;font-weight:800;text-decoration:none;border:none;transition:.2s ease}
+.fox-btn-sm{padding:.55rem 1.25rem;font-size:.95rem}
+.fox-btn-primary{background:linear-gradient(90deg,#ef2929,#d90f23);color:#fff}
+.fox-btn-yellow{background:#ffcd1f;color:#2f1e00}
+.fox-btn-light{background:#fff;color:#d3172c}
+.fox-btn:hover{transform:translateY(-2px)}
 
-.fox-hero{padding:4.5rem 0;background:radial-gradient(circle at top right,#ffedd5 0,#fff 45%,#fff 100%);}
-.fox-badge{display:inline-block;background:#fee2e2;color:#b91c1c;border-radius:999px;padding:.35rem .8rem;font-weight:700;margin-bottom:1rem;}
-.fox-hero h1{font-size:clamp(2rem,4vw,3.6rem);font-weight:800;line-height:1.08;margin-bottom:1rem;color:#111827;}
-.fox-hero p{font-size:1.15rem;max-width:520px;color:#4b5563;}
-.fox-hero-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.4rem;}
-.fox-store-buttons{margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap;}
-.fox-store-buttons img{height:45px;}
-.fox-hero-image{position:relative;background:linear-gradient(135deg,#ffe4e6,#fff7ed);padding:1rem;border-radius:24px;border:1px solid #fed7aa;}
-.fox-hero-image img{width:100%;max-height:420px;object-fit:contain;}
-.fox-logo-chip{position:absolute;right:16px;bottom:16px;background:#fff;padding:.35rem;border-radius:50%;box-shadow:0 6px 20px rgba(0,0,0,.2);}
-.fox-logo-chip img{width:64px;height:64px;object-fit:contain;}
+.fox-hero{padding:160px 0 70px;background:radial-gradient(circle at right top,#ffb167 2%,#ff6b38 28%,#ea3031 55%,#c51421 100%);color:#fff;position:relative}
+.fox-hero:before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 55%)}
+.fox-hero-copy h1{font-size:clamp(2.4rem,5vw,5rem);line-height:1.03;font-weight:900;color:#fff;margin-bottom:1rem}
+.fox-hero-copy p{font-size:clamp(1rem,2vw,1.9rem);line-height:1.2;max-width:530px;color:#fff6f6;font-weight:600}
+.fox-hero-actions{display:flex;gap:.85rem;flex-wrap:wrap;margin-top:1.4rem}
+.fox-store-buttons{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1rem}
+.fox-store-buttons img{height:58px;width:auto;filter:drop-shadow(0 4px 7px rgba(0,0,0,.4))}
+.fox-hero-image{display:flex;justify-content:center;align-items:flex-end;min-height:420px}
+.fox-scooter{max-height:540px;width:auto;object-fit:contain;filter:drop-shadow(0 22px 25px rgba(0,0,0,.35))}
+.fox-wave{position:absolute;left:0;right:0;bottom:-1px;height:95px;background:radial-gradient(120% 120px at 50% 0,#fff 58%,transparent 60%),linear-gradient(180deg,transparent 0,#fff 80%)}
 
-.fox-section{padding:4.2rem 0;}
-.fox-section-title{text-align:center;max-width:700px;margin:0 auto 2rem;}
-.fox-section-title h2{font-weight:800;color:#111827;margin-bottom:.5rem;}
-.fox-section-title p{color:#6b7280;}
-.fox-grid{display:grid;gap:1rem;}
-.fox-grid-5{grid-template-columns:repeat(5,minmax(0,1fr));}
-.fox-grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
-.fox-grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.fox-section{padding:4rem 0;background:#fff}
+.fox-section-title{text-align:center;max-width:800px;margin:0 auto 2rem}
+.fox-section-title h2{font-weight:900;font-size:clamp(1.8rem,4vw,3.4rem);color:#4a1010;margin-bottom:.55rem}
+.fox-section-title p{font-size:1.2rem;color:#5f4b4b}
+.fox-grid{display:grid;gap:1rem}
+.fox-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.fox-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.fox-grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 
-.fox-card,.fox-step,.fox-counter{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:1.25rem;text-align:center;box-shadow:0 10px 22px rgba(17,24,39,.06);}
-.fox-card-icon{font-size:2rem;}
-.fox-card h3,.fox-step h3{font-size:1.1rem;margin-top:.6rem;font-weight:700;color:#111827;}
-.fox-how{background:#f9fafb;}
-.fox-step span{display:inline-flex;width:38px;height:38px;border-radius:50%;background:#e11d2e;color:#fff;align-items:center;justify-content:center;font-weight:800;}
-.fox-step p{margin-top:.7rem;color:#6b7280;}
+.fox-categories{background:linear-gradient(180deg,#fff,#ffe9df)}
+.fox-card,.fox-step,.fox-partner-card{border-radius:22px;padding:1.3rem;background:#fff;border:1px solid #ffd7cc;box-shadow:0 12px 26px rgba(168,48,20,.1)}
+.fox-card{text-align:center}
+.fox-card-icon{font-size:2.15rem}
+.fox-card h3{margin-top:.45rem;font-weight:800;color:#7a1212}
 
-.fox-partner-card{background:linear-gradient(145deg,#fff,#fff4f2);border:1px solid #fed7aa;border-radius:20px;padding:2rem;}
-.fox-partner-card-dark{background:linear-gradient(145deg,#111827,#1f2937);color:#fff;border-color:transparent;}
-.fox-partner-card p{margin:.8rem 0 1.2rem;color:inherit;opacity:.9;}
+.fox-how{background:#fff4ef}
+.fox-how .fox-section-title h2 span{color:#d31426}
+.fox-step{text-align:left;display:flex;align-items:flex-start;gap:.7rem}
+.fox-step span{min-width:35px;height:35px;border-radius:999px;background:#e91d2f;color:#fff;font-weight:900;display:grid;place-items:center}
+.fox-step h3{font-size:1.45rem;color:#881515;margin-bottom:.2rem}
+.fox-step p{margin:0;color:#5e4f4f}
+.fox-download-cta{margin:1.5rem auto 0;display:flex;justify-content:center;align-items:center;gap:1rem;flex-wrap:wrap;background:linear-gradient(90deg,#ea242b,#cf1025);border-radius:999px;padding:.7rem 1.4rem;max-width:max-content}
+.fox-download-cta span{color:#fff;font-weight:800;font-size:1.45rem}
+.fox-download-cta .fox-store-buttons{margin:0}
+.fox-download-cta img{height:40px}
 
-.fox-proof{background:#111827;}
-.fox-proof .fox-counter{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#fff;}
-.fox-counter strong{display:block;font-size:1.9rem;line-height:1.1;}
-.fox-counter span{color:#d1d5db;text-transform:uppercase;letter-spacing:.04em;font-size:.8rem;}
-.fox-app{background:#fff7ed;}
+.fox-partner-card{min-height:260px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(120deg,rgba(55,22,6,.35),rgba(200,90,30,.25)),url('../img/contact-bg.png') center/cover}
+.fox-partner-card h3{font-size:2rem;color:#fff;font-weight:800;max-width:360px}
+.fox-partner-card p{color:#fff;max-width:380px}
+.fox-partner-card-dark{background:linear-gradient(120deg,rgba(15,15,15,.45),rgba(180,40,25,.2)),url('../img/download-app.png') center/cover}
 
-.fox-footer{background:#0f172a;color:#e2e8f0;padding:2rem 0;}
-.fox-footer-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
-.fox-footer-top img{max-height:52px;}
-.fox-footer-bottom{display:flex;gap:1rem;flex-wrap:wrap;font-size:.92rem;color:#cbd5e1;}
+.fox-footer{background:#1a1a1a;color:#f3f3f3;padding:2rem 0}
 
 @media (max-width: 991px){
-  .fox-grid-5{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .fox-grid-3,.fox-grid-2{grid-template-columns:1fr;}
-  .fox-header-actions{display:none;}
+ .fox-header.fox-header-overlay{position:sticky;padding-top:0;background:#bf1d20}
+ .fox-header.fox-header-overlay .navbar-bottom-wrapper{background:transparent;border:none;border-radius:0;padding:10px 0}
+ .fox-menu{display:none}
+ .fox-grid-5{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .fox-grid-3,.fox-grid-2{grid-template-columns:1fr}
+ .fox-header-actions{display:none}
+ .fox-hero{padding-top:100px}
+ .fox-hero-image{min-height:240px}
+ .fox-scooter{max-height:320px}
+ .fox-download-cta span{font-size:1rem}
 }
