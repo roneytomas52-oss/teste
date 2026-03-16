@@ -202,6 +202,16 @@ dd('Hello tester');
 Route::get('module-test', function () {
 });
 
+
+Route::group(['prefix' => 'fox', 'as' => 'fox.'], function () {
+    Route::get('/', 'FoxLandingController@home')->name('home');
+    Route::get('sobre-nos', 'FoxLandingController@about')->name('about');
+    Route::get('contato', 'FoxLandingController@contact')->name('contact');
+    Route::post('contato', 'FoxLandingController@sendMessage')->name('contact.send');
+    Route::get('cadastro-loja', 'FoxLandingController@storeRegistration')->name('store-registration');
+    Route::get('cadastro-entregador', 'FoxLandingController@deliveryRegistration')->name('delivery-registration');
+});
+
 //Restaurant Registration
 Route::group(['prefix' => 'vendor', 'as' => 'restaurant.'], function () {
     Route::get('apply', 'VendorController@create')->name('create');
