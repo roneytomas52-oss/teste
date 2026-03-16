@@ -29,3 +29,12 @@ nav{display:flex;gap:12px;flex-wrap:wrap}nav a{color:#fff;text-decoration:none;f
 .requirements{margin:0;padding-left:18px;line-height:1.7}
 footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:960px){.hero-grid,.cards.five,.cards.three,.split,.contact,.footer-grid{grid-template-columns:1fr}.hero-content h1{font-size:40px}.hero-content p,.center p{font-size:20px}}
+
+.registration-layout{grid-template-columns:.85fr 1.15fr}
+.steps-inline{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.step{display:inline-flex;padding:7px 12px;border-radius:999px;background:#fff3eb;border:1px solid #f3d2c2;font-size:13px;font-weight:700;color:#944f2a}
+.step.active{background:#e42520;color:#fff;border-color:#e42520}
+.embedded-panel{padding:12px;overflow:auto}
+.official-embed{min-height:950px;background:#fff;border:1px solid #efd2c6;border-radius:12px;padding:8px;overflow:auto}
+.official-embed img{max-width:100%;height:auto}
+@media(max-width:960px){.registration-layout{grid-template-columns:1fr}.official-embed{min-height:760px}}
