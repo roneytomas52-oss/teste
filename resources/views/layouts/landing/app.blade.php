@@ -38,7 +38,7 @@
 <body>
     <div id="landing-loader"></div>
 
-    <header class="fox-header">
+    <header class="fox-header fox-header-overlay">
         <div class="container">
             <div class="navbar-bottom-wrapper">
                 <a href="{{ route('home') }}" class="logo fox-logo">
@@ -46,10 +46,10 @@
                 </a>
 
                 <ul class="menu fox-menu">
-                    <li><a href="{{ route('home') }}" class="{{ Request::is('/') ? 'active' : '' }}">Início</a></li>
+                    <li><a href="{{ route('restaurant.create') }}" class="{{ Request::is('restaurant*') ? 'active' : '' }}">Menu parceiro</a></li>
+                    <li><a href="{{ route('contact-us') }}">Blog</a></li>
                     <li><a href="{{ route('about-us') }}">Sobre nós</a></li>
-                    <li><a href="{{ route('contact-us') }}">Contato</a></li>
-                    <li><a href="{{ route('privacy-policy') }}">Privacidade</a></li>
+                    <li><a href="#baixar-app">Baixar App</a></li>
                 </ul>
 
                 <div class="nav-toggle d-lg-none ms-auto me-3"><span></span><span></span><span></span></div>
@@ -76,14 +76,11 @@
                         </div>
                     @endif
 
-                    @if ($toggle_store_registration)
-                        <a href="{{ route('restaurant.create') }}" class="fox-btn fox-btn-outline fox-btn-sm">Cadastro de loja</a>
-                    @endif
-                    @if ($toggle_dm_registration)
-                        <a href="{{ route('deliveryman.create') }}" class="fox-btn fox-btn-dark fox-btn-sm">Cadastro de entregador</a>
+                    @if ($toggle_store_registration || $toggle_dm_registration)
+                        <a href="{{ $toggle_store_registration ? route('restaurant.create') : route('deliveryman.create') }}" class="fox-btn fox-btn-light fox-btn-sm">Cadastrar</a>
                     @endif
                     @if ($fixed_link && !empty($fixed_link['web_app_url_status']))
-                        <a href="{{ $fixed_link['web_app_url'] }}" target="_blank" class="fox-btn fox-btn-primary fox-btn-sm">Login</a>
+                        <a href="{{ $fixed_link['web_app_url'] }}" target="_blank" class="fox-btn fox-btn-primary fox-btn-sm">Entrar</a>
                     @endif
                 </div>
             </div>
