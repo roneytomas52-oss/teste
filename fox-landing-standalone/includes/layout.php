@@ -5,12 +5,10 @@ declare(strict_types=1);
 require_once __DIR__ . '/database.php';
 
 $businessName = get_business_setting('business_name', env('APP_NAME', 'Fox Delivery'));
-$logo = get_business_setting('logo', '');
 $phone = get_business_setting('phone', '(11) 9999-9999');
 $email = get_business_setting('email_address', 'contato@foxdelivery.com.br');
-$address = get_business_setting('address', 'São Paulo - SP');
+$address = get_business_setting('address', 'Sao Paulo - SP');
 
-$logoUrl = $logo ? sixammart_url('storage/app/public/business/' . ltrim((string) $logo, '/')) : '';
 $brandImage = './Imagem/logo.png';
 
 $pageTitle = $pageTitle ?? 'Fox Delivery';
@@ -31,20 +29,20 @@ $hidePageFooter = $hidePageFooter ?? false;
 <?php if (!$hidePageHeader): ?>
 <header class="header">
     <div class="container nav">
-        <a class="brand" href="./index.php">
+        <a class="brand" href="./index.php" aria-label="<?= e((string) $businessName) ?>">
             <span class="brand-mark">
                 <img src="<?= e($brandImage) ?>" alt="<?= e((string) $businessName) ?>">
             </span>
             <span class="brand-copy">
                 <strong><?= e((string) $businessName) ?></strong>
-                <small>Delivery e conveni&ecirc;ncia</small>
+                <small>Plataforma oficial</small>
             </span>
         </a>
         <nav>
-            <a class="<?= $current === 'home' ? 'active' : '' ?>" href="./index.php">Início</a>
-            <a class="<?= $current === 'about' ? 'active' : '' ?>" href="./sobre.php">Sobre Nós</a>
+            <a class="<?= $current === 'home' ? 'active' : '' ?>" href="./index.php">Inicio</a>
+            <a class="<?= $current === 'about' ? 'active' : '' ?>" href="./sobre.php">Sobre nos</a>
             <a class="<?= $current === 'contact' ? 'active' : '' ?>" href="./contato.php">Contato</a>
-            <a class="<?= $current === 'partners' ? 'active' : '' ?>" href="./cadastro-parceiros.php">Cadastro Loja/Entregador</a>
+            <a class="<?= $current === 'partners' ? 'active' : '' ?>" href="./cadastro-parceiros.php">Parceiros</a>
         </nav>
         <div class="actions">
             <a class="btn ghost" href="<?= e(sixammart_url('login')) ?>">Entrar</a>
@@ -61,12 +59,12 @@ $hidePageFooter = $hidePageFooter ?? false;
     <div class="container footer-grid">
         <div>
             <strong><?= e((string) $businessName) ?></strong>
-            <p>Mercado, restaurantes, farmácia e conveniência em um só app.</p>
+            <p>Mercado, restaurantes, farmacia e conveniencia em uma experiencia pensada para a rotina urbana.</p>
         </div>
         <div>
-            <p>📞 <?= e((string) $phone) ?></p>
-            <p>✉️ <?= e((string) $email) ?></p>
-            <p>📍 <?= e((string) $address) ?></p>
+            <p>Telefone: <?= e((string) $phone) ?></p>
+            <p>E-mail: <?= e((string) $email) ?></p>
+            <p>Localizacao: <?= e((string) $address) ?></p>
         </div>
     </div>
 </footer>
