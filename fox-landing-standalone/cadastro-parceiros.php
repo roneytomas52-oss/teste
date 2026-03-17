@@ -85,15 +85,23 @@ ob_start();
     display:inline-flex;
     align-items:center;
     text-decoration:none;
+    padding:8px;
+    border-radius:28px;
+    background:linear-gradient(180deg,rgba(255,246,239,.16),rgba(255,240,231,.08));
+    border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 16px 30px rgba(91,20,9,.14);
+    backdrop-filter:blur(10px);
 }
 
 .fdxp-brand img{
     display:block;
-    width:248px;
-    max-width:100%;
-    max-height:74px;
-    height:auto;
-    filter:drop-shadow(0 14px 26px rgba(90,19,7,.16));
+    width:132px;
+    height:88px;
+    max-width:none;
+    object-fit:cover;
+    object-position:center 18%;
+    border-radius:20px;
+    filter:saturate(1.08) contrast(1.04) brightness(1.02);
 }
 
 .fdxp-nav{
@@ -745,7 +753,8 @@ ob_start();
     }
 
     .fdxp-brand img{
-        width:196px;
+        width:112px;
+        height:76px;
     }
 
     .fdxp-nav{
@@ -840,7 +849,7 @@ ob_start();
         <div class="fdxp-shell">
             <div class="fdxp-topbar">
                 <a class="fdxp-brand" href="./index.php" aria-label="Fox Delivery">
-                    <img src="./assets/fox-brand.svg" alt="Fox Delivery">
+                    <img src="./Imagem/logo.png" alt="Fox Delivery">
                 </a>
 
                 <nav class="fdxp-nav" aria-label="Navega&ccedil;&atilde;o do parceiro">
