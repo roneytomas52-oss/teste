@@ -14,8 +14,16 @@ function env(string $key, ?string $default = null): ?string
 
     if ($env === null) {
         $env = [];
-        $envPath = dirname(__DIR__) . '/.env';
-        if (is_file($envPath)) {
+        $envPaths = [
+            dirname(__DIR__, 2) . '/.env',
+            dirname(__DIR__) . '/.env',
+        ];
+
+        foreach ($envPaths as $envPath) {
+            if (!is_file($envPath)) {
+                continue;
+            }
+
             foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
                 if (str_starts_with(trim($line), '#') || !str_contains($line, '=')) {
                     continue;
@@ -45,6 +53,6 @@ function app_url(string $path = ''): string
 
 function sixammart_url(string $path = ''): string
 {
-    $base = rtrim(env('SIXAMMART_BASE_URL', ''), '/');
+    $base = rtrim(env('SIXAMMART_BASE_URL', env('APP_URL', '')), '/');
     return $base . '/' . ltrim($path, '/');
 }

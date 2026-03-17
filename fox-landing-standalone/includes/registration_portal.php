@@ -37,6 +37,7 @@ function registration_bootstrap(?string $forcedType = null): array
 {
     $catalog = registration_catalog();
     $settings = registration_settings();
+    $syncStatus = registration_sync_status();
     $copyByType = registration_copy_map();
     $flash = registration_consume_flash();
 
@@ -76,6 +77,7 @@ function registration_bootstrap(?string $forcedType = null): array
     return [
         'catalog' => $catalog,
         'settings' => $settings,
+        'syncStatus' => $syncStatus,
         'copyByType' => $copyByType,
         'activeType' => $defaultType,
         'forms' => $forms,
@@ -135,6 +137,10 @@ function registration_render_page(string $mode = 'store'): void
                 <span class="frame-step">Valida&ccedil;&atilde;o cadastral</span>
                 <span class="frame-step">Conclus&atilde;o</span>
             </div>
+
+            <?php if (!$state['syncStatus']['is_ready']): ?>
+                <?= registration_render_alerts([], $state['syncStatus']['issues']) ?>
+            <?php endif; ?>
 
             <?= registration_render_form_panel($mode, $formState, $state['catalog'], $state['settings']) ?>
         </div>
@@ -1206,6 +1212,34 @@ function registration_settings(): array
         'currency_symbol' => (string) get_business_setting('currency_symbol', 'R$'),
         'currency_symbol_position' => (string) get_business_setting('currency_symbol_position', 'left'),
         'digit_after_decimal_point' => (int) get_business_setting('digit_after_decimal_point', 2),
+    ];
+}
+
+function registration_sync_status(): array
+{
+    $appUrl = trim((string) env('APP_URL', ''));
+    $apiBaseUrl = trim((string) env('SIXAMMART_BASE_URL', $appUrl));
+    $dbHost = trim((string) env('DB_HOST', ''));
+    $dbName = trim((string) env('DB_DATABASE', ''));
+
+    $issues = [];
+    if ($appUrl === '') {
+        $issues[] = 'A URL principal do painel n&atilde;o est&aacute; definida no ambiente da landing.';
+    }
+    if ($apiBaseUrl === '') {
+        $issues[] = 'A URL base das APIs oficiais n&atilde;o est&aacute; configurada.';
+    }
+    if ($dbHost === '' || $dbName === '') {
+        $issues[] = 'As credenciais do banco principal n&atilde;o est&atilde;o completas para leitura dos campos oficiais.';
+    }
+
+    return [
+        'app_url' => $appUrl,
+        'api_base_url' => $apiBaseUrl,
+        'db_ready' => $dbHost !== '' && $dbName !== '',
+        'api_ready' => $apiBaseUrl !== '',
+        'is_ready' => $issues === [],
+        'issues' => $issues,
     ];
 }
 

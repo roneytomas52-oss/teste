@@ -4,119 +4,76 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/registration_portal.php';
 
-$state = registration_bootstrap();
-$activeType = $state['activeType'];
-$copyByType = $state['copyByType'];
-$activeCopy = $copyByType[$activeType];
-$activeForm = $state['forms'][$activeType];
+$copyByType = registration_copy_map();
+$syncStatus = registration_sync_status();
 
 ob_start();
 ?>
 <section class="hero registration-hero">
     <div class="container registration-hero-content">
-        <h1>Cadastro Oficial Fox Delivery</h1>
-        <p>Escolha a modalidade de parceria e conclua o cadastro em um formul&aacute;rio pr&oacute;prio da Fox Delivery, com integra&ccedil;&atilde;o direta ao painel administrativo.</p>
+        <h1>Cadastro de Parceiros Fox Delivery</h1>
+        <p>Escolha abaixo o fluxo correto para iniciar seu credenciamento. Loja e entregador agora seguem em p&aacute;ginas separadas, com formul&aacute;rios independentes e integra&ccedil;&atilde;o direta ao painel administrativo.</p>
     </div>
 </section>
 
-<section class="container section contact registration-layout unified-registration">
-    <aside class="panel registration-side">
-        <span class="panel-kicker" id="copy-panel-label"><?= $activeCopy['panel_label'] ?></span>
-        <h2 id="copy-panel-title"><?= $activeCopy['panel_title'] ?></h2>
+<section class="container section registration-selector">
+    <div class="registration-selector-head">
+        <span class="panel-kicker">Jornada separada</span>
+        <h2>Selecione o tipo de cadastro</h2>
+        <p>Cada parceiro segue para uma tela pr&oacute;pria, com campos espec&iacute;ficos, valida&ccedil;&otilde;es alinhadas ao painel e envio para o fluxo oficial da Fox Delivery.</p>
+    </div>
 
-        <div class="switcher" role="tablist" aria-label="Tipo de cadastro">
-            <button type="button" class="switch-btn <?= $activeType === 'store' ? 'active' : '' ?>" data-target="store" role="tab" aria-selected="<?= $activeType === 'store' ? 'true' : 'false' ?>">Loja</button>
-            <button type="button" class="switch-btn <?= $activeType === 'delivery' ? 'active' : '' ?>" data-target="delivery" role="tab" aria-selected="<?= $activeType === 'delivery' ? 'true' : 'false' ?>">Entregador</button>
-        </div>
+    <?php if (!$syncStatus['is_ready']): ?>
+        <?= registration_render_alerts([], $syncStatus['issues']) ?>
+    <?php endif; ?>
 
-        <ul class="requirements" id="requirements-list">
-            <?php foreach ($activeCopy['requirements'] as $item): ?>
-                <li><?= $item ?></li>
-            <?php endforeach; ?>
-        </ul>
-
-        <div class="sync-note">
-            <strong id="copy-note-title"><?= $activeCopy['note_title'] ?></strong>
-            <p id="copy-note-body"><?= $activeCopy['note_body'] ?></p>
-        </div>
-    </aside>
-
-    <div class="panel embedded-panel registration-frame-shell registration-form-shell">
-        <div class="frame-title">
-            <span>Painel</span>
-            <strong>Fox Delivery</strong>
-        </div>
-
-        <div class="frame-steps" aria-hidden="true">
-            <span class="frame-step active">Informa&ccedil;&otilde;es iniciais</span>
-            <span class="frame-step">Valida&ccedil;&atilde;o cadastral</span>
-            <span class="frame-step">Conclus&atilde;o</span>
-        </div>
-
-        <?php if (!empty($activeForm['success'])): ?>
-            <?= registration_render_success_message((string) $activeForm['message']) ?>
-        <?php else: ?>
-            <div class="registration-form-panels">
-                <section class="registration-form-panel <?= $activeType === 'store' ? 'active' : '' ?>" data-panel-type="store">
-                    <?= registration_render_store_form($state['forms']['store'], $state['catalog'], $state['settings']) ?>
-                </section>
-                <section class="registration-form-panel <?= $activeType === 'delivery' ? 'active' : '' ?>" data-panel-type="delivery">
-                    <?= registration_render_delivery_form($state['forms']['delivery'], $state['catalog'], $state['settings']) ?>
-                </section>
+    <div class="partner-selector-grid">
+        <article class="partner-selector-card">
+            <span class="selector-badge">Loja</span>
+            <h3>Cadastro de loja parceira</h3>
+            <p>Fluxo dedicado ao cadastro comercial da loja, do respons&aacute;vel legal, dos documentos fiscais e do modelo operacional.</p>
+            <ul class="requirements">
+                <?php foreach ($copyByType['store']['requirements'] as $item): ?>
+                    <li><?= $item ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <div class="selector-footer">
+                <a class="btn" href="./cadastro-loja.php">Ir para cadastro de loja</a>
             </div>
-        <?php endif; ?>
+        </article>
+
+        <article class="partner-selector-card">
+            <span class="selector-badge delivery">Entregador</span>
+            <h3>Cadastro de entregador</h3>
+            <p>Fluxo dedicado ao credenciamento do entregador, documenta&ccedil;&atilde;o pessoal, zona de atua&ccedil;&atilde;o, ve&iacute;culo e dados operacionais.</p>
+            <ul class="requirements">
+                <?php foreach ($copyByType['delivery']['requirements'] as $item): ?>
+                    <li><?= $item ?></li>
+                <?php endforeach; ?>
+            </ul>
+            <div class="selector-footer">
+                <a class="btn" href="./cadastro-entregador.php">Ir para cadastro de entregador</a>
+            </div>
+        </article>
+    </div>
+
+    <div class="panel sync-overview-card">
+        <div class="sync-overview-copy">
+            <span class="panel-kicker">Sincroniza&ccedil;&atilde;o</span>
+            <h3>V&iacute;nculo com painel e banco principal</h3>
+            <p>Os formul&aacute;rios da Fox Delivery usam as mesmas op&ccedil;&otilde;es oficiais do banco principal e encaminham o envio para os endpoints oficiais do painel administrativo.</p>
+        </div>
+        <div class="sync-overview-badges">
+            <span class="<?= $syncStatus['db_ready'] ? 'ok' : 'warn' ?>">Banco principal <?= $syncStatus['db_ready'] ? 'conectado' : 'revisar' ?></span>
+            <span class="<?= $syncStatus['api_ready'] ? 'ok' : 'warn' ?>">API oficial <?= $syncStatus['api_ready'] ? 'configurada' : 'revisar' ?></span>
+            <span class="<?= $syncStatus['is_ready'] ? 'ok' : 'warn' ?>">Sincroniza&ccedil;&atilde;o <?= $syncStatus['is_ready'] ? 'pronta' : 'parcial' ?></span>
+        </div>
     </div>
 </section>
-
-<?= registration_render_scripts($state['catalog']) ?>
-
-<script>
-    (function () {
-        const copyByType = <?= json_encode($copyByType) ?>;
-        const buttons = document.querySelectorAll('.switch-btn[data-target]');
-        const panels = document.querySelectorAll('.registration-form-panel');
-        const requirementsList = document.getElementById('requirements-list');
-        const panelLabel = document.getElementById('copy-panel-label');
-        const panelTitle = document.getElementById('copy-panel-title');
-        const noteTitle = document.getElementById('copy-note-title');
-        const noteBody = document.getElementById('copy-note-body');
-
-        const setActive = (type) => {
-            const copy = copyByType[type];
-            if (!copy) {
-                return;
-            }
-
-            panelLabel.innerHTML = copy.panel_label;
-            panelTitle.innerHTML = copy.panel_title;
-            requirementsList.innerHTML = copy.requirements.map((item) => `<li>${item}</li>`).join('');
-            noteTitle.innerHTML = copy.note_title;
-            noteBody.innerHTML = copy.note_body;
-
-            panels.forEach((panel) => {
-                panel.classList.toggle('active', panel.dataset.panelType === type);
-            });
-
-            buttons.forEach((button) => {
-                const active = button.dataset.target === type;
-                button.classList.toggle('active', active);
-                button.setAttribute('aria-selected', active ? 'true' : 'false');
-            });
-
-            const url = new URL(window.location.href);
-            url.searchParams.set('tipo', type);
-            window.history.replaceState({}, '', url.toString());
-        };
-
-        buttons.forEach((button) => {
-            button.addEventListener('click', () => setActive(button.dataset.target));
-        });
-    })();
-</script>
 <?php
 
 $content = ob_get_clean();
-$pageTitle = 'Fox Delivery - Cadastro Parceiros';
+$pageTitle = 'Fox Delivery - Cadastro de Parceiros';
 $current = 'partners';
 $hidePageHeader = true;
 $hidePageFooter = true;

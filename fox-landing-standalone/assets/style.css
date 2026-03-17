@@ -158,7 +158,26 @@ footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;gr
 .registration-success-card p{margin:0 auto;max-width:760px;font-size:18px;line-height:1.7;color:#654638}
 .success-badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 .success-badges span{display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff4ed;color:#9e4d26;font-size:13px;font-weight:700}
+.registration-selector{display:grid;gap:22px}
+.registration-selector-head{max-width:900px}
+.registration-selector-head h2{margin:14px 0 10px;font-size:34px;color:#2c1612}
+.registration-selector-head p{margin:0;color:#6a4b3d;font-size:17px;line-height:1.7}
+.partner-selector-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.partner-selector-card{background:#fff;border:1px solid #f0dbd1;border-radius:22px;padding:28px;box-shadow:0 16px 34px rgba(236,99,49,.12)}
+.selector-badge{display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;background:#fff3eb;color:#d4541d;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.selector-badge.delivery{background:#eefcf4;color:#08a95f}
+.partner-selector-card h3{margin:16px 0 10px;font-size:28px;color:#2e1713}
+.partner-selector-card p{margin:0 0 16px;color:#6f4d3d;line-height:1.7}
+.selector-footer{padding-top:8px}
+.sync-overview-card{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:center;padding:24px 26px}
+.sync-overview-copy h3{margin:14px 0 8px;font-size:28px;color:#2d1612}
+.sync-overview-copy p{margin:0;color:#6e4d3e;line-height:1.7}
+.sync-overview-badges{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+.sync-overview-badges span{display:inline-flex;padding:11px 14px;border-radius:999px;font-size:13px;font-weight:800}
+.sync-overview-badges .ok{background:#eefcf4;color:#06a65e}
+.sync-overview-badges .warn{background:#fff3eb;color:#d35c20}
 
 @media(max-width:960px){
-    .plan-choice-grid,.package-grid,.form-grid{grid-template-columns:1fr}
+    .plan-choice-grid,.package-grid,.form-grid,.partner-selector-grid,.sync-overview-card{grid-template-columns:1fr}
+    .sync-overview-badges{justify-content:flex-start}
 }
