@@ -108,3 +108,57 @@ footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;gr
     .frame-step{min-width:100%;clip-path:none;border-radius:12px}
     .official-frame{min-height:920px;border-radius:12px}
 }
+
+.registration-form-shell{padding:24px}
+.registration-form-panels{display:grid;gap:18px}
+.registration-form-panel{display:none}
+.registration-form-panel.active{display:block}
+.fox-registration-form{display:grid;gap:18px}
+.form-stage-head{padding:8px 6px 2px}
+.form-stage-head h3{margin:10px 0 8px;font-size:28px;color:#2f1612}
+.form-stage-head p{margin:0;color:#735140;line-height:1.6}
+.form-stage-tag{display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;background:#fff4ed;color:#d24f1d;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.form-stage-tag.success{background:#eefcf4;color:#06b262}
+.registration-form-sections{display:grid;gap:18px}
+.registration-form-sections.is-disabled{opacity:.65}
+.form-section{background:#fffdfa;border:1px solid #f4ddd3;border-radius:18px;padding:22px}
+.form-section-heading{margin-bottom:16px}
+.form-section-heading h4{margin:0 0 6px;font-size:20px;color:#311513}
+.form-section-heading p{margin:0;color:#7b5848;line-height:1.6}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form-grid label{display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:700;color:#311513}
+.form-grid label span{line-height:1.4}
+.form-grid label small{font-size:12px;font-weight:500;color:#8a6555}
+.form-grid .full{grid-column:1/-1}
+.form-grid input,.form-grid select,.form-grid textarea{width:100%;padding:12px 14px;border:1px solid #e6cec3;border-radius:12px;background:#fff;font:inherit;color:#311513}
+.form-grid select[multiple]{min-height:124px}
+.registration-alert{border-radius:14px;padding:14px 16px;line-height:1.6}
+.registration-alert.warning{background:#fff7eb;border:1px solid #ffd7ae;color:#8f5517}
+.registration-alert.error{background:#fff1f0;border:1px solid #ffc9c2;color:#8b2119}
+.registration-alert ul{margin:8px 0 0;padding-left:20px}
+.plan-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.plan-choice{position:relative;display:flex;flex-direction:column;gap:8px;padding:18px;border:1px solid #f1d8ca;border-radius:16px;background:#fff7f2;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.plan-choice input{position:absolute;inset:0;opacity:0;pointer-events:none}
+.plan-choice strong{font-size:17px;color:#311513}
+.plan-choice span{font-size:14px;line-height:1.6;color:#775444}
+.plan-choice.active{border-color:#e42520;box-shadow:0 12px 28px rgba(228,37,32,.12);transform:translateY(-1px)}
+.package-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+.package-card{position:relative;display:block;border:1px solid #f0dbd1;border-radius:18px;background:#fff;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+.package-card input{position:absolute;inset:0;opacity:0;pointer-events:none}
+.package-card-body{display:grid;gap:8px;padding:18px}
+.package-card strong{font-size:18px;color:#2f1612}
+.package-price{font-size:24px;font-weight:800;color:#e4571a}
+.package-meta{font-size:13px;color:#8a6655}
+.package-card ul{margin:4px 0 0;padding-left:18px;color:#694838;line-height:1.6}
+.package-card.active{border-color:#e4571a;box-shadow:0 14px 30px rgba(228,87,26,.14);transform:translateY(-1px)}
+.is-hidden{display:none!important}
+.form-actions{display:flex;justify-content:flex-end}
+.registration-success-card{display:grid;gap:14px;max-width:840px;margin:0 auto;padding:20px 8px 8px;text-align:center}
+.registration-success-card h3{margin:0;font-size:34px;color:#2c1612}
+.registration-success-card p{margin:0 auto;max-width:760px;font-size:18px;line-height:1.7;color:#654638}
+.success-badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.success-badges span{display:inline-flex;padding:10px 14px;border-radius:999px;background:#fff4ed;color:#9e4d26;font-size:13px;font-weight:700}
+
+@media(max-width:960px){
+    .plan-choice-grid,.package-grid,.form-grid{grid-template-columns:1fr}
+}

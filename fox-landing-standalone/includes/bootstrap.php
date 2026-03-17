@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 date_default_timezone_set(env('APP_TIMEZONE', 'America/Sao_Paulo'));
 
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 function env(string $key, ?string $default = null): ?string
 {
     static $env = null;
