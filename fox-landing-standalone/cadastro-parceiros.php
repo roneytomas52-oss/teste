@@ -187,16 +187,39 @@ ob_start();
             completeMessage.style.display = 'block';
         };
 
+        const hasDeliverySuccessState = (frame) => {
+            try {
+                const doc = frame.contentDocument || frame.contentWindow.document;
+                if (!doc) {
+                    return false;
+                }
+
+                if (doc.querySelector('.toast-success, #toast-container .toast-success, .alert-success')) {
+                    return true;
+                }
+
+                const scriptText = Array.from(doc.querySelectorAll('script'))
+                    .map((script) => script.textContent || '')
+                    .join('\n')
+                    .toLowerCase();
+
+                return scriptText.includes('toastr.success');
+            } catch (error) {
+                return false;
+            }
+        };
+
         const checkCompletion = () => {
             try {
                 const activeFrame = frameStore.style.display === 'none' ? frameDelivery : frameStore;
+                const activeType = frameStore.style.display === 'none' ? 'delivery' : 'store';
                 cleanupFrame(activeFrame);
                 const currentUrl = activeFrame.contentWindow.location.href;
-                if (
-                    currentUrl.includes('/vendor/final-step') ||
-                    currentUrl.includes('/deliveryman') ||
-                    currentUrl.includes('step=complete')
-                ) {
+                if (activeType === 'store' && (currentUrl.includes('/vendor/final-step') || currentUrl.includes('step=complete'))) {
+                    showCompleteMessage();
+                }
+
+                if (activeType === 'delivery' && currentUrl.includes('/deliveryman/apply') && hasDeliverySuccessState(activeFrame)) {
                     showCompleteMessage();
                 }
             } catch (error) {

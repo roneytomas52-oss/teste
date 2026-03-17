@@ -110,6 +110,7 @@ function render_registration_page(string $mode = 'store'): void
             const completeMessage = document.getElementById('registration-complete-message');
             const registrationSection = document.querySelector('.registration-layout');
             const completionMarkers = <?= json_encode($completionMarkers) ?>;
+            const registrationType = <?= json_encode($isDelivery ? 'delivery' : 'store') ?>;
 
             const cleanupFrame = () => {
                 try {
@@ -175,17 +176,44 @@ function render_registration_page(string $mode = 'store'): void
                 completeMessage.style.display = 'block';
             };
 
+            const hasDeliverySuccessState = () => {
+                try {
+                    const doc = frame.contentDocument || frame.contentWindow.document;
+                    if (!doc) {
+                        return false;
+                    }
+
+                    if (doc.querySelector('.toast-success, #toast-container .toast-success, .alert-success')) {
+                        return true;
+                    }
+
+                    const scriptText = Array.from(doc.querySelectorAll('script'))
+                        .map((script) => script.textContent || '')
+                        .join('\n')
+                        .toLowerCase();
+
+                    return scriptText.includes('toastr.success');
+                } catch (error) {
+                    return false;
+                }
+            };
+
             const checkCompletion = () => {
                 try {
                     cleanupFrame();
                     const currentUrl = frame.contentWindow.location.href;
-                    const reachedCompleteStep = completionMarkers.some((marker) => currentUrl.includes(marker));
-
-                    if (reachedCompleteStep && !currentUrl.includes('/apply')) {
-                        showCompleteMessage();
+                    if (registrationType === 'store') {
+                        const reachedCompleteStep = completionMarkers.some((marker) => currentUrl.includes(marker));
+                        if (reachedCompleteStep && !currentUrl.includes('/apply')) {
+                            showCompleteMessage();
+                        }
                     }
 
                     if (currentUrl.includes('final-step') || currentUrl.includes('step=complete')) {
+                        showCompleteMessage();
+                    }
+
+                    if (registrationType === 'delivery' && currentUrl.includes('/deliveryman/apply') && hasDeliverySuccessState()) {
                         showCompleteMessage();
                     }
                 } catch (error) {

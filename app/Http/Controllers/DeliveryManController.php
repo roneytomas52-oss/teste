@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DMVehicle;
 use App\Models\DeliveryMan;
+use App\Models\Zone;
 use DB;
 use Illuminate\Http\Request;
 use App\CentralLogics\Helpers;
@@ -31,7 +33,10 @@ class DeliveryManController extends Controller
         $custome_recaptcha->build();
         Session::put('six_captcha', $custome_recaptcha->getPhrase());
 
-        return view('dm-registration', compact('custome_recaptcha'));
+        $zones = Zone::active()->orderBy('name')->get(['id', 'name']);
+        $vehicles = DMVehicle::active()->orderBy('type')->get(['id', 'type']);
+
+        return view('dm-registration', compact('custome_recaptcha', 'zones', 'vehicles'));
     }
 
     public function store(Request $request)
