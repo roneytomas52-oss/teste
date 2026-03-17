@@ -35,5 +35,7 @@ footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;gr
 .step{display:inline-flex;padding:7px 12px;border-radius:999px;background:#fff3eb;border:1px solid #f3d2c2;font-size:13px;font-weight:700;color:#944f2a}
 .step.active{background:#e42520;color:#fff;border-color:#e42520}
 .embedded-panel{padding:12px}
-.official-frame{width:100%;min-height:950px;border:1px solid #efd2c6;border-radius:12px;background:#fff}
-@media(max-width:960px){.registration-layout{grid-template-columns:1fr}.official-frame{min-height:760px}}
+.frame-zoom{overflow:hidden;border-radius:12px}.frame-zoom .official-frame{width:111%;min-height:1100px;border:1px solid #efd2c6;border-radius:12px;background:#fff;transform:scale(1.1);transform-origin:top left}
+@media(max-width:960px){.registration-layout{grid-template-columns:1fr}.frame-zoom .official-frame{width:118%;min-height:900px;transform:scale(1.16)}}
+
+.simple-footer{background:#2b1211;color:#fff;padding:18px 0;margin-top:24px}.simple-footer p{margin:0;text-align:center;font-size:14px}

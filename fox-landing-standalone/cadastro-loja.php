@@ -8,36 +8,73 @@ $vendorApplyUrl = sixammart_url('vendor/apply');
 
 ob_start();
 ?>
-<section class="container section">
-    <div class="panel embedded-panel" style="max-width: 980px; margin: 0 auto;">
-        <iframe
-            class="official-frame"
-            src="<?= e($vendorApplyUrl) ?>"
-            title="Cadastro oficial de loja"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+<section class="hero small">
+    <div class="container">
+        <h1>Cadastro de Loja</h1>
+        <p>Fluxo completo com os campos oficiais do 6amMart, incluindo validações e captcha nativo.</p>
+    </div>
+</section>
+
+<section class="container section contact registration-layout">
+    <div class="panel">
+        <h3>Requisitos obrigatórios (Brasil)</h3>
+        <ul class="requirements">
+            <li>CNPJ/CPF válido do responsável pelo estabelecimento.</li>
+            <li>Telefone, e-mail e endereço comercial atualizados.</li>
+            <li>Documento com foto do responsável legal.</li>
+            <li>Informações completas de operação e atendimento.</li>
+            <li>Validação completa com captcha oficial.</li>
+        </ul>
+
+        <div class="steps-inline">
+            <span class="step active">1. Dados da loja</span>
+            <span class="step">2. Dados do responsável</span>
+            <span class="step">3. Conclusão</span>
+        </div>
+
+        <p>O cadastro oficial está incorporado nesta página, mantendo o padrão profissional sem redirecionamento externo.</p>
     </div>
 
-    <div id="registration-complete-message" class="panel" style="max-width: 980px; margin: 0 auto; display:none; text-align:center;">
+    <div class="panel embedded-panel">
+        <div class="frame-zoom">
+            <iframe
+                class="official-frame"
+                src="<?= e($vendorApplyUrl) ?>"
+                title="Cadastro oficial de loja"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</section>
+
+<div id="registration-complete-message" class="container section" style="display:none; text-align:center;">
+    <div class="panel" style="max-width: 980px; margin: 0 auto;">
         <h2 style="margin-bottom: 14px;">Cadastro finalizado</h2>
         <p style="font-size: 18px; line-height:1.6;">
             Obrigado! Logo um agente entrará em contato pelo número de telefone e e-mail cadastrado.
         </p>
     </div>
-</section>
+</div>
+
+<footer class="simple-footer">
+    <div class="container">
+        <p>© <?= date('Y') ?> Fox Delivery. Todos os direitos reservados.</p>
+    </div>
+</footer>
 
 <script>
     (function () {
         const frame = document.querySelector('.official-frame');
         const completeMessage = document.getElementById('registration-complete-message');
+        const registrationSection = document.querySelector('.registration-layout');
 
-        if (!frame || !completeMessage) {
+        if (!frame || !completeMessage || !registrationSection) {
             return;
         }
 
         const showCompleteMessage = () => {
-            frame.closest('.embedded-panel').style.display = 'none';
+            registrationSection.style.display = 'none';
             completeMessage.style.display = 'block';
         };
 
