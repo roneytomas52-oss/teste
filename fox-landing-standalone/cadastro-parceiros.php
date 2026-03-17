@@ -23,7 +23,8 @@ ob_start();
     overflow:hidden;
     background:linear-gradient(180deg,#fff8f4 0%,#fff6f1 100%);
     color:var(--fdxp-ink);
-    font-family:"Trebuchet MS","Segoe UI",Verdana,sans-serif;
+    font-family:"Segoe UI Variable Display","Segoe UI","Helvetica Neue",Arial,sans-serif;
+    line-height:1.5;
 }
 
 .fdxp-shell{
@@ -74,10 +75,10 @@ ob_start();
 }
 
 .fdxp-topbar{
-    display:flex;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
     align-items:center;
-    justify-content:space-between;
-    gap:20px;
+    gap:24px;
     margin-bottom:46px;
 }
 
@@ -85,67 +86,56 @@ ob_start();
     display:inline-flex;
     align-items:center;
     text-decoration:none;
-    padding:8px;
-    border-radius:28px;
-    background:linear-gradient(180deg,rgba(255,246,239,.16),rgba(255,240,231,.08));
-    border:1px solid rgba(255,255,255,.16);
-    box-shadow:0 16px 30px rgba(91,20,9,.14);
-    backdrop-filter:blur(10px);
+    width:max-content;
+    padding:10px;
+    border-radius:30px;
+    background:linear-gradient(180deg,rgba(255,248,241,.14),rgba(255,239,230,.07));
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 18px 34px rgba(91,20,9,.16);
+    backdrop-filter:blur(12px);
 }
 
 .fdxp-brand img{
     display:block;
-    width:132px;
-    height:88px;
+    width:94px;
+    height:94px;
     max-width:none;
     object-fit:cover;
-    object-position:center 18%;
-    border-radius:20px;
-    filter:saturate(1.08) contrast(1.04) brightness(1.02);
+    object-position:center;
+    border-radius:24px;
+    box-shadow:0 12px 24px rgba(75,24,12,.18);
+    filter:saturate(1.03) contrast(1.02) brightness(1.01);
 }
 
 .fdxp-nav{
     display:flex;
     align-items:center;
-    gap:28px;
+    justify-content:center;
+    gap:22px;
     flex-wrap:wrap;
 }
 
 .fdxp-nav a{
-    color:rgba(255,255,255,.97);
+    color:rgba(255,247,241,.94);
     text-decoration:none;
-    font-size:17px;
-    font-weight:800;
+    font-size:15px;
+    font-weight:700;
     letter-spacing:-.01em;
 }
 
 .fdxp-nav a:first-child::before{
-    content:"";
-    display:inline-block;
-    width:12px;
-    height:12px;
-    margin-right:10px;
-    border-radius:3px;
-    background:#fff4ea;
-    box-shadow:inset 0 0 0 3px rgba(228,63,19,.32);
-    vertical-align:middle;
+    content:none;
 }
 
 .fdxp-nav a:nth-child(2)::before{
-    content:"";
-    display:inline-block;
-    width:12px;
-    height:2px;
-    margin-right:10px;
-    background:#fff4ea;
-    box-shadow:0 5px 0 #fff4ea,0 -5px 0 #fff4ea;
-    vertical-align:middle;
+    content:none;
 }
 
 .fdxp-actions{
     display:flex;
     align-items:center;
-    gap:12px;
+    justify-content:flex-end;
+    gap:10px;
     flex-wrap:wrap;
 }
 
@@ -153,15 +143,15 @@ ob_start();
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    min-width:144px;
-    padding:14px 24px;
+    min-width:0;
+    padding:13px 20px;
     border-radius:999px;
     background:linear-gradient(180deg,#ff6921,#de2715);
     border:1px solid rgba(255,255,255,.18);
     box-shadow:0 18px 30px rgba(120,20,8,.2);
     color:#fff;
     text-decoration:none;
-    font-size:18px;
+    font-size:16px;
     font-weight:900;
     transition:transform .2s ease,box-shadow .2s ease;
 }
@@ -172,7 +162,9 @@ ob_start();
 }
 
 .fdxp-pill-soft{
-    background:rgba(230,75,28,.16);
+    background:rgba(255,247,241,.1);
+    border-color:rgba(255,255,255,.14);
+    box-shadow:none;
     backdrop-filter:blur(10px);
 }
 
@@ -198,22 +190,22 @@ ob_start();
 
 .fdxp-copy{
     max-width:480px;
-    padding:14px 0 46px;
+    padding:10px 0 40px;
 }
 
 .fdxp-copy h1{
     margin:0 0 16px;
-    font-size:72px;
-    line-height:.93;
-    letter-spacing:-.055em;
+    font-size:70px;
+    line-height:.94;
+    letter-spacing:-.06em;
     text-shadow:0 10px 26px rgba(109,18,10,.16);
 }
 
 .fdxp-copy p{
     margin:0;
-    max-width:336px;
-    font-size:22px;
-    line-height:1.55;
+    max-width:390px;
+    font-size:21px;
+    line-height:1.58;
     color:rgba(255,247,241,.98);
 }
 
@@ -249,16 +241,16 @@ ob_start();
 .fdxp-spotlight{
     position:relative;
     z-index:2;
-    width:min(100%,432px);
+    width:min(100%,446px);
     display:grid;
-    gap:12px;
-    padding:32px 30px;
+    gap:14px;
+    padding:34px 32px;
     border-radius:32px;
     background:
-        linear-gradient(180deg,rgba(255,251,247,.94),rgba(255,242,233,.88)),
+        linear-gradient(180deg,rgba(255,252,249,.95),rgba(255,244,236,.9)),
         linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
-    border:1px solid rgba(255,255,255,.22);
-    box-shadow:0 28px 48px rgba(92,22,11,.13);
+    border:1px solid rgba(255,255,255,.26);
+    box-shadow:0 32px 56px rgba(92,22,11,.15);
     backdrop-filter:blur(16px);
 }
 
@@ -266,9 +258,9 @@ ob_start();
     content:"";
     position:absolute;
     inset:14px;
-    border-radius:26px;
-    border:1px solid rgba(255,255,255,.42);
-    opacity:.55;
+    border-radius:24px;
+    border:1px solid rgba(255,255,255,.48);
+    opacity:.5;
 }
 
 .fdxp-spotlight::after{
@@ -301,8 +293,8 @@ ob_start();
     position:relative;
     z-index:1;
     color:#562920;
-    font-size:31px;
-    line-height:1.08;
+    font-size:32px;
+    line-height:1.1;
     letter-spacing:-.04em;
 }
 
@@ -310,10 +302,10 @@ ob_start();
     position:relative;
     z-index:1;
     margin:0;
-    color:#7a584a;
-    font-size:14px;
-    line-height:1.7;
-    max-width:34ch;
+    color:#6f4e42;
+    font-size:15px;
+    line-height:1.72;
+    max-width:35ch;
 }
 
 .fdxp-curve{
@@ -328,7 +320,7 @@ ob_start();
     content:"";
     position:absolute;
     inset:34px -5% -10px;
-    background:#fff8f4;
+    background:#fff9f6;
     border-radius:52% 48% 0 0 / 100% 100% 0 0;
 }
 
@@ -337,10 +329,10 @@ ob_start();
     position:absolute;
     inset:0 0 28px;
     background:
-        linear-gradient(90deg,rgba(255,92,88,.9) 0,rgba(255,92,88,.9) 12%,transparent 12%),
-        linear-gradient(90deg,rgba(255,191,191,.9) 0,rgba(255,191,191,.9) 22%,transparent 22%);
+        linear-gradient(90deg,rgba(255,101,88,.84) 0,rgba(255,101,88,.84) 10%,transparent 10%),
+        linear-gradient(90deg,rgba(255,204,200,.78) 0,rgba(255,204,200,.78) 18%,transparent 18%);
     border-radius:48% 52% 0 0 / 100% 100% 0 0;
-    opacity:.96;
+    opacity:.84;
 }
 
 .fdxp-main{
@@ -381,11 +373,13 @@ ob_start();
     display:grid;
     gap:24px;
     min-height:100%;
+    overflow:hidden;
+    isolation:isolate;
     padding:36px 34px 34px;
     border-radius:32px;
     background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,248,244,.97));
     border:1px solid var(--fdxp-line);
-    box-shadow:0 24px 40px rgba(118,38,14,.1);
+    box-shadow:0 26px 44px rgba(118,38,14,.11);
 }
 
 .fdxp-card::before{
@@ -397,6 +391,17 @@ ob_start();
     height:5px;
     border-radius:32px 32px 0 0;
     background:linear-gradient(90deg,#ff7a24,#ea2f17);
+}
+
+.fdxp-card::after{
+    content:"";
+    position:absolute;
+    inset:auto -10% 56% auto;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background:radial-gradient(circle at center,rgba(255,173,104,.18) 0,rgba(255,173,104,.06) 42%,rgba(255,173,104,0) 72%);
+    z-index:-1;
 }
 
 .fdxp-card-rider::before{
@@ -429,8 +434,8 @@ ob_start();
 .fdxp-card-head h3{
     margin:0;
     color:#55291f;
-    font-size:30px;
-    line-height:1.08;
+    font-size:31px;
+    line-height:1.1;
     letter-spacing:-.03em;
 }
 
@@ -476,7 +481,7 @@ ob_start();
     align-items:center;
     justify-content:center;
     width:100%;
-    padding:18px 24px;
+    padding:19px 24px;
     border-radius:999px;
     background:linear-gradient(180deg,#ff6a20,#ea2916);
     border:1px solid rgba(255,255,255,.18);
@@ -485,7 +490,7 @@ ob_start();
     font-size:20px;
     font-weight:900;
     letter-spacing:-.02em;
-    box-shadow:0 18px 30px rgba(188,41,15,.22);
+    box-shadow:0 20px 34px rgba(188,41,15,.24);
     transition:transform .2s ease,box-shadow .2s ease;
 }
 
@@ -501,11 +506,11 @@ ob_start();
     max-width:1020px;
     width:100%;
     margin:8px auto 0;
-    padding:28px 34px;
+    padding:30px 36px;
     border-radius:28px;
     background:rgba(255,249,245,.97);
     border:1px solid rgba(241,215,198,.98);
-    box-shadow:0 18px 30px rgba(143,60,20,.08);
+    box-shadow:0 20px 34px rgba(143,60,20,.08);
 }
 
 .fdxp-integration-icon{
@@ -542,9 +547,69 @@ ob_start();
     line-height:1.65;
 }
 
+.fdxp-footer{
+    position:relative;
+    background:linear-gradient(180deg,rgba(97,28,18,.98),rgba(70,20,13,.99));
+    color:rgba(255,241,233,.92);
+}
+
+.fdxp-footer::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 18% 10%,rgba(255,138,63,.18) 0,rgba(255,138,63,0) 24%),
+        radial-gradient(circle at 82% 0,rgba(255,193,128,.12) 0,rgba(255,193,128,0) 20%);
+}
+
+.fdxp-footer-shell{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:28px;
+    align-items:start;
+    padding:34px 0 40px;
+}
+
+.fdxp-footer-copy{
+    display:grid;
+    gap:10px;
+    max-width:520px;
+}
+
+.fdxp-footer-copy strong{
+    font-size:26px;
+    line-height:1;
+    letter-spacing:-.04em;
+    color:#fff7f2;
+}
+
+.fdxp-footer-copy p{
+    margin:0;
+    font-size:15px;
+    line-height:1.75;
+    color:rgba(255,239,231,.8);
+}
+
+.fdxp-footer-links{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:12px 16px;
+}
+
+.fdxp-footer-links a{
+    color:rgba(255,247,241,.9);
+    text-decoration:none;
+    font-size:15px;
+    font-weight:700;
+}
+
 @media(max-width:1100px){
     .fdxp-topbar{
-        justify-content:center;
+        grid-template-columns:1fr;
+        justify-items:center;
     }
 
     .fdxp-nav,
@@ -554,7 +619,8 @@ ob_start();
 
     .fdxp-hero-grid,
     .fdxp-grid,
-    .fdxp-integration{
+    .fdxp-integration,
+    .fdxp-footer-shell{
         grid-template-columns:1fr;
     }
 
@@ -572,6 +638,12 @@ ob_start();
         justify-content:center;
         min-height:320px;
         padding-bottom:0;
+    }
+
+    .fdxp-footer-copy,
+    .fdxp-footer-links{
+        justify-content:center;
+        text-align:center;
     }
 
 }
@@ -595,12 +667,12 @@ ob_start();
     }
 
     .fdxp-brand img{
-        width:112px;
-        height:76px;
+        width:82px;
+        height:82px;
     }
 
     .fdxp-nav{
-        gap:16px;
+        gap:14px;
     }
 
     .fdxp-nav a,
@@ -614,11 +686,11 @@ ob_start();
     }
 
     .fdxp-copy h1{
-        font-size:54px;
+        font-size:52px;
     }
 
     .fdxp-copy p{
-        font-size:19px;
+        font-size:18px;
     }
 
     .fdxp-scene{
@@ -676,6 +748,20 @@ ob_start();
     .fdxp-integration-copy h3{
         font-size:24px;
     }
+
+    .fdxp-footer-shell{
+        padding:28px 0 32px;
+        gap:18px;
+    }
+
+    .fdxp-footer-copy strong{
+        font-size:22px;
+    }
+
+    .fdxp-footer-copy p,
+    .fdxp-footer-links a{
+        font-size:14px;
+    }
 }
 </style>
 
@@ -703,14 +789,14 @@ ob_start();
             <div class="fdxp-hero-grid">
                 <div class="fdxp-copy">
                     <h1>Cadastre-se<br>na Fox Delivery</h1>
-                    <p>Escolha como deseja participar da plataforma.</p>
+                    <p>Escolha a modalidade de parceria ideal para integrar sua opera&ccedil;&atilde;o &agrave; plataforma Fox Delivery.</p>
                 </div>
 
                 <div class="fdxp-scene">
                     <div class="fdxp-spotlight">
                         <span class="fdxp-spotlight-tag">Cadastro de parceiros Fox Delivery</span>
-                        <strong>Escolha a jornada ideal para sua loja ou opera&ccedil;&atilde;o de entregas.</strong>
-                        <p>Processo simples, visual profissional e acesso organizado ao painel.</p>
+                        <strong>Credencie sua opera&ccedil;&atilde;o comercial ou log&iacute;stica com a estrutura oficial da Fox Delivery.</strong>
+                        <p>Fluxo institucional com valida&ccedil;&atilde;o centralizada, acompanhamento administrativo e integra&ccedil;&atilde;o ao ecossistema da plataforma.</p>
                     </div>
                 </div>
             </div>
@@ -722,21 +808,21 @@ ob_start();
     <section class="fdxp-main" id="cadastro-opcoes">
         <div class="fdxp-shell fdxp-main-shell">
             <header class="fdxp-heading">
-                <h2>Escolha como deseja se cadastrar</h2>
+                <h2>Escolha a modalidade de cadastro</h2>
             </header>
 
             <div class="fdxp-grid">
                 <article class="fdxp-card">
                     <div class="fdxp-card-head">
-                        <span class="fdxp-card-label">Loja parceira</span>
+                        <span class="fdxp-card-label">Opera&ccedil;&atilde;o comercial</span>
                         <h3>Cadastrar minha loja</h3>
-                        <p>Cadastre seu restaurante, mercado ou farm&aacute;cia e comece a vender pela Fox Delivery.</p>
+                        <p>Cadastre restaurante, mercado ou farm&aacute;cia para vender com estrutura integrada &agrave; opera&ccedil;&atilde;o Fox Delivery.</p>
                     </div>
 
                     <ul class="fdxp-checks">
-                        <li>Receba pedidos online</li>
-                        <li>Alcance novos clientes</li>
-                        <li>Gerencie pedidos pelo painel</li>
+                        <li>Receba pedidos online com gest&atilde;o centralizada</li>
+                        <li>Amplie a visibilidade da sua opera&ccedil;&atilde;o</li>
+                        <li>Gerencie pedidos e atendimento pelo painel</li>
                     </ul>
 
                     <a class="fdxp-button" href="./cadastro-loja.php">Cadastrar loja</a>
@@ -744,15 +830,15 @@ ob_start();
 
                 <article class="fdxp-card fdxp-card-rider">
                     <div class="fdxp-card-head">
-                        <span class="fdxp-card-label rider">Entregador parceiro</span>
+                        <span class="fdxp-card-label rider">Opera&ccedil;&atilde;o log&iacute;stica</span>
                         <h3>Quero ser entregador</h3>
-                        <p>Trabalhe fazendo entregas com hor&aacute;rios flex&iacute;veis.</p>
+                        <p>Atue como parceiro log&iacute;stico com credenciamento organizado e integra&ccedil;&atilde;o &agrave; opera&ccedil;&atilde;o Fox Delivery.</p>
                     </div>
 
                     <ul class="fdxp-checks">
-                        <li>Ganhe por entrega</li>
-                        <li>Trabalhe quando quiser</li>
-                        <li>Use nosso app de entregador</li>
+                        <li>Atue com remunera&ccedil;&atilde;o por entrega</li>
+                        <li>Tenha flexibilidade operacional na rotina</li>
+                        <li>Utilize o app oficial de entregador</li>
                     </ul>
 
                     <a class="fdxp-button fdxp-button-rider" href="./cadastro-entregador.php">Cadastrar entregador</a>
@@ -766,11 +852,28 @@ ob_start();
 
                 <div class="fdxp-integration-copy">
                     <h3>Integra&ccedil;&atilde;o com o painel Fox Delivery</h3>
-                    <p>Cadastros s&atilde;o sincronizados automaticamente com o painel administrativo.</p>
+                    <p>Cadastros seguem o fluxo oficial da plataforma, com sincroniza&ccedil;&atilde;o administrativa e acompanhamento centralizado da opera&ccedil;&atilde;o.</p>
                 </div>
             </article>
         </div>
     </section>
+
+    <footer class="fdxp-footer">
+        <div class="fdxp-shell fdxp-footer-shell">
+            <div class="fdxp-footer-copy">
+                <strong>Fox Delivery</strong>
+                <p>Cadastro oficial de parceiros para opera&ccedil;&otilde;es comerciais e log&iacute;sticas, com jornada integrada ao painel administrativo da plataforma.</p>
+            </div>
+
+            <nav class="fdxp-footer-links" aria-label="Links institucionais da Fox Delivery">
+                <a href="./index.php">In&iacute;cio</a>
+                <a href="./sobre.php">Sobre n&oacute;s</a>
+                <a href="./index.php#blog">Blog</a>
+                <a href="./index.php#apps">Aplicativos</a>
+                <a href="<?= e(sixammart_url('login')) ?>">Painel administrativo</a>
+            </nav>
+        </div>
+    </footer>
 </section>
 <?php
 
