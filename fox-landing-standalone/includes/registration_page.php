@@ -58,20 +58,6 @@ function render_registration_page(string $mode = 'store'): void
         </aside>
 
         <div class="panel embedded-panel registration-frame-shell">
-            <div class="frame-topbar">
-                <div class="frame-brand">
-                    <span class="frame-logo">FOX</span>
-                    <div>
-                        <small>PT</small>
-                        <strong><?= $isDelivery ? 'Cadastro de entregador' : 'Cadastro de loja' ?></strong>
-                    </div>
-                </div>
-                <nav class="frame-links" aria-label="Links de cadastro">
-                    <a href="./cadastro-loja.php">Cadastro de loja</a>
-                    <a href="./cadastro-entregador.php">Cadastro de entregador</a>
-                </nav>
-            </div>
-
             <div class="frame-title">
                 <span>fornecedor</span>
                 <strong>aplicativo</strong>
@@ -102,18 +88,68 @@ function render_registration_page(string $mode = 'store'): void
         </div>
     </div>
 
-    <footer class="simple-footer">
-        <div class="container">
-            <p>&copy; <?= date('Y') ?> Fox Delivery. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-
     <script>
         (function () {
             const frame = document.getElementById('registration-frame');
             const completeMessage = document.getElementById('registration-complete-message');
             const registrationSection = document.querySelector('.registration-layout');
             const completionMarkers = <?= json_encode($completionMarkers) ?>;
+
+            const cleanupFrame = () => {
+                try {
+                    const doc = frame.contentDocument || frame.contentWindow.document;
+                    if (!doc || !doc.body) {
+                        return;
+                    }
+
+                    if (!doc.getElementById('fox-embedded-cleanup')) {
+                        const style = doc.createElement('style');
+                        style.id = 'fox-embedded-cleanup';
+                        style.textContent = `
+                            header, footer, .header, .footer, .navbar, .nav-bar, .topbar, .top-bar, .menubar,
+                            .menu-bar, .copyright, .copyright-area, .footer-area, .landing-footer, .web-footer,
+                            [class*="footer"], [class*="Footer"], [id*="footer"], [id*="Footer"] {
+                                display: none !important;
+                            }
+
+                            body {
+                                padding-top: 0 !important;
+                                padding-bottom: 0 !important;
+                            }
+                        `;
+                        doc.head.appendChild(style);
+                    }
+
+                    Array.from(doc.querySelectorAll('a')).forEach((link) => {
+                        const text = (link.textContent || '').trim().toLowerCase();
+                        if (!text.includes('cadastro de loja') && !text.includes('cadastro de entregador')) {
+                            return;
+                        }
+
+                        const block = link.closest('header, nav, div, section');
+                        if (block && block.style) {
+                            block.style.display = 'none';
+                        }
+                    });
+
+                    Array.from(doc.querySelectorAll('div, section, footer, p')).forEach((node) => {
+                        const text = (node.textContent || '').trim().toLowerCase();
+                        if (
+                            text.includes('todos os direitos reservados') ||
+                            text.includes('intermediacao de negocios') ||
+                            text.includes('cnpj') ||
+                            text.includes('rua frei bernardo')
+                        ) {
+                            const block = node.closest('footer, section, div');
+                            if (block && block.style) {
+                                block.style.display = 'none';
+                            }
+                        }
+                    });
+                } catch (error) {
+                    // Ignore iframe access issues while the official page is loading.
+                }
+            };
 
             const showCompleteMessage = () => {
                 if (!completeMessage || !registrationSection) {
@@ -125,6 +161,7 @@ function render_registration_page(string $mode = 'store'): void
 
             const checkCompletion = () => {
                 try {
+                    cleanupFrame();
                     const currentUrl = frame.contentWindow.location.href;
                     const reachedCompleteStep = completionMarkers.some((marker) => currentUrl.includes(marker));
 
@@ -140,7 +177,11 @@ function render_registration_page(string $mode = 'store'): void
                 }
             };
 
-            frame.addEventListener('load', checkCompletion);
+            frame.addEventListener('load', () => {
+                cleanupFrame();
+                checkCompletion();
+            });
+            window.setInterval(cleanupFrame, 1000);
             window.setInterval(checkCompletion, 1200);
         })();
     </script>

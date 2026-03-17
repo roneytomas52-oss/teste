@@ -38,7 +38,7 @@ footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;gr
 .official-frame{width:100%;min-height:950px;border:1px solid #efd2c6;border-radius:12px;background:#fff}
 @media(max-width:960px){.registration-layout{grid-template-columns:1fr}.official-frame{min-height:760px}}
 
-.simple-footer{background:#2b1211;color:#fff;padding:18px 0;margin-top:24px}.simple-footer p{margin:0;text-align:center;font-size:14px}
+.simple-footer{display:none}
 
 .switcher{display:flex;gap:10px;margin:14px 0 12px}
 .switch-btn{border:1px solid #f3d2c2;background:#fff3eb;color:#944f2a;border-radius:999px;padding:10px 14px;font-weight:700;cursor:pointer}
@@ -79,7 +79,7 @@ footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;gr
 .frame-logo{display:inline-flex;align-items:center;justify-content:center;width:68px;height:40px;border-radius:12px;background:linear-gradient(135deg,#151515,#444);color:#ff9b2f;font-size:14px;font-weight:900;letter-spacing:.08em}
 .frame-links{display:flex;gap:14px;flex-wrap:wrap;padding-top:6px}
 .frame-links a{color:#1d5fd0;text-decoration:underline;font-size:14px}
-.frame-title{padding:46px 18px 26px;text-align:center;font-size:18px}
+.frame-title{padding:22px 18px 22px;text-align:center;font-size:18px}
 .frame-title span{color:#2b221d}
 .frame-title strong{color:#00c746;font-size:20px;margin-left:4px}
 .frame-steps{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding:0 18px 24px}
@@ -104,7 +104,7 @@ footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;gr
     .frame-topbar{padding:14px 12px 8px}
     .frame-topbar,.frame-brand{flex-direction:column;align-items:flex-start}
     .frame-links{gap:10px}
-    .frame-title{padding:24px 12px 20px}
+    .frame-title{padding:18px 12px 18px}
     .frame-step{min-width:100%;clip-path:none;border-radius:12px}
     .official-frame{min-height:920px;border-radius:12px}
 }

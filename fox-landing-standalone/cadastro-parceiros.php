@@ -46,20 +46,6 @@ ob_start();
     </aside>
 
     <div class="panel embedded-panel registration-frame-shell">
-        <div class="frame-topbar">
-            <div class="frame-brand">
-                <span class="frame-logo">FOX</span>
-                <div>
-                    <small>PT</small>
-                    <strong id="frame-label"><?= $activeType === 'store' ? 'Cadastro de loja' : 'Cadastro de entregador' ?></strong>
-                </div>
-            </div>
-            <nav class="frame-links" aria-label="Links de cadastro">
-                <a href="./cadastro-loja.php">Cadastro de loja</a>
-                <a href="./cadastro-entregador.php">Cadastro de entregador</a>
-            </nav>
-        </div>
-
         <div class="frame-title">
             <span>fornecedor</span>
             <strong>aplicativo</strong>
@@ -85,12 +71,6 @@ ob_start();
     </div>
 </div>
 
-<footer class="simple-footer">
-    <div class="container">
-        <p>&copy; <?= date('Y') ?> Fox Delivery. Todos os direitos reservados.</p>
-    </div>
-</footer>
-
 <script>
     (function () {
         const buttons = document.querySelectorAll('.switch-btn');
@@ -98,9 +78,64 @@ ob_start();
         const frameDelivery = document.getElementById('frame-delivery');
         const reqStore = document.getElementById('requirements-store');
         const reqDelivery = document.getElementById('requirements-delivery');
-        const frameLabel = document.getElementById('frame-label');
         const completeMessage = document.getElementById('registration-complete-message');
         const registrationSection = document.querySelector('.registration-layout');
+
+        const cleanupFrame = (frame) => {
+            try {
+                const doc = frame.contentDocument || frame.contentWindow.document;
+                if (!doc || !doc.body) {
+                    return;
+                }
+
+                if (!doc.getElementById('fox-embedded-cleanup')) {
+                    const style = doc.createElement('style');
+                    style.id = 'fox-embedded-cleanup';
+                    style.textContent = `
+                        header, footer, .header, .footer, .navbar, .nav-bar, .topbar, .top-bar, .menubar,
+                        .menu-bar, .copyright, .copyright-area, .footer-area, .landing-footer, .web-footer,
+                        [class*="footer"], [class*="Footer"], [id*="footer"], [id*="Footer"] {
+                            display: none !important;
+                        }
+
+                        body {
+                            padding-top: 0 !important;
+                            padding-bottom: 0 !important;
+                        }
+                    `;
+                    doc.head.appendChild(style);
+                }
+
+                Array.from(doc.querySelectorAll('a')).forEach((link) => {
+                    const text = (link.textContent || '').trim().toLowerCase();
+                    if (!text.includes('cadastro de loja') && !text.includes('cadastro de entregador')) {
+                        return;
+                    }
+
+                    const block = link.closest('header, nav, div, section');
+                    if (block && block.style) {
+                        block.style.display = 'none';
+                    }
+                });
+
+                Array.from(doc.querySelectorAll('div, section, footer, p')).forEach((node) => {
+                    const text = (node.textContent || '').trim().toLowerCase();
+                    if (
+                        text.includes('todos os direitos reservados') ||
+                        text.includes('intermediacao de negocios') ||
+                        text.includes('cnpj') ||
+                        text.includes('rua frei bernardo')
+                    ) {
+                        const block = node.closest('footer, section, div');
+                        if (block && block.style) {
+                            block.style.display = 'none';
+                        }
+                    }
+                });
+            } catch (error) {
+                // Ignore iframe access issues while the official page is loading.
+            }
+        };
 
         const setActive = (type) => {
             const storeActive = type === 'store';
@@ -108,7 +143,6 @@ ob_start();
             frameDelivery.style.display = storeActive ? 'none' : 'block';
             reqStore.style.display = storeActive ? 'block' : 'none';
             reqDelivery.style.display = storeActive ? 'none' : 'block';
-            frameLabel.textContent = storeActive ? 'Cadastro de loja' : 'Cadastro de entregador';
 
             buttons.forEach((button) => {
                 const active = button.dataset.target === type;
@@ -128,6 +162,7 @@ ob_start();
         const checkCompletion = () => {
             try {
                 const activeFrame = frameStore.style.display === 'none' ? frameDelivery : frameStore;
+                cleanupFrame(activeFrame);
                 const currentUrl = activeFrame.contentWindow.location.href;
                 if (
                     currentUrl.includes('/vendor/final-step') ||
@@ -145,8 +180,16 @@ ob_start();
             button.addEventListener('click', () => setActive(button.dataset.target));
         });
 
-        frameStore.addEventListener('load', checkCompletion);
-        frameDelivery.addEventListener('load', checkCompletion);
+        frameStore.addEventListener('load', () => {
+            cleanupFrame(frameStore);
+            checkCompletion();
+        });
+        frameDelivery.addEventListener('load', () => {
+            cleanupFrame(frameDelivery);
+            checkCompletion();
+        });
+        window.setInterval(() => cleanupFrame(frameStore), 1000);
+        window.setInterval(() => cleanupFrame(frameDelivery), 1000);
         window.setInterval(checkCompletion, 1200);
 
         setActive(<?= json_encode($activeType) ?>);
