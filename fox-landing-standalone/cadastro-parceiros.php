@@ -34,12 +34,12 @@ ob_start();
 .fdxp-hero{
     position:relative;
     overflow:hidden;
-    padding:30px 0 224px;
+    padding:24px 0 160px;
     color:#fff;
     background:
         radial-gradient(circle at 18% 18%,rgba(255,196,123,.16) 0,rgba(255,196,123,0) 24%),
         radial-gradient(circle at 82% 14%,rgba(255,241,221,.22) 0,rgba(255,241,221,0) 18%),
-        radial-gradient(circle at 62% 58%,rgba(255,192,109,.12) 0,rgba(255,192,109,0) 24%),
+        radial-gradient(circle at 62% 58%,rgba(255,192,109,.1) 0,rgba(255,192,109,0) 24%),
         linear-gradient(180deg,var(--fdxp-red) 0%,var(--fdxp-red-strong) 30%,var(--fdxp-orange) 70%,#f4c89b 100%);
 }
 
@@ -58,13 +58,13 @@ ob_start();
     position:absolute;
     left:-8%;
     right:-8%;
-    bottom:102px;
-    height:226px;
+    bottom:72px;
+    height:156px;
     background:
         linear-gradient(180deg,rgba(255,233,205,.12) 0,rgba(255,233,205,0) 42%),
         linear-gradient(92deg,rgba(82,28,18,.7) 0%,rgba(138,57,24,.42) 30%,rgba(255,150,63,.08) 100%);
     transform:skewY(-8deg);
-    opacity:.78;
+    opacity:.72;
 }
 
 .fdxp-topbar,
@@ -78,7 +78,7 @@ ob_start();
     align-items:center;
     justify-content:space-between;
     gap:20px;
-    margin-bottom:66px;
+    margin-bottom:46px;
 }
 
 .fdxp-brand{
@@ -191,19 +191,19 @@ ob_start();
 .fdxp-hero-grid{
     display:grid;
     grid-template-columns:.94fr 1.06fr;
-    gap:34px;
-    align-items:end;
-    min-height:640px;
+    gap:36px;
+    align-items:center;
+    min-height:456px;
 }
 
 .fdxp-copy{
-    max-width:500px;
-    padding:42px 0 112px;
+    max-width:480px;
+    padding:14px 0 46px;
 }
 
 .fdxp-copy h1{
-    margin:0 0 22px;
-    font-size:82px;
+    margin:0 0 16px;
+    font-size:72px;
     line-height:.93;
     letter-spacing:-.055em;
     text-shadow:0 10px 26px rgba(109,18,10,.16);
@@ -211,281 +211,123 @@ ob_start();
 
 .fdxp-copy p{
     margin:0;
-    max-width:350px;
-    font-size:25px;
-    line-height:1.46;
+    max-width:336px;
+    font-size:22px;
+    line-height:1.55;
     color:rgba(255,247,241,.98);
 }
 
 .fdxp-scene{
     position:relative;
     display:flex;
-    justify-content:center;
-    align-items:flex-end;
-    min-height:640px;
+    justify-content:flex-end;
+    align-items:center;
+    min-height:404px;
+    padding-bottom:4px;
 }
 
 .fdxp-scene::before{
     content:"";
     position:absolute;
-    inset:auto 6% 14% 6%;
-    height:78%;
+    inset:auto 14% 20% 10%;
+    height:56%;
     border-radius:50%;
-    background:radial-gradient(circle at center,rgba(255,237,215,.48) 0,rgba(255,237,215,.12) 42%,rgba(255,237,215,0) 74%);
+    background:radial-gradient(circle at center,rgba(255,237,215,.34) 0,rgba(255,237,215,.09) 42%,rgba(255,237,215,0) 74%);
 }
 
 .fdxp-scene::after{
     content:"";
     position:absolute;
-    bottom:10%;
-    width:72%;
-    height:34px;
+    bottom:18%;
+    width:52%;
+    height:22px;
     border-radius:50%;
-    background:rgba(91,23,12,.18);
-    filter:blur(18px);
+    background:rgba(91,23,12,.1);
+    filter:blur(14px);
 }
 
-.fdxp-composition{
+.fdxp-spotlight{
     position:relative;
     z-index:2;
-    width:min(100%,586px);
-    min-height:524px;
-}
-
-.fdxp-composition::before{
-    content:"";
-    position:absolute;
-    inset:auto 0 30px auto;
-    width:240px;
-    height:240px;
-    border-radius:50%;
-    background:radial-gradient(circle at center,rgba(255,173,88,.34) 0,rgba(255,173,88,.08) 48%,rgba(255,173,88,0) 76%);
-    filter:blur(8px);
-}
-
-.fdxp-composition::after{
-    content:"";
-    position:absolute;
-    top:34px;
-    right:34px;
-    width:430px;
-    height:440px;
-    border-radius:38px;
-    background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
-    border:1px solid rgba(255,255,255,.08);
-    transform:rotate(-4deg);
-    transform-origin:center;
-    opacity:.45;
-}
-
-.fdxp-orb{
-    position:absolute;
-    inset:0 8% auto auto;
-    width:228px;
-    height:228px;
-    border-radius:50%;
-    background:radial-gradient(circle at 35% 35%,rgba(255,247,238,.86) 0,rgba(255,213,165,.5) 34%,rgba(255,129,55,.16) 70%,rgba(255,129,55,0) 100%);
-    filter:blur(8px);
-}
-
-.fdxp-dashboard{
-    position:absolute;
-    top:22px;
-    right:0;
-    width:448px;
-    padding:28px;
-    border-radius:38px;
-    background:
-        linear-gradient(180deg,rgba(255,249,243,.2),rgba(255,245,239,.1)),
-        linear-gradient(180deg,rgba(67,23,14,.22),rgba(67,23,14,.08));
-    border:1px solid rgba(255,255,255,.18);
-    box-shadow:0 40px 60px rgba(95,18,10,.16);
-    backdrop-filter:blur(20px);
-}
-
-.fdxp-dashboard::before{
-    content:"";
-    position:absolute;
-    inset:16px;
-    border-radius:30px;
-    border:1px solid rgba(255,255,255,.09);
-}
-
-.fdxp-dashboard-top{
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    width:min(100%,432px);
+    display:grid;
     gap:12px;
+    padding:32px 30px;
+    border-radius:32px;
+    background:
+        linear-gradient(180deg,rgba(255,251,247,.94),rgba(255,242,233,.88)),
+        linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 28px 48px rgba(92,22,11,.13);
+    backdrop-filter:blur(16px);
 }
 
-.fdxp-chip{
+.fdxp-spotlight::before{
+    content:"";
+    position:absolute;
+    inset:14px;
+    border-radius:26px;
+    border:1px solid rgba(255,255,255,.42);
+    opacity:.55;
+}
+
+.fdxp-spotlight::after{
+    content:"";
+    position:absolute;
+    inset:auto 28px -16px auto;
+    width:116px;
+    height:116px;
+    border-radius:50%;
+    background:radial-gradient(circle at center,rgba(255,169,80,.3) 0,rgba(255,169,80,.08) 46%,rgba(255,169,80,0) 74%);
+    filter:blur(6px);
+}
+
+.fdxp-spotlight-tag{
+    position:relative;
+    z-index:1;
     display:inline-flex;
-    align-items:center;
+    width:max-content;
     padding:10px 14px;
     border-radius:999px;
-    background:rgba(255,248,241,.92);
-    color:#ab3d1a;
+    background:#fff4ec;
+    color:#ca4f1d;
     font-size:12px;
     font-weight:900;
     letter-spacing:.08em;
     text-transform:uppercase;
 }
 
-.fdxp-live{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:9px 12px;
-    border-radius:999px;
-    background:rgba(255,255,255,.12);
-    color:#fff7f2;
-    font-size:12px;
-    font-weight:800;
-}
-
-.fdxp-live::before{
-    content:"";
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:#ffb34b;
-    box-shadow:0 0 0 6px rgba(255,179,75,.18);
-}
-
-.fdxp-dashboard-main{
+.fdxp-spotlight strong{
     position:relative;
-    display:grid;
-    gap:18px;
-    margin-top:20px;
-}
-
-.fdxp-hero-card{
-    display:grid;
-    gap:10px;
-    padding:30px 28px;
-    border-radius:30px;
-    background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(255,244,236,.9));
-    box-shadow:0 20px 36px rgba(81,24,14,.1);
-}
-
-.fdxp-hero-card strong{
-    color:#55291f;
-    font-size:36px;
-    line-height:1.02;
+    z-index:1;
+    color:#562920;
+    font-size:31px;
+    line-height:1.08;
     letter-spacing:-.04em;
 }
 
-.fdxp-hero-card p{
-    margin:0;
-    color:#7a5648;
-    font-size:15px;
-    line-height:1.65;
-}
-
-.fdxp-lane{
+.fdxp-spotlight p{
     position:relative;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-}
-
-.fdxp-mini{
-    display:grid;
-    gap:8px;
-    padding:22px;
-    border-radius:26px;
-    background:linear-gradient(180deg,rgba(255,247,241,.94),rgba(255,238,226,.84));
-    box-shadow:0 18px 30px rgba(88,27,15,.09);
-}
-
-.fdxp-mini.rider{
-    background:linear-gradient(180deg,rgba(255,249,245,.94),rgba(255,234,220,.82));
-}
-
-.fdxp-mini span{
-    display:inline-flex;
-    width:max-content;
-    padding:7px 10px;
-    border-radius:999px;
-    background:#fff1e8;
-    color:#d15523;
-    font-size:11px;
-    font-weight:900;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-}
-
-.fdxp-mini strong{
-    color:#53271f;
-    font-size:20px;
-    line-height:1.18;
-    letter-spacing:-.02em;
-}
-
-.fdxp-mini p{
+    z-index:1;
     margin:0;
-    color:#805d4f;
+    color:#7a584a;
     font-size:14px;
-    line-height:1.58;
-}
-
-.fdxp-float{
-    position:absolute;
-    border-radius:26px;
-    padding:18px 20px;
-    background:linear-gradient(180deg,rgba(255,248,242,.96),rgba(255,240,230,.9));
-    box-shadow:0 20px 32px rgba(92,27,14,.11);
-}
-
-.fdxp-float-top{
-    left:4px;
-    top:120px;
-    width:170px;
-}
-
-.fdxp-float-bottom{
-    right:-2px;
-    bottom:16px;
-    width:190px;
-}
-
-.fdxp-float small{
-    display:block;
-    color:#d15723;
-    font-size:11px;
-    font-weight:900;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-}
-
-.fdxp-float strong{
-    display:block;
-    margin-top:8px;
-    color:#54281f;
-    font-size:30px;
-    line-height:1;
-}
-
-.fdxp-float p{
-    margin:8px 0 0;
-    color:#7a594d;
-    font-size:13px;
-    line-height:1.5;
+    line-height:1.7;
+    max-width:34ch;
 }
 
 .fdxp-curve{
     position:absolute;
     inset:auto 0 0;
     z-index:2;
-    height:174px;
+    height:140px;
     pointer-events:none;
 }
 
 .fdxp-curve::before{
     content:"";
     position:absolute;
-    inset:34px -5% -12px;
+    inset:34px -5% -10px;
     background:#fff8f4;
     border-radius:52% 48% 0 0 / 100% 100% 0 0;
 }
@@ -493,7 +335,7 @@ ob_start();
 .fdxp-curve::after{
     content:"";
     position:absolute;
-    inset:0 0 42px;
+    inset:0 0 28px;
     background:
         linear-gradient(90deg,rgba(255,92,88,.9) 0,rgba(255,92,88,.9) 12%,transparent 12%),
         linear-gradient(90deg,rgba(255,191,191,.9) 0,rgba(255,191,191,.9) 22%,transparent 22%);
@@ -503,8 +345,8 @@ ob_start();
 
 .fdxp-main{
     position:relative;
-    margin-top:-110px;
-    padding:0 0 122px;
+    margin-top:-64px;
+    padding:0 0 96px;
     background:linear-gradient(180deg,#fff8f4 0%,#fff9f6 58%,#f4d7c1 100%);
 }
 
@@ -512,7 +354,7 @@ ob_start();
     position:relative;
     z-index:3;
     display:grid;
-    gap:34px;
+    gap:28px;
 }
 
 .fdxp-heading{
@@ -522,7 +364,7 @@ ob_start();
 .fdxp-heading h2{
     margin:0;
     color:#55291f;
-    font-size:62px;
+    font-size:56px;
     line-height:1;
     letter-spacing:-.05em;
 }
@@ -530,18 +372,20 @@ ob_start();
 .fdxp-grid{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:24px;
+    gap:26px;
+    align-items:stretch;
 }
 
 .fdxp-card{
     position:relative;
     display:grid;
     gap:24px;
-    padding:34px 32px 32px;
-    border-radius:34px;
+    min-height:100%;
+    padding:36px 34px 34px;
+    border-radius:32px;
     background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,248,244,.97));
     border:1px solid var(--fdxp-line);
-    box-shadow:var(--fdxp-shadow);
+    box-shadow:0 24px 40px rgba(118,38,14,.1);
 }
 
 .fdxp-card::before{
@@ -551,7 +395,7 @@ ob_start();
     left:0;
     right:0;
     height:5px;
-    border-radius:34px 34px 0 0;
+    border-radius:32px 32px 0 0;
     background:linear-gradient(90deg,#ff7a24,#ea2f17);
 }
 
@@ -585,7 +429,7 @@ ob_start();
 .fdxp-card-head h3{
     margin:0;
     color:#55291f;
-    font-size:31px;
+    font-size:30px;
     line-height:1.08;
     letter-spacing:-.03em;
 }
@@ -594,8 +438,8 @@ ob_start();
     margin:0;
     color:#714d41;
     font-size:16px;
-    line-height:1.68;
-    max-width:30ch;
+    line-height:1.7;
+    max-width:32ch;
 }
 
 .fdxp-checks{
@@ -610,7 +454,7 @@ ob_start();
     position:relative;
     padding-left:36px;
     color:#4d291d;
-    font-size:18px;
+    font-size:17px;
     font-weight:800;
     line-height:1.4;
 }
@@ -632,16 +476,16 @@ ob_start();
     align-items:center;
     justify-content:center;
     width:100%;
-    padding:19px 24px;
+    padding:18px 24px;
     border-radius:999px;
     background:linear-gradient(180deg,#ff6a20,#ea2916);
     border:1px solid rgba(255,255,255,.18);
     color:#fff;
     text-decoration:none;
-    font-size:21px;
+    font-size:20px;
     font-weight:900;
     letter-spacing:-.02em;
-    box-shadow:0 18px 32px rgba(188,41,15,.24);
+    box-shadow:0 18px 30px rgba(188,41,15,.22);
     transition:transform .2s ease,box-shadow .2s ease;
 }
 
@@ -652,25 +496,25 @@ ob_start();
 .fdxp-integration{
     display:grid;
     grid-template-columns:auto 1fr;
-    gap:22px;
+    gap:20px;
     align-items:center;
     max-width:1020px;
     width:100%;
     margin:8px auto 0;
     padding:28px 34px;
-    border-radius:30px;
+    border-radius:28px;
     background:rgba(255,249,245,.97);
     border:1px solid rgba(241,215,198,.98);
-    box-shadow:0 20px 38px rgba(143,60,20,.1);
+    box-shadow:0 18px 30px rgba(143,60,20,.08);
 }
 
 .fdxp-integration-icon{
     display:flex;
     align-items:center;
     justify-content:center;
-    width:82px;
-    height:82px;
-    border-radius:22px;
+    width:78px;
+    height:78px;
+    border-radius:20px;
     background:linear-gradient(180deg,#ffb438,#f08d18);
     box-shadow:0 14px 24px rgba(241,139,24,.22);
 }
@@ -686,7 +530,7 @@ ob_start();
 .fdxp-integration-copy h3{
     margin:0 0 6px;
     color:#582a20;
-    font-size:30px;
+    font-size:28px;
     line-height:1.1;
     letter-spacing:-.03em;
 }
@@ -694,8 +538,8 @@ ob_start();
 .fdxp-integration-copy p{
     margin:0;
     color:#856356;
-    font-size:17px;
-    line-height:1.6;
+    font-size:16px;
+    line-height:1.65;
 }
 
 @media(max-width:1100px){
@@ -710,7 +554,6 @@ ob_start();
 
     .fdxp-hero-grid,
     .fdxp-grid,
-    .fdxp-lane,
     .fdxp-integration{
         grid-template-columns:1fr;
     }
@@ -718,7 +561,7 @@ ob_start();
     .fdxp-copy{
         max-width:none;
         text-align:center;
-        padding-bottom:34px;
+        padding-bottom:26px;
     }
 
     .fdxp-copy p{
@@ -726,12 +569,11 @@ ob_start();
     }
 
     .fdxp-scene{
-        min-height:500px;
+        justify-content:center;
+        min-height:320px;
+        padding-bottom:0;
     }
 
-    .fdxp-heading h2{
-        font-size:50px;
-    }
 }
 
 @media(max-width:720px){
@@ -740,12 +582,12 @@ ob_start();
     }
 
     .fdxp-hero{
-        padding:20px 0 148px;
+        padding:20px 0 118px;
     }
 
     .fdxp-hero::after{
-        bottom:60px;
-        height:152px;
+        bottom:48px;
+        height:118px;
     }
 
     .fdxp-topbar{
@@ -772,53 +614,46 @@ ob_start();
     }
 
     .fdxp-copy h1{
-        font-size:58px;
+        font-size:54px;
     }
 
     .fdxp-copy p{
-        font-size:21px;
+        font-size:19px;
     }
 
     .fdxp-scene{
-        min-height:360px;
+        min-height:220px;
     }
 
-    .fdxp-dashboard{
-        position:relative;
-        top:auto;
-        right:auto;
+    .fdxp-spotlight{
         width:100%;
-        padding:22px;
+        padding:22px 20px;
     }
 
-    .fdxp-float{
-        position:relative;
-        inset:auto;
-        width:auto;
+    .fdxp-spotlight strong{
+        font-size:24px;
     }
 
-    .fdxp-composition{
-        display:grid;
-        gap:14px;
-        min-height:unset;
+    .fdxp-spotlight p{
+        max-width:none;
     }
 
     .fdxp-curve{
-        height:118px;
+        height:96px;
     }
 
     .fdxp-main{
-        margin-top:-68px;
-        padding-bottom:78px;
+        margin-top:-52px;
+        padding-bottom:72px;
     }
 
     .fdxp-heading h2{
-        font-size:40px;
+        font-size:38px;
     }
 
     .fdxp-card,
     .fdxp-integration{
-        padding:22px;
+        padding:24px 22px;
     }
 
     .fdxp-card-head h3{
@@ -871,49 +706,11 @@ ob_start();
                     <p>Escolha como deseja participar da plataforma.</p>
                 </div>
 
-                <div class="fdxp-scene" aria-hidden="true">
-                    <div class="fdxp-composition">
-                        <div class="fdxp-orb"></div>
-
-                        <div class="fdxp-dashboard">
-                            <div class="fdxp-dashboard-top">
-                                <span class="fdxp-chip">Fox Delivery Partners</span>
-                                <span class="fdxp-live">Ao vivo</span>
-                            </div>
-
-                            <div class="fdxp-dashboard-main">
-                                <article class="fdxp-hero-card">
-                                    <strong>Cadastro premium para lojas e entregadores</strong>
-                                    <p>Jornadas separadas, visual profissional e integra&ccedil;&atilde;o direta com a opera&ccedil;&atilde;o Fox Delivery.</p>
-                                </article>
-
-                                <div class="fdxp-lane">
-                                    <article class="fdxp-mini">
-                                        <span>Loja parceira</span>
-                                        <strong>Cat&aacute;logo, vendas e painel operacional</strong>
-                                        <p>Entrada comercial organizada para neg&oacute;cios que vendem na plataforma.</p>
-                                    </article>
-
-                                    <article class="fdxp-mini rider">
-                                        <span>Entregador parceiro</span>
-                                        <strong>Credenciamento e fluxo operacional</strong>
-                                        <p>Jornada dedicada para cadastro, valida&ccedil;&atilde;o e entrada no ecossistema.</p>
-                                    </article>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="fdxp-float fdxp-float-top">
-                            <small>Painel</small>
-                            <strong>100%</strong>
-                            <p>Sincronizado com a opera&ccedil;&atilde;o administrativa.</p>
-                        </div>
-
-                        <div class="fdxp-float fdxp-float-bottom">
-                            <small>Jornadas</small>
-                            <strong>2</strong>
-                            <p>Fluxos separados para loja e entregador, com linguagem visual consistente.</p>
-                        </div>
+                <div class="fdxp-scene">
+                    <div class="fdxp-spotlight">
+                        <span class="fdxp-spotlight-tag">Cadastro de parceiros Fox Delivery</span>
+                        <strong>Escolha a jornada ideal para sua loja ou opera&ccedil;&atilde;o de entregas.</strong>
+                        <p>Processo simples, visual profissional e acesso organizado ao painel.</p>
                     </div>
                 </div>
             </div>
