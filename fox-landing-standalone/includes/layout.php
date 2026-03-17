@@ -41,8 +41,7 @@ $hidePageFooter = $hidePageFooter ?? false;
             <a class="<?= $current === 'home' ? 'active' : '' ?>" href="./index.php">Início</a>
             <a class="<?= $current === 'about' ? 'active' : '' ?>" href="./sobre.php">Sobre Nós</a>
             <a class="<?= $current === 'contact' ? 'active' : '' ?>" href="./contato.php">Contato</a>
-            <a class="<?= $current === 'store' ? 'active' : '' ?>" href="./cadastro-loja.php">Cadastro de Lojas</a>
-            <a class="<?= $current === 'delivery' ? 'active' : '' ?>" href="./cadastro-entregador.php">Cadastro Entregador</a>
+            <a class="<?= $current === 'partners' ? 'active' : '' ?>" href="./cadastro-parceiros.php">Cadastro Loja/Entregador</a>
         </nav>
         <div class="actions">
             <a class="btn ghost" href="<?= e(sixammart_url('login')) ?>">Entrar</a>
