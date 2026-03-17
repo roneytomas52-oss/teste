@@ -5,94 +5,189 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/database.php';
 
 $vendorApplyUrl = sixammart_url('vendor/apply');
+$modulesUrl = sixammart_url('vendor/get-all-modules');
+$moduleTypeUrl = sixammart_url('vendor/get-module-type');
+$reloadCaptchaUrl = sixammart_url('reload-captcha');
+
+$zones = [];
+$packages = [];
+$recaptchaConfig = get_business_setting('recaptcha', []);
+$recaptchaEnabled = is_array($recaptchaConfig) && (($recaptchaConfig['status'] ?? 0) == 1);
+$recaptchaSiteKey = $recaptchaConfig['site_key'] ?? '';
+
+try {
+    $zones = db()->query("SELECT id, name FROM zones ORDER BY name ASC")->fetchAll();
+} catch (Throwable) {
+    $zones = [];
+}
+
+try {
+    $packages = db()->query("SELECT id, package_name FROM subscription_packages WHERE status = 1 AND module_type = 'all' ORDER BY id DESC")->fetchAll();
+} catch (Throwable) {
+    $packages = [];
+}
 
 ob_start();
 ?>
 <section class="hero small">
     <div class="container">
         <h1>Cadastro de Loja</h1>
-        <p>Fluxo completo com os campos oficiais do 6amMart, incluindo validações e captcha nativo.</p>
+        <p>Novo formulário da landing com validação na própria página e envio ao backend do 6amMart.</p>
     </div>
 </section>
 
-<section class="container section contact registration-layout">
-    <div class="panel">
-        <h3>Requisitos obrigatórios (Brasil)</h3>
-        <ul class="requirements">
-            <li>CNPJ/CPF válido do responsável pelo estabelecimento.</li>
-            <li>Telefone, e-mail e endereço comercial atualizados.</li>
-            <li>Documento com foto do responsável legal.</li>
-            <li>Informações completas de operação e atendimento.</li>
-            <li>Validação completa com captcha oficial.</li>
-        </ul>
+<section class="container section">
+    <form id="storeForm" class="fox-form" action="<?= e($vendorApplyUrl) ?>" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" id="store_token">
+        <input type="hidden" name="lang[]" value="default">
 
-        <div class="steps-inline">
-            <span class="step active">1. Dados da loja</span>
-            <span class="step">2. Dados do responsável</span>
-            <span class="step">3. Conclusão</span>
+        <div class="form-head">
+            <h3>Dados do responsável</h3>
         </div>
 
-        <p>O cadastro oficial está incorporado nesta página, mantendo o padrão profissional sem redirecionamento externo.</p>
-    </div>
-
-    <div class="panel embedded-panel">
-        <div class="frame-zoom">
-            <iframe
-                class="official-frame"
-                src="<?= e($vendorApplyUrl) ?>"
-                title="Cadastro oficial de loja"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+        <div class="form-grid">
+            <label>Nome* <input name="f_name" required></label>
+            <label>Sobrenome <input name="l_name"></label>
+            <label>E-mail* <input name="email" type="email" required></label>
+            <label>Telefone* <input name="phone" required></label>
+            <label class="full">Senha* <input name="password" type="password" required></label>
         </div>
-    </div>
+
+        <div class="form-head"><h3>Dados da loja</h3></div>
+        <div class="form-grid">
+            <label>Nome da loja* <input name="name[]" required></label>
+            <label>Endereço* <input name="address[]" required></label>
+            <label>Zona* <select name="zone_id" id="zone_id" required>
+                <option value="">Selecione</option>
+                <?php foreach ($zones as $zone): ?>
+                    <option value="<?= (int)$zone['id'] ?>"><?= e((string)$zone['name']) ?></option>
+                <?php endforeach; ?>
+            </select></label>
+            <label>Módulo* <select name="module_id" id="module_id" required><option value="">Selecione</option></select></label>
+            <label>Latitude* <input name="latitude" required></label>
+            <label>Longitude* <input name="longitude" required></label>
+            <label>Tempo mínimo* <input type="number" min="0" name="minimum_delivery_time" required></label>
+            <label>Tempo máximo* <input type="number" min="0" name="maximum_delivery_time" required></label>
+            <label>Tipo de tempo* <select name="delivery_time_type" required><option value="min">min</option><option value="hour">hour</option></select></label>
+            <label id="pickup_wrap" class="full" style="display:none">Zona de coleta
+                <select name="pickup_zone_id[]" id="pickup_zone_id" multiple>
+                    <?php foreach ($zones as $zone): ?>
+                        <option value="<?= (int)$zone['id'] ?>"><?= e((string)$zone['name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+        </div>
+
+        <div class="form-head"><h3>Documentos</h3></div>
+        <div class="form-grid">
+            <label>Logo* <input type="file" name="logo" accept="image/*" required></label>
+            <label>Capa <input type="file" name="cover_photo" accept="image/*"></label>
+            <label>TIN/CPF/CNPJ <input name="tin"></label>
+            <label>Validade TIN <input type="date" name="tin_expire_date"></label>
+            <label class="full">Certificado TIN <input type="file" name="tin_certificate_image"></label>
+        </div>
+
+        <div class="form-head"><h3>Plano</h3></div>
+        <div class="form-grid">
+            <label><input type="radio" name="business_plan" value="commission-base" checked> Comissão</label>
+            <label><input type="radio" name="business_plan" value="subscription-base"> Assinatura</label>
+            <label class="full">Pacote <select name="package_id" id="package_id"><option value="">Selecione</option>
+                <?php foreach ($packages as $package): ?>
+                    <option value="<?= (int)$package['id'] ?>"><?= e((string)$package['package_name']) ?></option>
+                <?php endforeach; ?>
+            </select></label>
+        </div>
+
+        <div class="form-grid" id="captcha_wrap"></div>
+
+        <button class="btn" type="submit">Enviar cadastro</button>
+    </form>
 </section>
 
-<div id="registration-complete-message" class="container section" style="display:none; text-align:center;">
-    <div class="panel" style="max-width: 980px; margin: 0 auto;">
-        <h2 style="margin-bottom: 14px;">Cadastro finalizado</h2>
-        <p style="font-size: 18px; line-height:1.6;">
-            Obrigado! Logo um agente entrará em contato pelo número de telefone e e-mail cadastrado.
-        </p>
-    </div>
-</div>
-
-<footer class="simple-footer">
-    <div class="container">
-        <p>© <?= date('Y') ?> Fox Delivery. Todos os direitos reservados.</p>
-    </div>
-</footer>
+<footer class="simple-footer"><div class="container"><p>© <?= date('Y') ?> Fox Delivery.</p></div></footer>
 
 <script>
-    (function () {
-        const frame = document.querySelector('.official-frame');
-        const completeMessage = document.getElementById('registration-complete-message');
-        const registrationSection = document.querySelector('.registration-layout');
+(async function(){
+    const modulesUrl = <?= json_encode($modulesUrl) ?>;
+    const moduleTypeUrl = <?= json_encode($moduleTypeUrl) ?>;
+    const reloadCaptchaUrl = <?= json_encode($reloadCaptchaUrl) ?>;
+    const recaptchaEnabled = <?= $recaptchaEnabled ? 'true' : 'false' ?>;
+    const recaptchaSiteKey = <?= json_encode($recaptchaSiteKey) ?>;
 
-        if (!frame || !completeMessage || !registrationSection) {
-            return;
-        }
+    const zone = document.getElementById('zone_id');
+    const moduleSelect = document.getElementById('module_id');
+    const captchaWrap = document.getElementById('captcha_wrap');
 
-        const showCompleteMessage = () => {
-            registrationSection.style.display = 'none';
-            completeMessage.style.display = 'block';
-        };
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+        return '';
+    }
 
-        const checkCompletion = () => {
-            try {
-                const currentUrl = frame.contentWindow.location.href;
-                if (currentUrl.includes('/vendor/final-step')) {
-                    showCompleteMessage();
-                }
-            } catch (error) {
-                // Ignore cross-origin access errors and keep polling.
-            }
-        };
+    async function initCustomCaptcha() {
+        const res = await fetch(reloadCaptchaUrl, {credentials:'include'});
+        const data = await res.json();
+        const html = new DOMParser().parseFromString(data.view || '', 'text/html');
+        const img = html.querySelector('img')?.getAttribute('src') || '';
 
-        frame.addEventListener('load', checkCompletion);
-        setInterval(checkCompletion, 1200);
-    })();
+        captchaWrap.innerHTML = `
+            <label>Captcha* <input name="custome_recaptcha" required></label>
+            <div class="captcha-box">
+                ${img ? `<img src="${img}" alt="captcha">` : '<span>Captcha indisponível</span>'}
+                <button type="button" class="captcha-refresh" id="refreshCustomCaptcha">↻</button>
+            </div>
+        `;
+
+        const token = getCookie('XSRF-TOKEN');
+        if (token) document.getElementById('store_token').value = token;
+
+        document.getElementById('refreshCustomCaptcha')?.addEventListener('click', initCustomCaptcha, {once:true});
+    }
+
+    async function initRecaptcha() {
+        captchaWrap.innerHTML = '<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">';
+
+        if (!window.grecaptcha || !recaptchaSiteKey) return;
+        const token = getCookie('XSRF-TOKEN');
+        if (token) document.getElementById('store_token').value = token;
+
+        grecaptcha.ready(function () {
+            grecaptcha.execute(recaptchaSiteKey, {action: 'submit'}).then(function (token) {
+                document.getElementById('g-recaptcha-response').value = token;
+            });
+        });
+    }
+
+    const initSession = await fetch(reloadCaptchaUrl, {credentials:'include'});
+    if (initSession.ok) {
+        const token = getCookie('XSRF-TOKEN');
+        if (token) document.getElementById('store_token').value = token;
+    }
+
+    if (recaptchaEnabled) {
+        await initRecaptcha();
+    } else {
+        await initCustomCaptcha();
+    }
+
+    zone.addEventListener('change', async ()=>{
+        const res = await fetch(`${modulesUrl}?zone_id=${zone.value}&q=`, {credentials:'include'});
+        const data = await res.json();
+        moduleSelect.innerHTML = '<option value="">Selecione</option>';
+        data.forEach(i => moduleSelect.add(new Option(i.text, i.id)));
+    });
+
+    moduleSelect.addEventListener('change', async (e)=>{
+        const res = await fetch(`${moduleTypeUrl}?id=${e.target.value}`, {credentials:'include'});
+        const data = await res.json();
+        document.getElementById('pickup_wrap').style.display = data.module_type === 'rental' ? 'block' : 'none';
+    });
+})();
 </script>
+<?php if ($recaptchaEnabled && !empty($recaptchaSiteKey)): ?>
+<script src="https://www.google.com/recaptcha/api.js?render=<?= e((string)$recaptchaSiteKey) ?>"></script>
+<?php endif; ?>
 <?php
 $content = ob_get_clean();
 $pageTitle = 'Fox Delivery - Cadastro de Loja';
