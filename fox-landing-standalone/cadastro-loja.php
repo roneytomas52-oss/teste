@@ -7,32 +7,13 @@ require_once __DIR__ . '/includes/database.php';
 $vendorApplyUrl = sixammart_url('vendor/apply');
 $modulesUrl = sixammart_url('vendor/get-all-modules');
 $moduleTypeUrl = sixammart_url('vendor/get-module-type');
-$reloadCaptchaUrl = sixammart_url('reload-captcha');
-
-$zones = [];
-$packages = [];
-$recaptchaConfig = get_business_setting('recaptcha', []);
-$recaptchaEnabled = is_array($recaptchaConfig) && (($recaptchaConfig['status'] ?? 0) == 1);
-$recaptchaSiteKey = $recaptchaConfig['site_key'] ?? '';
-
-try {
-    $zones = db()->query("SELECT id, name FROM zones ORDER BY name ASC")->fetchAll();
-} catch (Throwable) {
-    $zones = [];
-}
-
-try {
-    $packages = db()->query("SELECT id, package_name FROM subscription_packages WHERE status = 1 AND module_type = 'all' ORDER BY id DESC")->fetchAll();
-} catch (Throwable) {
-    $packages = [];
-}
 
 ob_start();
 ?>
 <section class="hero small">
     <div class="container">
         <h1>Cadastro de Loja</h1>
-        <p>Novo formulário da landing com validação na própria página e envio ao backend do 6amMart.</p>
+        <p>Novo formulário da landing com envio direto para o backend oficial do 6amMart.</p>
     </div>
 </section>
 
@@ -43,6 +24,7 @@ ob_start();
 
         <div class="form-head">
             <h3>Dados do responsável</h3>
+            <p>Use os mesmos campos exigidos pelo sistema oficial.</p>
         </div>
 
         <div class="form-grid">
@@ -57,12 +39,7 @@ ob_start();
         <div class="form-grid">
             <label>Nome da loja* <input name="name[]" required></label>
             <label>Endereço* <input name="address[]" required></label>
-            <label>Zona* <select name="zone_id" id="zone_id" required>
-                <option value="">Selecione</option>
-                <?php foreach ($zones as $zone): ?>
-                    <option value="<?= (int)$zone['id'] ?>"><?= e((string)$zone['name']) ?></option>
-                <?php endforeach; ?>
-            </select></label>
+            <label>Zona* <select name="zone_id" id="zone_id" required><option value="">Selecione</option></select></label>
             <label>Módulo* <select name="module_id" id="module_id" required><option value="">Selecione</option></select></label>
             <label>Latitude* <input name="latitude" required></label>
             <label>Longitude* <input name="longitude" required></label>
@@ -70,11 +47,7 @@ ob_start();
             <label>Tempo máximo* <input type="number" min="0" name="maximum_delivery_time" required></label>
             <label>Tipo de tempo* <select name="delivery_time_type" required><option value="min">min</option><option value="hour">hour</option></select></label>
             <label id="pickup_wrap" class="full" style="display:none">Zona de coleta
-                <select name="pickup_zone_id[]" id="pickup_zone_id" multiple>
-                    <?php foreach ($zones as $zone): ?>
-                        <option value="<?= (int)$zone['id'] ?>"><?= e((string)$zone['name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <select name="pickup_zone_id[]" id="pickup_zone_id" multiple></select>
             </label>
         </div>
 
@@ -91,11 +64,7 @@ ob_start();
         <div class="form-grid">
             <label><input type="radio" name="business_plan" value="commission-base" checked> Comissão</label>
             <label><input type="radio" name="business_plan" value="subscription-base"> Assinatura</label>
-            <label class="full">Pacote <select name="package_id" id="package_id"><option value="">Selecione</option>
-                <?php foreach ($packages as $package): ?>
-                    <option value="<?= (int)$package['id'] ?>"><?= e((string)$package['package_name']) ?></option>
-                <?php endforeach; ?>
-            </select></label>
+            <label class="full">Pacote <select name="package_id" id="package_id"><option value="">Selecione</option></select></label>
         </div>
 
         <div class="form-grid" id="captcha_wrap"></div>
@@ -108,77 +77,48 @@ ob_start();
 
 <script>
 (async function(){
+    const sourceUrl = <?= json_encode($vendorApplyUrl) ?>;
     const modulesUrl = <?= json_encode($modulesUrl) ?>;
     const moduleTypeUrl = <?= json_encode($moduleTypeUrl) ?>;
-    const reloadCaptchaUrl = <?= json_encode($reloadCaptchaUrl) ?>;
-    const recaptchaEnabled = <?= $recaptchaEnabled ? 'true' : 'false' ?>;
-    const recaptchaSiteKey = <?= json_encode($recaptchaSiteKey) ?>;
+    const form = document.getElementById('storeForm');
+    const html = await fetch(sourceUrl, {credentials:'include'}).then(r=>r.text());
+    const doc = new DOMParser().parseFromString(html,'text/html');
+
+    const token = doc.querySelector('input[name="_token"]')?.value || '';
+    document.getElementById('store_token').value = token;
 
     const zone = document.getElementById('zone_id');
-    const moduleSelect = document.getElementById('module_id');
+    const pickup = document.getElementById('pickup_zone_id');
+    doc.querySelectorAll('select[name="zone_id"] option').forEach(op=>{
+        if(!op.value) return;
+        zone.add(new Option(op.textContent.trim(), op.value));
+        pickup.add(new Option(op.textContent.trim(), op.value));
+    });
+
+    const packageSelect = document.getElementById('package_id');
+    doc.querySelectorAll('select[name="package_id"] option').forEach(op=>{
+        if(!op.value) return;
+        packageSelect.add(new Option(op.textContent.trim(), op.value));
+    });
+
     const captchaWrap = document.getElementById('captcha_wrap');
-
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
-        return '';
-    }
-
-    async function initCustomCaptcha() {
-        const res = await fetch(reloadCaptchaUrl, {credentials:'include'});
-        const data = await res.json();
-        const html = new DOMParser().parseFromString(data.view || '', 'text/html');
-        const img = html.querySelector('img')?.getAttribute('src') || '';
-
-        captchaWrap.innerHTML = `
-            <label>Captcha* <input name="custome_recaptcha" required></label>
-            <div class="captcha-box">
-                ${img ? `<img src="${img}" alt="captcha">` : '<span>Captcha indisponível</span>'}
-                <button type="button" class="captcha-refresh" id="refreshCustomCaptcha">↻</button>
-            </div>
-        `;
-
-        const token = getCookie('XSRF-TOKEN');
-        if (token) document.getElementById('store_token').value = token;
-
-        document.getElementById('refreshCustomCaptcha')?.addEventListener('click', initCustomCaptcha, {once:true});
-    }
-
-    async function initRecaptcha() {
+    const gRecaptcha = doc.querySelector('input[name="g-recaptcha-response"]');
+    if (gRecaptcha) {
         captchaWrap.innerHTML = '<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">';
-
-        if (!window.grecaptcha || !recaptchaSiteKey) return;
-        const token = getCookie('XSRF-TOKEN');
-        if (token) document.getElementById('store_token').value = token;
-
-        grecaptcha.ready(function () {
-            grecaptcha.execute(recaptchaSiteKey, {action: 'submit'}).then(function (token) {
-                document.getElementById('g-recaptcha-response').value = token;
-            });
-        });
-    }
-
-    const initSession = await fetch(reloadCaptchaUrl, {credentials:'include'});
-    if (initSession.ok) {
-        const token = getCookie('XSRF-TOKEN');
-        if (token) document.getElementById('store_token').value = token;
-    }
-
-    if (recaptchaEnabled) {
-        await initRecaptcha();
     } else {
-        await initCustomCaptcha();
+        const captchaImg = doc.querySelector('img[src^="data:image"]')?.getAttribute('src') || '';
+        captchaWrap.innerHTML = `<label>Captcha* <input name="custome_recaptcha" required></label><div class="captcha-box">${captchaImg ? `<img src="${captchaImg}" alt="captcha">` : 'Abra o cadastro oficial para carregar captcha.'}</div>`;
     }
 
     zone.addEventListener('change', async ()=>{
         const res = await fetch(`${modulesUrl}?zone_id=${zone.value}&q=`, {credentials:'include'});
         const data = await res.json();
-        moduleSelect.innerHTML = '<option value="">Selecione</option>';
-        data.forEach(i => moduleSelect.add(new Option(i.text, i.id)));
+        const module = document.getElementById('module_id');
+        module.innerHTML = '<option value="">Selecione</option>';
+        data.forEach(i => module.add(new Option(i.text, i.id)));
     });
 
-    moduleSelect.addEventListener('change', async (e)=>{
+    document.getElementById('module_id').addEventListener('change', async (e)=>{
         const res = await fetch(`${moduleTypeUrl}?id=${e.target.value}`, {credentials:'include'});
         const data = await res.json();
         document.getElementById('pickup_wrap').style.display = data.module_type === 'rental' ? 'block' : 'none';

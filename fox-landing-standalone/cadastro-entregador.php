@@ -30,7 +30,7 @@ ob_start();
 <section class="hero small">
     <div class="container">
         <h1>Cadastro de Entregador</h1>
-        <p>Interface moderna com validação de captcha na própria página e integração ao 6amMart.</p>
+        <p>Interface moderna conectada ao backend oficial do 6amMart.</p>
     </div>
 </section>
 
@@ -51,19 +51,9 @@ ob_start();
                 </select>
             </label>
             <label>Número do documento* <input name="identity_number" required></label>
-            <label>Zona* <select name="zone_id" required>
-                <option value="">Selecione</option>
-                <?php foreach ($zones as $zone): ?>
-                    <option value="<?= (int)$zone['id'] ?>"><?= e((string)$zone['name']) ?></option>
-                <?php endforeach; ?>
-            </select></label>
+            <label>Zona* <select name="zone_id" id="dm_zone" required><option value="">Selecione</option></select></label>
             <label>Tipo de entregador* <select name="earning" required><option value="1">freelancer</option><option value="0">salary_based</option></select></label>
-            <label>Veículo* <select name="vehicle_id" required>
-                <option value="">Selecione</option>
-                <?php foreach ($vehicles as $vehicle): ?>
-                    <option value="<?= (int)$vehicle['id'] ?>"><?= e((string)$vehicle['type']) ?></option>
-                <?php endforeach; ?>
-            </select></label>
+            <label>Veículo* <select name="vehicle_id" id="dm_vehicle" required><option value="">Selecione</option></select></label>
             <label>Código de indicação <input name="referral_code"></label>
             <label class="full">Senha* <input type="password" name="password" required></label>
             <label>Foto de perfil <input type="file" name="image" accept="image/*"></label>
@@ -80,68 +70,26 @@ ob_start();
 
 <script>
 (async function(){
-    const reloadCaptchaUrl = <?= json_encode($reloadCaptchaUrl) ?>;
-    const recaptchaEnabled = <?= $recaptchaEnabled ? 'true' : 'false' ?>;
-    const recaptchaSiteKey = <?= json_encode($recaptchaSiteKey) ?>;
+    const sourceUrl = <?= json_encode($deliveryApplyUrl) ?>;
+    const html = await fetch(sourceUrl, {credentials:'include'}).then(r=>r.text());
+    const doc = new DOMParser().parseFromString(html,'text/html');
+    document.getElementById('dm_token').value = doc.querySelector('input[name="_token"]')?.value || '';
+
+    const zone = document.getElementById('dm_zone');
+    doc.querySelectorAll('select[name="zone_id"] option').forEach(op=>{ if(op.value) zone.add(new Option(op.textContent.trim(), op.value)); });
+
+    const vehicle = document.getElementById('dm_vehicle');
+    doc.querySelectorAll('select[name="vehicle_id"] option').forEach(op=>{ if(op.value) vehicle.add(new Option(op.textContent.trim(), op.value)); });
+
     const wrap = document.getElementById('dm_captcha_wrap');
-
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
-        return '';
-    }
-
-    async function initCustomCaptcha() {
-        const res = await fetch(reloadCaptchaUrl, {credentials:'include'});
-        const data = await res.json();
-        const html = new DOMParser().parseFromString(data.view || '', 'text/html');
-        const img = html.querySelector('img')?.getAttribute('src') || '';
-
-        wrap.innerHTML = `
-            <label>Captcha* <input name="custome_recaptcha" required></label>
-            <div class="captcha-box">
-                ${img ? `<img src="${img}" alt="captcha">` : '<span>Captcha indisponível</span>'}
-                <button type="button" class="captcha-refresh" id="refreshDmCaptcha">↻</button>
-            </div>
-        `;
-
-        const token = getCookie('XSRF-TOKEN');
-        if (token) document.getElementById('dm_token').value = token;
-
-        document.getElementById('refreshDmCaptcha')?.addEventListener('click', initCustomCaptcha, {once:true});
-    }
-
-    async function initRecaptcha() {
+    if (doc.querySelector('input[name="g-recaptcha-response"]')) {
         wrap.innerHTML = '<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">';
-
-        if (!window.grecaptcha || !recaptchaSiteKey) return;
-        const token = getCookie('XSRF-TOKEN');
-        if (token) document.getElementById('dm_token').value = token;
-
-        grecaptcha.ready(function () {
-            grecaptcha.execute(recaptchaSiteKey, {action: 'submit'}).then(function (token) {
-                document.getElementById('g-recaptcha-response').value = token;
-            });
-        });
-    }
-
-    const initSession = await fetch(reloadCaptchaUrl, {credentials:'include'});
-    if (initSession.ok) {
-        const token = getCookie('XSRF-TOKEN');
-        if (token) document.getElementById('dm_token').value = token;
-    }
-
-    if (recaptchaEnabled) {
-        await initRecaptcha();
     } else {
-        await initCustomCaptcha();
+        const captchaImg = doc.querySelector('img[src^="data:image"]')?.getAttribute('src') || '';
+        wrap.innerHTML = `<label>Captcha* <input name="custome_recaptcha" required></label><div class="captcha-box">${captchaImg ? `<img src="${captchaImg}" alt="captcha">` : 'Abra o cadastro oficial para carregar captcha.'}</div>`;
     }
 })();
 </script>
-<?php if ($recaptchaEnabled && !empty($recaptchaSiteKey)): ?>
-<script src="https://www.google.com/recaptcha/api.js?render=<?= e((string)$recaptchaSiteKey) ?>"></script>
-<?php endif; ?>
 <?php
 $content = ob_get_clean();
 $pageTitle = 'Fox Delivery - Cadastro de Entregador';
