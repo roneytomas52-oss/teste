@@ -9,11 +9,33 @@ function render_registration_page(string $mode = 'store'): void
     $isDelivery = $mode === 'delivery';
     $vendorApplyUrl = sixammart_url('vendor/apply');
     $deliveryApplyUrl = sixammart_url('deliveryman/apply');
-
-    $title = $isDelivery ? 'Cadastro de Entregador' : 'Cadastro de Loja';
-    $subtitle = $isDelivery
-        ? 'Fluxo oficial do entregador com os mesmos campos, validacoes e aprovacao do painel.'
-        : 'Fluxo oficial da loja com os mesmos campos, validacoes e aprovacao do painel.';
+    $copy = $isDelivery ? [
+        'title' => 'Cadastro de Entregador Fox Delivery',
+        'subtitle' => 'Preencha o formul&aacute;rio oficial do entregador com an&aacute;lise cadastral, valida&ccedil;&atilde;o documental e acompanhamento pelo painel administrativo da Fox Delivery.',
+        'panel_label' => 'Parceiros Fox Delivery',
+        'panel_title' => 'Modalidade de cadastro',
+        'requirements' => [
+            'Cadastro pessoal, documenta&ccedil;&atilde;o e dados operacionais do entregador.',
+            'Envio realizado pelo fluxo oficial <code>/deliveryman/apply</code>, com as mesmas valida&ccedil;&otilde;es do painel administrativo.',
+            'Aprova&ccedil;&atilde;o, status e acompanhamento centralizados na opera&ccedil;&atilde;o da Fox Delivery.',
+        ],
+        'note_title' => 'Integra&ccedil;&atilde;o oficial',
+        'note_body' => 'Os dados do entregador s&atilde;o enviados diretamente ao ambiente oficial da Fox Delivery, sem cadastros paralelos ou duplicidade de regras.',
+    ] : [
+        'title' => 'Cadastro de Loja Fox Delivery',
+        'subtitle' => 'Preencha o formul&aacute;rio oficial do lojista com valida&ccedil;&atilde;o cadastral, confer&ecirc;ncia documental e integra&ccedil;&atilde;o direta ao painel administrativo da Fox Delivery.',
+        'panel_label' => 'Parceiros Fox Delivery',
+        'panel_title' => 'Modalidade de cadastro',
+        'requirements' => [
+            'Cadastro da loja e do respons&aacute;vel legal pela opera&ccedil;&atilde;o.',
+            'Envio realizado pelo fluxo oficial <code>/vendor/apply</code>, com os mesmos crit&eacute;rios do painel administrativo.',
+            'Aprova&ccedil;&atilde;o, status e acompanhamento centralizados na opera&ccedil;&atilde;o da Fox Delivery.',
+        ],
+        'note_title' => 'Integra&ccedil;&atilde;o oficial',
+        'note_body' => 'Os dados da loja s&atilde;o enviados diretamente ao ambiente oficial da Fox Delivery, sem formul&aacute;rios paralelos ou retrabalho operacional.',
+    ];
+    $title = $copy['title'];
+    $subtitle = $copy['subtitle'];
     $pageTitle = $isDelivery ? 'Fox Delivery - Cadastro de Entregador' : 'Fox Delivery - Cadastro de Loja';
     $frameUrl = $isDelivery ? $deliveryApplyUrl : $vendorApplyUrl;
     $completionMarkers = $isDelivery
@@ -24,15 +46,15 @@ function render_registration_page(string $mode = 'store'): void
     ?>
     <section class="hero registration-hero">
         <div class="container registration-hero-content">
-            <h1><?= e($title) ?></h1>
-            <p><?= e($subtitle) ?></p>
+            <h1><?= $title ?></h1>
+            <p><?= $subtitle ?></p>
         </div>
     </section>
 
     <section class="container section contact registration-layout unified-registration">
         <aside class="panel registration-side">
-            <span class="panel-kicker">Cadastro oficial</span>
-            <h2>Tipo de cadastro</h2>
+            <span class="panel-kicker"><?= $copy['panel_label'] ?></span>
+            <h2><?= $copy['panel_title'] ?></h2>
 
             <div class="switcher" role="tablist" aria-label="Tipo de cadastro">
                 <a class="switch-btn <?= $isDelivery ? '' : 'active' ?>" href="./cadastro-loja.php" role="tab" aria-selected="<?= $isDelivery ? 'false' : 'true' ?>">Loja</a>
@@ -40,33 +62,27 @@ function render_registration_page(string $mode = 'store'): void
             </div>
 
             <ul class="requirements">
-                <?php if ($isDelivery): ?>
-                    <li>Formulario oficial do entregador sem camada paralela de cadastro.</li>
-                    <li>Envio direto para <code>/deliveryman/apply</code> com os mesmos campos do admin.</li>
-                    <li>Status, aprovacao e dados gravados no mesmo fluxo do banco principal.</li>
-                <?php else: ?>
-                    <li>Formulario oficial da loja e do responsavel legal.</li>
-                    <li>Envio direto para <code>/vendor/apply</code> com os mesmos campos do admin.</li>
-                    <li>Status, aprovacao e dados gravados no mesmo fluxo do banco principal.</li>
-                <?php endif; ?>
+                <?php foreach ($copy['requirements'] as $item): ?>
+                    <li><?= $item ?></li>
+                <?php endforeach; ?>
             </ul>
 
             <div class="sync-note">
-                <strong>Sincronizacao real</strong>
-                <p>Esta tela apenas muda o visual. O processamento continua no backend oficial do 6amMart.</p>
+                <strong><?= $copy['note_title'] ?></strong>
+                <p><?= $copy['note_body'] ?></p>
             </div>
         </aside>
 
         <div class="panel embedded-panel registration-frame-shell">
             <div class="frame-title">
-                <span>fornecedor</span>
-                <strong>aplicativo</strong>
+                <span>Painel</span>
+                <strong>Fox Delivery</strong>
             </div>
 
             <div class="frame-steps" aria-hidden="true">
-                <span class="frame-step active">Informacoes Gerais</span>
-                <span class="frame-step">Plano de negocios</span>
-                <span class="frame-step">Completo</span>
+                <span class="frame-step active">Informa&ccedil;&otilde;es iniciais</span>
+                <span class="frame-step">Valida&ccedil;&atilde;o cadastral</span>
+                <span class="frame-step">Conclus&atilde;o</span>
             </div>
 
             <div class="frame-window">
@@ -83,8 +99,8 @@ function render_registration_page(string $mode = 'store'): void
 
     <div id="registration-complete-message" class="container section registration-complete" style="display:none;">
         <div class="panel">
-            <h2>Cadastro finalizado</h2>
-            <p>Seu cadastro foi enviado no fluxo oficial e ja esta sincronizado com o painel administrativo.</p>
+            <h2>Cadastro enviado com sucesso</h2>
+            <p>Seu cadastro foi conclu&iacute;do no fluxo oficial e j&aacute; est&aacute; sincronizado com o painel administrativo da Fox Delivery.</p>
         </div>
     </div>
 

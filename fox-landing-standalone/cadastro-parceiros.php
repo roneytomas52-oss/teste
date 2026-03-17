@@ -7,54 +7,73 @@ require_once __DIR__ . '/includes/database.php';
 $activeType = ($_GET['tipo'] ?? 'store') === 'delivery' ? 'delivery' : 'store';
 $vendorApplyUrl = sixammart_url('vendor/apply');
 $deliveryApplyUrl = sixammart_url('deliveryman/apply');
+$copyByType = [
+    'store' => [
+        'panel_label' => 'Parceiros Fox Delivery',
+        'panel_title' => 'Tipo de cadastro',
+        'requirements' => [
+            'Cadastro da loja e do respons&aacute;vel legal pela opera&ccedil;&atilde;o.',
+            'Envio realizado pelo fluxo oficial <code>/vendor/apply</code>, com os mesmos crit&eacute;rios do painel administrativo.',
+            'Aprova&ccedil;&atilde;o, status e acompanhamento centralizados na opera&ccedil;&atilde;o da Fox Delivery.',
+        ],
+        'note_title' => 'Integra&ccedil;&atilde;o oficial',
+        'note_body' => 'Os dados da loja s&atilde;o enviados diretamente ao ambiente oficial da Fox Delivery, sem formul&aacute;rios paralelos ou retrabalho operacional.',
+    ],
+    'delivery' => [
+        'panel_label' => 'Parceiros Fox Delivery',
+        'panel_title' => 'Tipo de cadastro',
+        'requirements' => [
+            'Cadastro pessoal, documenta&ccedil;&atilde;o e dados operacionais do entregador.',
+            'Envio realizado pelo fluxo oficial <code>/deliveryman/apply</code>, com as mesmas valida&ccedil;&otilde;es do painel administrativo.',
+            'Aprova&ccedil;&atilde;o, status e acompanhamento centralizados na opera&ccedil;&atilde;o da Fox Delivery.',
+        ],
+        'note_title' => 'Integra&ccedil;&atilde;o oficial',
+        'note_body' => 'Os dados do entregador s&atilde;o enviados diretamente ao ambiente oficial da Fox Delivery, sem cadastros paralelos ou duplicidade de regras.',
+    ],
+];
+$activeCopy = $copyByType[$activeType];
 
 ob_start();
 ?>
 <section class="hero registration-hero">
     <div class="container registration-hero-content">
-        <h1>Cadastro Oficial 6amMart</h1>
-        <p>Formulario unico para loja e entregador com visual inspirado na referencia e sincronizacao direta com o painel administrativo.</p>
+        <h1>Cadastro Oficial Fox Delivery</h1>
+        <p>Escolha a modalidade de parceria e conclua o cadastro pelo formul&aacute;rio oficial, com integra&ccedil;&atilde;o direta ao painel administrativo da Fox Delivery.</p>
     </div>
 </section>
 
 <section class="container section contact registration-layout unified-registration">
     <aside class="panel registration-side">
-        <span class="panel-kicker">Cadastro oficial</span>
-        <h2>Tipo de cadastro</h2>
+        <span class="panel-kicker" id="copy-panel-label"><?= $activeCopy['panel_label'] ?></span>
+        <h2 id="copy-panel-title"><?= $activeCopy['panel_title'] ?></h2>
 
         <div class="switcher" role="tablist" aria-label="Tipo de cadastro">
             <button class="switch-btn <?= $activeType === 'store' ? 'active' : '' ?>" data-target="store" role="tab" aria-selected="<?= $activeType === 'store' ? 'true' : 'false' ?>">Loja</button>
             <button class="switch-btn <?= $activeType === 'delivery' ? 'active' : '' ?>" data-target="delivery" role="tab" aria-selected="<?= $activeType === 'delivery' ? 'true' : 'false' ?>">Entregador</button>
         </div>
 
-        <ul class="requirements" id="requirements-store" <?= $activeType === 'store' ? '' : 'style="display:none;"' ?>>
-            <li>Dados da loja e do responsavel legal.</li>
-            <li>Mesmos campos oficiais do fluxo <code>/vendor/apply</code>.</li>
-            <li>Status e aprovacao refletidos no mesmo banco do admin.</li>
-        </ul>
-
-        <ul class="requirements" id="requirements-delivery" <?= $activeType === 'delivery' ? '' : 'style="display:none;"' ?>>
-            <li>Dados pessoais, identidade e area de cobertura.</li>
-            <li>Mesmos campos oficiais do fluxo <code>/deliveryman/apply</code>.</li>
-            <li>Status e aprovacao refletidos no mesmo banco do admin.</li>
+        <ul class="requirements" id="requirements-list">
+            <?php foreach ($activeCopy['requirements'] as $item): ?>
+                <li><?= $item ?></li>
+            <?php endforeach; ?>
         </ul>
 
         <div class="sync-note">
-            <strong>Sincronizacao real</strong>
-            <p>Os cadastros continuam sendo enviados para os endpoints oficiais do 6amMart, sem duplicar regras locais.</p>
+            <strong id="copy-note-title"><?= $activeCopy['note_title'] ?></strong>
+            <p id="copy-note-body"><?= $activeCopy['note_body'] ?></p>
         </div>
     </aside>
 
     <div class="panel embedded-panel registration-frame-shell">
         <div class="frame-title">
-            <span>fornecedor</span>
-            <strong>aplicativo</strong>
+            <span>Painel</span>
+            <strong>Fox Delivery</strong>
         </div>
 
         <div class="frame-steps" aria-hidden="true">
-            <span class="frame-step active">Informacoes Gerais</span>
-            <span class="frame-step">Plano de negocios</span>
-            <span class="frame-step">Completo</span>
+            <span class="frame-step active">Informa&ccedil;&otilde;es iniciais</span>
+            <span class="frame-step">Valida&ccedil;&atilde;o cadastral</span>
+            <span class="frame-step">Conclus&atilde;o</span>
         </div>
 
         <div class="frame-window">
@@ -66,18 +85,22 @@ ob_start();
 
 <div id="registration-complete-message" class="container section registration-complete" style="display:none;">
     <div class="panel">
-        <h2>Cadastro finalizado</h2>
-        <p>Seu cadastro foi enviado no fluxo oficial e ja esta sincronizado com o painel administrativo.</p>
+        <h2>Cadastro enviado com sucesso</h2>
+        <p>Seu cadastro foi conclu&iacute;do no fluxo oficial e j&aacute; est&aacute; sincronizado com o painel administrativo da Fox Delivery.</p>
     </div>
 </div>
 
 <script>
     (function () {
+        const copyByType = <?= json_encode($copyByType) ?>;
         const buttons = document.querySelectorAll('.switch-btn');
         const frameStore = document.getElementById('frame-store');
         const frameDelivery = document.getElementById('frame-delivery');
-        const reqStore = document.getElementById('requirements-store');
-        const reqDelivery = document.getElementById('requirements-delivery');
+        const requirementsList = document.getElementById('requirements-list');
+        const panelLabel = document.getElementById('copy-panel-label');
+        const panelTitle = document.getElementById('copy-panel-title');
+        const noteTitle = document.getElementById('copy-note-title');
+        const noteBody = document.getElementById('copy-note-body');
         const completeMessage = document.getElementById('registration-complete-message');
         const registrationSection = document.querySelector('.registration-layout');
 
@@ -141,8 +164,13 @@ ob_start();
             const storeActive = type === 'store';
             frameStore.style.display = storeActive ? 'block' : 'none';
             frameDelivery.style.display = storeActive ? 'none' : 'block';
-            reqStore.style.display = storeActive ? 'block' : 'none';
-            reqDelivery.style.display = storeActive ? 'none' : 'block';
+
+            const copy = copyByType[type];
+            panelLabel.innerHTML = copy.panel_label;
+            panelTitle.innerHTML = copy.panel_title;
+            requirementsList.innerHTML = copy.requirements.map((item) => `<li>${item}</li>`).join('');
+            noteTitle.innerHTML = copy.note_title;
+            noteBody.innerHTML = copy.note_body;
 
             buttons.forEach((button) => {
                 const active = button.dataset.target === type;
