@@ -1326,7 +1326,7 @@ function registration_has_uploaded_file(mixed $file): bool
         && is_uploaded_file((string) $file['tmp_name']);
 }
 
-function registration_build_curl_file(mixed $file): ?CURLFile
+function registration_build_curl_file(mixed $file)
 {
     if (!registration_has_uploaded_file($file)) {
         return null;
