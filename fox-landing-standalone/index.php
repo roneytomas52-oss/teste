@@ -17,7 +17,7 @@ ob_start();
             <p>Peça comida, mercado, farmácia e conveniência sem sair de casa.</p>
             <div class="cta-row">
                 <a class="btn yellow" href="./contato.php">Peça agora</a>
-                <a class="btn" href="./cadastro-loja.php">Cadastrar loja</a>
+                <a class="btn" href="./cadastro-parceiros.php">Cadastrar loja/entregador</a>
             </div>
             <div class="cta-row" id="apps">
                 <a class="store" href="<?= e($apple) ?>">App Store</a>
@@ -57,13 +57,9 @@ ob_start();
 </section>
 
 <section class="container section split">
-    <a class="panel" href="./cadastro-loja.php">
-        <h3>Cadastro de Lojas</h3>
-        <p>Fluxo em padrão brasileiro e integração ao painel 6amMart.</p>
-    </a>
-    <a class="panel" href="./cadastro-entregador.php">
-        <h3>Cadastro Entregador</h3>
-        <p>Validação de RG/CPF/CNH e finalização oficial no 6amMart.</p>
+    <a class="panel" href="./cadastro-parceiros.php">
+        <h3>Cadastro Loja e Entregador</h3>
+        <p>Usa os formulários oficiais do 6amMart com os mesmos campos e sincronização total no admin.</p>
     </a>
 </section>
 <?php

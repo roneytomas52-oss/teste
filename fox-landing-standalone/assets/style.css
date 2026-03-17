@@ -39,3 +39,8 @@ footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;gr
 @media(max-width:960px){.registration-layout{grid-template-columns:1fr}.official-frame{min-height:760px}}
 
 .simple-footer{background:#2b1211;color:#fff;padding:18px 0;margin-top:24px}.simple-footer p{margin:0;text-align:center;font-size:14px}
+
+.switcher{display:flex;gap:10px;margin:14px 0 12px}
+.switch-btn{border:1px solid #f3d2c2;background:#fff3eb;color:#944f2a;border-radius:999px;padding:10px 14px;font-weight:700;cursor:pointer}
+.switch-btn.active{background:#e42520;color:#fff;border-color:#e42520}
+.unified-registration .requirements code{background:#fff3eb;padding:2px 6px;border-radius:6px}

@@ -24,9 +24,11 @@ Esta pasta foi criada para você **baixar separada** e subir em qualquer hospeda
 
 ## Estrutura
 
-- `index.php`, `sobre.php`, `contato.php`, `cadastro-loja.php`, `cadastro-entregador.php`
+- `index.php`, `sobre.php`, `contato.php`, `cadastro-parceiros.php`, `cadastro-loja.php`, `cadastro-entregador.php`
 - `includes/` (bootstrap, conexão e layout)
 - `assets/style.css`
+
+- `cadastro-parceiros.php` centraliza loja e entregador em uma única tela com alternância de tipo, carregando os endpoints oficiais.
 
 ## Observação
 
