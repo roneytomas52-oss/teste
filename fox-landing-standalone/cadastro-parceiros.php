@@ -4,97 +4,122 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/registration_portal.php';
 
-$syncStatus = registration_sync_status();
-
 ob_start();
 ?>
-<section class="partner-poster">
-    <div class="container partner-topbar">
-        <a class="partner-brand" href="./index.php" aria-label="Fox Delivery">
-            <img src="./assets/fox-brand.svg" alt="Fox Delivery">
-        </a>
+<section class="fox-partner-page">
+    <section class="fox-partner-hero">
+        <div class="container fox-partner-topbar">
+            <a class="fox-partner-brand" href="./index.php" aria-label="Fox Delivery">
+                <img src="./assets/fox-brand.svg" alt="Fox Delivery">
+            </a>
 
-        <nav class="partner-nav" aria-label="Navega&ccedil;&atilde;o do parceiro">
-            <a href="./cadastro-parceiros.php">Menu parceiro</a>
-            <a href="./index.php#blog">Blog</a>
-            <a href="./sobre.php">Sobre n&oacute;s</a>
-        </nav>
+            <nav class="fox-partner-nav" aria-label="Navega&ccedil;&atilde;o do parceiro">
+                <a href="./cadastro-parceiros.php">Menu parceiro</a>
+                <a href="./index.php#blog">Blog</a>
+                <a href="./sobre.php">Sobre n&oacute;s</a>
+            </nav>
 
-        <div class="partner-actions">
-            <a class="partner-pill secondary" href="./index.php#apps">Baixar App</a>
-            <a class="partner-pill ghost" href="#cadastro-opcoes">Cadastrar <span aria-hidden="true">&rsaquo;</span></a>
-            <a class="partner-pill" href="<?= e(sixammart_url('login')) ?>">Entrar</a>
-        </div>
-    </div>
-
-    <div class="container partner-hero-grid">
-        <div class="partner-hero-copy">
-            <h1>Cadastre-se<br>na Fox Delivery</h1>
-            <p>Escolha como deseja participar da plataforma.</p>
+            <div class="fox-partner-actions">
+                <a class="fox-partner-pill fox-partner-pill-soft" href="./index.php#apps">Baixar App</a>
+                <a class="fox-partner-pill fox-partner-pill-light" href="#cadastro-opcoes">Cadastrar <span aria-hidden="true">&rsaquo;</span></a>
+                <a class="fox-partner-pill" href="<?= e(sixammart_url('login')) ?>">Entrar</a>
+            </div>
         </div>
 
-        <div class="partner-hero-figure">
-            <img src="./assets/fox-hero-rider.svg" alt="Raposa da Fox Delivery em uma moto de entregas">
+        <div class="container fox-partner-hero-grid">
+            <div class="fox-partner-copy">
+                <h1>Cadastre-se<br>na Fox Delivery</h1>
+                <p>Escolha como deseja participar da plataforma.</p>
+            </div>
+
+            <div class="fox-partner-scene" aria-hidden="true">
+                <div class="fox-partner-scene-shell">
+                    <div class="fox-partner-scene-badge">Fox Delivery Partners</div>
+
+                    <div class="fox-partner-scene-main">
+                        <span class="fox-partner-scene-kicker">Fluxo oficial</span>
+                        <strong>Cadastro premium para lojas e entregadores</strong>
+                        <p>Jornadas separadas, visual profissional e integra&ccedil;&atilde;o direta com a opera&ccedil;&atilde;o Fox Delivery.</p>
+                    </div>
+
+                    <div class="fox-partner-scene-route">
+                        <span class="fox-partner-scene-dot fox-partner-scene-dot-start"></span>
+                        <span class="fox-partner-scene-line"></span>
+                        <span class="fox-partner-scene-dot fox-partner-scene-dot-mid"></span>
+                        <span class="fox-partner-scene-line short"></span>
+                        <span class="fox-partner-scene-dot fox-partner-scene-dot-end"></span>
+                    </div>
+
+                    <div class="fox-partner-scene-panels">
+                        <article class="fox-partner-scene-panel">
+                            <span class="fox-partner-scene-panel-label">Loja parceira</span>
+                            <strong>Cat&aacute;logo, vendas e gest&atilde;o de pedidos</strong>
+                            <p>Estrutura pensada para opera&ccedil;&atilde;o comercial e acompanhamento administrativo.</p>
+                        </article>
+
+                        <article class="fox-partner-scene-panel rider">
+                            <span class="fox-partner-scene-panel-label">Entregador parceiro</span>
+                            <strong>Credenciamento e acompanhamento operacional</strong>
+                            <p>Jornada dedicada para cadastro, valida&ccedil;&atilde;o e entrada no fluxo da plataforma.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="partner-choice-surface" id="cadastro-opcoes">
-    <div class="container partner-choice-shell">
-        <div class="partner-choice-heading">
-            <h2>Escolha como deseja se cadastrar</h2>
-        </div>
+    <section class="fox-partner-register" id="cadastro-opcoes">
+        <div class="container fox-partner-register-shell">
+            <header class="fox-partner-heading">
+                <h2>Escolha como deseja se cadastrar</h2>
+            </header>
 
-        <?php if (!$syncStatus['is_ready']): ?>
-            <?= registration_render_alerts([], $syncStatus['issues']) ?>
-        <?php endif; ?>
-
-        <div class="partner-choice-grid">
-            <article class="partner-option-card">
-                <div class="partner-option-header">
-                    <img class="partner-option-art" src="./assets/partner-storefront.svg" alt="Loja parceira">
-                    <div class="partner-option-copy">
+            <div class="fox-partner-card-grid">
+                <article class="fox-partner-card">
+                    <div class="fox-partner-card-head">
+                        <span class="fox-partner-card-tag">Loja parceira</span>
                         <h3>Cadastrar minha loja</h3>
                         <p>Cadastre seu restaurante, mercado ou farm&aacute;cia e comece a vender pela Fox Delivery.</p>
                     </div>
-                </div>
 
-                <ul class="partner-benefits">
-                    <li>Receba pedidos online</li>
-                    <li>Alcance novos clientes</li>
-                    <li>Gerencie pedidos pelo painel</li>
-                </ul>
+                    <ul class="fox-partner-checklist">
+                        <li>Receba pedidos online</li>
+                        <li>Alcance novos clientes</li>
+                        <li>Gerencie pedidos pelo painel</li>
+                    </ul>
 
-                <a class="partner-primary-cta" href="./cadastro-loja.php">Cadastrar loja</a>
-            </article>
+                    <a class="fox-partner-cta" href="./cadastro-loja.php">Cadastrar loja</a>
+                </article>
 
-            <article class="partner-option-card delivery">
-                <div class="partner-option-header">
-                    <img class="partner-option-art delivery" src="./assets/partner-rider-card.svg" alt="Entregador parceiro">
-                    <div class="partner-option-copy">
+                <article class="fox-partner-card fox-partner-card-rider">
+                    <div class="fox-partner-card-head">
+                        <span class="fox-partner-card-tag rider">Entregador parceiro</span>
                         <h3>Quero ser entregador</h3>
                         <p>Trabalhe fazendo entregas com hor&aacute;rios flex&iacute;veis.</p>
                     </div>
+
+                    <ul class="fox-partner-checklist">
+                        <li>Ganhe por entrega</li>
+                        <li>Trabalhe quando quiser</li>
+                        <li>Use nosso app de entregador</li>
+                    </ul>
+
+                    <a class="fox-partner-cta fox-partner-cta-rider" href="./cadastro-entregador.php">Cadastrar entregador</a>
+                </article>
+            </div>
+
+            <article class="fox-partner-integration">
+                <div class="fox-partner-integration-icon" aria-hidden="true">
+                    <span></span>
                 </div>
 
-                <ul class="partner-benefits">
-                    <li>Ganhe por entrega</li>
-                    <li>Trabalhe quando quiser</li>
-                    <li>Use nosso app de entregador</li>
-                </ul>
-
-                <a class="partner-primary-cta delivery" href="./cadastro-entregador.php">Cadastrar entregador</a>
+                <div class="fox-partner-integration-copy">
+                    <h3>Integra&ccedil;&atilde;o com o painel Fox Delivery</h3>
+                    <p>Cadastros s&atilde;o sincronizados automaticamente com o painel administrativo.</p>
+                </div>
             </article>
         </div>
-
-        <div class="partner-sync-card">
-            <div class="partner-sync-icon" aria-hidden="true"><span></span></div>
-            <div class="partner-sync-copy">
-                <h3>Integra&ccedil;&atilde;o com o painel Fox Delivery</h3>
-                <p>Cadastros s&atilde;o sincronizados automaticamente com o painel administrativo.</p>
-            </div>
-        </div>
-    </div>
+    </section>
 </section>
 <?php
 
