@@ -11,6 +11,7 @@ $email = get_business_setting('email_address', 'contato@foxdelivery.com.br');
 $address = get_business_setting('address', 'São Paulo - SP');
 
 $logoUrl = $logo ? sixammart_url('storage/app/public/business/' . ltrim((string) $logo, '/')) : '';
+$brandImage = './Imagem/logo.png';
 
 $pageTitle = $pageTitle ?? 'Fox Delivery';
 $current = $current ?? 'home';
@@ -31,11 +32,13 @@ $hidePageFooter = $hidePageFooter ?? false;
 <header class="header">
     <div class="container nav">
         <a class="brand" href="./index.php">
-            <?php if ($logoUrl): ?>
-                <img src="<?= e($logoUrl) ?>" alt="<?= e((string) $businessName) ?>">
-            <?php else: ?>
+            <span class="brand-mark">
+                <img src="<?= e($brandImage) ?>" alt="<?= e((string) $businessName) ?>">
+            </span>
+            <span class="brand-copy">
                 <strong><?= e((string) $businessName) ?></strong>
-            <?php endif; ?>
+                <small>Delivery e conveni&ecirc;ncia</small>
+            </span>
         </a>
         <nav>
             <a class="<?= $current === 'home' ? 'active' : '' ?>" href="./index.php">Início</a>

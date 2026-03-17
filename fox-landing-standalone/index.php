@@ -25,7 +25,9 @@ ob_start();
             </div>
         </div>
         <div class="hero-illustration">
-            <img src="./assets/fox-mascot.svg" alt="Mascote Fox Delivery com sacola na moto">
+            <div class="hero-visual">
+                <img src="./Imagem/ChatGPT Image 10 de mar. de 2026, 18_51_32.png" alt="Entregador Fox Delivery com mochila, sacola de compras e produtos de mercado">
+            </div>
         </div>
     </div>
 </section>

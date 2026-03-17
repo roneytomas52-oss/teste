@@ -796,7 +796,6 @@ ob_start();
                     <div class="fdxp-spotlight">
                         <span class="fdxp-spotlight-tag">Cadastro de parceiros Fox Delivery</span>
                         <strong>Credencie sua opera&ccedil;&atilde;o comercial ou log&iacute;stica com a estrutura oficial da Fox Delivery.</strong>
-                        <p>Fluxo institucional com valida&ccedil;&atilde;o centralizada, acompanhamento administrativo e integra&ccedil;&atilde;o ao ecossistema da plataforma.</p>
                     </div>
                 </div>
             </div>
@@ -851,8 +850,8 @@ ob_start();
                 </div>
 
                 <div class="fdxp-integration-copy">
-                    <h3>Integra&ccedil;&atilde;o com o painel Fox Delivery</h3>
-                    <p>Cadastros seguem o fluxo oficial da plataforma, com sincroniza&ccedil;&atilde;o administrativa e acompanhamento centralizado da opera&ccedil;&atilde;o.</p>
+                    <h3>Cadastro analisado pela equipe Fox Delivery</h3>
+                    <p>Ap&oacute;s o envio, seus dados seguem para confer&ecirc;ncia e aprova&ccedil;&atilde;o conforme as regras da plataforma.</p>
                 </div>
             </article>
         </div>
