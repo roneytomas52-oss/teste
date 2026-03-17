@@ -125,6 +125,9 @@ ob_start();
     });
 })();
 </script>
+<?php if ($recaptchaEnabled && !empty($recaptchaSiteKey)): ?>
+<script src="https://www.google.com/recaptcha/api.js?render=<?= e((string)$recaptchaSiteKey) ?>"></script>
+<?php endif; ?>
 <?php
 $content = ob_get_clean();
 $pageTitle = 'Fox Delivery - Cadastro de Loja';

@@ -5,6 +5,25 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/database.php';
 
 $deliveryApplyUrl = sixammart_url('deliveryman/apply');
+$reloadCaptchaUrl = sixammart_url('reload-captcha');
+
+$zones = [];
+$vehicles = [];
+$recaptchaConfig = get_business_setting('recaptcha', []);
+$recaptchaEnabled = is_array($recaptchaConfig) && (($recaptchaConfig['status'] ?? 0) == 1);
+$recaptchaSiteKey = $recaptchaConfig['site_key'] ?? '';
+
+try {
+    $zones = db()->query("SELECT id, name FROM zones ORDER BY name ASC")->fetchAll();
+} catch (Throwable) {
+    $zones = [];
+}
+
+try {
+    $vehicles = db()->query("SELECT id, type FROM vehicles ORDER BY id ASC")->fetchAll();
+} catch (Throwable) {
+    $vehicles = [];
+}
 
 ob_start();
 ?>
