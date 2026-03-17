@@ -163,6 +163,27 @@ function render_registration_page(string $mode = 'store'): void
                             }
                         }
                     });
+
+                    if (registrationType === 'store') {
+                        const normalizeText = (value) => (value || '')
+                            .toLowerCase()
+                            .normalize('NFD')
+                            .replace(/[\u0300-\u036f]/g, '')
+                            .replace(/\s+/g, ' ')
+                            .trim();
+                        const stepperBlock = Array.from(doc.querySelectorAll('div, nav, section, ul'))
+                            .find((node) => {
+                                const text = normalizeText(node.textContent);
+                                return text.includes('informacoes gerais') &&
+                                    text.includes('plano de negocios') &&
+                                    text.includes('completo') &&
+                                    text.length < 180;
+                            });
+
+                        if (stepperBlock && stepperBlock.style) {
+                            stepperBlock.style.display = 'none';
+                        }
+                    }
                 } catch (error) {
                     // Ignore iframe access issues while the official page is loading.
                 }
