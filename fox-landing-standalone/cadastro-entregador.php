@@ -34,14 +34,10 @@ ob_start();
 
         <p>O cadastro oficial está incorporado nesta página, mantendo o padrão profissional sem redirecionamento externo.</p>
 
-        <p>
-            <a class="btn ghost" href="<?= e($deliveryApplyUrl) ?>" target="_blank" rel="noopener noreferrer">
-                Abrir em nova aba (fallback)
-            </a>
-        </p>
     </div>
 
     <div class="panel embedded-panel">
+        <div class="frame-zoom">
         <iframe
             class="official-frame"
             src="<?= e($deliveryApplyUrl) ?>"
@@ -49,10 +45,19 @@ ob_start();
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade">
         </iframe>
+        </div>
     </div>
 </section>
+
+<footer class="simple-footer">
+    <div class="container">
+        <p>© <?= date('Y') ?> Fox Delivery. Todos os direitos reservados.</p>
+    </div>
+</footer>
 <?php
 $content = ob_get_clean();
 $pageTitle = 'Fox Delivery - Cadastro de Entregador';
 $current = 'delivery';
+$hidePageHeader = true;
+$hidePageFooter = true;
 require __DIR__ . '/includes/layout.php';
