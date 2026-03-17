@@ -44,3 +44,13 @@ footer{background:#2b1211;color:#fff;padding:24px 0}.footer-grid{display:grid;gr
 .switch-btn{border:1px solid #f3d2c2;background:#fff3eb;color:#944f2a;border-radius:999px;padding:10px 14px;font-weight:700;cursor:pointer}
 .switch-btn.active{background:#e42520;color:#fff;border-color:#e42520}
 .unified-registration .requirements code{background:#fff3eb;padding:2px 6px;border-radius:6px}
+
+.fox-form{background:#fff;border:1px solid #f2d9cf;border-radius:16px;padding:22px;box-shadow:0 14px 28px rgba(236,99,49,.14)}
+.form-head h3{margin:0 0 4px;font-size:22px}.form-head p{margin:0 0 12px;color:#6b4b3e}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.form-grid label{display:flex;flex-direction:column;font-weight:700;gap:6px}
+.form-grid .full{grid-column:1/-1}
+.form-grid input,.form-grid select{padding:11px;border:1px solid #e7ccc1;border-radius:10px;font-weight:500}
+.captcha-box{display:flex;align-items:center;justify-content:center;background:#fff7f2;border:1px dashed #e5bca8;border-radius:10px;padding:10px;min-height:52px}
+.captcha-box img{max-width:100%;height:auto}
+@media(max-width:960px){.form-grid{grid-template-columns:1fr}}
