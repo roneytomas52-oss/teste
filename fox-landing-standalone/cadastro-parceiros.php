@@ -4,57 +4,90 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/database.php';
 
+$activeType = ($_GET['tipo'] ?? 'store') === 'delivery' ? 'delivery' : 'store';
 $vendorApplyUrl = sixammart_url('vendor/apply');
 $deliveryApplyUrl = sixammart_url('deliveryman/apply');
 
 ob_start();
 ?>
-<section class="hero small">
-    <div class="container">
+<section class="hero registration-hero">
+    <div class="container registration-hero-content">
         <h1>Cadastro Oficial 6amMart</h1>
-        <p>Formulário único para loja e entregador com os mesmos campos e validações oficiais, 100% sincronizado com o painel administrativo.</p>
+        <p>Formulario unico para loja e entregador com visual inspirado na referencia e sincronizacao direta com o painel administrativo.</p>
     </div>
 </section>
 
 <section class="container section contact registration-layout unified-registration">
-    <div class="panel">
-        <h3>Tipo de cadastro</h3>
+    <aside class="panel registration-side">
+        <span class="panel-kicker">Cadastro oficial</span>
+        <h2>Tipo de cadastro</h2>
+
         <div class="switcher" role="tablist" aria-label="Tipo de cadastro">
-            <button class="switch-btn active" data-target="store" role="tab" aria-selected="true">Loja</button>
-            <button class="switch-btn" data-target="delivery" role="tab" aria-selected="false">Entregador</button>
+            <button class="switch-btn <?= $activeType === 'store' ? 'active' : '' ?>" data-target="store" role="tab" aria-selected="<?= $activeType === 'store' ? 'true' : 'false' ?>">Loja</button>
+            <button class="switch-btn <?= $activeType === 'delivery' ? 'active' : '' ?>" data-target="delivery" role="tab" aria-selected="<?= $activeType === 'delivery' ? 'true' : 'false' ?>">Entregador</button>
         </div>
 
-        <ul class="requirements" id="requirements-store">
-            <li>Dados da loja e responsável legal.</li>
+        <ul class="requirements" id="requirements-store" <?= $activeType === 'store' ? '' : 'style="display:none;"' ?>>
+            <li>Dados da loja e do responsavel legal.</li>
             <li>Mesmos campos oficiais do fluxo <code>/vendor/apply</code>.</li>
-            <li>Processo de aprovação e status no painel admin 6amMart.</li>
+            <li>Status e aprovacao refletidos no mesmo banco do admin.</li>
         </ul>
 
-        <ul class="requirements" id="requirements-delivery" style="display:none;">
-            <li>Dados pessoais, identidade e área de cobertura.</li>
+        <ul class="requirements" id="requirements-delivery" <?= $activeType === 'delivery' ? '' : 'style="display:none;"' ?>>
+            <li>Dados pessoais, identidade e area de cobertura.</li>
             <li>Mesmos campos oficiais do fluxo <code>/deliveryman/apply</code>.</li>
-            <li>Processo de aprovação e status no painel admin 6amMart.</li>
+            <li>Status e aprovacao refletidos no mesmo banco do admin.</li>
         </ul>
-    </div>
 
-    <div class="panel embedded-panel">
-        <div class="frame-zoom">
-            <iframe class="official-frame" id="frame-store" src="<?= e($vendorApplyUrl) ?>" title="Cadastro oficial de loja" loading="lazy"></iframe>
-            <iframe class="official-frame" id="frame-delivery" src="<?= e($deliveryApplyUrl) ?>" title="Cadastro oficial de entregador" loading="lazy" style="display:none;"></iframe>
+        <div class="sync-note">
+            <strong>Sincronizacao real</strong>
+            <p>Os cadastros continuam sendo enviados para os endpoints oficiais do 6amMart, sem duplicar regras locais.</p>
+        </div>
+    </aside>
+
+    <div class="panel embedded-panel registration-frame-shell">
+        <div class="frame-topbar">
+            <div class="frame-brand">
+                <span class="frame-logo">FOX</span>
+                <div>
+                    <small>PT</small>
+                    <strong id="frame-label"><?= $activeType === 'store' ? 'Cadastro de loja' : 'Cadastro de entregador' ?></strong>
+                </div>
+            </div>
+            <nav class="frame-links" aria-label="Links de cadastro">
+                <a href="./cadastro-loja.php">Cadastro de loja</a>
+                <a href="./cadastro-entregador.php">Cadastro de entregador</a>
+            </nav>
+        </div>
+
+        <div class="frame-title">
+            <span>fornecedor</span>
+            <strong>aplicativo</strong>
+        </div>
+
+        <div class="frame-steps" aria-hidden="true">
+            <span class="frame-step active">Informacoes Gerais</span>
+            <span class="frame-step">Plano de negocios</span>
+            <span class="frame-step">Completo</span>
+        </div>
+
+        <div class="frame-window">
+            <iframe class="official-frame" id="frame-store" src="<?= e($vendorApplyUrl) ?>" title="Cadastro oficial de loja" loading="lazy" <?= $activeType === 'store' ? '' : 'style="display:none;"' ?>></iframe>
+            <iframe class="official-frame" id="frame-delivery" src="<?= e($deliveryApplyUrl) ?>" title="Cadastro oficial de entregador" loading="lazy" <?= $activeType === 'delivery' ? '' : 'style="display:none;"' ?>></iframe>
         </div>
     </div>
 </section>
 
-<div id="registration-complete-message" class="container section" style="display:none; text-align:center;">
-    <div class="panel" style="max-width: 980px; margin: 0 auto;">
-        <h2 style="margin-bottom: 14px;">Cadastro finalizado</h2>
-        <p style="font-size: 18px; line-height:1.6;">Obrigado! Seu cadastro foi enviado no fluxo oficial e está sincronizado com o painel de administração.</p>
+<div id="registration-complete-message" class="container section registration-complete" style="display:none;">
+    <div class="panel">
+        <h2>Cadastro finalizado</h2>
+        <p>Seu cadastro foi enviado no fluxo oficial e ja esta sincronizado com o painel administrativo.</p>
     </div>
 </div>
 
 <footer class="simple-footer">
     <div class="container">
-        <p>© <?= date('Y') ?> Fox Delivery. Todos os direitos reservados.</p>
+        <p>&copy; <?= date('Y') ?> Fox Delivery. Todos os direitos reservados.</p>
     </div>
 </footer>
 
@@ -65,6 +98,7 @@ ob_start();
         const frameDelivery = document.getElementById('frame-delivery');
         const reqStore = document.getElementById('requirements-store');
         const reqDelivery = document.getElementById('requirements-delivery');
+        const frameLabel = document.getElementById('frame-label');
         const completeMessage = document.getElementById('registration-complete-message');
         const registrationSection = document.querySelector('.registration-layout');
 
@@ -74,6 +108,7 @@ ob_start();
             frameDelivery.style.display = storeActive ? 'none' : 'block';
             reqStore.style.display = storeActive ? 'block' : 'none';
             reqDelivery.style.display = storeActive ? 'none' : 'block';
+            frameLabel.textContent = storeActive ? 'Cadastro de loja' : 'Cadastro de entregador';
 
             buttons.forEach((button) => {
                 const active = button.dataset.target === type;
@@ -81,10 +116,6 @@ ob_start();
                 button.setAttribute('aria-selected', active ? 'true' : 'false');
             });
         };
-
-        buttons.forEach((button) => {
-            button.addEventListener('click', () => setActive(button.dataset.target));
-        });
 
         const showCompleteMessage = () => {
             if (!completeMessage || !registrationSection) {
@@ -94,21 +125,31 @@ ob_start();
             completeMessage.style.display = 'block';
         };
 
-        const checkStoreCompletion = () => {
+        const checkCompletion = () => {
             try {
-                const currentUrl = frameStore.contentWindow.location.href;
-                if (currentUrl.includes('/vendor/final-step')) {
+                const activeFrame = frameStore.style.display === 'none' ? frameDelivery : frameStore;
+                const currentUrl = activeFrame.contentWindow.location.href;
+                if (
+                    currentUrl.includes('/vendor/final-step') ||
+                    currentUrl.includes('/deliveryman') ||
+                    currentUrl.includes('step=complete')
+                ) {
                     showCompleteMessage();
                 }
             } catch (error) {
-                // Ignore cross-origin access errors and keep polling.
+                // Ignore iframe access issues while the official page is loading.
             }
         };
 
-        frameStore.addEventListener('load', checkStoreCompletion);
-        setInterval(checkStoreCompletion, 1200);
+        buttons.forEach((button) => {
+            button.addEventListener('click', () => setActive(button.dataset.target));
+        });
 
-        setActive('store');
+        frameStore.addEventListener('load', checkCompletion);
+        frameDelivery.addEventListener('load', checkCompletion);
+        window.setInterval(checkCompletion, 1200);
+
+        setActive(<?= json_encode($activeType) ?>);
     })();
 </script>
 <?php
