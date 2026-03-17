@@ -37,6 +37,7 @@ ob_start();
     </div>
 
     <div class="panel embedded-panel">
+        <div class="frame-zoom">
         <iframe
             class="official-frame"
             src="<?= e($deliveryApplyUrl) ?>"
@@ -44,6 +45,7 @@ ob_start();
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade">
         </iframe>
+        </div>
     </div>
 </section>
 
