@@ -11,8 +11,7 @@ ob_start();
 <section class="partner-poster">
     <div class="container partner-topbar">
         <a class="partner-brand" href="./index.php" aria-label="Fox Delivery">
-            <img src="./assets/fox-mascot.svg" alt="Fox Delivery">
-            <span>FOX <small>Delivery</small></span>
+            <img src="./assets/fox-brand.svg" alt="Fox Delivery">
         </a>
 
         <nav class="partner-nav" aria-label="Navega&ccedil;&atilde;o do parceiro">
@@ -23,26 +22,19 @@ ob_start();
 
         <div class="partner-actions">
             <a class="partner-pill secondary" href="./index.php#apps">Baixar App</a>
-            <a class="partner-pill ghost" href="#cadastro-opcoes">Cadastrar</a>
+            <a class="partner-pill ghost" href="#cadastro-opcoes">Cadastrar <span aria-hidden="true">&rsaquo;</span></a>
             <a class="partner-pill" href="<?= e(sixammart_url('login')) ?>">Entrar</a>
         </div>
     </div>
 
     <div class="container partner-hero-grid">
         <div class="partner-hero-copy">
-            <span class="partner-hero-eyebrow">Fox Delivery parceiros</span>
             <h1>Cadastre-se<br>na Fox Delivery</h1>
             <p>Escolha como deseja participar da plataforma.</p>
-
-            <div class="partner-hero-points" aria-label="Destaques do cadastro">
-                <span>Fluxos separados para loja e entregador</span>
-                <span>Painel sincronizado com a opera&ccedil;&atilde;o</span>
-            </div>
         </div>
 
         <div class="partner-hero-figure">
-            <div class="partner-hero-badge">Integra&ccedil;&atilde;o direta com o painel</div>
-            <img src="./assets/fox-mascot.svg" alt="Mascote Fox Delivery">
+            <img src="./assets/fox-hero-rider.svg" alt="Raposa da Fox Delivery em uma moto de entregas">
         </div>
     </div>
 </section>
@@ -60,16 +52,8 @@ ob_start();
         <div class="partner-choice-grid">
             <article class="partner-option-card">
                 <div class="partner-option-header">
-                    <div class="partner-option-icon store" aria-hidden="true">
-                        <svg viewBox="0 0 64 64" role="presentation">
-                            <rect x="10" y="22" width="44" height="28" rx="4"></rect>
-                            <path d="M14 14h36l4 10H10z"></path>
-                            <path d="M20 30h10v20H20z"></path>
-                            <path d="M36 30h12v10H36z"></path>
-                        </svg>
-                    </div>
+                    <img class="partner-option-art" src="./assets/partner-storefront.svg" alt="Loja parceira">
                     <div class="partner-option-copy">
-                        <span class="partner-option-badge">Loja parceira</span>
                         <h3>Cadastrar minha loja</h3>
                         <p>Cadastre seu restaurante, mercado ou farm&aacute;cia e comece a vender pela Fox Delivery.</p>
                     </div>
@@ -86,19 +70,10 @@ ob_start();
 
             <article class="partner-option-card delivery">
                 <div class="partner-option-header">
-                    <div class="partner-option-icon delivery" aria-hidden="true">
-                        <svg viewBox="0 0 64 64" role="presentation">
-                            <circle cx="20" cy="46" r="8"></circle>
-                            <circle cx="48" cy="46" r="8"></circle>
-                            <path d="M21 46l10-16h10l8 8"></path>
-                            <path d="M28 28h12l6 8H32z"></path>
-                            <rect x="12" y="18" width="18" height="12" rx="3"></rect>
-                        </svg>
-                    </div>
+                    <img class="partner-option-art delivery" src="./assets/partner-rider-card.svg" alt="Entregador parceiro">
                     <div class="partner-option-copy">
-                        <span class="partner-option-badge delivery">Entregador parceiro</span>
                         <h3>Quero ser entregador</h3>
-                        <p>Trabalhe fazendo entregas com hor&aacute;rios flex&iacute;veis e credenciamento direto pela Fox Delivery.</p>
+                        <p>Trabalhe fazendo entregas com hor&aacute;rios flex&iacute;veis.</p>
                     </div>
                 </div>
 
@@ -113,14 +88,10 @@ ob_start();
         </div>
 
         <div class="partner-sync-card">
-            <div class="partner-sync-icon" aria-hidden="true">&#10003;</div>
+            <div class="partner-sync-icon" aria-hidden="true"><span></span></div>
             <div class="partner-sync-copy">
                 <h3>Integra&ccedil;&atilde;o com o painel Fox Delivery</h3>
                 <p>Cadastros s&atilde;o sincronizados automaticamente com o painel administrativo.</p>
-            </div>
-            <div class="partner-sync-status">
-                <span class="<?= $syncStatus['db_ready'] ? 'ok' : 'warn' ?>">Banco <?= $syncStatus['db_ready'] ? 'conectado' : 'revisar' ?></span>
-                <span class="<?= $syncStatus['api_ready'] ? 'ok' : 'warn' ?>">API <?= $syncStatus['api_ready'] ? 'configurada' : 'revisar' ?></span>
             </div>
         </div>
     </div>
