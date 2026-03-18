@@ -32,7 +32,7 @@ ob_start();
         </div>
         <div class="hero-illustration">
             <div class="hero-visual">
-                <img src="./Imagem/ChatGPT Image 10 de mar. de 2026, 18_51_32.png" alt="Entregador Fox Delivery com mochila, sacola de compras e produtos de mercado">
+                <img src="./Imagem/Banner.png" alt="Entregador Fox Delivery em operacao com mercado, farmacia e entrega urbana">
             </div>
         </div>
     </div>
