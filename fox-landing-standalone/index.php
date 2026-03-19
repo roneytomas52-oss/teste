@@ -8,19 +8,12 @@ ob_start();
     <div class="container home-hub-grid">
         <div class="home-hub-copy">
             <span class="eyebrow">Fox Delivery</span>
-            <h1>Peca restaurante, mercado, farmacia e conveniencia em minutos.</h1>
-            <p>Uma plataforma mais simples para pedir, vender e entregar com mais rapidez e clareza.</p>
+            <h1>Pe&ccedil;a comida, mercado, farm&aacute;cia e conveni&ecirc;ncia em minutos.</h1>
+            <p>Tudo em um s&oacute; lugar, com mais praticidade para pedir, vender e entregar.</p>
 
             <div class="home-hub-actions" id="apps">
                 <a class="btn" href="#categorias" data-track="home_order_cta_click" data-track-component="hero">Pedir agora</a>
                 <a class="btn ghost" href="./cadastro-parceiros.php" data-track="home_partner_cta_click" data-track-component="hero">Seja parceiro</a>
-            </div>
-
-            <div class="home-hub-points">
-                <span>Restaurante</span>
-                <span>Mercado</span>
-                <span>Farmacia</span>
-                <span>Conveniencia</span>
             </div>
         </div>
     </div>
