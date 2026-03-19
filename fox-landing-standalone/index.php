@@ -37,21 +37,21 @@ ob_start();
         <article class="home-profile-card surface-card">
             <small>Cliente</small>
             <h3>Pedir na plataforma</h3>
-            <p>Acesse as categorias principais e avance para o pedido com mais rapidez.</p>
+            <p>Acesse restaurante, mercado, farmacia e conveniencia em uma jornada mais rapida.</p>
             <a class="btn" href="#categorias" data-track="home_customer_entry_click" data-track-component="profile_card">Fazer pedido</a>
         </article>
 
         <article class="home-profile-card surface-card">
             <small>Parceiro</small>
             <h3>Vender na Fox Delivery</h3>
-            <p>Cadastre sua operacao e leve sua loja para uma jornada comercial mais objetiva.</p>
+            <p>Cadastre sua loja e entre na plataforma com um fluxo comercial mais organizado.</p>
             <a class="btn ghost" href="./cadastro-parceiros.php" data-track="home_partner_entry_click" data-track-component="profile_card">Seja parceiro</a>
         </article>
 
         <article class="home-profile-card delivery surface-card">
             <small>Entregador</small>
             <h3>Entregar com a Fox</h3>
-            <p>Entre no cadastro do entregador com um fluxo proprio para modalidade e documentacao.</p>
+            <p>Inicie seu cadastro com um fluxo proprio para modalidade, perfil e documentacao.</p>
             <a class="btn ghost" href="./cadastro-entregador.php" data-track="home_delivery_entry_click" data-track-component="profile_card">Seja entregador</a>
         </article>
     </div>
