@@ -14,6 +14,7 @@ $appleStoreUrl = is_array($download) ? (string)($download['apple_store_url'] ?? 
 $playStoreUrl = is_array($download) ? (string)($download['playstore_url'] ?? '') : '';
 $appDownloadUrl = $playStoreUrl !== '' ? $playStoreUrl : ($appleStoreUrl !== '' ? $appleStoreUrl : '#');
 $appDownloadAttrs = $appDownloadUrl !== '#' ? ' target="_blank" rel="noopener noreferrer"' : '';
+$partnerPanelLoginUrl = 'https://foxgodelivery.com.br/login/parceiro';
 
 $brandImage = './Imagem/logo.png';
 
@@ -61,7 +62,7 @@ $primaryNav = [
             <?php endforeach; ?>
         </nav>
         <div class="actions">
-            <a class="btn ghost" href="<?= e(sixammart_url('login')) ?>" data-track="panel_login_click" data-track-component="header">Entrar no painel</a>
+            <a class="btn ghost" href="<?= e($partnerPanelLoginUrl) ?>" target="_blank" rel="noopener noreferrer" data-track="panel_login_click" data-track-component="header">Entrar no painel</a>
             <a class="btn" href="<?= e($appDownloadUrl) ?>"<?= $appDownloadAttrs ?> data-track="app_download_header_click" data-track-component="header">Baixar app</a>
         </div>
     </div>
@@ -98,7 +99,7 @@ $primaryNav = [
             <div class="footer-nav">
                 <a href="./sobre.php" data-track="footer_about_click" data-track-component="footer">Sobre a Fox Delivery</a>
                 <a href="./contato.php" data-track="footer_contact_click" data-track-component="footer">Contato</a>
-                <a href="<?= e(sixammart_url('login')) ?>" data-track="footer_panel_login_click" data-track-component="footer">Entrar no painel</a>
+                <a href="<?= e($partnerPanelLoginUrl) ?>" target="_blank" rel="noopener noreferrer" data-track="footer_panel_login_click" data-track-component="footer">Entrar no painel</a>
             </div>
         </div>
         <div>
