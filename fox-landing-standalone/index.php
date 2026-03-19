@@ -30,7 +30,7 @@ ob_start();
         <article class="home-profile-card surface-card">
             <small>Cliente</small>
             <h3>Pedir na plataforma</h3>
-            <p>Acesse restaurante, mercado, farmacia e conveniencia em uma jornada mais rapida.</p>
+            <p>Acesse restaurante, mercado, farm&aacute;cia e conveni&ecirc;ncia em uma jornada mais r&aacute;pida.</p>
             <a class="btn" href="#categorias" data-track="home_customer_entry_click" data-track-component="profile_card">Fazer pedido</a>
         </article>
 
@@ -44,7 +44,7 @@ ob_start();
         <article class="home-profile-card delivery surface-card">
             <small>Entregador</small>
             <h3>Entregar com a Fox</h3>
-            <p>Inicie seu cadastro com um fluxo proprio para modalidade, perfil e documentacao.</p>
+            <p>Inicie seu cadastro com um fluxo pr&oacute;prio para modalidade, perfil e documenta&ccedil;&atilde;o.</p>
             <a class="btn ghost" href="./cadastro-entregador.php" data-track="home_delivery_entry_click" data-track-component="profile_card">Seja entregador</a>
         </article>
     </div>
@@ -53,15 +53,15 @@ ob_start();
 <section class="container section home-section" id="categorias">
     <div class="section-head center home-centered-head">
         <span class="eyebrow">Categorias</span>
-        <h2>Peca por categoria</h2>
-        <p>Os principais tipos de pedido da Fox Delivery em acessos diretos e faceis de entender.</p>
+        <h2>Pe&ccedil;a por categoria</h2>
+        <p>Os principais tipos de pedido da Fox Delivery em acessos diretos e f&aacute;ceis de entender.</p>
     </div>
 
     <div class="home-category-grid home-category-grid-compact">
         <article class="home-category-card surface-card">
-            <small>Refeicoes</small>
+            <small>Refei&ccedil;&otilde;es</small>
             <strong>Restaurante</strong>
-            <p>Pratos, lanches e refeicoes do dia em um acesso rapido.</p>
+            <p>Pratos, lanches e refei&ccedil;&otilde;es do dia em um acesso r&aacute;pido.</p>
         </article>
 
         <article class="home-category-card surface-card">
@@ -72,14 +72,14 @@ ob_start();
 
         <article class="home-category-card surface-card">
             <small>Cuidados</small>
-            <strong>Farmacia</strong>
+            <strong>Farm&aacute;cia</strong>
             <p>Produtos essenciais em uma jornada objetiva e organizada.</p>
         </article>
 
         <article class="home-category-card surface-card">
             <small>Dia a dia</small>
-            <strong>Conveniencia</strong>
-            <p>Itens rapidos para diferentes momentos do dia.</p>
+            <strong>Conveni&ecirc;ncia</strong>
+            <p>Itens r&aacute;pidos para diferentes momentos do dia.</p>
         </article>
     </div>
 </section>
@@ -89,7 +89,7 @@ ob_start();
         <div class="section-head center home-centered-head">
             <span class="eyebrow">Como funciona</span>
             <h2>Uma jornada simples em 3 passos</h2>
-            <p>Do primeiro clique ao acompanhamento da operacao, tudo fica mais claro para cada perfil.</p>
+            <p>Do primeiro clique ao acompanhamento da opera&ccedil;&atilde;o, tudo fica mais claro para cada perfil.</p>
         </div>
 
         <div class="home-process-grid home-process-grid-compact">
@@ -101,14 +101,14 @@ ob_start();
 
             <article class="surface-card home-process-card">
                 <span class="home-process-number">2</span>
-                <strong>Inicie sua acao</strong>
-                <p>Peca, cadastre sua loja ou siga para o cadastro de entregador.</p>
+                <strong>Inicie sua a&ccedil;&atilde;o</strong>
+                <p>Pe&ccedil;a, cadastre sua loja ou siga para o cadastro de entregador.</p>
             </article>
 
             <article class="surface-card home-process-card">
                 <span class="home-process-number">3</span>
                 <strong>Acompanhe com clareza</strong>
-                <p>Conte com orientacao, suporte e continuidade dentro da plataforma.</p>
+                <p>Conte com orienta&ccedil;&atilde;o, suporte e continuidade dentro da plataforma.</p>
             </article>
         </div>
     </div>
@@ -116,30 +116,30 @@ ob_start();
 
 <section class="container section home-section">
     <div class="section-head center home-centered-head">
-        <span class="eyebrow">Confianca</span>
+        <span class="eyebrow">Confian&ccedil;a</span>
         <h2>Uma estrutura pensada para operar com clareza</h2>
-        <p>A home da Fox Delivery organiza a entrada de clientes, parceiros e entregadores em uma experiencia mais objetiva.</p>
+        <p>A Fox Delivery organiza a entrada de clientes, parceiros e entregadores em uma experi&ecirc;ncia mais objetiva.</p>
     </div>
 
     <div class="home-trust-grid">
         <article class="home-trust-card surface-card">
             <strong>Acessos separados</strong>
-            <p>Cliente, parceiro e entregador entram na jornada certa desde o inicio.</p>
+            <p>Cliente, parceiro e entregador entram na jornada certa desde o in&iacute;cio.</p>
         </article>
 
         <article class="home-trust-card surface-card">
             <strong>Categorias claras</strong>
-            <p>Restaurante, mercado, farmacia e conveniencia com leitura mais rapida.</p>
+            <p>Restaurante, mercado, farm&aacute;cia e conveni&ecirc;ncia com leitura mais r&aacute;pida.</p>
         </article>
 
         <article class="home-trust-card surface-card">
-            <strong>Suporte e operacao</strong>
+            <strong>Suporte e opera&ccedil;&atilde;o</strong>
             <p>Ajuda, contato e cadastros conectados no mesmo ecossistema da plataforma.</p>
         </article>
     </div>
 </section>
 <?php
 $content = ob_get_clean();
-$pageTitle = 'Fox Delivery - Inicio';
+$pageTitle = 'Fox Delivery - Início';
 $current = 'home';
 require __DIR__ . '/includes/layout.php';

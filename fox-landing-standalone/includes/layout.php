@@ -7,7 +7,7 @@ require_once __DIR__ . '/database.php';
 $businessName = get_business_setting('business_name', env('APP_NAME', 'Fox Delivery'));
 $phone = get_business_setting('phone', '(11) 9999-9999');
 $email = get_business_setting('email_address', 'contato@foxdelivery.com.br');
-$address = get_business_setting('address', 'Sao Paulo - SP');
+$address = get_business_setting('address', 'São Paulo - SP');
 
 $download = get_data_setting('admin_landing_page', 'download_user_app_links', []);
 $appleStoreUrl = is_array($download) ? (string)($download['apple_store_url'] ?? '') : '';
@@ -25,7 +25,7 @@ $hidePageHeader = $hidePageHeader ?? false;
 $hidePageFooter = $hidePageFooter ?? false;
 
 $primaryNav = [
-    ['id' => 'home', 'label' => 'Inicio', 'href' => './index.php'],
+    ['id' => 'home', 'label' => 'Início', 'href' => './index.php'],
     ['id' => 'how', 'label' => 'Como funciona', 'href' => './como-funciona.php'],
     ['id' => 'partners', 'label' => 'Para parceiros', 'href' => './cadastro-parceiros.php'],
     ['id' => 'help', 'label' => 'Ajuda', 'href' => './ajuda.php'],
@@ -74,12 +74,12 @@ $primaryNav = [
     <div class="container footer-grid">
         <div class="footer-brand-block">
             <strong><?= e((string) $businessName) ?></strong>
-            <p class="footer-note">Operacao conectada para pedidos, lojas e entregadores com experiencia pensada para escala, agilidade e confianca.</p>
+            <p class="footer-note">Operação conectada para pedidos, lojas e entregadores, com experiência pensada para escala, agilidade e confiança.</p>
         </div>
         <div>
             <p class="footer-column-title">Plataforma</p>
             <div class="footer-nav">
-                <a href="./index.php" data-track="footer_home_click" data-track-component="footer">Inicio</a>
+                <a href="./index.php" data-track="footer_home_click" data-track-component="footer">Início</a>
                 <a href="./como-funciona.php" data-track="footer_how_click" data-track-component="footer">Como funciona</a>
                 <a href="./ajuda.php" data-track="footer_help_click" data-track-component="footer">Ajuda</a>
             </div>
