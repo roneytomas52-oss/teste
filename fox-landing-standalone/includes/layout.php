@@ -10,8 +10,8 @@ $email = get_business_setting('email_address', 'contato@foxdelivery.com.br');
 $address = get_business_setting('address', 'São Paulo - SP');
 
 $download = get_data_setting('admin_landing_page', 'download_user_app_links', []);
-$appleStoreUrl = is_array($download) ? (string)($download['apple_store_url'] ?? '') : '';
-$playStoreUrl = is_array($download) ? (string)($download['playstore_url'] ?? '') : '';
+$appleStoreUrl = is_array($download) ? (string) ($download['apple_store_url'] ?? '') : '';
+$playStoreUrl = is_array($download) ? (string) ($download['playstore_url'] ?? '') : '';
 $appDownloadUrl = $playStoreUrl !== '' ? $playStoreUrl : ($appleStoreUrl !== '' ? $appleStoreUrl : '#');
 $appDownloadAttrs = $appDownloadUrl !== '#' ? ' target="_blank" rel="noopener noreferrer"' : '';
 $partnerPanelLoginUrl = 'https://foxgodelivery.com.br/login/parceiro';
@@ -26,7 +26,6 @@ $hidePageFooter = $hidePageFooter ?? false;
 
 $primaryNav = [
     ['id' => 'home', 'label' => 'Início', 'href' => './index.php'],
-    ['id' => 'how', 'label' => 'Como funciona', 'href' => './como-funciona.php'],
     ['id' => 'partners', 'label' => 'Para parceiros', 'href' => './cadastro-parceiros.php'],
     ['id' => 'help', 'label' => 'Ajuda', 'href' => './ajuda.php'],
 ];
@@ -80,7 +79,6 @@ $primaryNav = [
             <p class="footer-column-title">Plataforma</p>
             <div class="footer-nav">
                 <a href="./index.php" data-track="footer_home_click" data-track-component="footer">Início</a>
-                <a href="./como-funciona.php" data-track="footer_how_click" data-track-component="footer">Como funciona</a>
                 <a href="./ajuda.php" data-track="footer_help_click" data-track-component="footer">Ajuda</a>
             </div>
         </div>

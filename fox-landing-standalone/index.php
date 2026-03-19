@@ -87,7 +87,7 @@ ob_start();
 <section class="section section-soft home-process-section">
     <div class="container">
         <div class="section-head center home-centered-head">
-            <span class="eyebrow">Como funciona</span>
+            <span class="eyebrow">Etapas principais</span>
             <h2>Uma jornada simples em 3 passos</h2>
             <p>Do primeiro clique ao acompanhamento da opera&ccedil;&atilde;o, tudo fica mais claro para cada perfil.</p>
         </div>

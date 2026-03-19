@@ -60,7 +60,7 @@ ob_start();
             </details>
             <details class="support-faq-item surface-card">
                 <summary>Onde posso tirar d&uacute;vidas antes de enviar o cadastro?</summary>
-                <p>Use esta central de ajuda, a p&aacute;gina <a href="./como-funciona.php">Como funciona</a> ou o canal de <a href="./contato.php#duvidas">Contato</a>.</p>
+                <p>Use esta central de ajuda ou o canal de <a href="./contato.php#duvidas">Contato</a> para falar com a equipe da Fox Delivery antes de seguir com o cadastro.</p>
             </details>
             <details class="support-faq-item surface-card">
                 <summary>Como a Fox Delivery organiza a entrada de parceiros?</summary>

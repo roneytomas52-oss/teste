@@ -50,13 +50,13 @@ ob_start();
 <section class="container section">
     <div class="support-callout surface-card">
         <div>
-            <span class="eyebrow">Próxima leitura</span>
-            <h2>Entenda o funcionamento da plataforma e os canais de apoio</h2>
-            <p>Se você quiser aprofundar o fluxo da Fox Delivery, siga para a página de funcionamento da plataforma ou para a central de ajuda.</p>
+            <span class="eyebrow">Próximo acesso</span>
+            <h2>Acesse os canais de apoio da plataforma</h2>
+            <p>Se você quiser aprofundar as orientações da Fox Delivery, siga para a central de ajuda ou entre em contato com a equipe da plataforma.</p>
         </div>
         <div class="partner-final-actions">
-            <a class="btn" href="./como-funciona.php" data-track="about_how_click" data-track-component="support_callout">Como funciona</a>
-            <a class="btn ghost" href="./ajuda.php" data-track="about_help_click" data-track-component="support_callout">Central de ajuda</a>
+            <a class="btn" href="./ajuda.php" data-track="about_help_click" data-track-component="support_callout">Central de ajuda</a>
+            <a class="btn ghost" href="./contato.php" data-track="about_contact_click" data-track-component="support_callout">Fale com a equipe</a>
         </div>
     </div>
 </section>
