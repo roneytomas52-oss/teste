@@ -28,9 +28,7 @@ $primaryNav = [
     ['id' => 'home', 'label' => 'Inicio', 'href' => './index.php'],
     ['id' => 'how', 'label' => 'Como funciona', 'href' => './como-funciona.php'],
     ['id' => 'partners', 'label' => 'Para parceiros', 'href' => './cadastro-parceiros.php'],
-    ['id' => 'delivery', 'label' => 'Para entregadores', 'href' => './cadastro-entregador.php'],
     ['id' => 'help', 'label' => 'Ajuda', 'href' => './ajuda.php'],
-    ['id' => 'contact', 'label' => 'Contato', 'href' => './contato.php'],
 ];
 ?>
 <!doctype html>
