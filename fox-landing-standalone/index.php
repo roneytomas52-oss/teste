@@ -23,17 +23,6 @@ ob_start();
                 <span>Conveniencia</span>
             </div>
         </div>
-
-        <aside class="home-hub-highlight surface-card">
-            <small>Plataforma Fox Delivery</small>
-            <strong>Cliente, parceiro e entregador em jornadas separadas e mais claras.</strong>
-            <p>Escolha o perfil certo e siga para a proxima etapa com uma experiencia mais organizada.</p>
-            <div class="home-hub-highlight-points">
-                <span>Pedidos</span>
-                <span>Lojas parceiras</span>
-                <span>Entregadores</span>
-            </div>
-        </aside>
     </div>
 </section>
 
