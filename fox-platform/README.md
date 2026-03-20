@@ -53,13 +53,18 @@ fox-platform/
 - [Entrega da Fase 1](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-1/phase-1-foundation.md)
 - [Entrega da Fase 2](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-2/phase-2-shells.md)
 - [Entrega da Fase 3](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-3/phase-3-partner-portal-mvp.md)
+- [Entrega da Fase 4](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-4/phase-4-finance-and-reports.md)
+- [Entrega da Fase 5](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-5/phase-5-admin-mvp.md)
+- [Entrega da Fase 6](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-6/phase-6-driver-portal-mvp.md)
+- [Entrega da Fase 7](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-7/phase-7-support-and-refinement.md)
+- [Entrega da Fase 8](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-8/phase-8-real-integration.md)
 - [Mapa do portal do parceiro](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/partner-portal-sitemap.md)
 - [Superficie de APIs](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/api-surface.md)
 - [Roadmap do MVP](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/roadmap-mvp.md)
 
 ## Estado atual
 
-Fase atual: Fase 3 concluida.
+Fase atual: Fase 8 concluida.
 
 Ja definido e materializado:
 
@@ -74,11 +79,22 @@ Ja definido e materializado:
 - shell do driver portal
 - shell da landing
 - MVP navegavel do portal do parceiro
+- financeiro e relatorios basicos do parceiro
+- painel admin MVP com aprovacao, pedidos, operacao e financeiro
+- portal do entregador com login, ganhos, documentos, disponibilidade e perfil
+- suporte do parceiro com mensagens, chamados e ajuda
+- suporte do entregador
+- admin com suporte, auditoria e analytics
+- camada mock versionada da API
+- SDK compartilhado para os apps
+- autenticacao local no navegador
+- sessao integrada entre telas principais
+- dashboards e modulos principais hidratados por dados compartilhados
 
-Proxima etapa:
+Proxima etapa recomendada:
 
-- Financeiro e relatorios do parceiro
-- extrato e repasses
-- resumo financeiro
-- relatorios basicos da loja
-
+- Fase 9 de backend executavel
+- scaffold real dos apps em framework
+- banco persistente
+- APIs HTTP proprias
+- dados reais nos modulos

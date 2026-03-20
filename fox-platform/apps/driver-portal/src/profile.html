@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Driver Portal | Perfil</title>
+    <link rel="stylesheet" href="./driver-portal.css" />
+  </head>
+  <body data-fx-screen="profile">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Driver</strong>
+              <div class="fx-copy-sm">Portal do entregador</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Conta do entregador, dados pessoais e informacoes operacionais em um unico ambiente.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./earnings.html">Ganhos</a>
+          <a class="fx-sidebar-link" href="./documents.html">Documentos</a>
+          <a class="fx-sidebar-link" href="./availability.html">Disponibilidade</a>
+          <a class="fx-sidebar-link is-active" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Perfil</div>
+            <h1 class="fx-title-sm">Dados do entregador</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="#">Trocar senha</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-driver-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Conta operacional</div>
+                <h2 class="fx-title-md">Mantenha seus dados e a modalidade ativos e atualizados.</h2>
+                <p class="fx-copy">Esta area concentra o perfil do entregador, o modal principal e os dados de acesso utilizados na operacao.</p>
+              </div>
+            </section>
+
+            <section class="fx-page-columns">
+              <article class="fx-driver-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Dados pessoais</h3>
+                </div>
+                <div class="fx-form-grid">
+                  <div class="fx-field">
+                    <label>Nome completo</label>
+                    <input type="text" value="Lucas Ferreira" />
+                  </div>
+                  <div class="fx-field">
+                    <label>E-mail</label>
+                    <input type="email" value="lucas.ferreira@foxdelivery.com.br" />
+                  </div>
+                  <div class="fx-field">
+                    <label>Telefone</label>
+                    <input type="text" value="(11) 98888-3344" />
+                  </div>
+                  <div class="fx-field">
+                    <label>Modalidade</label>
+                    <input type="text" value="Moto" />
+                  </div>
+                  <div class="fx-field">
+                    <label>Cidade</label>
+                    <input type="text" value="Sao Paulo" />
+                  </div>
+                  <div class="fx-field">
+                    <label>Conta de recebimento</label>
+                    <input type="text" value="Banco Fox 341 - 45897-2" />
+                  </div>
+                </div>
+                <div class="fx-inline-actions">
+                  <a class="fx-button" href="#">Salvar perfil</a>
+                </div>
+              </article>
+
+              <article class="fx-driver-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Status do cadastro</h3>
+                </div>
+                <div class="fx-info-list">
+                  <div class="fx-info-row">
+                    <strong>Status da conta</strong>
+                    <span class="fx-status success">ativa</span>
+                  </div>
+                  <div class="fx-info-row">
+                    <strong>Ultimo acesso</strong>
+                    <span>20/03/2026 as 13:18</span>
+                  </div>
+                  <div class="fx-info-row">
+                    <strong>Documentos</strong>
+                    <span class="fx-status success">validados</span>
+                  </div>
+                  <div class="fx-info-row">
+                    <strong>Modal principal</strong>
+                    <span>Moto</span>
+                  </div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/driver-app.js"></script>
+  </body>
+</html>

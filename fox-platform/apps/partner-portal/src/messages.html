@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal | Mensagens</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
+  </head>
+  <body data-fx-screen="messages">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Canal central para falar com suporte, financeiro e operacao da Fox Delivery.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link is-active" href="./messages.html">Mensagens</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./help.html">Ajuda</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Mensagens</div>
+            <h1 class="fx-title-sm">Inbox do parceiro</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar conversa, protocolo ou assunto" />
+            <a class="fx-button-secondary" href="./support.html">Abrir chamado</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-partner-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Central de comunicacao</div>
+                <h2 class="fx-title-md">Acompanhe orientacoes, respostas e historico de atendimento da sua loja.</h2>
+                <p class="fx-copy">Converse com os times da Fox Delivery sem sair do portal e mantenha cada assunto registrado por contexto operacional.</p>
+              </div>
+            </section>
+
+            <section class="fx-message-layout">
+              <div class="fx-thread-list">
+                <article class="fx-thread-item is-active">
+                  <div class="fx-thread-head">
+                    <strong>Operacao Fox Delivery</strong>
+                    <span class="fx-status success">aberto</span>
+                  </div>
+                  <p class="fx-copy-sm">Atualizacao do SLA do turno do almoco e validacao de horario de pico.</p>
+                  <span class="fx-copy-sm">ha 12 min</span>
+                </article>
+                <article class="fx-thread-item">
+                  <div class="fx-thread-head">
+                    <strong>Financeiro</strong>
+                    <span class="fx-status warning">aguardando</span>
+                  </div>
+                  <p class="fx-copy-sm">Conferencia do repasse semanal e ajuste em taxa de campanha.</p>
+                  <span class="fx-copy-sm">ha 1 h</span>
+                </article>
+                <article class="fx-thread-item">
+                  <div class="fx-thread-head">
+                    <strong>Curadoria de catalogo</strong>
+                    <span class="fx-status success">respondido</span>
+                  </div>
+                  <p class="fx-copy-sm">Recomendacoes para revisar itens com baixa conversao na categoria.</p>
+                  <span class="fx-copy-sm">ontem</span>
+                </article>
+              </div>
+
+              <article class="fx-message-window">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Conversa com Operacao Fox Delivery</h3>
+                  <span class="fx-pill">Protocolo #MSG-22041</span>
+                </div>
+                <div class="fx-message-stream">
+                  <div class="fx-message-bubble is-incoming">
+                    <strong>Fox Delivery</strong>
+                    <span>Identificamos aumento no tempo medio de preparo no almoco. Precisamos validar se a equipe quer ampliar a janela de retirada para manter o SLA.</span>
+                  </div>
+                  <div class="fx-message-bubble is-outgoing">
+                    <strong>Loja</strong>
+                    <span>Podemos ampliar em 5 minutos no almoco e manter o horario atual no jantar. Tambem vamos revisar a estacao de montagem.</span>
+                  </div>
+                  <div class="fx-message-bubble is-incoming">
+                    <strong>Fox Delivery</strong>
+                    <span>Perfeito. A atualizacao entra hoje as 11h15. Se precisarem de novo ajuste, usem o chamado operacional ou respondam por aqui.</span>
+                  </div>
+                </div>
+                <div class="fx-message-composer">
+                  <textarea placeholder="Responder conversa ou adicionar uma observacao operacional"></textarea>
+                  <div class="fx-inline-actions">
+                    <a class="fx-button" href="#">Enviar mensagem</a>
+                    <a class="fx-button-ghost" href="#">Anexar arquivo</a>
+                  </div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/partner-app.js"></script>
+  </body>
+</html>

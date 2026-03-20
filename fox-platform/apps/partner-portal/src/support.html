@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal | Suporte</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
+  </head>
+  <body data-fx-screen="support">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Gerencie chamados, acompanhe SLA e fale com a Fox Delivery em uma fila unica da operacao.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./messages.html">Mensagens</a>
+          <a class="fx-sidebar-link is-active" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./help.html">Ajuda</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Suporte</div>
+            <h1 class="fx-title-sm">Chamados da loja</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar protocolo, canal ou prioridade" />
+            <a class="fx-button-secondary" href="./help.html">Ver artigos de ajuda</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-partner-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Atendimento operacional</div>
+                <h2 class="fx-title-md">Abra chamados, acompanhe protocolos e mantenha a operacao da loja assistida.</h2>
+                <p class="fx-copy">Cada solicitacao entra em uma fila clara por assunto, prioridade e SLA, com historico para comercial, catalogo, pedidos e financeiro.</p>
+              </div>
+            </section>
+
+            <section class="fx-support-grid">
+              <div class="fx-ticket-list">
+                <article class="fx-ticket-card">
+                  <div class="fx-ticket-head">
+                    <strong>#SUP-8432 - Operacao</strong>
+                    <span class="fx-status warning">em andamento</span>
+                  </div>
+                  <p class="fx-copy-sm">Solicitacao para revisar tempo estimado no horario de pico do almoco.</p>
+                  <div class="fx-inline-actions">
+                    <span class="fx-tag">SLA 2h</span>
+                    <span class="fx-tag">Atualizado ha 18 min</span>
+                  </div>
+                </article>
+                <article class="fx-ticket-card">
+                  <div class="fx-ticket-head">
+                    <strong>#SUP-8397 - Financeiro</strong>
+                    <span class="fx-status success">respondido</span>
+                  </div>
+                  <p class="fx-copy-sm">Conferencia de divergencia no repasse da campanha de mercado da semana passada.</p>
+                  <div class="fx-inline-actions">
+                    <span class="fx-tag">SLA 6h</span>
+                    <span class="fx-tag">Atualizado ontem</span>
+                  </div>
+                </article>
+                <article class="fx-ticket-card">
+                  <div class="fx-ticket-head">
+                    <strong>#SUP-8350 - Catalogo</strong>
+                    <span class="fx-status success">concluido</span>
+                  </div>
+                  <p class="fx-copy-sm">Validacao concluida de variacoes e imagens da categoria sanduiches.</p>
+                  <div class="fx-inline-actions">
+                    <span class="fx-tag">Concluido</span>
+                    <span class="fx-tag">Ha 2 dias</span>
+                  </div>
+                </article>
+              </div>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Abrir novo chamado</h3>
+                </div>
+                <div class="fx-form-grid">
+                  <div class="fx-field">
+                    <label>Canal</label>
+                    <select>
+                      <option>Operacao</option>
+                      <option>Financeiro</option>
+                      <option>Catalogo</option>
+                      <option>Comercial</option>
+                    </select>
+                  </div>
+                  <div class="fx-field">
+                    <label>Prioridade</label>
+                    <select>
+                      <option>Normal</option>
+                      <option>Alta</option>
+                      <option>Critica</option>
+                    </select>
+                  </div>
+                  <div class="fx-field" style="grid-column: 1 / -1;">
+                    <label>Assunto</label>
+                    <input type="text" value="Ajuste no SLA do almoco" />
+                  </div>
+                  <div class="fx-field" style="grid-column: 1 / -1;">
+                    <label>Descricao</label>
+                    <textarea>Precisamos ampliar em 5 minutos a janela de retirada entre 11h30 e 13h30 para reduzir cancelamentos no pico.</textarea>
+                  </div>
+                </div>
+                <div class="fx-inline-actions">
+                  <a class="fx-button" href="#">Enviar chamado</a>
+                  <a class="fx-button-ghost" href="./messages.html">Falar via mensagens</a>
+                </div>
+              </article>
+            </section>
+
+            <section class="fx-channel-grid">
+              <article class="fx-channel-card">
+                <strong>Operacao</strong>
+                <p class="fx-copy-sm">Pedidos, SLA, pausas operacionais, disponibilidade da loja e ajustes do turno.</p>
+              </article>
+              <article class="fx-channel-card">
+                <strong>Financeiro</strong>
+                <p class="fx-copy-sm">Repasses, taxas, campanhas, estornos, extratos e conciliacao de valores.</p>
+              </article>
+              <article class="fx-channel-card">
+                <strong>Catalogo e comercial</strong>
+                <p class="fx-copy-sm">Itens, fotos, campanhas, visibilidade da loja e orientacoes de crescimento.</p>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/partner-app.js"></script>
+  </body>
+</html>

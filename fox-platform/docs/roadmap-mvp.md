@@ -27,14 +27,14 @@
 - horarios
 - perfil
 
-## Fase 4 - Financeiro e relatorios [proxima]
+## Fase 4 - Financeiro e relatorios [concluida]
 
 - extrato
 - repasses
 - resumo financeiro
 - relatorios basicos
 
-## Fase 5 - Admin MVP
+## Fase 5 - Admin MVP [concluida]
 
 - aprovacao de parceiros
 - aprovacao de entregadores
@@ -42,7 +42,7 @@
 - controle operacional
 - controle financeiro basico
 
-## Fase 6 - Driver Portal MVP
+## Fase 6 - Driver Portal MVP [concluida]
 
 - login
 - perfil
@@ -50,13 +50,29 @@
 - ganhos
 - disponibilidade
 
-## Fase 7 - Suporte e refinamento
+## Fase 7 - Suporte e refinamento [concluida]
 
 - chamados
 - ajuda
 - mensagens
 - auditoria
 - analytics
+
+## Fase 8 - Integracao real viavel [concluida]
+
+- camada mock versionada
+- SDK compartilhado
+- sessao local
+- login funcional no navegador
+- hidratacao das telas principais
+
+## Proxima fase recomendada - Backend executavel
+
+- scaffold de framework
+- autenticacao funcional
+- APIs do backend
+- dados reais
+- contratos frontend/backend
 
 ## Entregavel minimo para primeira versao
 
@@ -77,4 +93,3 @@
 - CRM comercial
 - campanhas avancadas
 - multiempresa
-

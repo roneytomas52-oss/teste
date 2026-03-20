@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Analytics</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="analytics">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Indicadores consolidados para leitura de crescimento, eficiencia operacional e risco da plataforma.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link is-active" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Analytics</div>
+            <h1 class="fx-title-sm">Leituras de performance da plataforma</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar indicador, cidade ou periodo" />
+            <a class="fx-button-secondary" href="#">Compartilhar resumo</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-analytics-grid">
+              <article class="fx-analytics-card">
+                <strong class="fx-title-sm">R$ 5,4 mi</strong>
+                <p class="fx-copy-sm">volume bruto no mes</p>
+              </article>
+              <article class="fx-analytics-card">
+                <strong class="fx-title-sm">128 mil</strong>
+                <p class="fx-copy-sm">pedidos concluidos</p>
+              </article>
+              <article class="fx-analytics-card">
+                <strong class="fx-title-sm">97,6%</strong>
+                <p class="fx-copy-sm">pedidos dentro do SLA</p>
+              </article>
+            </section>
+
+            <section class="fx-chart-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Volume por vertical</h3>
+                  <span class="fx-pill">30 dias</span>
+                </div>
+                <div class="fx-bar-list">
+                  <div class="fx-bar-row">
+                    <div class="fx-bar-head"><span>Restaurantes</span><strong>44%</strong></div>
+                    <div class="fx-bar-track"><div class="fx-bar-fill" style="width: 44%;"></div></div>
+                  </div>
+                  <div class="fx-bar-row">
+                    <div class="fx-bar-head"><span>Mercado</span><strong>29%</strong></div>
+                    <div class="fx-bar-track"><div class="fx-bar-fill" style="width: 29%;"></div></div>
+                  </div>
+                  <div class="fx-bar-row">
+                    <div class="fx-bar-head"><span>Farmacia</span><strong>17%</strong></div>
+                    <div class="fx-bar-track"><div class="fx-bar-fill" style="width: 17%;"></div></div>
+                  </div>
+                  <div class="fx-bar-row">
+                    <div class="fx-bar-head"><span>Convivencia</span><strong>10%</strong></div>
+                    <div class="fx-bar-track"><div class="fx-bar-fill" style="width: 10%;"></div></div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="fx-support-card">
+                <h3 class="fx-title-sm">Destaques do periodo</h3>
+                <ul class="fx-list">
+                  <li>Sao Paulo lidera volume e ticket medio no periodo.</li>
+                  <li>Mercado foi a vertical com maior crescimento relativo.</li>
+                  <li>Cancelamentos cairam 0,8 p.p. apos ajustes de horario e estoque.</li>
+                </ul>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

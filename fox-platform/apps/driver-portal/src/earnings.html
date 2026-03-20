@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Driver Portal | Ganhos</title>
+    <link rel="stylesheet" href="./driver-portal.css" />
+  </head>
+  <body data-fx-screen="earnings">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Driver</strong>
+              <div class="fx-copy-sm">Portal do entregador</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Ganhos, corridas e agenda de repasse do entregador em uma leitura clara por periodo.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link is-active" href="./earnings.html">Ganhos</a>
+          <a class="fx-sidebar-link" href="./documents.html">Documentos</a>
+          <a class="fx-sidebar-link" href="./availability.html">Disponibilidade</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Ganhos</div>
+            <h1 class="fx-title-sm">Resumo financeiro do entregador</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar corrida ou comprovante" />
+            <a class="fx-button-secondary" href="#">Baixar comprovante</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-driver-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Financeiro pessoal</div>
+                <h2 class="fx-title-md">Acompanhe os ganhos da semana, a agenda de repasses e o historico de corridas.</h2>
+                <p class="fx-copy">A area financeira do entregador concentra liquido acumulado, media por entrega e previsao do proximo repasse.</p>
+              </div>
+            </section>
+
+            <section class="fx-driver-grid">
+              <article class="fx-balance-card">
+                <span class="fx-pill">Saldo da semana</span>
+                <div class="fx-balance-value">R$ 1.286,40</div>
+                <p class="fx-copy">Valor acumulado no periodo atual, ja considerando ganhos por corrida e ajustes da operacao.</p>
+                <div class="fx-inline-actions">
+                  <a class="fx-button-secondary" href="#">Ver agenda de repasse</a>
+                </div>
+              </article>
+
+              <div class="fx-checklist">
+                <article class="fx-check-card">
+                  <div class="fx-card-header">
+                    <h3 class="fx-title-sm">Indicadores</h3>
+                  </div>
+                  <ul class="fx-list">
+                    <li>R$ 8,72 de ganho medio por entrega.</li>
+                    <li>62 corridas concluidas na semana.</li>
+                    <li>Repasse previsto para 24/03/2026.</li>
+                  </ul>
+                </article>
+              </div>
+            </section>
+
+            <section class="fx-table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Corrida</th>
+                    <th>Status</th>
+                    <th>Valor</th>
+                    <th>Observacao</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>20/03/2026</td>
+                    <td>#RUN-8741</td>
+                    <td><span class="fx-status success">concluida</span></td>
+                    <td>R$ 9,40</td>
+                    <td>entrega em restaurante</td>
+                  </tr>
+                  <tr>
+                    <td>20/03/2026</td>
+                    <td>#RUN-8739</td>
+                    <td><span class="fx-status success">concluida</span></td>
+                    <td>R$ 7,90</td>
+                    <td>mercado de pequeno porte</td>
+                  </tr>
+                  <tr>
+                    <td>19/03/2026</td>
+                    <td>#RUN-8727</td>
+                    <td><span class="fx-status warning">ajuste em analise</span></td>
+                    <td>R$ 12,10</td>
+                    <td>conferencia de distancia</td>
+                  </tr>
+                  <tr>
+                    <td>18/03/2026</td>
+                    <td>#RUN-8718</td>
+                    <td><span class="fx-status success">concluida</span></td>
+                    <td>R$ 10,20</td>
+                    <td>farmacia</td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/driver-app.js"></script>
+  </body>
+</html>

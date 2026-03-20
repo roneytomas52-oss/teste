@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Driver Portal | Suporte</title>
+    <link rel="stylesheet" href="./driver-portal.css" />
+  </head>
+  <body data-fx-screen="support">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Driver</strong>
+              <div class="fx-copy-sm">Portal do entregador</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Canal de suporte para documentacao, corridas, ganhos e orientacoes da operacao.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./earnings.html">Ganhos</a>
+          <a class="fx-sidebar-link" href="./documents.html">Documentos</a>
+          <a class="fx-sidebar-link" href="./availability.html">Disponibilidade</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link is-active" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Suporte</div>
+            <h1 class="fx-title-sm">Ajuda do entregador</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar protocolo, corrida ou artigo" />
+            <a class="fx-button-secondary" href="./documents.html">Revisar documentos</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-driver-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Atendimento operacional</div>
+                <h2 class="fx-title-md">Abra chamados, acompanhe protocolos e encontre respostas rapidas para a sua rotina.</h2>
+                <p class="fx-copy">O suporte do entregador concentra orientacoes sobre ganhos, documentacao, corridas e disponibilidade em um unico lugar.</p>
+              </div>
+            </section>
+
+            <section class="fx-channel-grid">
+              <article class="fx-channel-card">
+                <strong>Ganhos e repasses</strong>
+                <p class="fx-copy-sm">Divergencia de corrida, comprovante, agenda de repasse e ajustes financeiros.</p>
+              </article>
+              <article class="fx-channel-card">
+                <strong>Cadastro e documentos</strong>
+                <p class="fx-copy-sm">CNH, identidade, foto de perfil, veiculo e situacao cadastral.</p>
+              </article>
+              <article class="fx-channel-card">
+                <strong>Operacao</strong>
+                <p class="fx-copy-sm">Disponibilidade, presenca em janela, corrida em analise e suporte do turno.</p>
+              </article>
+            </section>
+
+            <section class="fx-support-grid">
+              <article class="fx-support-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Chamados recentes</h3>
+                </div>
+                <div class="fx-ticket-stream">
+                  <div class="fx-timeline-item">
+                    <div>
+                      <strong>#DRV-1120</strong>
+                      <p class="fx-copy-sm">Ajuste de corrida com distancia divergente em analise.</p>
+                    </div>
+                    <span class="fx-status warning">em andamento</span>
+                  </div>
+                  <div class="fx-timeline-item">
+                    <div>
+                      <strong>#DRV-1103</strong>
+                      <p class="fx-copy-sm">Validacao de documento concluida com sucesso.</p>
+                    </div>
+                    <span class="fx-status success">concluido</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="fx-support-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Abrir chamado</h3>
+                </div>
+                <div class="fx-form-grid">
+                  <div class="fx-field">
+                    <label>Assunto</label>
+                    <select>
+                      <option>Ganhos</option>
+                      <option>Documentos</option>
+                      <option>Operacao</option>
+                    </select>
+                  </div>
+                  <div class="fx-field">
+                    <label>Prioridade</label>
+                    <select>
+                      <option>Normal</option>
+                      <option>Alta</option>
+                    </select>
+                  </div>
+                  <div class="fx-field" style="grid-column: 1 / -1;">
+                    <label>Descricao</label>
+                    <textarea>Preciso revisar uma corrida com distancia divergente no repasse da semana.</textarea>
+                  </div>
+                </div>
+                <div class="fx-inline-actions">
+                  <a class="fx-button" href="#">Enviar chamado</a>
+                </div>
+              </article>
+            </section>
+
+            <section class="fx-help-grid">
+              <article class="fx-help-card">
+                <strong>Quando o repasse aparece?</strong>
+                <p class="fx-copy-sm">O portal mostra o valor previsto assim que o ciclo da semana e consolidado.</p>
+              </article>
+              <article class="fx-help-card">
+                <strong>Como atualizar documentos?</strong>
+                <p class="fx-copy-sm">Use a area de documentos para reenviar fotos e acompanhar o status de validacao.</p>
+              </article>
+              <article class="fx-help-card">
+                <strong>O que fazer em corrida em analise?</strong>
+                <p class="fx-copy-sm">Abra chamado no canal de ganhos e informe o numero da corrida para revisao.</p>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/driver-app.js"></script>
+  </body>
+</html>

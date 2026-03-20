@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal | Relatorios</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
+  </head>
+  <body data-fx-screen="reports">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Indicadores da loja para acompanhar vendas, mix de produtos e eficiencia operacional.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link is-active" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./messages.html">Mensagens</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./help.html">Ajuda</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Relatorios</div>
+            <h1 class="fx-title-sm">Desempenho da loja</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar indicador ou periodo" />
+            <a class="fx-button-secondary" href="#">Exportar CSV</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-partner-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Indicadores basicos</div>
+                <h2 class="fx-title-md">Veja a evolucao da loja por vendas, pedidos e mix de produtos.</h2>
+                <p class="fx-copy">Os relatorios basicos ajudam a entender quais categorias performam melhor e onde a operacao perde margem, volume ou tempo.</p>
+              </div>
+            </section>
+
+            <section class="fx-report-grid">
+              <article class="fx-report-card">
+                <strong>R$ 18.420</strong>
+                <span class="fx-copy-sm">faturamento bruto nos ultimos 30 dias</span>
+              </article>
+              <article class="fx-report-card">
+                <strong>214</strong>
+                <span class="fx-copy-sm">pedidos concluidos no periodo</span>
+              </article>
+              <article class="fx-report-card">
+                <strong>R$ 86</strong>
+                <span class="fx-copy-sm">ticket medio consolidado</span>
+              </article>
+              <article class="fx-report-card">
+                <strong>3,7%</strong>
+                <span class="fx-copy-sm">taxa de cancelamento da operacao</span>
+              </article>
+            </section>
+
+            <section class="fx-page-columns">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Desempenho por categoria</h3>
+                  <span class="fx-pill">30 dias</span>
+                </div>
+                <div class="fx-trend-list">
+                  <div class="fx-trend-row">
+                    <div class="fx-trend-head"><span>Sanduiches</span><strong>42%</strong></div>
+                    <div class="fx-trend-bar"><div class="fx-trend-fill" style="width: 42%;"></div></div>
+                  </div>
+                  <div class="fx-trend-row">
+                    <div class="fx-trend-head"><span>Mercado</span><strong>28%</strong></div>
+                    <div class="fx-trend-bar"><div class="fx-trend-fill" style="width: 28%;"></div></div>
+                  </div>
+                  <div class="fx-trend-row">
+                    <div class="fx-trend-head"><span>Convivencia</span><strong>18%</strong></div>
+                    <div class="fx-trend-bar"><div class="fx-trend-fill" style="width: 18%;"></div></div>
+                  </div>
+                  <div class="fx-trend-row">
+                    <div class="fx-trend-head"><span>Farmacia</span><strong>12%</strong></div>
+                    <div class="fx-trend-bar"><div class="fx-trend-fill" style="width: 12%;"></div></div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Insights da operacao</h3>
+                  <span class="fx-pill">Leituras rapidas</span>
+                </div>
+                <div class="fx-checklist">
+                  <div class="fx-check-item">
+                    <strong>Horario de pico</strong>
+                    <p class="fx-copy-sm">Maior concentracao de pedidos entre 11h30 e 13h45.</p>
+                  </div>
+                  <div class="fx-check-item">
+                    <strong>Produto destaque</strong>
+                    <p class="fx-copy-sm">Hamburguer Fox Prime lidera vendas e puxa ticket medio.</p>
+                  </div>
+                  <div class="fx-check-item">
+                    <strong>Ponto de atencao</strong>
+                    <p class="fx-copy-sm">Cancelamentos aumentam quando o preparo ultrapassa 18 minutos.</p>
+                  </div>
+                </div>
+              </article>
+            </section>
+
+            <section class="fx-table-card">
+              <div class="fx-table-tools">
+                <div class="fx-inline-actions">
+                  <span class="fx-pill">Resumo operacional</span>
+                  <span class="fx-copy-sm">Produtos, pedidos e cancelamentos por periodo.</span>
+                </div>
+                <div class="fx-inline-actions">
+                  <button class="fx-filter-chip is-active" type="button">Semanal</button>
+                  <button class="fx-filter-chip" type="button">Mensal</button>
+                </div>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Periodo</th>
+                    <th>Pedidos</th>
+                    <th>Faturamento</th>
+                    <th>Ticket medio</th>
+                    <th>Cancelamentos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Semana 1</td>
+                    <td>52</td>
+                    <td>R$ 4.180</td>
+                    <td>R$ 80</td>
+                    <td>2,8%</td>
+                  </tr>
+                  <tr>
+                    <td>Semana 2</td>
+                    <td>58</td>
+                    <td>R$ 4.940</td>
+                    <td>R$ 85</td>
+                    <td>3,1%</td>
+                  </tr>
+                  <tr>
+                    <td>Semana 3</td>
+                    <td>49</td>
+                    <td>R$ 4.020</td>
+                    <td>R$ 82</td>
+                    <td>4,0%</td>
+                  </tr>
+                  <tr>
+                    <td>Semana 4</td>
+                    <td>55</td>
+                    <td>R$ 5.280</td>
+                    <td>R$ 96</td>
+                    <td>3,0%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/partner-app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "dashboard": {
+    "heroTitle": "Controle parceiros, pedidos e saúde operacional da Fox Delivery em um único lugar.",
+    "heroLead": "Aprovações, indicadores críticos, suporte, auditoria e financeiro organizados por prioridade operacional.",
+    "summary": [
+      { "label": "pedidos em andamento", "value": "148" },
+      { "label": "cadastros aguardando aprovação", "value": "23" },
+      { "label": "volume bruto processado hoje", "value": "R$ 182 mil" }
+    ],
+    "metrics": [
+      { "label": "parceiros ativos na operação", "value": "1.284" },
+      { "label": "entregadores habilitados", "value": "3.912" },
+      { "label": "pedidos dentro do SLA", "value": "97,4%" },
+      { "label": "alertas críticos abertos", "value": "12" }
+    ]
+  },
+  "finance": {
+    "balance": "R$ 182.430",
+    "balanceNote": "Volume bruto processado hoje na plataforma, consolidando pedidos pagos, taxas e previsão de repasses.",
+    "stats": [
+      { "label": "comissões apuradas no dia", "value": "R$ 26.118" },
+      { "label": "repasses previstos nesta semana", "value": "R$ 94.500" },
+      { "label": "ajustes financeiros pendentes", "value": "5" }
+    ]
+  },
+  "support": {
+    "priorityQueue": [
+      { "title": "#SUP-4120 - Parceiro", "summary": "Mercado Nova Rota reporta divergência de repasse e pausa operacional no almoço.", "status": "crítico", "statusType": "danger" },
+      { "title": "#SUP-4116 - Entregador", "summary": "Lucas Ferreira aguarda revisão de corrida com distância divergente.", "status": "alta", "statusType": "warning" },
+      { "title": "#SUP-4108 - Catálogo", "summary": "Loja solicita revisão de imagem e disponibilidade em lote.", "status": "normal", "statusType": "success" }
+    ]
+  },
+  "audit": {
+    "events": [
+      { "time": "14:08", "title": "Aprovação de parceiro", "summary": "Amanda Ribeiro aprovou o cadastro da Farmácia São Lucas após revisão documental." },
+      { "time": "13:41", "title": "Ajuste financeiro", "summary": "Carlos Silva aplicou compensação manual em lote de repasse #PAYOUT-119." },
+      { "time": "12:52", "title": "Bloqueio temporário", "summary": "Operação pausou a loja Conveniência Central por divergência de horário e estoque." }
+    ]
+  },
+  "analytics": {
+    "cards": [
+      { "label": "volume bruto no mês", "value": "R$ 5,4 mi" },
+      { "label": "pedidos concluídos", "value": "128 mil" },
+      { "label": "pedidos dentro do SLA", "value": "97,6%" }
+    ],
+    "verticals": [
+      { "name": "Restaurantes", "share": "44%" },
+      { "name": "Mercado", "share": "29%" },
+      { "name": "Farmácia", "share": "17%" },
+      { "name": "Conveniência", "share": "10%" }
+    ]
+  }
+}

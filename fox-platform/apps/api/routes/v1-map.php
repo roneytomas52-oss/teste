@@ -16,6 +16,9 @@ return [
         'GET /api/v1/admin/orders',
         'GET /api/v1/admin/finance/overview',
         'GET /api/v1/admin/reports/overview',
+        'GET /api/v1/admin/support',
+        'GET /api/v1/admin/audit',
+        'GET /api/v1/admin/analytics',
     ],
     'partner' => [
         'GET /api/v1/partner/dashboard',
@@ -23,12 +26,16 @@ return [
         'GET /api/v1/partner/catalog/products',
         'GET /api/v1/partner/store/profile',
         'GET /api/v1/partner/finance/summary',
+        'GET /api/v1/partner/messages',
+        'GET /api/v1/partner/support',
+        'GET /api/v1/partner/help',
     ],
     'driver' => [
         'GET /api/v1/driver/dashboard',
         'GET /api/v1/driver/profile',
         'GET /api/v1/driver/earnings',
         'GET /api/v1/driver/availability',
+        'GET /api/v1/driver/support',
     ],
     'public' => [
         'GET /api/v1/public/categories',
@@ -37,4 +44,3 @@ return [
         'POST /api/v1/public/driver-leads',
     ],
 ];
-

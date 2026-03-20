@@ -1,0 +1,61 @@
+{
+  "dashboard": {
+    "storeName": "Fox Burgers Centro",
+    "heroTitle": "Acompanhe pedidos, catálogo e desempenho da sua loja em um único painel.",
+    "heroLead": "A operação parceira da Fox Delivery concentra pedidos, catálogo, repasses, suporte e desempenho em uma rotina mais clara para a loja.",
+    "summary": [
+      { "label": "Pedidos concluídos hoje", "value": "37" },
+      { "label": "Faturamento bruto do dia", "value": "R$ 4.820" },
+      { "label": "Nota média da loja", "value": "4,8" }
+    ],
+    "metrics": [
+      { "label": "tempo médio de preparo", "value": "12 min" },
+      { "label": "taxa de aceite do dia", "value": "96%" },
+      { "label": "itens ativos no catálogo", "value": "184" },
+      { "label": "ticket médio do dia", "value": "R$ 91" }
+    ]
+  },
+  "orders": [
+    { "id": "#FD-10482", "customer": "Ana Souza", "status": "aguardando aceite", "statusType": "warning", "sla": "4 min", "value": "R$ 78,90", "action": "Aceitar" },
+    { "id": "#FD-10479", "customer": "Paulo Lima", "status": "em preparo", "statusType": "success", "sla": "10 min", "value": "R$ 54,20", "action": "Atualizar" },
+    { "id": "#FD-10471", "customer": "Júlia Martins", "status": "pronto para retirada", "statusType": "warning", "sla": "2 min", "value": "R$ 31,00", "action": "Sinalizar coleta" },
+    { "id": "#FD-10455", "customer": "Carlos Vieira", "status": "concluído", "statusType": "success", "sla": "entregue", "value": "R$ 92,40", "action": "Ver detalhes" }
+  ],
+  "finance": {
+    "balance": "R$ 18.420",
+    "balanceNote": "Faturamento bruto dos últimos 30 dias consolidado pela operação da loja.",
+    "stats": [
+      { "label": "repasses previstos nesta semana", "value": "R$ 8.460" },
+      { "label": "taxas da plataforma no período", "value": "R$ 1.184" },
+      { "label": "ajustes pendentes", "value": "2" }
+    ]
+  },
+  "reports": {
+    "cards": [
+      { "label": "faturamento bruto nos últimos 30 dias", "value": "R$ 18.420" },
+      { "label": "pedidos concluídos no período", "value": "214" },
+      { "label": "ticket médio consolidado", "value": "R$ 86" },
+      { "label": "taxa de cancelamento da operação", "value": "3,7%" }
+    ]
+  },
+  "messages": {
+    "threads": [
+      { "title": "Operação Fox Delivery", "status": "aberto", "statusType": "success", "summary": "Atualização do SLA do turno do almoço e validação de horário de pico.", "time": "há 12 min" },
+      { "title": "Financeiro", "status": "aguardando", "statusType": "warning", "summary": "Conferência do repasse semanal e ajuste em taxa de campanha.", "time": "há 1 h" },
+      { "title": "Curadoria de catálogo", "status": "respondido", "statusType": "success", "summary": "Recomendações para revisar itens com baixa conversão na categoria.", "time": "ontem" }
+    ]
+  },
+  "support": {
+    "tickets": [
+      { "id": "#SUP-8432", "channel": "Operação", "status": "em andamento", "statusType": "warning", "summary": "Solicitação para revisar tempo estimado no horário de pico do almoço.", "meta": ["SLA 2h", "Atualizado há 18 min"] },
+      { "id": "#SUP-8397", "channel": "Financeiro", "status": "respondido", "statusType": "success", "summary": "Conferência de divergência no repasse da campanha de mercado da semana passada.", "meta": ["SLA 6h", "Atualizado ontem"] }
+    ]
+  },
+  "help": {
+    "articles": [
+      { "title": "Pedidos e SLA", "text": "Como aceitar pedidos, atualizar preparo, sinalizar coleta e tratar atrasos do turno." },
+      { "title": "Catálogo e estoque", "text": "Boas práticas para fotos, variações, itens indisponíveis e controle de estoque." },
+      { "title": "Financeiro e repasses", "text": "Leitura de extrato, agenda de repasses, taxas da plataforma e conferências." }
+    ]
+  }
+}

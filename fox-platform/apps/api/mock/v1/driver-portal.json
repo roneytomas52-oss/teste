@@ -1,0 +1,41 @@
+{
+  "dashboard": {
+    "driverName": "Lucas Ferreira",
+    "heroTitle": "Ganhos, documentação e disponibilidade organizados em uma experiência própria.",
+    "heroLead": "O portal do entregador concentra a parte financeira, os documentos e os próximos passos da operação.",
+    "summary": [
+      { "label": "ganhos líquidos acumulados", "value": "R$ 1.286" },
+      { "label": "entregas concluídas", "value": "62" },
+      { "label": "taxa de presença nas janelas abertas", "value": "98%" }
+    ],
+    "metrics": [
+      { "label": "modalidade ativa na operação", "value": "Moto" },
+      { "label": "tempo médio por corrida", "value": "24 min" },
+      { "label": "ganho médio por entrega", "value": "R$ 8,72" },
+      { "label": "avaliação média recente", "value": "4,9" }
+    ]
+  },
+  "earnings": {
+    "balance": "R$ 1.286,40",
+    "balanceNote": "Valor acumulado no período atual, já considerando ganhos por corrida e ajustes da operação.",
+    "stats": [
+      { "label": "ganho médio por entrega", "value": "R$ 8,72" },
+      { "label": "corridas concluídas na semana", "value": "62" },
+      { "label": "repasse previsto", "value": "24/03/2026" }
+    ]
+  },
+  "support": {
+    "tickets": [
+      { "id": "#DRV-1120", "summary": "Ajuste de corrida com distância divergente em análise.", "status": "em andamento", "statusType": "warning" },
+      { "id": "#DRV-1103", "summary": "Validação de documento concluída com sucesso.", "status": "concluído", "statusType": "success" }
+    ]
+  },
+  "profile": {
+    "name": "Lucas Ferreira",
+    "email": "entregador@foxdelivery.com.br",
+    "phone": "(11) 98888-3344",
+    "mode": "Moto",
+    "city": "São Paulo",
+    "bankAccount": "Banco Fox 341 - 45897-2"
+  }
+}

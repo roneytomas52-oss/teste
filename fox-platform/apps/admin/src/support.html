@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Suporte</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="support">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Fila central de atendimento com protocolos, prioridade e roteamento entre times internos.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link is-active" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Suporte</div>
+            <h1 class="fx-title-sm">Fila de atendimento da plataforma</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar protocolo, loja, entregador ou assunto" />
+            <a class="fx-button-secondary" href="./audit.html">Ver historico</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-support-grid">
+              <div class="fx-support-stack">
+                <article class="fx-support-card">
+                  <div class="fx-card-header">
+                    <h3 class="fx-title-sm">Fila prioritaria</h3>
+                    <span class="fx-pill">18 protocolos</span>
+                  </div>
+                  <div class="fx-stream">
+                    <div class="fx-activity-row">
+                      <div class="fx-activity-dot"></div>
+                      <div>
+                        <strong>#SUP-4120 - Parceiro</strong>
+                        <p class="fx-copy-sm">Mercado Nova Rota reporta divergencia de repasse e pausa operacional no almoco.</p>
+                      </div>
+                      <span class="fx-status danger">critico</span>
+                    </div>
+                    <div class="fx-activity-row">
+                      <div class="fx-activity-dot"></div>
+                      <div>
+                        <strong>#SUP-4116 - Entregador</strong>
+                        <p class="fx-copy-sm">Lucas Ferreira aguarda revisao de corrida com distancia divergente.</p>
+                      </div>
+                      <span class="fx-status warning">alta</span>
+                    </div>
+                    <div class="fx-activity-row">
+                      <div class="fx-activity-dot"></div>
+                      <div>
+                        <strong>#SUP-4108 - Catalogo</strong>
+                        <p class="fx-copy-sm">Loja solicita revisao de imagem e disponibilidade em lote.</p>
+                      </div>
+                      <span class="fx-status success">normal</span>
+                    </div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="fx-support-stack">
+                <article class="fx-support-card">
+                  <h3 class="fx-title-sm">Distribuicao da fila</h3>
+                  <div class="fx-metric-list">
+                    <div class="fx-info-row">
+                      <strong>Operacao</strong>
+                      <span>7 tickets</span>
+                    </div>
+                    <div class="fx-info-row">
+                      <strong>Financeiro</strong>
+                      <span>5 tickets</span>
+                    </div>
+                    <div class="fx-info-row">
+                      <strong>Catalogo</strong>
+                      <span>4 tickets</span>
+                    </div>
+                    <div class="fx-info-row">
+                      <strong>Comercial</strong>
+                      <span>2 tickets</span>
+                    </div>
+                  </div>
+                </article>
+                <article class="fx-support-card">
+                  <h3 class="fx-title-sm">SLA do dia</h3>
+                  <ul class="fx-list">
+                    <li>Tempo medio de primeira resposta: 19 min.</li>
+                    <li>85% da fila dentro do SLA acordado.</li>
+                    <li>2 chamados escalados para revisao manual.</li>
+                  </ul>
+                </article>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

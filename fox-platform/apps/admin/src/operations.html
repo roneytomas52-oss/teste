@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Operacao</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="operations">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Visao de saude da operacao com foco em SLA, cobertura e incidentes em tempo util.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link is-active" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Operacao</div>
+            <h1 class="fx-title-sm">Controle operacional</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar alerta, loja ou zona" />
+            <a class="fx-button-secondary" href="#">Ver incidentes</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-admin-grid">
+              <article class="fx-compact-metric">
+                <strong>97,4%</strong>
+                <span>pedidos dentro do SLA</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>8</strong>
+                <span>lojas em pausa operacional</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>14</strong>
+                <span>alertas de atraso acima do tolerado</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>3</strong>
+                <span>zonas com cobertura reduzida</span>
+              </article>
+            </section>
+
+            <section class="fx-admin-columns">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h2 class="fx-title-sm">Linha do tempo de operacao</h2>
+                </div>
+                <div class="fx-ops-timeline">
+                  <div class="fx-ops-step">
+                    <strong>11:42 - Pico no centro expandido</strong>
+                    <p class="fx-copy-sm">Aumento de 18% no volume de pedidos com maior pressao em restaurantes e conveniencia.</p>
+                  </div>
+                  <div class="fx-ops-step">
+                    <strong>11:26 - Reforco de cobertura ativado</strong>
+                    <p class="fx-copy-sm">Mais 12 entregadores foram direcionados para a zona sul apos alerta de fila.</p>
+                  </div>
+                  <div class="fx-ops-step">
+                    <strong>11:10 - Loja pausada</strong>
+                    <p class="fx-copy-sm">Mercado Nova Rota entrou em pausa por divergencia no estoque de itens essenciais.</p>
+                  </div>
+                </div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h2 class="fx-title-sm">Alertas atuais</h2>
+                </div>
+                <div class="fx-checklist">
+                  <div class="fx-check-item">
+                    <strong>Fila de preparo acima da meta</strong>
+                    <p class="fx-copy-sm">Fox Burgers Centro passou de 18 minutos em 6 pedidos consecutivos.</p>
+                  </div>
+                  <div class="fx-check-item">
+                    <strong>Zona com cobertura critica</strong>
+                    <p class="fx-copy-sm">Baixa densidade de entregadores ativos em Guarulhos oeste.</p>
+                  </div>
+                  <div class="fx-check-item">
+                    <strong>Incidente financeiro em analise</strong>
+                    <p class="fx-copy-sm">Revisao de estorno pendente para uma loja com cancelamentos acima do normal.</p>
+                  </div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

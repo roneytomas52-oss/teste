@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Driver Portal | Login</title>
+    <link rel="stylesheet" href="./driver-portal.css" />
+  </head>
+  <body data-fx-screen="login">
+    <div class="fx-auth-page">
+      <div class="fx-auth-shell">
+        <section class="fx-auth-hero">
+          <div class="fx-eyebrow">Fox Driver</div>
+          <h1 class="fx-title-lg">Acesse o portal do entregador e acompanhe sua operação com mais clareza.</h1>
+          <p class="fx-lead">Ganhos, disponibilidade, documentos e perfil reunidos em uma experiência própria da Fox Delivery.</p>
+
+          <div class="fx-auth-kpis">
+            <div class="fx-auth-kpi">
+              <strong>Ganhos</strong>
+              <span class="fx-copy-sm">visão consolidada da semana e do período</span>
+            </div>
+            <div class="fx-auth-kpi">
+              <strong>Documentos</strong>
+              <span class="fx-copy-sm">status da validação e pendências de envio</span>
+            </div>
+            <div class="fx-auth-kpi">
+              <strong>Disponibilidade</strong>
+              <span class="fx-copy-sm">controle das janelas operacionais abertas</span>
+            </div>
+            <div class="fx-auth-kpi">
+              <strong>Perfil</strong>
+              <span class="fx-copy-sm">dados pessoais, modalidade e conta de recebimento</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="fx-login-card">
+          <div class="fx-login-header">
+            <div class="fx-pill">Login do entregador</div>
+            <h2 class="fx-title-md">Entre com sua conta da Fox Delivery</h2>
+            <p class="fx-copy">Autenticação local conectada à camada de dados compartilhada do MVP da Fox Platform.</p>
+          </div>
+
+          <form id="fx-driver-login-form" class="fx-grid">
+            <div class="fx-field">
+              <label for="driver-email">E-mail da conta</label>
+              <input id="driver-email" type="email" value="entregador@foxdelivery.com.br" />
+            </div>
+
+            <div class="fx-field">
+              <label for="driver-password">Senha</label>
+              <input id="driver-password" type="password" value="123456" />
+            </div>
+
+            <div id="fx-login-error" class="fx-note" hidden></div>
+
+            <div class="fx-inline-actions">
+              <button class="fx-button" type="submit">Entrar no portal</button>
+              <a class="fx-button-secondary" href="#">Recuperar acesso</a>
+            </div>
+          </form>
+
+          <div class="fx-note">Credenciais de demonstração: entregador@foxdelivery.com.br / 123456</div>
+        </section>
+      </div>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/driver-app.js"></script>
+  </body>
+</html>

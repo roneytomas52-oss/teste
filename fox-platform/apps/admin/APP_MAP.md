@@ -2,17 +2,23 @@
 
 ## Objetivo
 
-Painel interno da Fox Delivery para operação, aprovação, financeiro e auditoria.
+Painel interno da Fox Delivery para operacao, aprovacao, financeiro e auditoria.
 
-## Rotas-base da Fase 2
+## Paginas entregues ate a Fase 7
 
 - `/login`
 - `/dashboard`
-- `/partners`
-- `/drivers`
+- `/partners-approvals`
+- `/drivers-approvals`
 - `/orders`
+- `/operations`
 - `/finance`
-- `/reports`
-- `/settings`
+- `/analytics`
+- `/audit`
 - `/support`
 
+## Proximas areas previstas
+
+- `/reports`
+- `/settings`
+- `/permissions`

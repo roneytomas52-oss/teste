@@ -18,6 +18,9 @@
 - GET `/admin/orders`
 - GET `/admin/reports`
 - GET `/admin/finance`
+- GET `/admin/support`
+- GET `/admin/audit`
+- GET `/admin/analytics`
 
 ## Partner Portal
 
@@ -81,6 +84,13 @@
 - GET `/partner/reports/products`
 - GET `/partner/reports/finance`
 
+### messages, support and help
+
+- GET `/partner/messages`
+- GET `/partner/support`
+- POST `/partner/support/tickets`
+- GET `/partner/help`
+
 ### staff
 
 - GET `/partner/staff`
@@ -104,6 +114,7 @@
 - GET `/driver/history`
 - POST `/driver/availability`
 - POST `/driver/payout-request`
+- GET `/driver/support`
 
 ## Support
 
@@ -117,3 +128,4 @@
 - o sistema deve nascer API-first
 - o frontend nao deve depender de renderizacao Blade
 - endpoints devem ser versionados desde o inicio
+- durante a fase atual, os apps web consomem uma camada mock versionada em `apps/api/mock/v1`

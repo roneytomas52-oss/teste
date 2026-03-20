@@ -3,39 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fox Platform Admin</title>
-    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
-    <style>
-      .fx-admin-alerts,
-      .fx-admin-columns {
-        display: grid;
-        gap: var(--fx-space-6);
-      }
-
-      .fx-admin-columns {
-        grid-template-columns: 1.4fr 1fr;
-      }
-
-      .fx-admin-queue {
-        display: grid;
-        gap: var(--fx-space-5);
-      }
-
-      .fx-admin-queue-item {
-        padding: var(--fx-space-5);
-        border-radius: var(--fx-radius-sm);
-        background: rgba(255, 255, 255, 0.86);
-        border: 1px solid rgba(242, 209, 191, 0.88);
-      }
-
-      @media (max-width: 1100px) {
-        .fx-admin-columns {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <title>Fox Platform Admin | Dashboard</title>
+    <link rel="stylesheet" href="./admin.css" />
   </head>
-  <body>
+  <body data-fx-screen="dashboard">
     <div class="fx-app-shell">
       <aside class="fx-sidebar">
         <div class="fx-brand-lockup">
@@ -43,21 +14,23 @@
             <div class="fx-brand-mark"></div>
             <div>
               <strong>Fox Platform</strong>
-              <div class="fx-copy-sm">Admin da operação</div>
+              <div class="fx-copy-sm">Admin da operacao</div>
             </div>
           </div>
-          <p class="fx-copy-sm">Centro de controle da Fox Delivery para aprovação, risco, pedidos e financeiro.</p>
+          <p class="fx-copy-sm">Centro de controle da Fox Delivery para aprovacao, risco, pedidos e financeiro.</p>
         </div>
 
         <nav class="fx-sidebar-nav">
-          <a class="fx-sidebar-link is-active" href="#">Dashboard</a>
-          <a class="fx-sidebar-link" href="#">Parceiros</a>
-          <a class="fx-sidebar-link" href="#">Entregadores</a>
-          <a class="fx-sidebar-link" href="#">Pedidos</a>
-          <a class="fx-sidebar-link" href="#">Financeiro</a>
-          <a class="fx-sidebar-link" href="#">Relatórios</a>
-          <a class="fx-sidebar-link" href="#">Configurações</a>
-          <a class="fx-sidebar-link" href="#">Suporte</a>
+          <a class="fx-sidebar-link is-active" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
         </nav>
       </aside>
 
@@ -69,21 +42,21 @@
           </div>
           <div class="fx-topbar-actions">
             <input class="fx-search" type="search" placeholder="Buscar parceiro, pedido ou entregador" />
-            <a class="fx-button-secondary" href="#">Nova campanha</a>
+            <a class="fx-button-secondary" href="./operations.html">Abrir operacao</a>
           </div>
         </header>
 
         <div class="fx-shell-content">
-          <div class="fx-panel">
+          <div class="fx-admin-view">
             <section class="fx-hero-banner">
               <div class="fx-hero-grid">
                 <div class="fx-hero-content">
-                  <div class="fx-eyebrow">Operação central</div>
-                  <h2 class="fx-title-lg">Controle parceiros, pedidos e saúde operacional da Fox Delivery em um único lugar.</h2>
-                  <p class="fx-lead">Aprovações, indicadores críticos, suporte e financeiro organizados por prioridade operacional.</p>
+                  <div class="fx-eyebrow">Operacao central</div>
+                  <h2 class="fx-title-lg">Controle parceiros, pedidos e saude operacional da Fox Delivery em um unico lugar.</h2>
+                  <p class="fx-lead">Aprovacoes, indicadores criticos, suporte e financeiro organizados por prioridade operacional.</p>
                   <div class="fx-hero-actions">
-                    <a class="fx-button" href="#">Ver fila de aprovação</a>
-                    <a class="fx-button-secondary" href="#">Abrir financeiro</a>
+                    <a class="fx-button" href="./partners-approvals.html">Ver fila de aprovacao</a>
+                    <a class="fx-button-secondary" href="./finance.html">Abrir financeiro</a>
                   </div>
                 </div>
                 <div class="fx-hero-panel">
@@ -94,7 +67,7 @@
                   </div>
                   <div class="fx-mini-kpi">
                     <strong>23</strong>
-                    <span>cadastros aguardando aprovação</span>
+                    <span>cadastros aguardando aprovacao</span>
                   </div>
                   <div class="fx-mini-kpi">
                     <strong>R$ 182 mil</strong>
@@ -104,18 +77,22 @@
               </div>
             </section>
 
-            <section class="fx-kpi-grid">
-              <article class="fx-stat">
-                <div class="fx-stat-value">1.284</div>
-                <div class="fx-stat-label">parceiros ativos na operação</div>
+            <section class="fx-admin-grid">
+              <article class="fx-compact-metric">
+                <strong>1.284</strong>
+                <span>parceiros ativos na operacao</span>
               </article>
-              <article class="fx-stat">
-                <div class="fx-stat-value">3.912</div>
-                <div class="fx-stat-label">entregadores habilitados</div>
+              <article class="fx-compact-metric">
+                <strong>3.912</strong>
+                <span>entregadores habilitados</span>
               </article>
-              <article class="fx-stat">
-                <div class="fx-stat-value">97,4%</div>
-                <div class="fx-stat-label">pedidos entregues dentro do SLA</div>
+              <article class="fx-compact-metric">
+                <strong>97,4%</strong>
+                <span>pedidos dentro do SLA</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>12</strong>
+                <span>alertas criticos abertos</span>
               </article>
             </section>
 
@@ -124,7 +101,7 @@
                 <table>
                   <thead>
                     <tr>
-                      <th>Fila de aprovação</th>
+                      <th>Fila de aprovacao</th>
                       <th>Tipo</th>
                       <th>Status</th>
                       <th>Atualizado</th>
@@ -134,26 +111,26 @@
                     <tr>
                       <td>Mercado Nova Rota</td>
                       <td>Parceiro</td>
-                      <td><span class="fx-status warning">documentação pendente</span></td>
-                      <td>há 18 min</td>
+                      <td><span class="fx-status warning">documentacao pendente</span></td>
+                      <td>ha 18 min</td>
                     </tr>
                     <tr>
                       <td>Lucas Ferreira</td>
                       <td>Entregador</td>
-                      <td><span class="fx-status success">apto para ativação</span></td>
-                      <td>há 32 min</td>
+                      <td><span class="fx-status success">apto para ativacao</span></td>
+                      <td>ha 32 min</td>
                     </tr>
                     <tr>
-                      <td>Farmácia São Lucas</td>
+                      <td>Farmacia Sao Lucas</td>
                       <td>Parceiro</td>
-                      <td><span class="fx-status warning">validar horário</span></td>
-                      <td>há 47 min</td>
+                      <td><span class="fx-status warning">validar horario</span></td>
+                      <td>ha 47 min</td>
                     </tr>
                     <tr>
                       <td>Marina Costa</td>
                       <td>Entregador</td>
-                      <td><span class="fx-status danger">revisão manual</span></td>
-                      <td>há 1 h</td>
+                      <td><span class="fx-status danger">revisao manual</span></td>
+                      <td>ha 1 h</td>
                     </tr>
                   </tbody>
                 </table>
@@ -166,8 +143,8 @@
                   </div>
                   <ul class="fx-list">
                     <li>8 lojas com pausa operacional acima de 30 minutos.</li>
-                    <li>3 repasses aguardando conferência financeira.</li>
-                    <li>12 pedidos com atraso acima do padrão.</li>
+                    <li>3 repasses aguardando conferencia financeira.</li>
+                    <li>12 pedidos com atraso acima do padrao.</li>
                   </ul>
                 </article>
 
@@ -176,9 +153,9 @@
                     <span class="fx-pill">Atalhos</span>
                   </div>
                   <div class="fx-admin-queue">
-                    <a class="fx-button" href="#">Aprovar parceiros</a>
-                    <a class="fx-button-secondary" href="#">Ver pedidos críticos</a>
-                    <a class="fx-button-ghost" href="#">Abrir central de suporte</a>
+                    <a class="fx-button" href="./partners-approvals.html">Aprovar parceiros</a>
+                    <a class="fx-button-secondary" href="./orders.html">Ver pedidos criticos</a>
+                    <a class="fx-button-ghost" href="./finance.html">Abrir financeiro</a>
                   </div>
                 </article>
               </div>
@@ -187,6 +164,6 @@
         </div>
       </main>
     </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
   </body>
 </html>
-

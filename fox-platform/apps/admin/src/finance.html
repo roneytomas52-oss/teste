@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Financeiro</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="finance">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Resumo financeiro da plataforma com repasses, taxas e controles basicos de acompanhamento.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link is-active" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Financeiro</div>
+            <h1 class="fx-title-sm">Controle financeiro basico</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar parceiro, repasse ou ajuste" />
+            <a class="fx-button-secondary" href="#">Exportar resumo</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-admin-columns">
+              <article class="fx-balance-card">
+                <span class="fx-pill">Volume do dia</span>
+                <div class="fx-balance-value">R$ 182.430</div>
+                <p class="fx-copy">Volume bruto processado hoje na plataforma, consolidando pedidos pagos, taxas e previsao de repasses.</p>
+              </article>
+              <div class="fx-finance-stack">
+                <article class="fx-stat">
+                  <div class="fx-stat-value">R$ 26.118</div>
+                  <div class="fx-stat-label">comissoes apuradas no dia</div>
+                </article>
+                <article class="fx-stat">
+                  <div class="fx-stat-value">R$ 94.500</div>
+                  <div class="fx-stat-label">repasses previstos nesta semana</div>
+                </article>
+                <article class="fx-stat">
+                  <div class="fx-stat-value">5</div>
+                  <div class="fx-stat-label">ajustes financeiros pendentes</div>
+                </article>
+              </div>
+            </section>
+
+            <section class="fx-finance-grid">
+              <article class="fx-finance-card">
+                <h3>Repasses em processamento</h3>
+                <p class="fx-copy-sm">Lojas com ciclo financeiro ja apurado e aguardando envio bancario.</p>
+                <div class="fx-finance-meta">
+                  <span class="fx-tag">12 parceiros</span>
+                  <span class="fx-tag">R$ 94.500</span>
+                </div>
+                <div class="fx-inline-actions">
+                  <a class="fx-button" href="#">Abrir lote</a>
+                </div>
+              </article>
+              <article class="fx-finance-card">
+                <h3>Ajustes e estornos</h3>
+                <p class="fx-copy-sm">Eventos que precisam de revisao do financeiro antes do fechamento do ciclo.</p>
+                <div class="fx-finance-meta">
+                  <span class="fx-tag">5 ajustes</span>
+                  <span class="fx-tag">2 estornos</span>
+                </div>
+                <div class="fx-inline-actions">
+                  <a class="fx-button-secondary" href="#">Revisar fila</a>
+                </div>
+              </article>
+            </section>
+
+            <section class="fx-table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Parceiro</th>
+                    <th>Periodo</th>
+                    <th>Status</th>
+                    <th>Liquido previsto</th>
+                    <th>Observacao</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Fox Burgers Centro</td>
+                    <td>17/03 a 23/03</td>
+                    <td><span class="fx-status success">aprovado</span></td>
+                    <td>R$ 8.460,32</td>
+                    <td>conta validada</td>
+                  </tr>
+                  <tr>
+                    <td>Mercado Nova Rota</td>
+                    <td>17/03 a 23/03</td>
+                    <td><span class="fx-status warning">em conferencia</span></td>
+                    <td>R$ 6.218,40</td>
+                    <td>revisar divergencia de estoque</td>
+                  </tr>
+                  <tr>
+                    <td>Farmacia Sao Lucas</td>
+                    <td>17/03 a 23/03</td>
+                    <td><span class="fx-status success">aprovado</span></td>
+                    <td>R$ 4.912,18</td>
+                    <td>pronto para envio</td>
+                  </tr>
+                  <tr>
+                    <td>Convivencia Central</td>
+                    <td>17/03 a 23/03</td>
+                    <td><span class="fx-status danger">bloqueado</span></td>
+                    <td>R$ 2.118,90</td>
+                    <td>pendencia documental</td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

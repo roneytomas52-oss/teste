@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Driver Portal | Disponibilidade</title>
+    <link rel="stylesheet" href="./driver-portal.css" />
+  </head>
+  <body data-fx-screen="availability">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Driver</strong>
+              <div class="fx-copy-sm">Portal do entregador</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Controle as janelas abertas para operar e acompanhe sua presenca nas faixas da semana.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./earnings.html">Ganhos</a>
+          <a class="fx-sidebar-link" href="./documents.html">Documentos</a>
+          <a class="fx-sidebar-link is-active" href="./availability.html">Disponibilidade</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Disponibilidade</div>
+            <h1 class="fx-title-sm">Janelas da operacao</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button" href="#">Abrir agenda</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-driver-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Presenca operacional</div>
+                <h2 class="fx-title-md">Defina quando voce quer operar e acompanhe sua constancia nas janelas abertas.</h2>
+                <p class="fx-copy">A disponibilidade influencia a cobertura da plataforma e ajuda a equipe a distribuir a operacao por zona e horario.</p>
+              </div>
+            </section>
+
+            <section class="fx-compact-metrics">
+              <article class="fx-compact-metric">
+                <strong>98%</strong>
+                <span>presenca nas janelas abertas</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>6</strong>
+                <span>janelas ativas nesta semana</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>Zona Sul</strong>
+                <span>area principal da operacao</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>12h-14h</strong>
+                <span>maior volume de corrida</span>
+              </article>
+            </section>
+
+            <section class="fx-availability-grid">
+              <article class="fx-slot-card is-open">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Segunda-feira</h3>
+                  <span class="fx-status success">aberta</span>
+                </div>
+                <p class="fx-copy-sm">11:00 as 14:00 e 18:00 as 22:00</p>
+              </article>
+              <article class="fx-slot-card is-open">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Terca-feira</h3>
+                  <span class="fx-status success">aberta</span>
+                </div>
+                <p class="fx-copy-sm">11:00 as 14:00 e 18:00 as 22:00</p>
+              </article>
+              <article class="fx-slot-card is-closed">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Quarta-feira</h3>
+                  <span class="fx-status warning">parcial</span>
+                </div>
+                <p class="fx-copy-sm">18:00 as 22:00</p>
+              </article>
+              <article class="fx-slot-card is-open">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Quinta-feira</h3>
+                  <span class="fx-status success">aberta</span>
+                </div>
+                <p class="fx-copy-sm">11:00 as 14:00 e 18:00 as 22:00</p>
+              </article>
+              <article class="fx-slot-card is-open">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Sexta-feira</h3>
+                  <span class="fx-status success">aberta</span>
+                </div>
+                <p class="fx-copy-sm">11:00 as 14:00 e 18:00 as 23:00</p>
+              </article>
+              <article class="fx-slot-card is-closed">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Sabado</h3>
+                  <span class="fx-status danger">fechada</span>
+                </div>
+                <p class="fx-copy-sm">sem janelas abertas no momento</p>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/driver-app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Pedidos</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="orders">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Visao centralizada da fila de pedidos da plataforma para tomada de decisao operacional.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link is-active" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Pedidos</div>
+            <h1 class="fx-title-sm">Fila operacional da plataforma</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar pedido, loja ou cliente" />
+            <a class="fx-button-secondary" href="#">Exportar fila</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-filter-row">
+              <button class="fx-filter-chip is-active" type="button">Todos</button>
+              <button class="fx-filter-chip" type="button">Atrasados</button>
+              <button class="fx-filter-chip" type="button">Em preparo</button>
+              <button class="fx-filter-chip" type="button">Prontos</button>
+              <button class="fx-filter-chip" type="button">Cancelados</button>
+            </section>
+            <section class="fx-table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pedido</th>
+                    <th>Loja</th>
+                    <th>Status</th>
+                    <th>SLA</th>
+                    <th>Entregador</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>#FD-10482</td>
+                    <td>Mercado Nova Rota</td>
+                    <td><span class="fx-status warning">aguardando aceite</span></td>
+                    <td>4 min</td>
+                    <td>sem atribuicao</td>
+                    <td>R$ 78,90</td>
+                  </tr>
+                  <tr>
+                    <td>#FD-10479</td>
+                    <td>Fox Burgers Centro</td>
+                    <td><span class="fx-status success">em preparo</span></td>
+                    <td>10 min</td>
+                    <td>Lucas Ferreira</td>
+                    <td>R$ 54,20</td>
+                  </tr>
+                  <tr>
+                    <td>#FD-10471</td>
+                    <td>Farmacia Sao Lucas</td>
+                    <td><span class="fx-status warning">pronto para retirada</span></td>
+                    <td>2 min</td>
+                    <td>Daniela Matos</td>
+                    <td>R$ 31,00</td>
+                  </tr>
+                  <tr>
+                    <td>#FD-10433</td>
+                    <td>Convivencia Central</td>
+                    <td><span class="fx-status danger">cancelado</span></td>
+                    <td>fora da janela</td>
+                    <td>nao atribuido</td>
+                    <td>R$ 44,90</td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

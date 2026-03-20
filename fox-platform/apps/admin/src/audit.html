@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Auditoria</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="audit">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Trilha de auditoria para aprovacoes, mudancas de cadastro, ajustes financeiros e acoes sensiveis.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link is-active" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Auditoria</div>
+            <h1 class="fx-title-sm">Historico de acoes sensiveis</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar usuario, modulo ou evento" />
+            <a class="fx-button-secondary" href="#">Exportar trilha</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-audit-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Eventos recentes</h3>
+                  <span class="fx-pill">Hoje</span>
+                </div>
+                <div class="fx-stream">
+                  <div class="fx-activity-row">
+                    <div class="fx-activity-dot"></div>
+                    <div>
+                      <strong>Aprovacao de parceiro</strong>
+                      <p class="fx-copy-sm">Amanda Ribeiro aprovou o cadastro da Farmacia Sao Lucas apos revisao documental.</p>
+                    </div>
+                    <span class="fx-copy-sm">14:08</span>
+                  </div>
+                  <div class="fx-activity-row">
+                    <div class="fx-activity-dot"></div>
+                    <div>
+                      <strong>Ajuste financeiro</strong>
+                      <p class="fx-copy-sm">Carlos Silva aplicou compensacao manual em lote de repasse #PAYOUT-119.</p>
+                    </div>
+                    <span class="fx-copy-sm">13:41</span>
+                  </div>
+                  <div class="fx-activity-row">
+                    <div class="fx-activity-dot"></div>
+                    <div>
+                      <strong>Bloqueio temporario</strong>
+                      <p class="fx-copy-sm">Operacao pausou a loja Conveniencia Central por divergencia de horario e estoque.</p>
+                    </div>
+                    <span class="fx-copy-sm">12:52</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="fx-support-card">
+                <h3 class="fx-title-sm">Leituras de risco</h3>
+                <ul class="fx-list">
+                  <li>3 ajustes financeiros manuais acima da media da semana.</li>
+                  <li>2 aprovacoes com override de regra automatica.</li>
+                  <li>1 usuario interno com tentativa de acesso fora do horario padrao.</li>
+                </ul>
+              </article>
+            </section>
+
+            <section class="fx-table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Horario</th>
+                    <th>Usuario</th>
+                    <th>Modulo</th>
+                    <th>Acao</th>
+                    <th>Contexto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>14:08</td>
+                    <td>Amanda Ribeiro</td>
+                    <td>Partners approvals</td>
+                    <td>Aprovou parceiro</td>
+                    <td>Farmacia Sao Lucas</td>
+                  </tr>
+                  <tr>
+                    <td>13:41</td>
+                    <td>Carlos Silva</td>
+                    <td>Financeiro</td>
+                    <td>Aplicou ajuste</td>
+                    <td>PAYOUT-119</td>
+                  </tr>
+                  <tr>
+                    <td>12:52</td>
+                    <td>Operacao turno A</td>
+                    <td>Operacao</td>
+                    <td>Pausou loja</td>
+                    <td>Conveniencia Central</td>
+                  </tr>
+                  <tr>
+                    <td>11:36</td>
+                    <td>Fernanda Mota</td>
+                    <td>Drivers approvals</td>
+                    <td>Solicitou revisao manual</td>
+                    <td>Lucas Ferreira</td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

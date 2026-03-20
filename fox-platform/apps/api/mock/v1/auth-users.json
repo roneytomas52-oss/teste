@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": "admin-001",
+      "role": "admin",
+      "email": "admin@foxplatform.com",
+      "password": "123456",
+      "name": "Amanda Ribeiro",
+      "accountLabel": "Fox Platform Admin"
+    },
+    {
+      "id": "partner-001",
+      "role": "partner",
+      "email": "parceiro@foxdelivery.com.br",
+      "password": "123456",
+      "name": "Fox Burgers Centro",
+      "accountLabel": "Fox Burgers Centro"
+    },
+    {
+      "id": "driver-001",
+      "role": "driver",
+      "email": "entregador@foxdelivery.com.br",
+      "password": "123456",
+      "name": "Lucas Ferreira",
+      "accountLabel": "Lucas Ferreira"
+    }
+  ]
+}

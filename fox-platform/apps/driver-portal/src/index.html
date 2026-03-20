@@ -3,35 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fox Driver Portal</title>
-    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
-    <style>
-      .fx-driver-grid {
-        display: grid;
-        grid-template-columns: 1.1fr 1fr;
-        gap: var(--fx-space-6);
-      }
-
-      .fx-driver-checklist {
-        display: grid;
-        gap: var(--fx-space-4);
-      }
-
-      .fx-driver-checklist article {
-        padding: var(--fx-space-5);
-        border-radius: var(--fx-radius-sm);
-        background: rgba(255, 255, 255, 0.84);
-        border: 1px solid rgba(242, 209, 191, 0.82);
-      }
-
-      @media (max-width: 1100px) {
-        .fx-driver-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <title>Fox Driver Portal | Dashboard</title>
+    <link rel="stylesheet" href="./driver-portal.css" />
   </head>
-  <body>
+  <body data-fx-screen="dashboard">
     <div class="fx-app-shell">
       <aside class="fx-sidebar">
         <div class="fx-brand-lockup">
@@ -42,16 +17,17 @@
               <div class="fx-copy-sm">Portal do entregador</div>
             </div>
           </div>
-          <p class="fx-copy-sm">Perfil, documentos, ganhos e disponibilidade em um painel próprio da Fox Delivery.</p>
+          <p class="fx-copy-sm">Perfil, documentos, ganhos e disponibilidade em um painel proprio da Fox Delivery.</p>
         </div>
 
         <nav class="fx-sidebar-nav">
-          <a class="fx-sidebar-link is-active" href="#">Dashboard</a>
-          <a class="fx-sidebar-link" href="#">Ganhos</a>
-          <a class="fx-sidebar-link" href="#">Corridas</a>
-          <a class="fx-sidebar-link" href="#">Documentos</a>
-          <a class="fx-sidebar-link" href="#">Disponibilidade</a>
-          <a class="fx-sidebar-link" href="#">Suporte</a>
+          <a class="fx-sidebar-link is-active" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./earnings.html">Ganhos</a>
+          <a class="fx-sidebar-link" href="./documents.html">Documentos</a>
+          <a class="fx-sidebar-link" href="./availability.html">Disponibilidade</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
         </nav>
       </aside>
 
@@ -59,57 +35,61 @@
         <header class="fx-shell-topbar">
           <div>
             <div class="fx-pill">Entregador ativo</div>
-            <h1 class="fx-title-sm">Painel do entregador</h1>
+            <h1 class="fx-title-sm">Dashboard do entregador</h1>
           </div>
           <div class="fx-topbar-actions">
             <input class="fx-search" type="search" placeholder="Buscar corrida, documento ou atendimento" />
-            <a class="fx-button-secondary" href="#">Atualizar perfil</a>
+            <a class="fx-button-secondary" href="./profile.html">Atualizar perfil</a>
           </div>
         </header>
 
         <div class="fx-shell-content">
-          <div class="fx-panel">
+          <div class="fx-driver-view">
             <section class="fx-hero-banner">
               <div class="fx-hero-grid">
                 <div class="fx-hero-content">
-                  <div class="fx-eyebrow">Operação do entregador</div>
-                  <h2 class="fx-title-lg">Ganhos, documentação e disponibilidade organizados em uma experiência própria.</h2>
-                  <p class="fx-lead">O portal do entregador concentra a parte financeira, os documentos e os próximos passos da operação.</p>
+                  <div class="fx-eyebrow">Operacao do entregador</div>
+                  <h2 class="fx-title-lg">Ganhos, documentacao e disponibilidade organizados em uma experiencia propria.</h2>
+                  <p class="fx-lead">O portal do entregador concentra a parte financeira, os documentos e os proximos passos da operacao.</p>
                   <div class="fx-hero-actions">
-                    <a class="fx-button" href="#">Ver ganhos</a>
-                    <a class="fx-button-secondary" href="#">Revisar documentos</a>
+                    <a class="fx-button" href="./earnings.html">Ver ganhos</a>
+                    <a class="fx-button-secondary" href="./documents.html">Revisar documentos</a>
                   </div>
                 </div>
                 <div class="fx-hero-panel">
                   <div class="fx-pill">Resumo da semana</div>
                   <div class="fx-mini-kpi">
                     <strong>R$ 1.286</strong>
-                    <span>ganhos líquidos acumulados</span>
+                    <span>ganhos liquidos acumulados</span>
                   </div>
                   <div class="fx-mini-kpi">
                     <strong>62</strong>
-                    <span>entregas concluídas</span>
+                    <span>entregas concluidas</span>
                   </div>
                   <div class="fx-mini-kpi">
                     <strong>98%</strong>
-                    <span>taxa de presença nas janelas abertas</span>
+                    <span>taxa de presenca nas janelas abertas</span>
                   </div>
                 </div>
               </div>
             </section>
 
-            <section class="fx-kpi-grid">
-              <article class="fx-stat">
-                <div class="fx-stat-value">Moto</div>
-                <div class="fx-stat-label">modalidade ativa na operação</div>
+            <section class="fx-compact-metrics">
+              <article class="fx-compact-metric">
+                <strong>Moto</strong>
+                <span>modalidade ativa na operacao</span>
               </article>
-              <article class="fx-stat">
-                <div class="fx-stat-value">24 min</div>
-                <div class="fx-stat-label">tempo médio por corrida</div>
+              <article class="fx-compact-metric">
+                <strong>24 min</strong>
+                <span>tempo medio por corrida</span>
               </article>
-              <article class="fx-stat">
-                <div class="fx-stat-value">R$ 8,72</div>
-                <div class="fx-stat-label">ganho médio por entrega</div>
+              <article class="fx-compact-metric">
+                <strong>R$ 8,72</strong>
+                <span>ganho medio por entrega</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>4,9</strong>
+                <span>avaliacao media recente</span>
               </article>
             </section>
 
@@ -121,25 +101,25 @@
                       <th>Corridas recentes</th>
                       <th>Status</th>
                       <th>Valor</th>
-                      <th>Horário</th>
+                      <th>Horario</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>#RUN-8741</td>
-                      <td><span class="fx-status success">concluída</span></td>
+                      <td><span class="fx-status success">concluida</span></td>
                       <td>R$ 9,40</td>
                       <td>12:08</td>
                     </tr>
                     <tr>
                       <td>#RUN-8739</td>
-                      <td><span class="fx-status success">concluída</span></td>
+                      <td><span class="fx-status success">concluida</span></td>
                       <td>R$ 7,90</td>
                       <td>11:34</td>
                     </tr>
                     <tr>
                       <td>#RUN-8734</td>
-                      <td><span class="fx-status warning">em análise</span></td>
+                      <td><span class="fx-status warning">em analise</span></td>
                       <td>R$ 12,10</td>
                       <td>10:42</td>
                     </tr>
@@ -147,26 +127,25 @@
                 </table>
               </div>
 
-              <div class="fx-driver-checklist">
-                <article>
+              <div class="fx-checklist">
+                <article class="fx-check-card">
                   <div class="fx-card-header">
                     <h3 class="fx-title-sm">Checklist do perfil</h3>
                   </div>
                   <ul class="fx-list">
-                    <li>CNH validada até 2027.</li>
-                    <li>Conta bancária aprovada para repasses.</li>
+                    <li>CNH validada ate 2027.</li>
+                    <li>Conta bancaria aprovada para repasses.</li>
                     <li>Seguro e cadastro da moto atualizados.</li>
                   </ul>
                 </article>
-
-                <article>
+                <article class="fx-check-card">
                   <div class="fx-card-header">
-                    <h3 class="fx-title-sm">Ações rápidas</h3>
+                    <h3 class="fx-title-sm">Acoes rapidas</h3>
                   </div>
                   <div class="fx-grid">
-                    <a class="fx-button" href="#">Abrir disponibilidade</a>
-                    <a class="fx-button-secondary" href="#">Solicitar suporte</a>
-                    <a class="fx-button-ghost" href="#">Baixar comprovante</a>
+                    <a class="fx-button" href="./availability.html">Abrir disponibilidade</a>
+                    <a class="fx-button-secondary" href="./documents.html">Enviar documento</a>
+                    <a class="fx-button-ghost" href="./earnings.html">Baixar comprovante</a>
                   </div>
                 </article>
               </div>
@@ -175,6 +154,6 @@
         </div>
       </main>
     </div>
+    <script type="module" src="../../../packages/sdk/src/driver-app.js"></script>
   </body>
 </html>
-

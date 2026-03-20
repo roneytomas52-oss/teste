@@ -4,7 +4,7 @@
 
 Portal operacional do entregador.
 
-## Rotas-base da Fase 2
+## Paginas entregues ate a Fase 7
 
 - `/login`
 - `/dashboard`
@@ -14,3 +14,7 @@ Portal operacional do entregador.
 - `/availability`
 - `/support`
 
+## Proximas areas previstas
+
+- `/notifications`
+- `/history`

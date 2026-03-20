@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Aprovacao de parceiros</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="partners-approvals">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Aprovacao comercial e operacional das lojas parceiras da Fox Delivery.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link is-active" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Parceiros</div>
+            <h1 class="fx-title-sm">Fila de aprovacao comercial</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar loja, CNPJ ou responsavel" />
+            <a class="fx-button-secondary" href="#">Exportar fila</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Entrada de parceiros</div>
+                <h2 class="fx-title-md">Revise documentacao, operacao e enquadramento antes da ativacao da loja.</h2>
+                <p class="fx-copy">A aprovacao do parceiro precisa validar informacoes cadastrais, categoria da operacao, cobertura e risco basico de entrada.</p>
+              </div>
+            </section>
+            <section class="fx-filter-row">
+              <button class="fx-filter-chip is-active" type="button">Todos</button>
+              <button class="fx-filter-chip" type="button">Documentacao pendente</button>
+              <button class="fx-filter-chip" type="button">Aptos para ativacao</button>
+              <button class="fx-filter-chip" type="button">Revisao manual</button>
+            </section>
+            <section class="fx-approval-grid">
+              <article class="fx-approval-card">
+                <h3>Mercado Nova Rota</h3>
+                <p class="fx-copy-sm">CNPJ validado, endereco confirmado e horario aguardando ajuste final da equipe comercial.</p>
+                <div class="fx-approval-meta">
+                  <span class="fx-tag">Mercado</span>
+                  <span class="fx-tag">Sao Paulo</span>
+                  <span class="fx-tag">analise inicial</span>
+                </div>
+                <div class="fx-inline-actions">
+                  <span class="fx-status warning">documentacao pendente</span>
+                  <a class="fx-button" href="#">Abrir cadastro</a>
+                </div>
+              </article>
+              <article class="fx-approval-card">
+                <h3>Farmacia Sao Lucas</h3>
+                <p class="fx-copy-sm">Documentos ok, conta bancaria validada e operacao pronta para ativacao apos revisao de horario.</p>
+                <div class="fx-approval-meta">
+                  <span class="fx-tag">Farmacia</span>
+                  <span class="fx-tag">Campinas</span>
+                  <span class="fx-tag">alto potencial</span>
+                </div>
+                <div class="fx-inline-actions">
+                  <span class="fx-status success">apto para ativacao</span>
+                  <a class="fx-button" href="#">Ativar loja</a>
+                </div>
+              </article>
+              <article class="fx-approval-card">
+                <h3>Conveniência Central</h3>
+                <p class="fx-copy-sm">Cadastro novo com divergencia entre razao social e documento informado no responsavel.</p>
+                <div class="fx-approval-meta">
+                  <span class="fx-tag">Convivencia</span>
+                  <span class="fx-tag">Guarulhos</span>
+                  <span class="fx-tag">atencao cadastral</span>
+                </div>
+                <div class="fx-inline-actions">
+                  <span class="fx-status danger">revisao manual</span>
+                  <a class="fx-button" href="#">Solicitar correcoes</a>
+                </div>
+              </article>
+              <article class="fx-approval-card">
+                <h3>Fox Burgers Norte</h3>
+                <p class="fx-copy-sm">Expansao de parceiro existente com historico positivo e documentacao reaproveitada.</p>
+                <div class="fx-approval-meta">
+                  <span class="fx-tag">Restaurante</span>
+                  <span class="fx-tag">Rio de Janeiro</span>
+                  <span class="fx-tag">expansao</span>
+                </div>
+                <div class="fx-inline-actions">
+                  <span class="fx-status success">prioridade comercial</span>
+                  <a class="fx-button" href="#">Concluir aprovacao</a>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

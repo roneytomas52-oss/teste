@@ -4,21 +4,23 @@
 
 Portal operacional da loja parceira.
 
-## Paginas entregues ate a Fase 3
+## Paginas entregues ate a Fase 7
 
 - `/login`
 - `/dashboard`
 - `/orders`
 - `/catalog`
 - `/inventory`
+- `/finance`
+- `/reports`
 - `/store`
 - `/schedules`
 - `/profile`
+- `/messages`
+- `/support`
+- `/help`
 
 ## Proximas areas previstas
 
-- `/finance`
 - `/team`
-- `/reports`
-- `/help`
-
+- `/notifications`
