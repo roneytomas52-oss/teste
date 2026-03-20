@@ -66,13 +66,22 @@
 - login funcional no navegador
 - hidratacao das telas principais
 
-## Proxima fase recomendada - Backend executavel
+## Fase 9 - Backend executavel [em andamento]
 
-- scaffold de framework
-- autenticacao funcional
-- APIs do backend
-- dados reais
-- contratos frontend/backend
+- Sprint 1 concluida:
+  - bootstrap HTTP do backend
+  - autenticacao funcional
+  - rotas base de auth e `me`
+  - seeds iniciais e banco preparado
+- Sprint 2 concluida:
+  - Partner Core ligado no backend
+  - perfil real do parceiro
+  - loja, horarios e documentos com rotas reais
+  - SDK do parceiro em modo API-first com fallback local
+- Proximo foco:
+  - catalogo real
+  - pedidos reais
+  - dashboard e admin consumindo banco
 
 ## Entregavel minimo para primeira versao
 

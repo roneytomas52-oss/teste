@@ -2,8 +2,11 @@
 
 return [
     'tokens' => [
-        'access_ttl_seconds' => 900,
-        'refresh_ttl_seconds' => 2592000,
+        'access_ttl_seconds' => (int) (getenv('AUTH_ACCESS_TOKEN_TTL') ?: 900),
+        'refresh_ttl_seconds' => (int) (getenv('AUTH_REFRESH_TOKEN_TTL') ?: 2592000),
+        'password_reset_ttl_seconds' => (int) (getenv('AUTH_PASSWORD_RESET_TTL') ?: 3600),
+        'refresh_token_bytes' => (int) (getenv('AUTH_REFRESH_TOKEN_BYTES') ?: 32),
+        'access_token_secret' => getenv('AUTH_ACCESS_TOKEN_SECRET') ?: 'fox-platform-local-secret',
     ],
     'guards' => [
         'admin',
@@ -46,4 +49,3 @@ return [
         'export',
     ],
 ];
-

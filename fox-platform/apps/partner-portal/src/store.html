@@ -17,17 +17,17 @@
               <div class="fx-copy-sm">Portal do parceiro</div>
             </div>
           </div>
-          <p class="fx-copy-sm">Dados operacionais, comerciais e cadastrais da loja em um unico ambiente.</p>
+          <p class="fx-copy-sm">Dados operacionais, comerciais e cadastrais da loja em um único ambiente.</p>
         </div>
         <nav class="fx-sidebar-nav">
           <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
           <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
-          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catálogo</a>
           <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
           <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
-          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatórios</a>
           <a class="fx-sidebar-link is-active" href="./store.html">Loja</a>
-          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horários</a>
           <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
           <a class="fx-sidebar-link" href="./messages.html">Mensagens</a>
           <a class="fx-sidebar-link" href="./support.html">Suporte</a>
@@ -42,7 +42,7 @@
             <h1 class="fx-title-sm">Perfil comercial e operacional</h1>
           </div>
           <div class="fx-topbar-actions">
-            <a class="fx-button-secondary" href="./schedules.html">Editar horarios</a>
+            <a class="fx-button-secondary" href="./schedules.html">Editar horários</a>
           </div>
         </header>
         <div class="fx-shell-content">
@@ -50,42 +50,108 @@
             <section class="fx-page-header">
               <div class="fx-page-header-copy">
                 <div class="fx-eyebrow">Dados da loja</div>
-                <h2 class="fx-title-md">Mantenha a identidade e a operacao da loja atualizadas.</h2>
-                <p class="fx-copy">Essas informacoes sustentam o cadastro, a analise da equipe Fox Delivery e a operacao diaria da loja dentro da plataforma.</p>
-              </div>
-              <div class="fx-page-actions">
-                <a class="fx-button" href="#">Salvar alteracoes</a>
+                <h2 class="fx-title-md">Mantenha a identidade e a operação da loja atualizadas.</h2>
+                <p class="fx-copy">Essas informações sustentam o cadastro, a análise da equipe Fox Delivery e a rotina diária da operação parceira.</p>
               </div>
             </section>
+
+            <div id="fx-store-feedback" class="fx-note fx-feedback" hidden></div>
+
             <section class="fx-page-columns">
-              <article class="fx-card">
+              <form id="fx-partner-store-form" class="fx-card fx-form-shell">
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Dados principais</h3>
                 </div>
                 <div class="fx-form-grid">
-                  <div class="fx-field"><label for="trade-name">Nome de exibicao</label><input id="trade-name" type="text" value="Fox Burgers Centro" /></div>
-                  <div class="fx-field"><label for="legal-name">Razao social</label><input id="legal-name" type="text" value="Fox Burgers Alimentos Ltda." /></div>
-                  <div class="fx-field"><label for="store-email">E-mail da loja</label><input id="store-email" type="email" value="contato@foxburgers.com.br" /></div>
-                  <div class="fx-field"><label for="store-phone">Telefone</label><input id="store-phone" type="text" value="(11) 4000-2244" /></div>
-                  <div class="fx-field"><label for="store-document">CNPJ</label><input id="store-document" type="text" value="12.345.678/0001-99" /></div>
-                  <div class="fx-field"><label for="store-city">Cidade</label><input id="store-city" type="text" value="Sao Paulo" /></div>
+                  <div class="fx-field">
+                    <label for="store-trade-name">Nome de exibição</label>
+                    <input id="store-trade-name" name="trade_name" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="store-legal-name">Razão social</label>
+                    <input id="store-legal-name" name="legal_name" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="store-email">E-mail da loja</label>
+                    <input id="store-email" name="email" type="email" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="store-phone">Telefone</label>
+                    <input id="store-phone" name="phone" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="store-document-number">CNPJ</label>
+                    <input id="store-document-number" name="document_number" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="store-city">Cidade</label>
+                    <input id="store-city" name="city" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="store-state">Estado</label>
+                    <input id="store-state" name="state" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="store-country">País</label>
+                    <input id="store-country" name="country" type="text" />
+                  </div>
                   <div class="fx-field" style="grid-column: 1 / -1;">
-                    <label for="store-description">Descricao operacional</label>
-                    <textarea id="store-description">Loja focada em sanduiches, combos e conveniencia com alta velocidade de preparo e janela estendida de atendimento.</textarea>
+                    <label for="store-description">Descrição operacional</label>
+                    <textarea id="store-description" name="description"></textarea>
                   </div>
                 </div>
-              </article>
+                <div class="fx-inline-actions">
+                  <button class="fx-button" type="submit">Salvar loja</button>
+                </div>
+              </form>
+
               <article class="fx-card">
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Resumo cadastral</h3>
                 </div>
                 <div class="fx-info-list">
-                  <div class="fx-info-row"><strong>Status da loja</strong><span class="fx-status success">ativa</span></div>
-                  <div class="fx-info-row"><strong>Modelo operacional</strong><span>entrega parceira</span></div>
-                  <div class="fx-info-row"><strong>Categoria principal</strong><span>Restaurante</span></div>
-                  <div class="fx-info-row"><strong>Ultima analise</strong><span>18/03/2026</span></div>
+                  <div class="fx-info-row"><strong>Status da loja</strong><span id="store-status" class="fx-status">-</span></div>
+                  <div class="fx-info-row"><strong>Contato principal</strong><span id="store-contact">-</span></div>
+                  <div class="fx-info-row"><strong>Cidade e UF</strong><span id="store-region">-</span></div>
+                  <div class="fx-info-row"><strong>Documentos ativos</strong><span id="store-documents-count">-</span></div>
                 </div>
               </article>
+            </section>
+
+            <section class="fx-page-columns">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Documentos da loja</h3>
+                </div>
+                <div id="fx-store-document-list" class="fx-document-list"></div>
+              </article>
+
+              <form id="fx-partner-document-form" class="fx-card fx-form-shell">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Registrar documento</h3>
+                </div>
+                <div class="fx-form-grid">
+                  <div class="fx-field">
+                    <label for="document-type">Tipo do documento</label>
+                    <input id="document-type" name="document_type" type="text" placeholder="cnpj" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="document-label">Rótulo</label>
+                    <input id="document-label" name="label" type="text" placeholder="Cartão CNPJ" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="document-file-name">Nome do arquivo</label>
+                    <input id="document-file-name" name="file_name" type="text" placeholder="cartao-cnpj.pdf" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="document-storage-path">Caminho do arquivo</label>
+                    <input id="document-storage-path" name="storage_path" type="text" placeholder="/documents/loja/cartao-cnpj.pdf" />
+                  </div>
+                </div>
+                <div class="fx-inline-actions">
+                  <button class="fx-button-secondary" type="submit">Adicionar documento</button>
+                </div>
+              </form>
             </section>
           </div>
         </div>

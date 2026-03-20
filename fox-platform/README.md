@@ -64,7 +64,7 @@ fox-platform/
 
 ## Estado atual
 
-Fase atual: Fase 8 concluida.
+Fase atual: Fase 9 em andamento.
 
 Ja definido e materializado:
 
@@ -90,11 +90,18 @@ Ja definido e materializado:
 - autenticacao local no navegador
 - sessao integrada entre telas principais
 - dashboards e modulos principais hidratados por dados compartilhados
+- bootstrap HTTP do novo backend proprio
+- auth real com login, logout, refresh, reset e `me`
+- PDO e configuracao de banco prontos para conexao real
+- migrations complementares para reset de senha e indices
+- seed inicial de admin, parceiro e entregador
+- rotas reais do Partner Core
+- perfil, loja, horarios e documentos conectados ao backend do parceiro
+- SDK do parceiro em modo API-first com fallback local
+- credenciais de demonstracao alinhadas entre mock e seed inicial
 
 Proxima etapa recomendada:
 
-- Fase 9 de backend executavel
-- scaffold real dos apps em framework
-- banco persistente
-- APIs HTTP proprias
-- dados reais nos modulos
+- entrar na Sprint 3 da Fase 9 com catalogo real
+- ligar estoque e pedidos reais ao portal do parceiro
+- iniciar o primeiro dashboard administrativo com leitura de banco

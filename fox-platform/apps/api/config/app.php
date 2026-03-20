@@ -2,7 +2,7 @@
 
 return [
     'name' => 'fox-platform-api',
-    'version' => '0.1.0-phase-1',
+    'version' => '0.2.0-phase-9-sprint-1',
     'locale' => 'pt_BR',
     'timezone' => 'America/Sao_Paulo',
     'runtime' => [
@@ -26,4 +26,3 @@ return [
         'analytics',
     ],
 ];
-

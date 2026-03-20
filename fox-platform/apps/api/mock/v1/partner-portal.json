@@ -15,6 +15,62 @@
       { "label": "ticket médio do dia", "value": "R$ 91" }
     ]
   },
+  "profile": {
+    "id": "partner-001",
+    "full_name": "Roberto Almeida",
+    "email": "parceiro@foxdelivery.com.br",
+    "phone": "(11) 98888-2244",
+    "status": "active",
+    "locale": "pt_BR",
+    "last_login_at": "2026-03-20T11:42:00-03:00",
+    "legal_name": "Fox Partner Foods Ltda.",
+    "document_number": "12.345.678/0001-99",
+    "roles": [
+      {
+        "slug": "partner_owner",
+        "scope": "partner",
+        "name": "Dono da loja"
+      }
+    ]
+  },
+  "store": {
+    "store": {
+      "id": "store-001",
+      "trade_name": "Fox Burgers Centro",
+      "legal_name": "Fox Partner Foods Ltda.",
+      "document_number": "12.345.678/0001-99",
+      "email": "contato@foxburgers.com.br",
+      "phone": "(11) 4000-2244",
+      "status": "active",
+      "city": "São Paulo",
+      "state": "SP",
+      "country": "Brasil",
+      "description": "Loja focada em sanduíches, combos e conveniência com alta velocidade de preparo e janela estendida de atendimento."
+    },
+    "hours": [
+      { "weekday": 0, "opens_at": "11:00", "closes_at": "20:00", "is_active": true },
+      { "weekday": 1, "opens_at": "09:00", "closes_at": "23:00", "is_active": true },
+      { "weekday": 2, "opens_at": "09:00", "closes_at": "23:00", "is_active": true },
+      { "weekday": 3, "opens_at": "09:00", "closes_at": "23:00", "is_active": true },
+      { "weekday": 4, "opens_at": "09:00", "closes_at": "23:00", "is_active": true },
+      { "weekday": 5, "opens_at": "09:00", "closes_at": "23:00", "is_active": true },
+      { "weekday": 6, "opens_at": "10:00", "closes_at": "23:30", "is_active": true }
+    ],
+    "documents": [
+      {
+        "id": "doc-001",
+        "document_type": "cnpj",
+        "label": "Cartão CNPJ",
+        "file_name": "cartao-cnpj.pdf",
+        "storage_path": "/documents/fox-burgers/cartao-cnpj.pdf",
+        "status": "approved",
+        "metadata": {
+          "issuer": "Receita Federal"
+        },
+        "created_at": "2026-03-18T10:20:00-03:00"
+      }
+    ]
+  },
   "orders": [
     { "id": "#FD-10482", "customer": "Ana Souza", "status": "aguardando aceite", "statusType": "warning", "sla": "4 min", "value": "R$ 78,90", "action": "Aceitar" },
     { "id": "#FD-10479", "customer": "Paulo Lima", "status": "em preparo", "statusType": "success", "sla": "10 min", "value": "R$ 54,20", "action": "Atualizar" },

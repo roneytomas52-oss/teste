@@ -40,9 +40,9 @@ O sistema deixou de ser apenas HTML estatico. Agora os tres apps principais comp
 
 ## Credenciais de demonstracao
 
-- parceiro: `parceiro@foxdelivery.com.br / 123456`
-- admin: `admin@foxplatform.com / 123456`
-- entregador: `entregador@foxdelivery.com.br / 123456`
+- parceiro: `parceiro@foxdelivery.com.br / password`
+- admin: `admin@foxplatform.com / password`
+- entregador: `entregador@foxdelivery.com.br / password`
 
 ## Limitacao real do ambiente
 

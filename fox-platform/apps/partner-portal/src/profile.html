@@ -17,17 +17,17 @@
               <div class="fx-copy-sm">Portal do parceiro</div>
             </div>
           </div>
-          <p class="fx-copy-sm">Conta do responsavel da loja, acesso e dados de seguranca da operacao.</p>
+          <p class="fx-copy-sm">Conta do responsável da loja, acesso e dados da operação em um único ambiente.</p>
         </div>
         <nav class="fx-sidebar-nav">
           <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
           <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
-          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catálogo</a>
           <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
           <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
-          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatórios</a>
           <a class="fx-sidebar-link" href="./store.html">Loja</a>
-          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horários</a>
           <a class="fx-sidebar-link is-active" href="./profile.html">Perfil</a>
           <a class="fx-sidebar-link" href="./messages.html">Mensagens</a>
           <a class="fx-sidebar-link" href="./support.html">Suporte</a>
@@ -39,10 +39,10 @@
         <header class="fx-shell-topbar">
           <div>
             <div class="fx-pill">Perfil</div>
-            <h1 class="fx-title-sm">Dados do responsavel</h1>
+            <h1 class="fx-title-sm">Dados do responsável</h1>
           </div>
           <div class="fx-topbar-actions">
-            <a class="fx-button-secondary" href="#">Trocar senha</a>
+            <a class="fx-button-secondary" href="#">Recuperar senha</a>
           </div>
         </header>
         <div class="fx-shell-content">
@@ -50,28 +50,56 @@
             <section class="fx-page-header">
               <div class="fx-page-header-copy">
                 <div class="fx-eyebrow">Conta do parceiro</div>
-                <h2 class="fx-title-md">Mantenha os dados do responsavel da loja atualizados.</h2>
-                <p class="fx-copy">Esta area concentra o perfil da conta, o e-mail principal da loja e os dados de acesso da operacao parceira.</p>
+                <h2 class="fx-title-md">Mantenha os dados do responsável atualizados.</h2>
+                <p class="fx-copy">Esta área concentra o perfil de acesso da operação, o contato principal e a leitura do status da conta.</p>
               </div>
             </section>
+
+            <div id="fx-profile-feedback" class="fx-note fx-feedback" hidden></div>
+
             <section class="fx-page-columns">
-              <article class="fx-card">
-                <div class="fx-card-header"><h3 class="fx-title-sm">Dados de acesso</h3></div>
-                <div class="fx-form-grid">
-                  <div class="fx-field"><label>Nome completo</label><input type="text" value="Roberto Almeida" /></div>
-                  <div class="fx-field"><label>E-mail</label><input type="email" value="roberto@foxburgers.com.br" /></div>
-                  <div class="fx-field"><label>Telefone</label><input type="text" value="(11) 98888-2244" /></div>
-                  <div class="fx-field"><label>Cargo</label><input type="text" value="Socio administrador" /></div>
+              <form id="fx-partner-profile-form" class="fx-card fx-form-shell">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Dados de acesso</h3>
                 </div>
-                <div class="fx-inline-actions"><a class="fx-button" href="#">Salvar perfil</a></div>
-              </article>
+                <div class="fx-form-grid">
+                  <div class="fx-field">
+                    <label for="profile-full-name">Nome completo</label>
+                    <input id="profile-full-name" name="full_name" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="profile-email">E-mail</label>
+                    <input id="profile-email" name="email" type="email" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="profile-phone">Telefone</label>
+                    <input id="profile-phone" name="phone" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="profile-locale">Idioma da conta</label>
+                    <input id="profile-locale" type="text" readonly />
+                  </div>
+                  <div class="fx-field">
+                    <label for="profile-legal-name">Razão social</label>
+                    <input id="profile-legal-name" type="text" readonly />
+                  </div>
+                  <div class="fx-field">
+                    <label for="profile-document-number">Documento principal</label>
+                    <input id="profile-document-number" type="text" readonly />
+                  </div>
+                </div>
+                <div class="fx-inline-actions">
+                  <button class="fx-button" type="submit">Salvar perfil</button>
+                </div>
+              </form>
+
               <article class="fx-card">
-                <div class="fx-card-header"><h3 class="fx-title-sm">Seguranca e status</h3></div>
+                <div class="fx-card-header"><h3 class="fx-title-sm">Segurança e status</h3></div>
                 <div class="fx-info-list">
-                  <div class="fx-info-row"><strong>Status da conta</strong><span class="fx-status success">ativa</span></div>
-                  <div class="fx-info-row"><strong>Ultimo acesso</strong><span>20/03/2026 as 11:42</span></div>
-                  <div class="fx-info-row"><strong>Autenticacao em dois fatores</strong><span>planejada para proxima fase</span></div>
-                  <div class="fx-info-row"><strong>Perfil</strong><span>partner_owner</span></div>
+                  <div class="fx-info-row"><strong>Status da conta</strong><span id="profile-status" class="fx-status">-</span></div>
+                  <div class="fx-info-row"><strong>Último acesso</strong><span id="profile-last-login">-</span></div>
+                  <div class="fx-info-row"><strong>Perfil operacional</strong><span id="profile-role">-</span></div>
+                  <div class="fx-info-row"><strong>Escopo</strong><span id="profile-scope">-</span></div>
                 </div>
               </article>
             </section>
