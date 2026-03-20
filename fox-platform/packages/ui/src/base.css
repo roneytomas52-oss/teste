@@ -1,0 +1,155 @@
+@import url("./tokens.css");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--fx-font-sans);
+  color: var(--fx-color-text);
+  background: var(--fx-color-surface);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(255, 214, 185, 0.22), transparent 22%),
+    linear-gradient(180deg, #fffaf7 0%, #fff7f2 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.fx-page {
+  min-height: 100vh;
+}
+
+.fx-container {
+  width: min(var(--fx-max-width), calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.fx-section {
+  padding: var(--fx-space-9) 0;
+}
+
+.fx-section-header {
+  display: grid;
+  gap: var(--fx-space-3);
+  margin-bottom: var(--fx-space-7);
+  max-width: 720px;
+}
+
+.fx-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--fx-color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fx-title-xl,
+.fx-title-lg,
+.fx-title-md,
+.fx-title-sm {
+  margin: 0;
+  line-height: 1.04;
+  color: var(--fx-color-ink);
+  font-weight: 800;
+}
+
+.fx-title-xl {
+  font-size: clamp(42px, 5vw, 72px);
+}
+
+.fx-title-lg {
+  font-size: clamp(32px, 4vw, 52px);
+}
+
+.fx-title-md {
+  font-size: clamp(24px, 2.8vw, 34px);
+}
+
+.fx-title-sm {
+  font-size: 20px;
+}
+
+.fx-lead,
+.fx-copy,
+.fx-copy-sm {
+  margin: 0;
+  line-height: 1.65;
+  color: var(--fx-color-text-soft);
+}
+
+.fx-lead {
+  font-size: clamp(17px, 2vw, 22px);
+}
+
+.fx-copy {
+  font-size: 16px;
+}
+
+.fx-copy-sm {
+  font-size: 14px;
+}
+
+.fx-grid {
+  display: grid;
+  gap: var(--fx-space-6);
+}
+
+.fx-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fx-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.fx-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1024px) {
+  .fx-grid-4,
+  .fx-grid-3,
+  .fx-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .fx-container {
+    width: min(var(--fx-max-width), calc(100% - 28px));
+  }
+
+  .fx-section {
+    padding: var(--fx-space-8) 0;
+  }
+}
+

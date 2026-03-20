@@ -1,0 +1,52 @@
+:root {
+  --fx-color-primary: #ea2b12;
+  --fx-color-primary-strong: #c61d0e;
+  --fx-color-accent: #ff7a1f;
+  --fx-color-accent-soft: #ffd0ad;
+  --fx-color-ink: #1f1726;
+  --fx-color-text: #342735;
+  --fx-color-text-soft: #705a66;
+  --fx-color-surface: #fff9f5;
+  --fx-color-surface-alt: #fff1e7;
+  --fx-color-surface-strong: #fff5ef;
+  --fx-color-border: #f2d1bf;
+  --fx-color-border-strong: #e9baa0;
+  --fx-color-success: #2f9e44;
+  --fx-color-warning: #f08c00;
+  --fx-color-danger: #d6332a;
+  --fx-color-sidebar: #22131b;
+  --fx-color-sidebar-soft: #32212a;
+  --fx-color-white: #ffffff;
+
+  --fx-gradient-brand: linear-gradient(135deg, #c61d0e 0%, #ea2b12 45%, #ff7a1f 100%);
+  --fx-gradient-hero: radial-gradient(circle at top left, rgba(255, 214, 185, 0.28), transparent 34%),
+    radial-gradient(circle at right center, rgba(255, 180, 89, 0.22), transparent 28%),
+    linear-gradient(130deg, #b91b12 0%, #ea2b12 46%, #ff7a1f 100%);
+  --fx-gradient-card: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 244, 236, 0.94));
+
+  --fx-shadow-sm: 0 10px 24px rgba(72, 25, 6, 0.08);
+  --fx-shadow-md: 0 18px 45px rgba(72, 25, 6, 0.12);
+  --fx-shadow-lg: 0 28px 60px rgba(72, 25, 6, 0.16);
+  --fx-shadow-glow: 0 0 0 1px rgba(255, 255, 255, 0.15), 0 24px 80px rgba(255, 130, 55, 0.24);
+
+  --fx-radius-xs: 10px;
+  --fx-radius-sm: 16px;
+  --fx-radius-md: 24px;
+  --fx-radius-lg: 32px;
+
+  --fx-space-1: 4px;
+  --fx-space-2: 8px;
+  --fx-space-3: 12px;
+  --fx-space-4: 16px;
+  --fx-space-5: 20px;
+  --fx-space-6: 24px;
+  --fx-space-7: 32px;
+  --fx-space-8: 40px;
+  --fx-space-9: 48px;
+  --fx-space-10: 64px;
+
+  --fx-max-width: 1220px;
+
+  --fx-font-sans: "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+

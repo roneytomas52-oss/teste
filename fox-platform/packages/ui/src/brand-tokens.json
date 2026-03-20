@@ -1,0 +1,15 @@
+{
+  "brand": {
+    "name": "Fox Delivery",
+    "primary": "#ea2b12",
+    "primaryStrong": "#c61d0e",
+    "accent": "#ff7a1f",
+    "accentSoft": "#ffd0ad",
+    "ink": "#1f1726",
+    "surface": "#fff9f5",
+    "surfaceAlt": "#fff1e7",
+    "border": "#f5c5a8",
+    "success": "#2f9e44",
+    "warning": "#f08c00"
+  }
+}

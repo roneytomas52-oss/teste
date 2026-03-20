@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery Landing</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <style>
+      .fx-landing-page {
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top, rgba(255, 199, 159, 0.2), transparent 20%),
+          linear-gradient(180deg, #fffaf7 0%, #fff4ec 100%);
+      }
+
+      .fx-landing-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: 1px solid rgba(242, 209, 191, 0.58);
+        background: rgba(255, 250, 247, 0.92);
+        backdrop-filter: blur(14px);
+      }
+
+      .fx-landing-header .fx-container,
+      .fx-landing-nav,
+      .fx-landing-actions {
+        display: flex;
+        align-items: center;
+      }
+
+      .fx-landing-header .fx-container {
+        justify-content: space-between;
+        gap: var(--fx-space-6);
+        padding: var(--fx-space-5) 0;
+      }
+
+      .fx-landing-nav,
+      .fx-landing-actions {
+        gap: var(--fx-space-5);
+      }
+
+      .fx-landing-hero {
+        padding: var(--fx-space-10) 0;
+      }
+
+      .fx-landing-hero .fx-hero-banner {
+        overflow: hidden;
+      }
+
+      .fx-landing-proof {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--fx-space-5);
+      }
+
+      @media (max-width: 900px) {
+        .fx-landing-header .fx-container {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .fx-landing-nav,
+        .fx-landing-actions {
+          flex-wrap: wrap;
+        }
+
+        .fx-landing-proof {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Plataforma nacional de entregas</div>
+            </div>
+          </div>
+
+          <nav class="fx-landing-nav">
+            <a href="#">Início</a>
+            <a href="#">Para parceiros</a>
+            <a href="#">Para entregadores</a>
+            <a href="#">Ajuda</a>
+          </nav>
+
+          <div class="fx-landing-actions">
+            <a class="fx-button-secondary" href="#">Entrar no painel</a>
+            <a class="fx-button" href="#">Baixar app</a>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="fx-landing-hero">
+          <div class="fx-container">
+            <div class="fx-hero-banner">
+              <div class="fx-hero-grid">
+                <div class="fx-hero-content">
+                  <div class="fx-eyebrow">Fox Delivery</div>
+                  <h1 class="fx-title-xl">Entrega para clientes, operação para parceiros e jornada organizada para entregadores.</h1>
+                  <p class="fx-lead">A Fox Delivery conecta pedidos, lojas e entregadores em uma plataforma própria, pensada para operação real e escala nacional.</p>
+                  <div class="fx-hero-actions">
+                    <a class="fx-button" href="#">Pedir agora</a>
+                    <a class="fx-button-secondary" href="#">Seja parceiro</a>
+                    <a class="fx-button-ghost" href="#">Seja entregador</a>
+                  </div>
+                </div>
+                <div class="fx-hero-panel">
+                  <div class="fx-pill">Entradas principais</div>
+                  <div class="fx-mini-kpi">
+                    <strong>Cliente</strong>
+                    <span>pede restaurante, mercado, farmácia e conveniência</span>
+                  </div>
+                  <div class="fx-mini-kpi">
+                    <strong>Parceiro</strong>
+                    <span>opera pedidos, catálogo, equipe e repasses</span>
+                  </div>
+                  <div class="fx-mini-kpi">
+                    <strong>Entregador</strong>
+                    <span>acompanha ganhos, documentos e disponibilidade</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="fx-section">
+          <div class="fx-container">
+            <div class="fx-section-header">
+              <div class="fx-eyebrow">Jornadas</div>
+              <h2 class="fx-title-md">Entradas claras para cada perfil da operação Fox Delivery.</h2>
+            </div>
+
+            <div class="fx-grid fx-grid-3">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Cliente</h3>
+                  <span class="fx-pill">Pedido</span>
+                </div>
+                <p class="fx-copy">Pede comida, mercado, farmácia e conveniência com uma experiência direta e organizada.</p>
+                <div class="fx-hero-actions">
+                  <a class="fx-button" href="#">Fazer pedido</a>
+                </div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Parceiro</h3>
+                  <span class="fx-pill">Operação</span>
+                </div>
+                <p class="fx-copy">Entra no portal da loja para gerir pedidos, catálogo, equipe, financeiro e desempenho.</p>
+                <div class="fx-hero-actions">
+                  <a class="fx-button-secondary" href="#">Entrar como parceiro</a>
+                </div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Entregador</h3>
+                  <span class="fx-pill">Mobilidade</span>
+                </div>
+                <p class="fx-copy">Acompanha ganhos, disponibilidade, documentos e histórico de corridas em um painel próprio.</p>
+                <div class="fx-hero-actions">
+                  <a class="fx-button-ghost" href="#">Entrar como entregador</a>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="fx-section">
+          <div class="fx-container">
+            <div class="fx-section-header">
+              <div class="fx-eyebrow">Prova de confiança</div>
+              <h2 class="fx-title-md">Indicadores que a landing precisa sustentar com dados reais nas próximas fases.</h2>
+            </div>
+            <div class="fx-landing-proof">
+              <article class="fx-stat">
+                <div class="fx-stat-value">+120</div>
+                <div class="fx-stat-label">cidades prontas para operação</div>
+              </article>
+              <article class="fx-stat">
+                <div class="fx-stat-value">+5.000</div>
+                <div class="fx-stat-label">parceiros cadastrados no roadmap da plataforma</div>
+              </article>
+              <article class="fx-stat">
+                <div class="fx-stat-value">+2 mi</div>
+                <div class="fx-stat-label">entregas como meta de escala operacional</div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

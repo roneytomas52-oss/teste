@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <style>
+      .fx-partner-grid {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: var(--fx-space-6);
+      }
+
+      .fx-orders-board {
+        display: grid;
+        gap: var(--fx-space-4);
+      }
+
+      .fx-order-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: var(--fx-space-4);
+        padding: var(--fx-space-5);
+        border-radius: var(--fx-radius-sm);
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(242, 209, 191, 0.86);
+      }
+
+      @media (max-width: 1100px) {
+        .fx-partner-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Operação da loja, pedidos, catálogo, equipe e repasses em uma experiência própria da Fox Delivery.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link is-active" href="#">Dashboard</a>
+          <a class="fx-sidebar-link" href="#">Pedidos</a>
+          <a class="fx-sidebar-link" href="#">Catálogo</a>
+          <a class="fx-sidebar-link" href="#">Estoque</a>
+          <a class="fx-sidebar-link" href="#">Promoções</a>
+          <a class="fx-sidebar-link" href="#">Financeiro</a>
+          <a class="fx-sidebar-link" href="#">Loja</a>
+          <a class="fx-sidebar-link" href="#">Equipe</a>
+          <a class="fx-sidebar-link" href="#">Relatórios</a>
+          <a class="fx-sidebar-link" href="#">Ajuda</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Loja ativa</div>
+            <h1 class="fx-title-sm">Painel da loja</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar pedido, item ou cupom" />
+            <a class="fx-button-secondary" href="#">Novo produto</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-panel">
+            <section class="fx-hero-banner">
+              <div class="fx-hero-grid">
+                <div class="fx-hero-content">
+                  <div class="fx-eyebrow">Operação da loja</div>
+                  <h2 class="fx-title-lg">Acompanhe pedidos, catálogo e desempenho da sua loja na Fox Delivery.</h2>
+                  <p class="fx-lead">Tudo o que a operação parceira precisa para vender, atualizar pedidos e manter o catálogo organizado.</p>
+                  <div class="fx-hero-actions">
+                    <a class="fx-button" href="#">Ver pedidos do dia</a>
+                    <a class="fx-button-secondary" href="#">Atualizar horários</a>
+                  </div>
+                </div>
+                <div class="fx-hero-panel">
+                  <div class="fx-pill">Resumo do turno</div>
+                  <div class="fx-mini-kpi">
+                    <strong>37</strong>
+                    <span>pedidos concluídos hoje</span>
+                  </div>
+                  <div class="fx-mini-kpi">
+                    <strong>R$ 4.820</strong>
+                    <span>faturamento bruto do dia</span>
+                  </div>
+                  <div class="fx-mini-kpi">
+                    <strong>4,8</strong>
+                    <span>nota média da loja</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="fx-kpi-grid">
+              <article class="fx-stat">
+                <div class="fx-stat-value">12 min</div>
+                <div class="fx-stat-label">tempo médio de preparo</div>
+              </article>
+              <article class="fx-stat">
+                <div class="fx-stat-value">96%</div>
+                <div class="fx-stat-label">taxa de aceite no dia</div>
+              </article>
+              <article class="fx-stat">
+                <div class="fx-stat-value">184</div>
+                <div class="fx-stat-label">itens ativos no catálogo</div>
+              </article>
+            </section>
+
+            <section class="fx-partner-grid">
+              <div class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Fila operacional</h3>
+                  <span class="fx-pill">Pedidos</span>
+                </div>
+                <div class="fx-orders-board">
+                  <div class="fx-order-row">
+                    <div>
+                      <strong>#FD-10482</strong>
+                      <p class="fx-copy-sm">Pedido com 4 itens aguardando aceite da loja.</p>
+                    </div>
+                    <span class="fx-status warning">aguardando</span>
+                  </div>
+                  <div class="fx-order-row">
+                    <div>
+                      <strong>#FD-10479</strong>
+                      <p class="fx-copy-sm">Pedido em preparo com SLA de 10 minutos.</p>
+                    </div>
+                    <span class="fx-status success">em preparo</span>
+                  </div>
+                  <div class="fx-order-row">
+                    <div>
+                      <strong>#FD-10471</strong>
+                      <p class="fx-copy-sm">Pedido pronto e aguardando coleta do entregador.</p>
+                    </div>
+                    <span class="fx-status warning">pronto</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fx-grid">
+                <article class="fx-card">
+                  <div class="fx-card-header">
+                    <h3 class="fx-title-sm">Checklist da loja</h3>
+                  </div>
+                  <ul class="fx-list">
+                    <li>Revisar 6 itens com estoque baixo.</li>
+                    <li>Atualizar o banner da campanha do almoço.</li>
+                    <li>Confirmar conta bancária do próximo repasse.</li>
+                  </ul>
+                </article>
+
+                <article class="fx-card">
+                  <div class="fx-card-header">
+                    <h3 class="fx-title-sm">Atalhos rápidos</h3>
+                  </div>
+                  <div class="fx-grid">
+                    <a class="fx-button" href="#">Cadastrar item</a>
+                    <a class="fx-button-secondary" href="#">Criar cupom</a>
+                    <a class="fx-button-ghost" href="#">Abrir financeiro</a>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+
