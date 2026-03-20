@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal | Horarios</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
+  </head>
+  <body>
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Organize o funcionamento da loja e as janelas de operacao da Fox Delivery.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link is-active" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Horarios</div>
+            <h1 class="fx-title-sm">Funcionamento da loja</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button" href="#">Salvar agenda</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-partner-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Janelas operacionais</div>
+                <h2 class="fx-title-md">Defina os horarios em que a loja aparece para o cliente.</h2>
+                <p class="fx-copy">Os horarios sustentam disponibilidade, promessa de entrega e ativacao comercial da loja dentro da plataforma.</p>
+              </div>
+            </section>
+            <section class="fx-schedule-grid">
+              <article class="fx-week-card">
+                <div class="fx-card-header"><h3 class="fx-title-sm">Segunda a sexta</h3><span class="fx-status success">ativa</span></div>
+                <div class="fx-form-grid">
+                  <div class="fx-field"><label>Abertura</label><input type="time" value="09:00" /></div>
+                  <div class="fx-field"><label>Fechamento</label><input type="time" value="23:00" /></div>
+                </div>
+                <div class="fx-inline-actions"><a class="fx-button-ghost" href="#">Adicionar pausa</a></div>
+              </article>
+              <article class="fx-week-card">
+                <div class="fx-card-header"><h3 class="fx-title-sm">Sabado</h3><span class="fx-status success">ativa</span></div>
+                <div class="fx-form-grid">
+                  <div class="fx-field"><label>Abertura</label><input type="time" value="10:00" /></div>
+                  <div class="fx-field"><label>Fechamento</label><input type="time" value="23:30" /></div>
+                </div>
+              </article>
+              <article class="fx-week-card">
+                <div class="fx-card-header"><h3 class="fx-title-sm">Domingo</h3><span class="fx-status warning">horario reduzido</span></div>
+                <div class="fx-form-grid">
+                  <div class="fx-field"><label>Abertura</label><input type="time" value="11:00" /></div>
+                  <div class="fx-field"><label>Fechamento</label><input type="time" value="20:00" /></div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+

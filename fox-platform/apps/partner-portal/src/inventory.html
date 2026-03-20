@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal | Estoque</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
+  </head>
+  <body>
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Controle de disponibilidade, estoque minimo e pausas operacionais por item.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link is-active" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Estoque</div>
+            <h1 class="fx-title-sm">Disponibilidade dos itens</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar item com estoque baixo" />
+            <a class="fx-button-secondary" href="#">Atualizar em lote</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-partner-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Controle de disponibilidade</div>
+                <h2 class="fx-title-md">Evite ruptura e mantenha a operacao da loja consistente.</h2>
+                <p class="fx-copy">O estoque influencia o aceite, a conversao do pedido e a experiencia do cliente. Esta visao concentra os itens que precisam de atencao.</p>
+              </div>
+            </section>
+            <section class="fx-compact-metrics">
+              <article class="fx-compact-metric"><strong>6</strong><span>itens abaixo do minimo</span></article>
+              <article class="fx-compact-metric"><strong>9</strong><span>itens pausados</span></article>
+              <article class="fx-compact-metric"><strong>154</strong><span>itens com disponibilidade normal</span></article>
+              <article class="fx-compact-metric"><strong>15 min</strong><span>tempo medio para revisao de ruptura</span></article>
+            </section>
+            <section class="fx-table-card">
+              <table>
+                <thead>
+                  <tr><th>Item</th><th>Categoria</th><th>Estoque atual</th><th>Estoque minimo</th><th>Status</th><th>Acao rapida</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Kit farmacia rapida</td><td>Farmacia</td><td>4</td><td>12</td><td><span class="fx-status warning">baixo</span></td><td><a class="fx-button-ghost" href="#">Repor</a></td></tr>
+                  <tr><td>Agua 500ml</td><td>Convivencia</td><td>0</td><td>10</td><td><span class="fx-status danger">esgotado</span></td><td><a class="fx-button-ghost" href="#">Pausar</a></td></tr>
+                  <tr><td>Hamburguer Fox Prime</td><td>Sanduiches</td><td>38</td><td>10</td><td><span class="fx-status success">normal</span></td><td><a class="fx-button-ghost" href="#">Ajustar</a></td></tr>
+                  <tr><td>Combo mercado essencial</td><td>Mercado</td><td>18</td><td>15</td><td><span class="fx-status warning">atencao</span></td><td><a class="fx-button-ghost" href="#">Aumentar</a></td></tr>
+                </tbody>
+              </table>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+

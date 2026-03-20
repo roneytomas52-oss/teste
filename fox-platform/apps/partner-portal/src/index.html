@@ -3,36 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fox Partner Portal</title>
-    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
-    <style>
-      .fx-partner-grid {
-        display: grid;
-        grid-template-columns: 1.35fr 1fr;
-        gap: var(--fx-space-6);
-      }
-
-      .fx-orders-board {
-        display: grid;
-        gap: var(--fx-space-4);
-      }
-
-      .fx-order-row {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: var(--fx-space-4);
-        padding: var(--fx-space-5);
-        border-radius: var(--fx-radius-sm);
-        background: rgba(255, 255, 255, 0.84);
-        border: 1px solid rgba(242, 209, 191, 0.86);
-      }
-
-      @media (max-width: 1100px) {
-        .fx-partner-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <title>Fox Partner Portal | Dashboard</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
   </head>
   <body>
     <div class="fx-app-shell">
@@ -49,16 +21,14 @@
         </div>
 
         <nav class="fx-sidebar-nav">
-          <a class="fx-sidebar-link is-active" href="#">Dashboard</a>
-          <a class="fx-sidebar-link" href="#">Pedidos</a>
-          <a class="fx-sidebar-link" href="#">Catálogo</a>
-          <a class="fx-sidebar-link" href="#">Estoque</a>
-          <a class="fx-sidebar-link" href="#">Promoções</a>
-          <a class="fx-sidebar-link" href="#">Financeiro</a>
-          <a class="fx-sidebar-link" href="#">Loja</a>
-          <a class="fx-sidebar-link" href="#">Equipe</a>
-          <a class="fx-sidebar-link" href="#">Relatórios</a>
-          <a class="fx-sidebar-link" href="#">Ajuda</a>
+          <a class="fx-sidebar-link is-active" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catálogo</a>
+          <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horários</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
         </nav>
       </aside>
 
@@ -66,27 +36,28 @@
         <header class="fx-shell-topbar">
           <div>
             <div class="fx-pill">Loja ativa</div>
-            <h1 class="fx-title-sm">Painel da loja</h1>
+            <h1 class="fx-title-sm">Dashboard da loja</h1>
           </div>
           <div class="fx-topbar-actions">
             <input class="fx-search" type="search" placeholder="Buscar pedido, item ou cupom" />
-            <a class="fx-button-secondary" href="#">Novo produto</a>
+            <a class="fx-button-secondary" href="./catalog.html">Novo produto</a>
           </div>
         </header>
 
         <div class="fx-shell-content">
-          <div class="fx-panel">
+          <div class="fx-partner-view">
             <section class="fx-hero-banner">
               <div class="fx-hero-grid">
                 <div class="fx-hero-content">
                   <div class="fx-eyebrow">Operação da loja</div>
                   <h2 class="fx-title-lg">Acompanhe pedidos, catálogo e desempenho da sua loja na Fox Delivery.</h2>
-                  <p class="fx-lead">Tudo o que a operação parceira precisa para vender, atualizar pedidos e manter o catálogo organizado.</p>
+                  <p class="fx-lead">Tudo o que a operação parceira precisa para vender, atualizar pedidos e manter o catálogo organizado em um painel único.</p>
                   <div class="fx-hero-actions">
-                    <a class="fx-button" href="#">Ver pedidos do dia</a>
-                    <a class="fx-button-secondary" href="#">Atualizar horários</a>
+                    <a class="fx-button" href="./orders.html">Ver pedidos do dia</a>
+                    <a class="fx-button-secondary" href="./schedules.html">Atualizar horários</a>
                   </div>
                 </div>
+
                 <div class="fx-hero-panel">
                   <div class="fx-pill">Resumo do turno</div>
                   <div class="fx-mini-kpi">
@@ -105,18 +76,22 @@
               </div>
             </section>
 
-            <section class="fx-kpi-grid">
-              <article class="fx-stat">
-                <div class="fx-stat-value">12 min</div>
-                <div class="fx-stat-label">tempo médio de preparo</div>
+            <section class="fx-compact-metrics">
+              <article class="fx-compact-metric">
+                <strong>12 min</strong>
+                <span>tempo médio de preparo</span>
               </article>
-              <article class="fx-stat">
-                <div class="fx-stat-value">96%</div>
-                <div class="fx-stat-label">taxa de aceite no dia</div>
+              <article class="fx-compact-metric">
+                <strong>96%</strong>
+                <span>taxa de aceite do dia</span>
               </article>
-              <article class="fx-stat">
-                <div class="fx-stat-value">184</div>
-                <div class="fx-stat-label">itens ativos no catálogo</div>
+              <article class="fx-compact-metric">
+                <strong>184</strong>
+                <span>itens ativos no catálogo</span>
+              </article>
+              <article class="fx-compact-metric">
+                <strong>R$ 91</strong>
+                <span>ticket médio do dia</span>
               </article>
             </section>
 
@@ -146,7 +121,7 @@
                       <strong>#FD-10471</strong>
                       <p class="fx-copy-sm">Pedido pronto e aguardando coleta do entregador.</p>
                     </div>
-                    <span class="fx-status warning">pronto</span>
+                    <span class="fx-status warning">pronto para retirada</span>
                   </div>
                 </div>
               </div>
@@ -157,9 +132,9 @@
                     <h3 class="fx-title-sm">Checklist da loja</h3>
                   </div>
                   <ul class="fx-list">
-                    <li>Revisar 6 itens com estoque baixo.</li>
-                    <li>Atualizar o banner da campanha do almoço.</li>
-                    <li>Confirmar conta bancária do próximo repasse.</li>
+                    <li>Revisar 6 itens com estoque abaixo do mínimo.</li>
+                    <li>Atualizar a campanha promocional do almoço.</li>
+                    <li>Confirmar a conta bancária do próximo repasse.</li>
                   </ul>
                 </article>
 
@@ -168,12 +143,73 @@
                     <h3 class="fx-title-sm">Atalhos rápidos</h3>
                   </div>
                   <div class="fx-grid">
-                    <a class="fx-button" href="#">Cadastrar item</a>
-                    <a class="fx-button-secondary" href="#">Criar cupom</a>
-                    <a class="fx-button-ghost" href="#">Abrir financeiro</a>
+                    <a class="fx-button" href="./catalog.html">Cadastrar item</a>
+                    <a class="fx-button-secondary" href="./inventory.html">Ajustar estoque</a>
+                    <a class="fx-button-ghost" href="./store.html">Editar loja</a>
                   </div>
                 </article>
               </div>
+            </section>
+
+            <section class="fx-page-columns">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Produtos com maior saída</h3>
+                  <a class="fx-button-ghost" href="./catalog.html">Ver catálogo</a>
+                </div>
+                <div class="fx-table-card">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Categoria</th>
+                        <th>Vendas</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Hambúrguer Fox Prime</td>
+                        <td>Sanduíches</td>
+                        <td>84</td>
+                        <td><span class="fx-status success">ativo</span></td>
+                      </tr>
+                      <tr>
+                        <td>Combo mercado essencial</td>
+                        <td>Mercado</td>
+                        <td>62</td>
+                        <td><span class="fx-status success">ativo</span></td>
+                      </tr>
+                      <tr>
+                        <td>Kit farmácia rápida</td>
+                        <td>Farmácia</td>
+                        <td>37</td>
+                        <td><span class="fx-status warning">estoque baixo</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Saúde da operação</h3>
+                </div>
+                <div class="fx-checklist">
+                  <div class="fx-check-item">
+                    <strong>Catálogo</strong>
+                    <p class="fx-copy-sm">184 itens ativos, 9 pausados e 6 aguardando revisão de estoque.</p>
+                  </div>
+                  <div class="fx-check-item">
+                    <strong>Horários</strong>
+                    <p class="fx-copy-sm">Operação aberta até 23h00 com janela de pico entre 11h e 14h.</p>
+                  </div>
+                  <div class="fx-check-item">
+                    <strong>Perfil</strong>
+                    <p class="fx-copy-sm">Responsável validado e documentação da loja aprovada.</p>
+                  </div>
+                </div>
+              </article>
             </section>
           </div>
         </div>

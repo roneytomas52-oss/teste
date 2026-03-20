@@ -16,7 +16,7 @@
 - shell da landing
 - design system base
 
-## Fase 3 - Partner Portal MVP [proxima]
+## Fase 3 - Partner Portal MVP [concluida]
 
 - login
 - dashboard
@@ -27,7 +27,7 @@
 - horarios
 - perfil
 
-## Fase 4 - Financeiro e relatorios
+## Fase 4 - Financeiro e relatorios [proxima]
 
 - extrato
 - repasses
@@ -77,3 +77,4 @@
 - CRM comercial
 - campanhas avancadas
 - multiempresa
+

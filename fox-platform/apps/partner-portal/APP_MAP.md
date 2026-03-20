@@ -4,15 +4,20 @@
 
 Portal operacional da loja parceira.
 
-## Rotas-base da Fase 2
+## Paginas entregues ate a Fase 3
 
 - `/login`
 - `/dashboard`
 - `/orders`
 - `/catalog`
 - `/inventory`
-- `/finance`
 - `/store`
+- `/schedules`
+- `/profile`
+
+## Proximas areas previstas
+
+- `/finance`
 - `/team`
 - `/reports`
 - `/help`

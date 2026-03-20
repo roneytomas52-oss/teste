@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal | Loja</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
+  </head>
+  <body>
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Dados operacionais, comerciais e cadastrais da loja em um unico ambiente.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link is-active" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Loja</div>
+            <h1 class="fx-title-sm">Perfil comercial e operacional</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="./schedules.html">Editar horarios</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-partner-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Dados da loja</div>
+                <h2 class="fx-title-md">Mantenha a identidade e a operacao da loja atualizadas.</h2>
+                <p class="fx-copy">Essas informacoes sustentam o cadastro, a analise da equipe Fox Delivery e a operacao diaria da loja dentro da plataforma.</p>
+              </div>
+              <div class="fx-page-actions">
+                <a class="fx-button" href="#">Salvar alteracoes</a>
+              </div>
+            </section>
+            <section class="fx-page-columns">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Dados principais</h3>
+                </div>
+                <div class="fx-form-grid">
+                  <div class="fx-field"><label for="trade-name">Nome de exibicao</label><input id="trade-name" type="text" value="Fox Burgers Centro" /></div>
+                  <div class="fx-field"><label for="legal-name">Razao social</label><input id="legal-name" type="text" value="Fox Burgers Alimentos Ltda." /></div>
+                  <div class="fx-field"><label for="store-email">E-mail da loja</label><input id="store-email" type="email" value="contato@foxburgers.com.br" /></div>
+                  <div class="fx-field"><label for="store-phone">Telefone</label><input id="store-phone" type="text" value="(11) 4000-2244" /></div>
+                  <div class="fx-field"><label for="store-document">CNPJ</label><input id="store-document" type="text" value="12.345.678/0001-99" /></div>
+                  <div class="fx-field"><label for="store-city">Cidade</label><input id="store-city" type="text" value="Sao Paulo" /></div>
+                  <div class="fx-field" style="grid-column: 1 / -1;">
+                    <label for="store-description">Descricao operacional</label>
+                    <textarea id="store-description">Loja focada em sanduiches, combos e conveniencia com alta velocidade de preparo e janela estendida de atendimento.</textarea>
+                  </div>
+                </div>
+              </article>
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Resumo cadastral</h3>
+                </div>
+                <div class="fx-info-list">
+                  <div class="fx-info-row"><strong>Status da loja</strong><span class="fx-status success">ativa</span></div>
+                  <div class="fx-info-row"><strong>Modelo operacional</strong><span>entrega parceira</span></div>
+                  <div class="fx-info-row"><strong>Categoria principal</strong><span>Restaurante</span></div>
+                  <div class="fx-info-row"><strong>Ultima analise</strong><span>18/03/2026</span></div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+
