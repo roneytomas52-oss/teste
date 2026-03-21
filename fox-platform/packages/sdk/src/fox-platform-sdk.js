@@ -377,6 +377,111 @@ export async function addPartnerStoreDocument(document) {
   };
 }
 
+export async function getPartnerTeam() {
+  const payload = await requestApi("api/v1/partner/team", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  return data.team || { summary: [], members: [] };
+}
+
+export async function createPartnerTeamMember(body) {
+  const payload = await requestApi("api/v1/partner/team", {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerTeam();
+  const nextMember = {
+    id: `team-${Date.now()}`,
+    full_name: body.full_name,
+    email: body.email,
+    phone: body.phone,
+    role_slug: body.role_slug,
+    role_label: body.role_slug,
+    status: "convite pendente",
+    status_key: "invited",
+    status_type: "warning",
+    permissions: body.permissions || [],
+    last_login_at: "-",
+    created_at: new Date().toLocaleString("pt-BR")
+  };
+
+  return {
+    summary: current.summary || [],
+    members: [nextMember, ...(current.members || [])]
+  };
+}
+
+export async function updatePartnerTeamMember(memberId, body) {
+  const payload = await requestApi(`api/v1/partner/team/${memberId}`, {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerTeam();
+  return {
+    ...current,
+    members: (current.members || []).map((member) =>
+      member.id === memberId
+        ? {
+            ...member,
+            ...body,
+            role_label: body.role_slug || member.role_label
+          }
+        : member
+    )
+  };
+}
+
+export async function updatePartnerTeamMemberStatus(memberId, status) {
+  const payload = await requestApi(`api/v1/partner/team/${memberId}/status`, {
+    method: "PUT",
+    body: { status },
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerTeam();
+  const labelMap = {
+    active: ["ativo", "success"],
+    suspended: ["suspenso", "danger"],
+    invited: ["convite pendente", "warning"]
+  };
+
+  return {
+    ...current,
+    members: (current.members || []).map((member) =>
+      member.id === memberId
+        ? {
+            ...member,
+            status_key: status,
+            status: labelMap[status]?.[0] || status,
+            status_type: labelMap[status]?.[1] || "warning"
+          }
+        : member
+    )
+  };
+}
+
 export async function getPartnerCatalog() {
   const payload = await requestApi("api/v1/partner/catalog/products", {
     allowFallback: true
@@ -440,6 +545,79 @@ export async function getPartnerDashboard() {
         text: data.finance?.balanceNote || "Resumo financeiro da operacao disponivel no portal."
       }
     ]
+  };
+}
+
+export async function getPartnerFinance() {
+  const payload = await requestApi("api/v1/partner/finance/summary", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  const finance = data.finance || {};
+
+  return {
+    balance: finance.balance || "R$ 0,00",
+    balanceNote: finance.balanceNote || "Resumo financeiro indisponivel no momento.",
+    stats: finance.stats || [],
+    payouts:
+      finance.payouts || [
+        {
+          date: "24/03/2026",
+          title: "Repasse referente ao periodo 17/03 a 23/03.",
+          text: "Repasse semanal consolidado a partir dos pedidos concluidos no ciclo.",
+          status: "previsto",
+          status_type: "warning",
+          amount: "R$ 3.182,40"
+        },
+        {
+          date: "31/03/2026",
+          title: "Repasse referente ao periodo 24/03 a 30/03.",
+          text: "Repasse em conferencia bancaria apos fechamento da operacao.",
+          status: "em processamento",
+          status_type: "warning",
+          amount: "R$ 2.940,18"
+        }
+      ],
+    bank_account:
+      finance.bank_account || {
+        bank_name: "Banco Fox",
+        branch_number: "1524",
+        account_number: "45897-2",
+        status: "validada",
+        status_type: "success"
+      },
+    transactions:
+      finance.transactions || [
+        {
+          date: "20/03/2026",
+          description: "Pedidos concluidos no turno do almoco",
+          type: "credito operacional",
+          status: "processado",
+          status_type: "success",
+          value: "+ R$ 1.284,70"
+        },
+        {
+          date: "20/03/2026",
+          description: "Taxas da plataforma e pagamentos online",
+          type: "taxa da plataforma",
+          status: "processado",
+          status_type: "success",
+          value: "- R$ 318,42"
+        },
+        {
+          date: "18/03/2026",
+          description: "Ajuste de cancelamento reembolsado",
+          type: "ajuste",
+          status: "revisar",
+          status_type: "danger",
+          value: "- R$ 42,10"
+        }
+      ]
   };
 }
 
@@ -666,6 +844,131 @@ export async function updatePartnerProductInventory(productId, body) {
   };
 }
 
+export async function getPartnerSupport() {
+  const payload = await requestApi("api/v1/partner/support", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  return data.support || { tickets: [] };
+}
+
+export async function createPartnerSupportTicket(body) {
+  const payload = await requestApi("api/v1/partner/support/tickets", {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerSupport();
+  const generatedId = `ticket-${Date.now()}`;
+  const next = {
+    id: `#SUP-${String(Date.now()).slice(-6)}`,
+    ticket_id: generatedId,
+    channel: body.channel,
+    priority: body.priority,
+    last_message_at: new Date().toISOString(),
+    status: "aberto",
+    statusType: body.priority === "critical" ? "danger" : body.priority === "high" ? "warning" : "success",
+    summary: body.subject,
+    meta: [`Prioridade ${body.priority}`, "Atualizado agora"]
+  };
+
+  return {
+    tickets: [next, ...(current.tickets || [])]
+  };
+}
+
+export async function getPartnerSupportThread(ticketId) {
+  const payload = await requestApi(`api/v1/partner/support/${ticketId}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  const tickets = data.support?.tickets || [];
+  const ticket = tickets.find((item) => item.ticket_id === ticketId) || tickets[0];
+
+  return {
+    ticket,
+    messages: (data.messages?.[ticket?.ticket_id] || []).map((message) => ({
+      ...message,
+      time: message.time || "Agora"
+    }))
+  };
+}
+
+export async function replyPartnerSupportThread(ticketId, body) {
+  const payload = await requestApi(`api/v1/partner/support/${ticketId}/messages`, {
+    method: "POST",
+    body: { body },
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerSupportThread(ticketId);
+  return {
+    ...current,
+    messages: [
+      ...(current.messages || []),
+      {
+        id: `msg-${Date.now()}`,
+        direction: "outgoing",
+        author: "Loja parceira",
+        body,
+        time: new Date().toLocaleString("pt-BR"),
+        role: "partner_owner"
+      }
+    ]
+  };
+}
+
+export async function getPartnerNotifications() {
+  const payload = await requestApi("api/v1/partner/notifications", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  return data.notifications || { summary: [], items: [] };
+}
+
+export async function markPartnerNotificationRead(notificationId) {
+  const payload = await requestApi(`api/v1/partner/notifications/${notificationId}/read`, {
+    method: "POST",
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerNotifications();
+  return {
+    ...current,
+    items: (current.items || []).map((item) =>
+      item.id === notificationId ? { ...item, is_read: true } : item
+    )
+  };
+}
+
 export async function getPartnerData() {
   return loadJson("partner-portal.json");
 }
@@ -688,6 +991,61 @@ export async function getAdminDashboard() {
     ...data.dashboard,
     approvals: data.partnerApprovals || [],
     alerts: (data.support?.priorityQueue || []).map((item) => item.summary)
+  };
+}
+
+export async function getAdminFinance() {
+  const payload = await requestApi("api/v1/admin/finance/overview", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  const finance = data.finance || {};
+
+  return {
+    balance: finance.balance || "R$ 0,00",
+    balanceNote: finance.balanceNote || "Resumo financeiro indisponivel no momento.",
+    stats: finance.stats || [],
+    highlights:
+      finance.highlights || [
+        {
+          title: "Repasses em processamento",
+          text: "Lotes financeiros com conferencia concluida ou em etapa final antes do envio bancario.",
+          meta: ["12 parceiros", "R$ 94.500"],
+          action_label: "Abrir lote",
+          action_tone: "primary"
+        },
+        {
+          title: "Ajustes e estornos",
+          text: "Eventos que precisam de revisao do financeiro antes do fechamento do ciclo da plataforma.",
+          meta: ["5 ajustes", "2 estornos"],
+          action_label: "Revisar fila",
+          action_tone: "secondary"
+        }
+      ],
+    payouts:
+      finance.payouts || [
+        {
+          partner: "Fox Burgers Centro",
+          period: "17/03/2026 a 23/03/2026",
+          status: "aprovado",
+          status_type: "success",
+          net_amount: "R$ 8.460,32",
+          note: "conta validada"
+        },
+        {
+          partner: "Mercado Nova Rota",
+          period: "17/03/2026 a 23/03/2026",
+          status: "em conferencia",
+          status_type: "warning",
+          net_amount: "R$ 6.218,40",
+          note: "revisar divergencia de estoque"
+        }
+      ]
   };
 }
 
@@ -737,6 +1095,461 @@ export async function getAdminDriverApprovals() {
   const data = await loadJson("admin.json");
   return {
     items: data.driverApprovals || []
+  };
+}
+
+async function filterFallbackApprovalQueue(fileName, key, itemId) {
+  const data = await loadJson(fileName);
+  return {
+    items: (data[key] || []).filter((item) => item.id !== itemId)
+  };
+}
+
+export async function approveAdminPartner(partnerId) {
+  const payload = await requestApi(`api/v1/admin/approvals/partners/${partnerId}/approve`, {
+    method: "POST",
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return filterFallbackApprovalQueue("admin.json", "partnerApprovals", partnerId);
+}
+
+export async function rejectAdminPartner(partnerId) {
+  const payload = await requestApi(`api/v1/admin/approvals/partners/${partnerId}/reject`, {
+    method: "POST",
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return filterFallbackApprovalQueue("admin.json", "partnerApprovals", partnerId);
+}
+
+export async function approveAdminDriver(driverId) {
+  const payload = await requestApi(`api/v1/admin/approvals/drivers/${driverId}/approve`, {
+    method: "POST",
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return filterFallbackApprovalQueue("admin.json", "driverApprovals", driverId);
+}
+
+export async function rejectAdminDriver(driverId) {
+  const payload = await requestApi(`api/v1/admin/approvals/drivers/${driverId}/reject`, {
+    method: "POST",
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return filterFallbackApprovalQueue("admin.json", "driverApprovals", driverId);
+}
+
+export async function getAdminSupport() {
+  const payload = await requestApi("api/v1/admin/support/queue", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return {
+    priorityQueue: data.support?.priorityQueue || [],
+    distribution: [
+      { label: "Operacao", value: "7 tickets" },
+      { label: "Financeiro", value: "5 tickets" },
+      { label: "Catalogo", value: "4 tickets" },
+      { label: "Comercial", value: "2 tickets" }
+    ],
+    sla: [
+      "Tempo medio de primeira resposta: 19 min.",
+      "85% da fila dentro do SLA acordado.",
+      "2 chamados escalados para revisao manual."
+    ]
+  };
+}
+
+export async function getDriverDashboard() {
+  const payload = await requestApi("api/v1/driver/dashboard", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("driver-portal.json");
+  const dashboard = data.dashboard || {};
+
+  return {
+    heroTitle: dashboard.heroTitle || "Ganhos, documentos e disponibilidade organizados em um unico ambiente.",
+    heroLead: dashboard.heroLead || "Acompanhe o que precisa da sua operacao em um painel proprio da Fox Delivery.",
+    summary:
+      dashboard.summary || [
+        { label: "ganhos liquidos acumulados", value: "R$ 1.286,40" },
+        { label: "entregas concluidas", value: "62" },
+        { label: "presenca nas janelas abertas", value: "98%" }
+      ],
+    metrics:
+      dashboard.metrics || [
+        { label: "modalidade ativa na operacao", value: "Moto" },
+        { label: "tempo medio por corrida", value: "24 min" },
+        { label: "ganho medio por entrega", value: "R$ 8,72" },
+        { label: "avaliacao media recente", value: "4,9" }
+      ],
+    recent_runs: [
+      { id: "#RUN-8741", status: "concluida", status_type: "success", value: "R$ 9,40", time: "12:08" },
+      { id: "#RUN-8739", status: "concluida", status_type: "success", value: "R$ 7,90", time: "11:34" },
+      { id: "#RUN-8734", status: "em analise", status_type: "warning", value: "R$ 12,10", time: "10:42" }
+    ],
+    checklist: [
+      "2 documentos aprovados na conta operacional.",
+      "Conta bancaria configurada para repasses.",
+      "Ultima atividade registrada hoje as 13:18."
+    ]
+  };
+}
+
+export async function getDriverProfile() {
+  const payload = await requestApi("api/v1/driver/profile", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("driver-portal.json");
+  const profile = data.profile || {};
+
+  return {
+    full_name: profile.name || "Lucas Ferreira",
+    email: profile.email || "entregador@foxdelivery.com.br",
+    phone: profile.phone || "(11) 98888-3344",
+    modal: profile.mode || "Moto",
+    city: profile.city || "Sao Paulo",
+    bank_name: "Banco Fox",
+    bank_branch_number: "341",
+    bank_account_number: "45897-2",
+    bank_account: profile.bankAccount || "Banco Fox 341 - 45897-2",
+    status: "ativa",
+    status_type: "success",
+    last_login_at: "20/03/2026 13:18",
+    documents_status: "validados",
+    documents_status_type: "success"
+  };
+}
+
+export async function updateDriverProfile(body) {
+  const payload = await requestApi("api/v1/driver/profile", {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return {
+    ...(await getDriverProfile()),
+    ...body,
+    bank_account: `${body.bank_name} ${body.bank_branch_number} - ${body.bank_account_number}`
+  };
+}
+
+export async function getDriverEarnings() {
+  const payload = await requestApi("api/v1/driver/earnings", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("driver-portal.json");
+  const earnings = data.earnings || {};
+
+  return {
+    balance: earnings.balance || "R$ 1.286,40",
+    balanceNote:
+      earnings.balanceNote ||
+      "Valor acumulado no periodo atual, ja considerando ganhos por corrida e ajustes da operacao.",
+    stats:
+      earnings.stats || [
+        { label: "ganho medio por entrega", value: "R$ 8,72" },
+        { label: "corridas concluidas na semana", value: "62" },
+        { label: "repasse previsto", value: "24/03/2026" }
+      ],
+    transactions: [
+      { date: "20/03/2026", run: "#RUN-8741", status: "concluida", status_type: "success", value: "R$ 9,40", note: "credito operacional" },
+      { date: "20/03/2026", run: "#RUN-8739", status: "concluida", status_type: "success", value: "R$ 7,90", note: "credito operacional" },
+      { date: "19/03/2026", run: "#RUN-8727", status: "ajuste em analise", status_type: "warning", value: "R$ 12,10", note: "conferencia de distancia" },
+      { date: "18/03/2026", run: "#RUN-8718", status: "concluida", status_type: "success", value: "R$ 10,20", note: "farmacia" }
+    ]
+  };
+}
+
+export async function getDriverAvailability() {
+  const payload = await requestApi("api/v1/driver/availability", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return {
+    metrics: [
+      { label: "presenca nas janelas abertas", value: "98%" },
+      { label: "janelas ativas nesta semana", value: "6" },
+      { label: "area principal da operacao", value: "Zona Sul" },
+      { label: "maior volume de corrida", value: "12h-14h" }
+    ],
+    slots: [
+      { title: "Segunda-feira", status: "aberta", status_type: "success", status_key: "open", description: "11:00 as 14:00 e 18:00 as 22:00" },
+      { title: "Terca-feira", status: "aberta", status_type: "success", status_key: "open", description: "11:00 as 14:00 e 18:00 as 22:00" },
+      { title: "Quarta-feira", status: "parcial", status_type: "warning", status_key: "partial", description: "18:00 as 22:00" },
+      { title: "Quinta-feira", status: "aberta", status_type: "success", status_key: "open", description: "11:00 as 14:00 e 18:00 as 22:00" },
+      { title: "Sexta-feira", status: "aberta", status_type: "success", status_key: "open", description: "11:00 as 14:00 e 18:00 as 23:00" },
+      { title: "Sabado", status: "fechada", status_type: "danger", status_key: "closed", description: "sem janelas abertas no momento" }
+    ]
+  };
+}
+
+export async function getDriverDocuments() {
+  const payload = await requestApi("api/v1/driver/documents", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return {
+    summary: [
+      { label: "documentos aprovados", value: "2" },
+      { label: "documentos pendentes", value: "1" },
+      { label: "modalidade ativa", value: "Moto" }
+    ],
+    documents: [
+      { title: "Documento de identidade", status: "validado", status_type: "success", description: "Documento principal conferido e aprovado pela equipe.", expires_at: "-", reviewed_at: "20/03/2026 11:10" },
+      { title: "CNH", status: "validado", status_type: "success", description: "Habilitacao com categoria compativel e vigencia ate 2027.", expires_at: "30/11/2027", reviewed_at: "20/03/2026 11:15" },
+      { title: "Documento do veiculo", status: "pendente", status_type: "warning", description: "Arquivo aceito, mas programado para reconferencia no proximo ciclo.", expires_at: "-", reviewed_at: "-" }
+    ],
+    checklist: [
+      "Documento de identidade aprovado.",
+      "CNH validada para a modalidade ativa.",
+      "Conta de recebimento registrada para repasses."
+    ],
+    pending_actions: [
+      { title: "Revisar arquivo do veiculo", text: "Atualize a documentacao do veiculo para concluir a analise operacional." }
+    ]
+  };
+}
+
+export async function getDriverSupport() {
+  const payload = await requestApi("api/v1/driver/support", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("driver-portal.json");
+  return data.support || { tickets: [] };
+}
+
+export async function createDriverSupportTicket(body) {
+  const payload = await requestApi("api/v1/driver/support/tickets", {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getDriverSupport();
+  const generatedId = `driver-ticket-${Date.now()}`;
+  const next = {
+    id: `#DRV-${String(Date.now()).slice(-4)}`,
+    ticket_id: generatedId,
+    channel: body.channel,
+    priority: body.priority,
+    last_message_at: new Date().toISOString(),
+    summary: body.subject,
+    status: "aberto",
+    statusType: body.priority === "critical" ? "danger" : body.priority === "high" ? "warning" : "success",
+    meta: [body.channel, `Prioridade ${body.priority}`, "Atualizado agora"]
+  };
+
+  return {
+    tickets: [next, ...(current.tickets || [])]
+  };
+}
+
+export async function getDriverSupportThread(ticketId) {
+  const payload = await requestApi(`api/v1/driver/support/${ticketId}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("driver-portal.json");
+  const tickets = data.support?.tickets || [];
+  const ticket = tickets.find((item) => item.ticket_id === ticketId) || tickets[0];
+
+  return {
+    ticket,
+    messages: (data.messages?.[ticket?.ticket_id] || []).map((message) => ({
+      ...message,
+      time: message.time || "Agora"
+    }))
+  };
+}
+
+export async function replyDriverSupportThread(ticketId, body) {
+  const payload = await requestApi(`api/v1/driver/support/${ticketId}/messages`, {
+    method: "POST",
+    body: { body },
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getDriverSupportThread(ticketId);
+  return {
+    ...current,
+    messages: [
+      ...(current.messages || []),
+      {
+        id: `drv-msg-${Date.now()}`,
+        direction: "outgoing",
+        author: "Entregador",
+        body,
+        time: new Date().toLocaleString("pt-BR"),
+        role: "driver"
+      }
+    ]
+  };
+}
+
+export async function getDriverNotifications() {
+  const payload = await requestApi("api/v1/driver/notifications", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("driver-portal.json");
+  return data.notifications || { summary: [], items: [] };
+}
+
+export async function markDriverNotificationRead(notificationId) {
+  const payload = await requestApi(`api/v1/driver/notifications/${notificationId}/read`, {
+    method: "POST",
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getDriverNotifications();
+  return {
+    ...current,
+    items: (current.items || []).map((item) =>
+      item.id === notificationId ? { ...item, is_read: true } : item
+    )
+  };
+}
+
+export async function getPublicCategories() {
+  const payload = await requestApi("api/v1/public/categories", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("landing.json");
+  return {
+    items: data.categories || []
+  };
+}
+
+export async function getPublicPlatformMetrics() {
+  const payload = await requestApi("api/v1/public/platform-metrics", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("landing.json");
+  return {
+    items: data.metrics || []
+  };
+}
+
+export async function createPublicPartnerLead(body) {
+  const payload = await requestApi("api/v1/public/partner-leads", {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return {
+    protocol: `PAR-${String(Date.now()).slice(-8)}`,
+    status: "recebido",
+    next_step: "Nossa equipe comercial vai retornar com os proximos passos do cadastro."
+  };
+}
+
+export async function createPublicDriverLead(body) {
+  const payload = await requestApi("api/v1/public/driver-leads", {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return {
+    protocol: `DRV-${String(Date.now()).slice(-8)}`,
+    status: "recebido",
+    next_step: "O time operacional vai revisar seus dados e orientar a proxima etapa."
   };
 }
 

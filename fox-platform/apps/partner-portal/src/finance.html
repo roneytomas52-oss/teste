@@ -29,7 +29,9 @@
           <a class="fx-sidebar-link" href="./store.html">Loja</a>
           <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
           <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./team.html">Equipe</a>
           <a class="fx-sidebar-link" href="./messages.html">Mensagens</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
           <a class="fx-sidebar-link" href="./support.html">Suporte</a>
           <a class="fx-sidebar-link" href="./help.html">Ajuda</a>
           <a class="fx-sidebar-link" href="./login.html">Sair</a>
@@ -64,8 +66,8 @@
             <section class="fx-partner-grid">
               <article class="fx-balance-card">
                 <span class="fx-pill">Saldo disponivel</span>
-                <div class="fx-balance-value">R$ 8.460,32</div>
-                <p class="fx-copy">Valor disponivel para repasse, ja considerado o fechamento dos pedidos concluidos e as taxas da plataforma.</p>
+                <div class="fx-balance-value">R$ 0,00</div>
+                <p class="fx-copy">Carregando resumo financeiro da loja.</p>
                 <div class="fx-inline-actions">
                   <a class="fx-button-secondary" href="#">Ver agenda de repasses</a>
                   <a class="fx-button-ghost" href="#">Atualizar conta bancaria</a>
@@ -74,16 +76,16 @@
 
               <div class="fx-grid">
                 <article class="fx-stat">
-                  <div class="fx-stat-value">R$ 3.182</div>
+                  <div class="fx-stat-value">-</div>
                   <div class="fx-stat-label">previsto para o proximo ciclo</div>
                 </article>
                 <article class="fx-stat">
-                  <div class="fx-stat-value">R$ 1.148</div>
+                  <div class="fx-stat-value">-</div>
                   <div class="fx-stat-label">taxas e comissoes do periodo</div>
                 </article>
                 <article class="fx-stat">
-                  <div class="fx-stat-value">2</div>
-                  <div class="fx-stat-label">repasses em processamento</div>
+                  <div class="fx-stat-value">-</div>
+                  <div class="fx-stat-label">ajustes pendentes</div>
                 </article>
               </div>
             </section>
@@ -94,18 +96,7 @@
                   <h3 class="fx-title-sm">Agenda de repasses</h3>
                   <span class="fx-pill">Proximos ciclos</span>
                 </div>
-                <div class="fx-grid">
-                  <div class="fx-payout-item">
-                    <strong>24/03/2026</strong>
-                    <p class="fx-copy-sm">Repasse semanal referente aos pedidos concluidos entre 17/03 e 23/03.</p>
-                    <span class="fx-status success">R$ 3.182,40 previstos</span>
-                  </div>
-                  <div class="fx-payout-item">
-                    <strong>31/03/2026</strong>
-                    <p class="fx-copy-sm">Repasse seguinte ja considerando a campanha de fim de mes.</p>
-                    <span class="fx-status warning">estimativa em apuracao</span>
-                  </div>
-                </div>
+                <div class="fx-grid" id="fx-partner-finance-payouts"></div>
               </article>
 
               <article class="fx-card">
@@ -113,24 +104,7 @@
                   <h3 class="fx-title-sm">Conta de recebimento</h3>
                   <span class="fx-pill">Dados bancarios</span>
                 </div>
-                <div class="fx-info-list">
-                  <div class="fx-info-row">
-                    <strong>Banco</strong>
-                    <span>Banco Fox 341</span>
-                  </div>
-                  <div class="fx-info-row">
-                    <strong>Agencia</strong>
-                    <span>1524</span>
-                  </div>
-                  <div class="fx-info-row">
-                    <strong>Conta</strong>
-                    <span>45897-2</span>
-                  </div>
-                  <div class="fx-info-row">
-                    <strong>Status</strong>
-                    <span class="fx-status success">validada</span>
-                  </div>
-                </div>
+                <div class="fx-info-list" id="fx-partner-bank-account"></div>
               </article>
             </section>
 
@@ -138,7 +112,7 @@
               <div class="fx-table-tools">
                 <div class="fx-inline-actions">
                   <span class="fx-pill">Extrato do periodo</span>
-                  <span class="fx-copy-sm">Movimentacoes consolidadas dos ultimos 7 dias.</span>
+                  <span class="fx-copy-sm">Movimentacoes consolidadas da operacao recente.</span>
                 </div>
                 <div class="fx-inline-actions">
                   <button class="fx-filter-chip is-active" type="button">7 dias</button>
@@ -156,36 +130,7 @@
                     <th>Valor</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>20/03/2026</td>
-                    <td>Pedidos concluidos no turno do almoco</td>
-                    <td>credito operacional</td>
-                    <td><span class="fx-status success">processado</span></td>
-                    <td>+ R$ 1.284,70</td>
-                  </tr>
-                  <tr>
-                    <td>20/03/2026</td>
-                    <td>Taxas da plataforma e pagamentos online</td>
-                    <td>debito</td>
-                    <td><span class="fx-status warning">fechado</span></td>
-                    <td>- R$ 318,42</td>
-                  </tr>
-                  <tr>
-                    <td>19/03/2026</td>
-                    <td>Repasse semanal liberado</td>
-                    <td>repasse</td>
-                    <td><span class="fx-status success">enviado</span></td>
-                    <td>+ R$ 4.128,20</td>
-                  </tr>
-                  <tr>
-                    <td>18/03/2026</td>
-                    <td>Ajuste de cancelamento reembolsado</td>
-                    <td>ajuste</td>
-                    <td><span class="fx-status danger">revisar</span></td>
-                    <td>- R$ 42,10</td>
-                  </tr>
-                </tbody>
+                <tbody id="fx-partner-finance-transactions"></tbody>
               </table>
             </section>
           </div>

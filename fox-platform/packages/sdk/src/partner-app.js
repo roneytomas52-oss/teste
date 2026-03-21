@@ -2,19 +2,30 @@ import {
   addPartnerStoreDocument,
   bindLogout,
   createPartnerProduct,
+  createPartnerTeamMember,
+  createPartnerSupportTicket,
   getPartnerCatalog,
   getPartnerDashboard,
+  getPartnerFinance,
   getPartnerData,
+  getPartnerNotifications,
   getPartnerOrders,
   getPartnerProfile,
   getPartnerStore,
+  getPartnerSupport,
+  getPartnerSupportThread,
+  getPartnerTeam,
   injectSessionLabel,
   login,
+  markPartnerNotificationRead,
+  replyPartnerSupportThread,
   requireSession,
   updatePartnerOrderStatus,
   updatePartnerProduct,
   updatePartnerProfile,
   updatePartnerProductInventory,
+  updatePartnerTeamMember,
+  updatePartnerTeamMemberStatus,
   updatePartnerStore,
   updatePartnerStoreHours
 } from "./fox-platform-sdk.js";
@@ -347,6 +358,61 @@ function renderFinance(finance) {
     if (value) value.textContent = current.value;
     if (label) label.textContent = current.label;
   });
+
+  const payouts = document.querySelector("#fx-partner-finance-payouts");
+  if (payouts) {
+    payouts.innerHTML = (finance.payouts || [])
+      .map(
+        (item) => `
+          <div class="fx-payout-item">
+            <strong>${item.date}</strong>
+            <p class="fx-copy-sm">${item.title}</p>
+            <p class="fx-copy-sm">${item.text}</p>
+            <span class="fx-status ${item.status_type || "warning"}">${item.amount} - ${item.status}</span>
+          </div>
+        `
+      )
+      .join("");
+  }
+
+  const bankAccount = document.querySelector("#fx-partner-bank-account");
+  if (bankAccount) {
+    bankAccount.innerHTML = `
+      <div class="fx-info-row">
+        <strong>Banco</strong>
+        <span>${finance.bank_account?.bank_name || "-"}</span>
+      </div>
+      <div class="fx-info-row">
+        <strong>Agencia</strong>
+        <span>${finance.bank_account?.branch_number || "-"}</span>
+      </div>
+      <div class="fx-info-row">
+        <strong>Conta</strong>
+        <span>${finance.bank_account?.account_number || "-"}</span>
+      </div>
+      <div class="fx-info-row">
+        <strong>Status</strong>
+        <span class="fx-status ${finance.bank_account?.status_type || "warning"}">${finance.bank_account?.status || "em analise"}</span>
+      </div>
+    `;
+  }
+
+  const transactions = document.querySelector("#fx-partner-finance-transactions");
+  if (transactions) {
+    transactions.innerHTML = (finance.transactions || [])
+      .map(
+        (item) => `
+          <tr>
+            <td>${item.date}</td>
+            <td>${item.description}</td>
+            <td>${item.type}</td>
+            <td><span class="fx-status ${item.status_type || "warning"}">${item.status}</span></td>
+            <td>${item.value}</td>
+          </tr>
+        `
+      )
+      .join("");
+  }
 }
 
 function renderReports(reports) {
@@ -360,29 +426,81 @@ function renderReports(reports) {
   });
 }
 
-function renderMessages(messages) {
-  const list = document.querySelector(".fx-thread-list");
+function renderMessageThreadList(tickets, activeTicketId) {
+  const list = document.querySelector("#fx-partner-message-threads");
   if (!list) return;
-  list.innerHTML = messages.threads
+
+  if (!tickets?.length) {
+    list.innerHTML = `<div class="fx-note">Nenhum protocolo com historico disponivel.</div>`;
+    return;
+  }
+
+  list.innerHTML = tickets
     .map(
-      (thread, index) => `
-        <article class="fx-thread-item${index === 0 ? " is-active" : ""}">
+      (ticket) => `
+        <button
+          class="fx-thread-item ${ticket.ticket_id === activeTicketId ? "is-active" : ""}"
+          type="button"
+          data-ticket-id="${ticket.ticket_id}"
+        >
           <div class="fx-thread-head">
-            <strong>${thread.title}</strong>
-            <span class="fx-status ${thread.statusType}">${thread.status}</span>
+            <strong>${ticket.channel}</strong>
+            <span class="fx-status ${ticket.statusType}">${ticket.status}</span>
           </div>
-          <p class="fx-copy-sm">${thread.summary}</p>
-          <span class="fx-copy-sm">${thread.time}</span>
-        </article>
+          <p class="fx-copy-sm">${ticket.summary}</p>
+          <span class="fx-copy-sm">${(ticket.meta || []).join(" · ")}</span>
+        </button>
+      `
+    )
+    .join("");
+}
+
+function renderMessageThreadView(thread) {
+  const title = document.querySelector("#fx-partner-thread-title");
+  const pill = document.querySelector("#fx-partner-thread-pill");
+  const meta = document.querySelector("#fx-partner-thread-meta");
+  const stream = document.querySelector("#fx-partner-message-stream");
+
+  if (!stream) return;
+
+  if (!thread?.ticket) {
+    if (title) title.textContent = "Nenhum protocolo selecionado";
+    if (pill) pill.textContent = "Aguardando selecao";
+    if (meta) meta.textContent = "Escolha um protocolo para visualizar o historico completo.";
+    stream.innerHTML = `<div class="fx-note">Selecione um protocolo da lista para abrir a conversa.</div>`;
+    return;
+  }
+
+  if (title) title.textContent = `Conversa com ${thread.ticket.channel}`;
+  if (pill) pill.textContent = thread.ticket.id;
+  if (meta) {
+    meta.textContent = `Prioridade ${thread.ticket.priority} · Atualizado em ${thread.ticket.last_message_at ? formatDateTime(thread.ticket.last_message_at) : "-"}`;
+  }
+
+  stream.innerHTML = (thread.messages || [])
+    .map(
+      (message) => `
+        <div class="fx-message-bubble ${message.direction === "outgoing" ? "is-outgoing" : "is-incoming"}">
+          <strong>${message.author}</strong>
+          <span>${message.body}</span>
+          <small class="fx-copy-sm">${message.time}</small>
+        </div>
       `
     )
     .join("");
 }
 
 function renderSupport(support) {
-  const list = document.querySelector(".fx-ticket-list");
+  const list = document.querySelector("#fx-partner-support-tickets");
   if (!list) return;
-  list.innerHTML = support.tickets
+
+  const tickets = support?.tickets || [];
+  if (!tickets.length) {
+    list.innerHTML = `<div class="fx-note">Nenhum chamado aberto no momento.</div>`;
+    return;
+  }
+
+  list.innerHTML = tickets
     .map(
       (ticket) => `
         <article class="fx-ticket-card">
@@ -392,12 +510,218 @@ function renderSupport(support) {
           </div>
           <p class="fx-copy-sm">${ticket.summary}</p>
           <div class="fx-inline-actions">
-            ${ticket.meta.map((item) => `<span class="fx-tag">${item}</span>`).join("")}
+            ${(ticket.meta || []).map((item) => `<span class="fx-tag">${item}</span>`).join("")}
+          </div>
+          <div class="fx-inline-actions">
+            <a class="fx-button-ghost" href="./messages.html?ticket=${ticket.ticket_id || ticket.id}">Abrir conversa</a>
           </div>
         </article>
       `
     )
     .join("");
+}
+
+async function handleSupportForm() {
+  const form = document.querySelector("#fx-partner-support-form");
+  if (!form || form.dataset.bound === "true") return;
+  form.dataset.bound = "true";
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const payload = {
+      channel: document.querySelector("#fx-partner-support-channel")?.value ?? "operations",
+      priority: document.querySelector("#fx-partner-support-priority")?.value ?? "normal",
+      subject: document.querySelector("#fx-partner-support-subject")?.value ?? "",
+      description: document.querySelector("#fx-partner-support-description")?.value ?? ""
+    };
+
+    try {
+      const support = await createPartnerSupportTicket(payload);
+      renderSupport(support);
+      form.reset();
+      showFeedback("#fx-partner-support-feedback", "Chamado enviado para a fila operacional da Fox Delivery.");
+    } catch (error) {
+      showFeedback(
+        "#fx-partner-support-feedback",
+        error?.message || "Nao foi possivel abrir o chamado da loja.",
+        "danger"
+      );
+    }
+  });
+}
+
+async function handleMessagesScreen() {
+  const list = document.querySelector("#fx-partner-message-threads");
+  const form = document.querySelector("#fx-partner-message-form");
+  const bodyField = document.querySelector("#fx-partner-message-body");
+  const feedbackSelector = "#fx-partner-message-feedback";
+  const support = await getPartnerSupport();
+  const tickets = support?.tickets || [];
+  const params = new URLSearchParams(window.location.search);
+  let activeTicketId = params.get("ticket") || tickets[0]?.ticket_id || tickets[0]?.id || "";
+
+  const loadThread = async (ticketId) => {
+    activeTicketId = ticketId;
+    renderMessageThreadList(tickets, activeTicketId);
+
+    if (!activeTicketId) {
+      renderMessageThreadView(null);
+      return;
+    }
+
+    const thread = await getPartnerSupportThread(activeTicketId);
+    renderMessageThreadView(thread);
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.set("ticket", activeTicketId);
+    window.history.replaceState({}, "", nextUrl);
+  };
+
+  await loadThread(activeTicketId);
+
+  list?.addEventListener("click", async (event) => {
+    const trigger = event.target.closest("[data-ticket-id]");
+    if (!trigger) return;
+    await loadThread(trigger.dataset.ticketId);
+  });
+
+  if (!form || form.dataset.bound === "true") return;
+  form.dataset.bound = "true";
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!activeTicketId) {
+      showFeedback(feedbackSelector, "Selecione um protocolo antes de responder.", "danger");
+      return;
+    }
+
+    const body = bodyField?.value?.trim() || "";
+    if (!body) {
+      showFeedback(feedbackSelector, "Digite uma mensagem para enviar ao suporte.", "danger");
+      return;
+    }
+
+    try {
+      const thread = await replyPartnerSupportThread(activeTicketId, body);
+      renderMessageThreadView(thread);
+      if (bodyField) bodyField.value = "";
+      showFeedback(feedbackSelector, "Mensagem enviada com sucesso.");
+    } catch (error) {
+      showFeedback(feedbackSelector, error.message || "Nao foi possivel responder o protocolo.", "danger");
+    }
+  });
+}
+
+async function handleTeamScreen() {
+  const form = document.querySelector("#fx-team-form");
+  const list = document.querySelector("#fx-team-list");
+  const feedbackSelector = "#fx-team-feedback";
+  let payload = await getPartnerTeam();
+  renderTeam(payload);
+
+  const resetForm = () => {
+    setInputValue("#fx-team-member-id", "");
+    setInputValue("#fx-team-full-name", "");
+    setInputValue("#fx-team-email", "");
+    setInputValue("#fx-team-phone", "");
+    setInputValue("#fx-team-role", "manager");
+    document.querySelectorAll(".js-team-permission").forEach((input) => {
+      input.checked = false;
+    });
+    const title = document.querySelector("#fx-team-form-title");
+    const submit = document.querySelector("#fx-team-submit");
+    if (title) title.textContent = "Convidar novo membro";
+    if (submit) submit.textContent = "Enviar convite";
+  };
+
+  const fillForm = (member) => {
+    setInputValue("#fx-team-member-id", member.id);
+    setInputValue("#fx-team-full-name", member.full_name);
+    setInputValue("#fx-team-email", member.email);
+    setInputValue("#fx-team-phone", member.phone);
+    setInputValue("#fx-team-role", member.role_slug);
+    const permissions = new Set(member.permissions || []);
+    document.querySelectorAll(".js-team-permission").forEach((input) => {
+      input.checked = permissions.has(input.value);
+    });
+    const title = document.querySelector("#fx-team-form-title");
+    const submit = document.querySelector("#fx-team-submit");
+    if (title) title.textContent = `Editar acesso de ${member.full_name}`;
+    if (submit) submit.textContent = "Salvar alteracoes";
+  };
+
+  resetForm();
+
+  list?.addEventListener("click", async (event) => {
+    const edit = event.target.closest(".js-team-edit");
+    if (edit) {
+      const member = (payload.members || []).find((item) => item.id === edit.dataset.memberId);
+      if (member) fillForm(member);
+      return;
+    }
+
+    const status = event.target.closest(".js-team-status");
+    if (!status) return;
+
+    try {
+      payload = await updatePartnerTeamMemberStatus(status.dataset.memberId, status.dataset.status);
+      renderTeam(payload);
+      showFeedback(feedbackSelector, "Status do membro atualizado com sucesso.");
+    } catch (error) {
+      showFeedback(feedbackSelector, error.message || "Nao foi possivel atualizar o status do membro.", "danger");
+    }
+  });
+
+  const resetButton = document.querySelector("#fx-team-reset");
+  resetButton?.addEventListener("click", resetForm);
+
+  if (!form || form.dataset.bound === "true") return;
+  form.dataset.bound = "true";
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const memberId = document.querySelector("#fx-team-member-id")?.value?.trim() || "";
+    const permissions = Array.from(document.querySelectorAll(".js-team-permission:checked")).map((input) => input.value);
+    const body = {
+      full_name: document.querySelector("#fx-team-full-name")?.value?.trim() || "",
+      email: document.querySelector("#fx-team-email")?.value?.trim() || "",
+      phone: document.querySelector("#fx-team-phone")?.value?.trim() || "",
+      role_slug: document.querySelector("#fx-team-role")?.value || "manager",
+      permissions
+    };
+
+    try {
+      payload = memberId
+        ? await updatePartnerTeamMember(memberId, body)
+        : await createPartnerTeamMember(body);
+      renderTeam(payload);
+      resetForm();
+      showFeedback(feedbackSelector, memberId ? "Membro atualizado com sucesso." : "Convite enviado com sucesso.");
+    } catch (error) {
+      showFeedback(feedbackSelector, error.message || "Nao foi possivel salvar o membro da equipe.", "danger");
+    }
+  });
+}
+
+async function handleNotificationsScreen() {
+  const list = document.querySelector("#fx-notifications-list");
+  let payload = await getPartnerNotifications();
+  renderNotifications(payload);
+
+  list?.addEventListener("click", async (event) => {
+    const trigger = event.target.closest(".js-notification-read");
+    if (!trigger) return;
+
+    try {
+      payload = await markPartnerNotificationRead(trigger.dataset.notificationId);
+      renderNotifications(payload);
+      showFeedback("#fx-notifications-feedback", "Notificacao marcada como lida.");
+    } catch (error) {
+      showFeedback("#fx-notifications-feedback", error.message || "Nao foi possivel atualizar a notificacao.", "danger");
+    }
+  });
 }
 
 function renderHelp(help) {
@@ -409,6 +733,109 @@ function renderHelp(help) {
         <article class="fx-article-card">
           <strong>${article.title}</strong>
           <p class="fx-copy-sm">${article.text}</p>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function renderTeam(team) {
+  const summary = document.querySelector("#fx-team-summary");
+  const list = document.querySelector("#fx-team-list");
+
+  if (summary) {
+    summary.innerHTML = (team.summary || [])
+      .map(
+        (item) => `
+          <article class="fx-compact-metric">
+            <strong>${item.value}</strong>
+            <span>${item.label}</span>
+          </article>
+        `
+      )
+      .join("");
+  }
+
+  if (!list) return;
+
+  if (!(team.members || []).length) {
+    list.innerHTML = `<div class="fx-note">Nenhum membro adicional cadastrado para esta loja.</div>`;
+    return;
+  }
+
+  list.innerHTML = (team.members || [])
+    .map(
+      (member) => `
+        <article class="fx-team-member-card" data-member-id="${member.id}">
+          <div class="fx-card-header">
+            <div>
+              <h3 class="fx-title-sm">${member.full_name}</h3>
+              <p class="fx-copy-sm">${member.role_label}</p>
+            </div>
+            <span class="fx-status ${member.status_type}">${member.status}</span>
+          </div>
+          <div class="fx-team-member-meta">
+            <span>${member.email}</span>
+            <span>${member.phone}</span>
+            <span>Ultimo acesso: ${member.last_login_at}</span>
+          </div>
+          <div class="fx-inline-actions">
+            ${(member.permissions || []).map((permission) => `<span class="fx-tag">${permission}</span>`).join("")}
+          </div>
+          <div class="fx-inline-actions">
+            <button class="fx-button-ghost js-team-edit" type="button" data-member-id="${member.id}">Editar</button>
+            <button class="fx-button-ghost js-team-status" type="button" data-member-id="${member.id}" data-status="${member.status_key === "active" ? "suspended" : "active"}">
+              ${member.status_key === "active" ? "Suspender" : "Ativar"}
+            </button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function renderNotifications(payload) {
+  const summary = document.querySelector("#fx-notifications-summary");
+  const list = document.querySelector("#fx-notifications-list");
+
+  if (summary) {
+    summary.innerHTML = (payload.summary || [])
+      .map(
+        (item) => `
+          <article class="fx-compact-metric">
+            <strong>${item.value}</strong>
+            <span>${item.label}</span>
+          </article>
+        `
+      )
+      .join("");
+  }
+
+  if (!list) return;
+
+  const items = payload.items || [];
+  if (!items.length) {
+    list.innerHTML = `<div class="fx-note">Nenhuma notificacao operacional registrada.</div>`;
+    return;
+  }
+
+  list.innerHTML = items
+    .map(
+      (item) => `
+        <article class="fx-notification-card ${item.is_read ? "is-read" : "is-unread"}">
+          <div class="fx-card-header">
+            <div>
+              <h3 class="fx-title-sm">${item.title}</h3>
+              <p class="fx-copy-sm">${item.context}</p>
+            </div>
+            <span class="fx-status ${item.level_type}">${item.level}</span>
+          </div>
+          <p class="fx-copy-sm">${item.body}</p>
+          <div class="fx-inline-actions">
+            <span class="fx-tag">${item.created_at}</span>
+            ${item.action_url ? `<a class="fx-button-ghost" href="${item.action_url}">${item.action_label || "Abrir"}</a>` : ""}
+            ${!item.is_read ? `<button class="fx-button-ghost js-notification-read" type="button" data-notification-id="${item.id}">Marcar como lida</button>` : ""}
+          </div>
         </article>
       `
     )
@@ -1132,22 +1559,36 @@ async function boot() {
     return;
   }
 
-  const data = await getPartnerData();
+  if (screen === "messages") {
+    await handleMessagesScreen();
+    return;
+  }
+
+  if (screen === "team") {
+    await handleTeamScreen();
+    return;
+  }
+
+  if (screen === "notifications") {
+    await handleNotificationsScreen();
+    return;
+  }
 
   if (screen === "finance") {
-    renderFinance(data.finance);
-  }
-
-  if (screen === "reports") {
-    renderReports(data.reports);
-  }
-
-  if (screen === "messages") {
-    renderMessages(data.messages);
+    renderFinance(await getPartnerFinance());
+    return;
   }
 
   if (screen === "support") {
-    renderSupport(data.support);
+    renderSupport(await getPartnerSupport());
+    await handleSupportForm();
+    return;
+  }
+
+  const data = await getPartnerData();
+
+  if (screen === "reports") {
+    renderReports(data.reports);
   }
 
   if (screen === "help") {

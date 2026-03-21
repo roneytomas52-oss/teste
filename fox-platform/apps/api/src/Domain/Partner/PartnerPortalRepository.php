@@ -17,4 +17,12 @@ interface PartnerPortalRepository
     public function replaceStoreHours(string $userId, array $hours): array;
 
     public function addStoreDocument(string $userId, array $document): array;
+
+    public function getTeam(string $userId): array;
+
+    public function createTeamMember(string $userId, array $data): array;
+
+    public function updateTeamMember(string $userId, string $memberId, array $data): array;
+
+    public function updateTeamMemberStatus(string $userId, string $memberId, array $data): array;
 }

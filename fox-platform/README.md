@@ -58,6 +58,16 @@ fox-platform/
 - [Entrega da Fase 6](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-6/phase-6-driver-portal-mvp.md)
 - [Entrega da Fase 7](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-7/phase-7-support-and-refinement.md)
 - [Entrega da Fase 8](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-8/phase-8-real-integration.md)
+- [Entrega da Fase 9 - Sprint 1](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-1-backend-bootstrap.md)
+- [Entrega da Fase 9 - Sprint 2](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-2-partner-core.md)
+- [Entrega da Fase 9 - Sprint 3](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-3-catalog-stock-core.md)
+- [Entrega da Fase 9 - Sprint 4](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-4-orders-and-admin-core.md)
+- [Entrega da Fase 9 - Sprint 5](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-5-finance-core.md)
+- [Entrega da Fase 9 - Sprint 6](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-6-driver-core.md)
+- [Entrega da Fase 9 - Sprint 7](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-7-support-core.md)
+- [Entrega da Fase 9 - Sprint 8](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-8-public-landing-core.md)
+- [Entrega da Fase 9 - Sprint 9](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-9-admin-approval-actions.md)
+- [Entrega da Fase 9 - Sprint 10](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-10-team-notifications-and-ticket-threads.md)
 - [Mapa do portal do parceiro](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/partner-portal-sitemap.md)
 - [Superficie de APIs](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/api-surface.md)
 - [Roadmap do MVP](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/roadmap-mvp.md)
@@ -101,9 +111,32 @@ Ja definido e materializado:
 - credenciais de demonstracao alinhadas entre mock e seed inicial
 - catalogo inicial e estoque da loja conectados ao backend do parceiro
 - rotas reais para listagem de produtos e ajuste de inventario
+- dashboard do parceiro lendo dados reais do backend
+- pedidos do parceiro lendo dados reais do backend
+- alteracao de status de pedidos do parceiro via API
+- dashboard do admin lendo dados reais do backend
+- pedidos do admin lendo dados reais do backend
+- filas de aprovacao do admin lendo dados reais do backend
+- financeiro do parceiro lendo saldo, repasses e extrato pela API
+- financeiro do admin lendo volume, comissoes e repasses pela API
+- dashboard do entregador lendo dados reais do backend
+- perfil do entregador lendo e salvando dados reais pela API
+- ganhos, disponibilidade e documentos do entregador ligados ao banco
+- driver portal em modo API-first nas telas principais
+- suporte do parceiro ligado a tickets reais
+- suporte do admin ligado a fila real de atendimento
+- suporte do entregador ligado a tickets reais
+- landing publica ligada a categorias e metricas da API
+- landing publica com captura real de leads de parceiro e entregador
+- admin com aprovacao e rejeicao reais nas filas de parceiro e entregador
+- mensagens do parceiro detalhadas por protocolo com thread completa
+- equipe da loja com membros, perfis e status ligados ao backend
+- notificacoes operacionais no portal do parceiro
+- notificacoes operacionais no portal do entregador
 
 Proxima etapa recomendada:
 
-- concluir a Sprint 3 da Fase 9 com criacao e edicao de produto
-- ligar pedidos reais ao portal do parceiro
-- iniciar o primeiro dashboard administrativo com leitura de banco
+- iniciar a Sprint 11 da Fase 9
+- unificar autenticacao da equipe da loja
+- abrir configuracoes administrativas da plataforma
+- evoluir notificacoes para tempo real

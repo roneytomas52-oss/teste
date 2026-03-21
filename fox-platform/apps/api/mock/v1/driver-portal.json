@@ -1,41 +1,148 @@
 {
   "dashboard": {
     "driverName": "Lucas Ferreira",
-    "heroTitle": "Ganhos, documentação e disponibilidade organizados em uma experiência própria.",
-    "heroLead": "O portal do entregador concentra a parte financeira, os documentos e os próximos passos da operação.",
+    "heroTitle": "Ganhos, documentacao e disponibilidade organizados em uma experiencia propria.",
+    "heroLead": "O portal do entregador concentra a parte financeira, os documentos e os proximos passos da operacao.",
     "summary": [
-      { "label": "ganhos líquidos acumulados", "value": "R$ 1.286" },
-      { "label": "entregas concluídas", "value": "62" },
-      { "label": "taxa de presença nas janelas abertas", "value": "98%" }
+      { "label": "ganhos liquidos acumulados", "value": "R$ 1.286" },
+      { "label": "entregas concluidas", "value": "62" },
+      { "label": "taxa de presenca nas janelas abertas", "value": "98%" }
     ],
     "metrics": [
-      { "label": "modalidade ativa na operação", "value": "Moto" },
-      { "label": "tempo médio por corrida", "value": "24 min" },
-      { "label": "ganho médio por entrega", "value": "R$ 8,72" },
-      { "label": "avaliação média recente", "value": "4,9" }
+      { "label": "modalidade ativa na operacao", "value": "Moto" },
+      { "label": "tempo medio por corrida", "value": "24 min" },
+      { "label": "ganho medio por entrega", "value": "R$ 8,72" },
+      { "label": "avaliacao media recente", "value": "4,9" }
+    ],
+    "recent_runs": [
+      { "id": "#RUN-4021", "status": "concluida", "status_type": "success", "value": "R$ 9,80", "time": "ha 18 min" },
+      { "id": "#RUN-4018", "status": "em analise", "status_type": "warning", "value": "R$ 12,40", "time": "ha 1 h" },
+      { "id": "#RUN-4014", "status": "concluida", "status_type": "success", "value": "R$ 7,60", "time": "ontem" }
+    ],
+    "checklist": [
+      "Revisar comprovante de corrida em analise.",
+      "Confirmar disponibilidade do turno de sabado.",
+      "Atualizar CNH antes do vencimento."
     ]
   },
   "earnings": {
     "balance": "R$ 1.286,40",
-    "balanceNote": "Valor acumulado no período atual, já considerando ganhos por corrida e ajustes da operação.",
+    "balanceNote": "Valor acumulado no periodo atual, considerando ganhos por corrida e ajustes da operacao.",
     "stats": [
-      { "label": "ganho médio por entrega", "value": "R$ 8,72" },
-      { "label": "corridas concluídas na semana", "value": "62" },
+      { "label": "ganho medio por entrega", "value": "R$ 8,72" },
+      { "label": "corridas concluidas na semana", "value": "62" },
       { "label": "repasse previsto", "value": "24/03/2026" }
+    ],
+    "transactions": [
+      { "date": "21/03/2026", "run": "#RUN-4021", "status": "pago", "status_type": "success", "value": "R$ 9,80", "note": "Rota concluida na Zona Sul." },
+      { "date": "21/03/2026", "run": "#RUN-4018", "status": "em analise", "status_type": "warning", "value": "R$ 12,40", "note": "Distancia em revisao pela operacao." }
+    ]
+  },
+  "availability": {
+    "metrics": [
+      { "label": "presenca nas janelas abertas", "value": "98%" },
+      { "label": "janelas ativas nesta semana", "value": "6" },
+      { "label": "area principal da operacao", "value": "Zona Sul" },
+      { "label": "maior volume de corrida", "value": "12h-14h" }
+    ],
+    "slots": [
+      { "title": "Segunda a sexta - almoco", "status": "aberta", "status_key": "open", "status_type": "success", "description": "Janela com maior volume de corridas e prioridade para a sua zona." },
+      { "title": "Sexta - jantar", "status": "monitorada", "status_key": "open", "status_type": "warning", "description": "Horario sujeito a pico e redistribuicao por demanda." },
+      { "title": "Sabado - madrugada", "status": "fechada", "status_key": "closed", "status_type": "danger", "description": "Sem escala ativa para sua modalidade neste momento." }
+    ]
+  },
+  "documents": {
+    "summary": [
+      { "label": "documentos aprovados", "value": "3" },
+      { "label": "pendencias ativas", "value": "1" },
+      { "label": "proximo vencimento", "value": "14 dias" }
+    ],
+    "documents": [
+      { "title": "CNH", "status": "aprovada", "status_type": "success", "description": "Documento validado pela equipe da Fox Delivery.", "expires_at": "04/04/2026", "reviewed_at": "20/03/2026" },
+      { "title": "Documento do veiculo", "status": "em analise", "status_type": "warning", "description": "Nova foto enviada e aguardando validacao do time operacional.", "expires_at": "15/10/2026", "reviewed_at": "21/03/2026" }
+    ],
+    "checklist": [
+      "Manter CNH legivel e dentro da validade.",
+      "Atualizar documento do veiculo sempre que houver troca de placa.",
+      "Confirmar foto de perfil recente e sem obstrucao."
+    ],
+    "pending_actions": [
+      { "title": "Documento do veiculo", "text": "Aguardar retorno da analise enviada no ultimo reenvio." }
     ]
   },
   "support": {
     "tickets": [
-      { "id": "#DRV-1120", "summary": "Ajuste de corrida com distância divergente em análise.", "status": "em andamento", "statusType": "warning" },
-      { "id": "#DRV-1103", "summary": "Validação de documento concluída com sucesso.", "status": "concluído", "statusType": "success" }
+      { "id": "#DRV-1120", "ticket_id": "e1000000-0000-4000-8000-000000000004", "channel": "Ganhos", "priority": "alta", "summary": "Ajuste de corrida com distancia divergente em analise.", "status": "em andamento", "statusType": "warning", "meta": ["Prioridade alta", "Atualizado ha 18 min"], "last_message_at": "2026-03-21T09:45:00-03:00" },
+      { "id": "#DRV-1103", "ticket_id": "e1000000-0000-4000-8000-000000000003", "channel": "Documentos", "priority": "media", "summary": "Validacao de documento concluida com sucesso.", "status": "concluido", "statusType": "success", "meta": ["Prioridade media", "Atualizado ontem"], "last_message_at": "2026-03-20T14:20:00-03:00" }
+    ]
+  },
+  "messages": {
+    "e1000000-0000-4000-8000-000000000004": [
+      { "id": "drv-msg-1001", "direction": "incoming", "author": "Fox Delivery", "body": "Recebemos seu pedido de revisao da distancia da corrida #RUN-4018.", "time": "21/03/2026 09:12" },
+      { "id": "drv-msg-1002", "direction": "outgoing", "author": "Entregador", "body": "Perfeito. A corrida teve desvio por bloqueio na via principal.", "time": "21/03/2026 09:18" }
+    ],
+    "e1000000-0000-4000-8000-000000000003": [
+      { "id": "drv-msg-2001", "direction": "incoming", "author": "Fox Delivery", "body": "Seu documento foi validado e nao ha mais pendencias nesta etapa.", "time": "20/03/2026 14:20" }
+    ]
+  },
+  "notifications": {
+    "summary": [
+      { "label": "nao lidas", "value": "2" },
+      { "label": "documentos", "value": "1" },
+      { "label": "ganhos", "value": "1" }
+    ],
+    "items": [
+      {
+        "id": "n2000000-0000-4000-8000-000000000001",
+        "title": "Repasse semanal programado",
+        "context": "Ganhos",
+        "level": "informativo",
+        "level_type": "success",
+        "body": "O repasse da semana foi agendado para o dia 24/03/2026.",
+        "action_label": "Ver ganhos",
+        "action_url": "./earnings.html",
+        "is_read": false,
+        "created_at": "21/03/2026 09:30"
+      },
+      {
+        "id": "n2000000-0000-4000-8000-000000000002",
+        "title": "Documento do veiculo em analise",
+        "context": "Documentos",
+        "level": "atencao",
+        "level_type": "warning",
+        "body": "Seu novo documento foi recebido e esta em revisao pela equipe operacional.",
+        "action_label": "Ver documentos",
+        "action_url": "./documents.html",
+        "is_read": false,
+        "created_at": "21/03/2026 08:55"
+      },
+      {
+        "id": "n2000000-0000-4000-8000-000000000003",
+        "title": "Janela de almoco atualizada",
+        "context": "Operacao",
+        "level": "ok",
+        "level_type": "success",
+        "body": "Sua janela principal de almoco foi mantida para a Zona Sul.",
+        "action_label": "Ver disponibilidade",
+        "action_url": "./availability.html",
+        "is_read": true,
+        "created_at": "20/03/2026 19:05"
+      }
     ]
   },
   "profile": {
-    "name": "Lucas Ferreira",
+    "full_name": "Lucas Ferreira",
     "email": "entregador@foxdelivery.com.br",
     "phone": "(11) 98888-3344",
-    "mode": "Moto",
-    "city": "São Paulo",
-    "bankAccount": "Banco Fox 341 - 45897-2"
+    "modal": "Moto",
+    "city": "Sao Paulo",
+    "bank_name": "Banco Fox 341",
+    "bank_branch_number": "4589",
+    "bank_account_number": "88931-0",
+    "status": "ativo",
+    "status_type": "success",
+    "last_login_at": "21/03/2026 09:04",
+    "documents_status": "em analise",
+    "documents_status_type": "warning"
   }
 }

@@ -1,18 +1,33 @@
 {
   "dashboard": {
     "storeName": "Fox Burgers Centro",
-    "heroTitle": "Acompanhe pedidos, catálogo e desempenho da sua loja em um único painel.",
-    "heroLead": "A operação parceira da Fox Delivery concentra pedidos, catálogo, repasses, suporte e desempenho em uma rotina mais clara para a loja.",
+    "heroTitle": "Acompanhe pedidos, catalogo e desempenho da sua loja em um unico painel.",
+    "heroLead": "A operacao parceira da Fox Delivery concentra pedidos, catalogo, repasses, suporte e desempenho em uma rotina mais clara para a loja.",
     "summary": [
-      { "label": "Pedidos concluídos hoje", "value": "37" },
+      { "label": "Pedidos concluidos hoje", "value": "37" },
       { "label": "Faturamento bruto do dia", "value": "R$ 4.820" },
-      { "label": "Nota média da loja", "value": "4,8" }
+      { "label": "Nota media da loja", "value": "4,8" }
     ],
     "metrics": [
-      { "label": "tempo médio de preparo", "value": "12 min" },
+      { "label": "tempo medio de preparo", "value": "12 min" },
       { "label": "taxa de aceite do dia", "value": "96%" },
-      { "label": "itens ativos no catálogo", "value": "184" },
-      { "label": "ticket médio do dia", "value": "R$ 91" }
+      { "label": "itens ativos no catalogo", "value": "184" },
+      { "label": "ticket medio do dia", "value": "R$ 91" }
+    ],
+    "orders": [
+      { "id": "#FD-10482", "customer": "Ana Souza", "driver_name": "sem atribuicao", "status": "aguardando aceite", "statusType": "warning" },
+      { "id": "#FD-10479", "customer": "Paulo Lima", "driver_name": "Lucas Ferreira", "status": "em preparo", "statusType": "success" },
+      { "id": "#FD-10471", "customer": "Julia Martins", "driver_name": "Daniela Matos", "status": "pronto para retirada", "statusType": "warning" }
+    ],
+    "top_products": [
+      { "name": "Hamburguer Fox Prime", "category": "Restaurante", "sold_count": 84, "status": "ativo", "status_type": "success" },
+      { "name": "Combo mercado essencial", "category": "Mercado", "sold_count": 62, "status": "ativo", "status_type": "success" },
+      { "name": "Kit farmacia rapida", "category": "Farmacia", "sold_count": 37, "status": "estoque baixo", "status_type": "warning" }
+    ],
+    "health": [
+      { "title": "Estoque critico", "text": "2 itens precisam de reposicao ate o proximo turno." },
+      { "title": "Janela de almoco", "text": "Turno com maior volume entre 11h30 e 13h30." },
+      { "title": "Atendimento", "text": "Nenhum chamado sem resposta no momento." }
     ]
   },
   "profile": {
@@ -42,10 +57,10 @@
       "email": "contato@foxburgers.com.br",
       "phone": "(11) 4000-2244",
       "status": "active",
-      "city": "São Paulo",
+      "city": "Sao Paulo",
       "state": "SP",
       "country": "Brasil",
-      "description": "Loja focada em sanduíches, combos e conveniência com alta velocidade de preparo e janela estendida de atendimento."
+      "description": "Loja focada em sanduiches, combos e conveniencia com alta velocidade de preparo e janela estendida de atendimento."
     },
     "hours": [
       { "weekday": 0, "opens_at": "11:00", "closes_at": "20:00", "is_active": true },
@@ -60,7 +75,7 @@
       {
         "id": "doc-001",
         "document_type": "cnpj",
-        "label": "Cartão CNPJ",
+        "label": "Cartao CNPJ",
         "file_name": "cartao-cnpj.pdf",
         "storage_path": "/documents/fox-burgers/cartao-cnpj.pdf",
         "status": "approved",
@@ -76,13 +91,13 @@
       { "id": "44444444-4444-4444-8444-444444444444", "slug": "restaurantes", "name": "Restaurante" },
       { "id": "55555555-5555-4555-8555-555555555555", "slug": "mercado", "name": "Mercado" },
       { "id": "66666666-6666-4666-8666-666666666666", "slug": "farmacia", "name": "Farmacia" },
-      { "id": "77777777-7777-4777-8777-777777777777", "slug": "conveniencia", "name": "Conveniencia" }
+      { "id": "77777777-7777-4777-8777-777777777777", "slug": "conveniencia", "name": "Conveniência" }
     ],
     "products": [
       {
         "id": "88888888-8888-4888-8888-888888888888",
-        "name": "Hambúrguer Fox Prime",
-        "description": "Sanduíche premium com pão brioche, carne artesanal, queijo e molho da casa.",
+        "name": "Hamburguer Fox Prime",
+        "description": "Sanduiche premium com pao brioche, carne artesanal, queijo e molho da casa.",
         "sku": "FOX-BURGER-001",
         "price": "R$ 34,90",
         "base_price": 34.9,
@@ -99,7 +114,7 @@
       {
         "id": "99999999-9999-4999-8999-999999999999",
         "name": "Combo mercado essencial",
-        "description": "Seleção de itens de mercado com alta rotatividade e entrega rápida.",
+        "description": "Selecao de itens de mercado com alta rotatividade e entrega rapida.",
         "sku": "FOX-MERCADO-010",
         "price": "R$ 59,90",
         "base_price": 59.9,
@@ -115,14 +130,14 @@
       },
       {
         "id": "aaaaaaaa-9999-4999-8999-999999999999",
-        "name": "Kit farmácia rápida",
-        "description": "Itens essenciais de farmácia com foco em velocidade e praticidade.",
+        "name": "Kit farmacia rapida",
+        "description": "Itens essenciais de farmacia com foco em velocidade e praticidade.",
         "sku": "FOX-FARMA-021",
         "price": "R$ 28,70",
         "base_price": 28.7,
         "currency": "BRL",
         "status": "active",
-        "category": "Farmácia",
+        "category": "Farmacia",
         "category_slug": "farmacia",
         "stock_quantity": 4,
         "min_stock_quantity": 12,
@@ -132,8 +147,8 @@
       },
       {
         "id": "bbbbbbbb-9999-4999-8999-999999999999",
-        "name": "Água 500ml",
-        "description": "Item de conveniência com giro alto e reposição recorrente.",
+        "name": "Agua 500ml",
+        "description": "Item de conveniencia com giro alto e reposicao recorrente.",
         "sku": "FOX-CONV-100",
         "price": "R$ 5,50",
         "base_price": 5.5,
@@ -158,44 +173,156 @@
   "orders": [
     { "id": "#FD-10482", "order_id": "mock-order-10482", "customer": "Ana Souza", "status": "aguardando aceite", "status_key": "pending_acceptance", "statusType": "warning", "sla": "4 min", "value": "R$ 78,90", "action": "Aceitar", "driver_name": "sem atribuicao" },
     { "id": "#FD-10479", "order_id": "mock-order-10479", "customer": "Paulo Lima", "status": "em preparo", "status_key": "preparing", "statusType": "success", "sla": "10 min", "value": "R$ 54,20", "action": "Atualizar", "driver_name": "Lucas Ferreira" },
-    { "id": "#FD-10471", "order_id": "mock-order-10471", "customer": "Júlia Martins", "status": "pronto para retirada", "status_key": "ready_for_pickup", "statusType": "warning", "sla": "2 min", "value": "R$ 31,00", "action": "Sinalizar coleta", "driver_name": "Daniela Matos" },
-    { "id": "#FD-10455", "order_id": "mock-order-10455", "customer": "Carlos Vieira", "status": "concluído", "status_key": "completed", "statusType": "success", "sla": "entregue", "value": "R$ 92,40", "action": "Ver detalhes", "driver_name": "Lucas Ferreira" }
+    { "id": "#FD-10471", "order_id": "mock-order-10471", "customer": "Julia Martins", "status": "pronto para retirada", "status_key": "ready_for_pickup", "statusType": "warning", "sla": "2 min", "value": "R$ 31,00", "action": "Sinalizar coleta", "driver_name": "Daniela Matos" },
+    { "id": "#FD-10455", "order_id": "mock-order-10455", "customer": "Carlos Vieira", "status": "concluido", "status_key": "completed", "statusType": "success", "sla": "entregue", "value": "R$ 92,40", "action": "Ver detalhes", "driver_name": "Lucas Ferreira" }
   ],
   "finance": {
     "balance": "R$ 18.420",
-    "balanceNote": "Faturamento bruto dos últimos 30 dias consolidado pela operação da loja.",
+    "balanceNote": "Faturamento bruto dos ultimos 30 dias consolidado pela operacao da loja.",
     "stats": [
       { "label": "repasses previstos nesta semana", "value": "R$ 8.460" },
-      { "label": "taxas da plataforma no período", "value": "R$ 1.184" },
+      { "label": "taxas da plataforma no periodo", "value": "R$ 1.184" },
       { "label": "ajustes pendentes", "value": "2" }
+    ],
+    "payouts": [
+      { "date": "22/03/2026", "title": "Repasse semanal", "text": "Ciclo consolidado de pedidos de segunda a domingo.", "amount": "R$ 4.280", "status": "agendado", "status_type": "warning" },
+      { "date": "15/03/2026", "title": "Repasse semanal", "text": "Credito confirmado na conta da loja.", "amount": "R$ 4.180", "status": "concluido", "status_type": "success" }
+    ],
+    "bank_account": {
+      "bank_name": "Banco Fox 341",
+      "branch_number": "4589",
+      "account_number": "45218-3",
+      "status": "validada",
+      "status_type": "success"
+    },
+    "transactions": [
+      { "date": "21/03/2026", "description": "Pedidos liquidados do dia", "type": "credito", "status": "processado", "status_type": "success", "value": "R$ 2.140" },
+      { "date": "20/03/2026", "description": "Taxa da plataforma", "type": "debito", "status": "processado", "status_type": "warning", "value": "R$ 248" }
     ]
   },
   "reports": {
     "cards": [
-      { "label": "faturamento bruto nos últimos 30 dias", "value": "R$ 18.420" },
-      { "label": "pedidos concluídos no período", "value": "214" },
-      { "label": "ticket médio consolidado", "value": "R$ 86" },
-      { "label": "taxa de cancelamento da operação", "value": "3,7%" }
+      { "label": "faturamento bruto nos ultimos 30 dias", "value": "R$ 18.420" },
+      { "label": "pedidos concluidos no periodo", "value": "214" },
+      { "label": "ticket medio consolidado", "value": "R$ 86" },
+      { "label": "taxa de cancelamento da operacao", "value": "3,7%" }
     ]
   },
   "messages": {
-    "threads": [
-      { "title": "Operação Fox Delivery", "status": "aberto", "statusType": "success", "summary": "Atualização do SLA do turno do almoço e validação de horário de pico.", "time": "há 12 min" },
-      { "title": "Financeiro", "status": "aguardando", "statusType": "warning", "summary": "Conferência do repasse semanal e ajuste em taxa de campanha.", "time": "há 1 h" },
-      { "title": "Curadoria de catálogo", "status": "respondido", "statusType": "success", "summary": "Recomendações para revisar itens com baixa conversão na categoria.", "time": "ontem" }
+    "e1000000-0000-4000-8000-000000000001": [
+      { "id": "msg-1001", "direction": "incoming", "author": "Fox Delivery", "body": "Identificamos aumento no tempo medio de preparo no almoco. Podemos revisar a janela de retirada para manter o SLA.", "time": "21/03/2026 10:14" },
+      { "id": "msg-1002", "direction": "outgoing", "author": "Loja parceira", "body": "Podemos ampliar em cinco minutos no horario de pico e revisar a bancada do turno.", "time": "21/03/2026 10:23" },
+      { "id": "msg-1003", "direction": "incoming", "author": "Fox Delivery", "body": "Perfeito. A atualizacao entra ainda hoje e monitoraremos o impacto no almoco.", "time": "21/03/2026 10:28" }
+    ],
+    "e1000000-0000-4000-8000-000000000002": [
+      { "id": "msg-2001", "direction": "incoming", "author": "Fox Delivery", "body": "Estamos conferindo a divergencia informada no repasse da campanha de mercado.", "time": "20/03/2026 16:02" },
+      { "id": "msg-2002", "direction": "outgoing", "author": "Loja parceira", "body": "Enviei os comprovantes da promocao e do extrato consolidado para revisar o valor.", "time": "20/03/2026 16:18" }
     ]
   },
   "support": {
     "tickets": [
-      { "id": "#SUP-8432", "channel": "Operação", "status": "em andamento", "statusType": "warning", "summary": "Solicitação para revisar tempo estimado no horário de pico do almoço.", "meta": ["SLA 2h", "Atualizado há 18 min"] },
-      { "id": "#SUP-8397", "channel": "Financeiro", "status": "respondido", "statusType": "success", "summary": "Conferência de divergência no repasse da campanha de mercado da semana passada.", "meta": ["SLA 6h", "Atualizado ontem"] }
+      { "id": "#SUP-8432", "ticket_id": "e1000000-0000-4000-8000-000000000001", "channel": "Operacao", "priority": "alta", "status": "em andamento", "statusType": "warning", "summary": "Solicitacao para revisar tempo estimado no horario de pico do almoco.", "meta": ["SLA 2h", "Atualizado ha 18 min"], "last_message_at": "2026-03-21T10:28:00-03:00" },
+      { "id": "#SUP-8397", "ticket_id": "e1000000-0000-4000-8000-000000000002", "channel": "Financeiro", "priority": "media", "status": "respondido", "statusType": "success", "summary": "Conferencia de divergencia no repasse da campanha de mercado da semana passada.", "meta": ["SLA 6h", "Atualizado ontem"], "last_message_at": "2026-03-20T16:18:00-03:00" }
+    ]
+  },
+  "team": {
+    "summary": [
+      { "label": "membros ativos", "value": "2" },
+      { "label": "convites pendentes", "value": "1" },
+      { "label": "permissoes criticas", "value": "3" }
+    ],
+    "members": [
+      {
+        "id": "f1000000-0000-4000-8000-000000000001",
+        "full_name": "Marina Costa",
+        "email": "marina@foxburgers.com.br",
+        "phone": "(11) 97777-1100",
+        "role_slug": "manager",
+        "role_label": "Gestao da loja",
+        "status": "ativo",
+        "status_key": "active",
+        "status_type": "success",
+        "permissions": ["orders.view", "orders.update", "support.manage"],
+        "last_login_at": "21/03/2026 09:02"
+      },
+      {
+        "id": "f1000000-0000-4000-8000-000000000002",
+        "full_name": "Diego Prado",
+        "email": "diego@foxburgers.com.br",
+        "phone": "(11) 97777-2200",
+        "role_slug": "catalog",
+        "role_label": "Catalogo",
+        "status": "ativo",
+        "status_key": "active",
+        "status_type": "success",
+        "permissions": ["catalog.manage", "inventory.manage"],
+        "last_login_at": "20/03/2026 18:41"
+      },
+      {
+        "id": "f1000000-0000-4000-8000-000000000003",
+        "full_name": "Juliana Ramos",
+        "email": "juliana@foxburgers.com.br",
+        "phone": "(11) 97777-3300",
+        "role_slug": "finance",
+        "role_label": "Financeiro",
+        "status": "convite pendente",
+        "status_key": "invited",
+        "status_type": "warning",
+        "permissions": ["finance.view", "support.manage"],
+        "last_login_at": "-"
+      }
+    ]
+  },
+  "notifications": {
+    "summary": [
+      { "label": "nao lidas", "value": "2" },
+      { "label": "estoque critico", "value": "1" },
+      { "label": "financeiro", "value": "1" }
+    ],
+    "items": [
+      {
+        "id": "n1000000-0000-4000-8000-000000000001",
+        "title": "Estoque abaixo do minimo em 2 itens",
+        "context": "Catalogo",
+        "level": "atencao",
+        "level_type": "warning",
+        "body": "Kit farmacia rapida e Agua 500ml estao abaixo do limite configurado para a loja.",
+        "action_label": "Revisar estoque",
+        "action_url": "./inventory.html",
+        "is_read": false,
+        "created_at": "21/03/2026 10:12"
+      },
+      {
+        "id": "n1000000-0000-4000-8000-000000000002",
+        "title": "Repasse semanal agendado",
+        "context": "Financeiro",
+        "level": "informativo",
+        "level_type": "success",
+        "body": "O repasse do ciclo atual foi programado para o dia 22/03/2026.",
+        "action_label": "Ver financeiro",
+        "action_url": "./finance.html",
+        "is_read": false,
+        "created_at": "21/03/2026 09:35"
+      },
+      {
+        "id": "n1000000-0000-4000-8000-000000000003",
+        "title": "Aprovacao de documento concluida",
+        "context": "Loja",
+        "level": "ok",
+        "level_type": "success",
+        "body": "O Cartao CNPJ da loja foi validado sem pendencias.",
+        "action_label": "Ver loja",
+        "action_url": "./store.html",
+        "is_read": true,
+        "created_at": "20/03/2026 17:10"
+      }
     ]
   },
   "help": {
     "articles": [
       { "title": "Pedidos e SLA", "text": "Como aceitar pedidos, atualizar preparo, sinalizar coleta e tratar atrasos do turno." },
-      { "title": "Catálogo e estoque", "text": "Boas práticas para fotos, variações, itens indisponíveis e controle de estoque." },
-      { "title": "Financeiro e repasses", "text": "Leitura de extrato, agenda de repasses, taxas da plataforma e conferências." }
+      { "title": "Catalogo e estoque", "text": "Boas praticas para fotos, variacoes, itens indisponiveis e controle de estoque." },
+      { "title": "Financeiro e repasses", "text": "Leitura de extrato, agenda de repasses, taxas da plataforma e conferencias." }
     ]
   }
 }

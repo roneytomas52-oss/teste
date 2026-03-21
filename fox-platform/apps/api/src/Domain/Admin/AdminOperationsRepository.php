@@ -13,4 +13,12 @@ interface AdminOperationsRepository
     public function getPartnerApprovals(): array;
 
     public function getDriverApprovals(): array;
+
+    public function getFinance(): array;
+
+    public function getSupport(): array;
+
+    public function reviewPartnerApproval(string $partnerId, string $decision): array;
+
+    public function reviewDriverApproval(string $driverId, string $decision): array;
 }

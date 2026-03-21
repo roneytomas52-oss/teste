@@ -4,7 +4,7 @@
 
 Portal operacional do entregador.
 
-## Paginas entregues ate a Fase 7
+## Paginas entregues ate a Fase 10
 
 - `/login`
 - `/dashboard`
@@ -12,9 +12,10 @@ Portal operacional do entregador.
 - `/documents`
 - `/earnings`
 - `/availability`
+- `/notifications`
 - `/support`
 
 ## Proximas areas previstas
 
-- `/notifications`
 - `/history`
+- `/wallet`

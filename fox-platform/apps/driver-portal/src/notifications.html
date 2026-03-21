@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Driver Portal | Notificacoes</title>
+    <link rel="stylesheet" href="./driver-portal.css" />
+  </head>
+  <body data-fx-screen="notifications">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Driver</strong>
+              <div class="fx-copy-sm">Portal do entregador</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Alertas de documentos, ganhos e operacao em uma fila unica para o entregador.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./earnings.html">Ganhos</a>
+          <a class="fx-sidebar-link" href="./documents.html">Documentos</a>
+          <a class="fx-sidebar-link" href="./availability.html">Disponibilidade</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link is-active" href="./notifications.html">Notificacoes</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Notificacoes</div>
+            <h1 class="fx-title-sm">Alertas do entregador</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="./support.html">Abrir suporte</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-driver-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Acompanhamento da rotina</div>
+                <h2 class="fx-title-md">Receba alertas de repasse, documentos, operacao e janela ativa em um so lugar.</h2>
+                <p class="fx-copy">Use esta fila para acompanhar o que exige resposta imediata e marcar como lido o que ja foi tratado.</p>
+              </div>
+            </section>
+
+            <section class="fx-compact-metrics" id="fx-driver-notifications-summary"></section>
+            <p class="fx-note" id="fx-driver-notifications-feedback" hidden></p>
+            <section class="fx-notification-list" id="fx-driver-notifications-list"></section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/driver-app.js"></script>
+  </body>
+</html>

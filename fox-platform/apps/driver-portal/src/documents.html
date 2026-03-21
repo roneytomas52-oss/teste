@@ -25,6 +25,7 @@
           <a class="fx-sidebar-link is-active" href="./documents.html">Documentos</a>
           <a class="fx-sidebar-link" href="./availability.html">Disponibilidade</a>
           <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
           <a class="fx-sidebar-link" href="./support.html">Suporte</a>
           <a class="fx-sidebar-link" href="./login.html">Sair</a>
         </nav>
@@ -49,56 +50,23 @@
               </div>
             </section>
 
-            <section class="fx-doc-grid">
-              <article class="fx-doc-card">
-                <div class="fx-card-header">
-                  <h3 class="fx-title-sm">Documento de identidade</h3>
-                  <span class="fx-status success">validado</span>
-                </div>
-                <p class="fx-copy-sm">Documento principal conferido e aprovado pela equipe.</p>
-              </article>
-              <article class="fx-doc-card">
-                <div class="fx-card-header">
-                  <h3 class="fx-title-sm">CNH</h3>
-                  <span class="fx-status success">validada</span>
-                </div>
-                <p class="fx-copy-sm">Habilitacao com categoria compatível e vigencia ate 2027.</p>
-              </article>
-              <article class="fx-doc-card">
-                <div class="fx-card-header">
-                  <h3 class="fx-title-sm">Documento do veiculo</h3>
-                  <span class="fx-status warning">revisao futura</span>
-                </div>
-                <p class="fx-copy-sm">Arquivo aceito, mas programado para reconferencia no proximo ciclo.</p>
-              </article>
-            </section>
+            <section class="fx-compact-metrics" id="fx-driver-documents-summary"></section>
+
+            <section class="fx-doc-grid" id="fx-driver-documents-cards"></section>
 
             <section class="fx-driver-grid">
               <article class="fx-driver-card">
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Checklist documental</h3>
                 </div>
-                <ul class="fx-list">
-                  <li>Documento de identidade aprovado.</li>
-                  <li>CNH validada para a modalidade ativa.</li>
-                  <li>Foto de perfil enviada e compatível com o cadastro.</li>
-                </ul>
+                <ul class="fx-list" id="fx-driver-documents-checklist"></ul>
               </article>
 
               <article class="fx-driver-card">
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Pendencias e proximos passos</h3>
                 </div>
-                <div class="fx-doc-list">
-                  <div class="fx-doc-item">
-                    <strong>Placa da moto</strong>
-                    <p class="fx-copy-sm">Conferir se a placa cadastrada permanece a mesma do documento enviado.</p>
-                  </div>
-                  <div class="fx-doc-item">
-                    <strong>Conta de recebimento</strong>
-                    <p class="fx-copy-sm">Validar comprovante bancario para liberar repasses automatizados.</p>
-                  </div>
-                </div>
+                <div class="fx-doc-list" id="fx-driver-documents-actions"></div>
               </article>
             </section>
           </div>

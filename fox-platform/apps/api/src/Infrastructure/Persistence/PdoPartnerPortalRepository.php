@@ -222,6 +222,100 @@ class PdoPartnerPortalRepository implements PartnerPortalRepository
         ];
     }
 
+    public function getTeam(string $userId): array
+    {
+        [, $storeId] = $this->resolveStoreIdentity($userId);
+        $members = $this->loadTeamMembers($storeId);
+
+        return [
+            'summary' => [
+                ['label' => 'membros ativos', 'value' => (string) count(array_filter($members, static fn (array $member) => $member['status_key'] === 'active'))],
+                ['label' => 'convites pendentes', 'value' => (string) count(array_filter($members, static fn (array $member) => $member['status_key'] === 'invited'))],
+                ['label' => 'perfis configurados', 'value' => (string) count(array_unique(array_map(static fn (array $member) => $member['role_label'], $members)))],
+            ],
+            'members' => $members,
+        ];
+    }
+
+    public function createTeamMember(string $userId, array $data): array
+    {
+        [, $storeId] = $this->resolveStoreIdentity($userId);
+
+        $statement = $this->pdo->prepare(
+            "INSERT INTO store_team_members (
+                id, store_id, full_name, email, phone, role_slug, status, permissions
+             ) VALUES (
+                gen_random_uuid(), :store_id, :full_name, :email, :phone, :role_slug, 'invited', :permissions::jsonb
+             )"
+        );
+        $statement->execute([
+            'store_id' => $storeId,
+            'full_name' => $data['full_name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'role_slug' => $data['role_slug'],
+            'permissions' => json_encode($data['permissions'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        ]);
+
+        return $this->getTeam($userId);
+    }
+
+    public function updateTeamMember(string $userId, string $memberId, array $data): array
+    {
+        [, $storeId] = $this->resolveStoreIdentity($userId);
+
+        $statement = $this->pdo->prepare(
+            "UPDATE store_team_members
+             SET full_name = :full_name,
+                 email = :email,
+                 phone = :phone,
+                 role_slug = :role_slug,
+                 permissions = :permissions::jsonb,
+                 updated_at = NOW()
+             WHERE id = :member_id
+               AND store_id = :store_id"
+        );
+        $statement->execute([
+            'full_name' => $data['full_name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'role_slug' => $data['role_slug'],
+            'permissions' => json_encode($data['permissions'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'member_id' => $memberId,
+            'store_id' => $storeId,
+        ]);
+
+        if ($statement->rowCount() === 0) {
+            throw new ApiException(404, 'TEAM_MEMBER_NOT_FOUND', 'Membro da equipe nao encontrado para esta loja.');
+        }
+
+        return $this->getTeam($userId);
+    }
+
+    public function updateTeamMemberStatus(string $userId, string $memberId, array $data): array
+    {
+        [, $storeId] = $this->resolveStoreIdentity($userId);
+
+        $statement = $this->pdo->prepare(
+            "UPDATE store_team_members
+             SET status = :status,
+                 updated_at = NOW()
+             WHERE id = :member_id
+               AND store_id = :store_id"
+        );
+        $statement->execute([
+            'status' => $data['status'],
+            'member_id' => $memberId,
+            'store_id' => $storeId,
+        ]);
+
+        if ($statement->rowCount() === 0) {
+            throw new ApiException(404, 'TEAM_MEMBER_NOT_FOUND', 'Membro da equipe nao encontrado para esta loja.');
+        }
+
+        return $this->getTeam($userId);
+    }
+
     private function resolveStoreIdentity(string $userId): array
     {
         $statement = $this->pdo->prepare(
@@ -299,5 +393,74 @@ class PdoPartnerPortalRepository implements PartnerPortalRepository
             ],
             $statement->fetchAll() ?: []
         );
+    }
+
+    private function loadTeamMembers(string $storeId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT id, full_name, email, phone, role_slug, status, permissions, last_login_at, created_at
+             FROM store_team_members
+             WHERE store_id = :store_id
+             ORDER BY created_at DESC, full_name ASC"
+        );
+        $statement->execute(['store_id' => $storeId]);
+
+        return array_map(function (array $row): array {
+            $permissions = json_decode((string) $row['permissions'], true) ?: [];
+
+            return [
+                'id' => $row['id'],
+                'full_name' => $row['full_name'],
+                'email' => $row['email'],
+                'phone' => $row['phone'],
+                'role_slug' => $row['role_slug'],
+                'role_label' => $this->normalizeTeamRoleLabel((string) $row['role_slug']),
+                'status' => $this->normalizeTeamStatusLabel((string) $row['status']),
+                'status_key' => $row['status'],
+                'status_type' => $this->normalizeTeamStatusType((string) $row['status']),
+                'permissions' => $permissions,
+                'last_login_at' => $row['last_login_at'] ? $this->formatDateTime((string) $row['last_login_at']) : '-',
+                'created_at' => $this->formatDateTime((string) $row['created_at']),
+            ];
+        }, $statement->fetchAll() ?: []);
+    }
+
+    private function normalizeTeamRoleLabel(string $role): string
+    {
+        return match ($role) {
+            'manager' => 'Gerente da loja',
+            'catalog' => 'Catalogo e estoque',
+            'operations' => 'Operacao',
+            'finance' => 'Financeiro',
+            'support' => 'Suporte',
+            default => 'Equipe',
+        };
+    }
+
+    private function normalizeTeamStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'active' => 'ativo',
+            'suspended' => 'suspenso',
+            default => 'convite pendente',
+        };
+    }
+
+    private function normalizeTeamStatusType(string $status): string
+    {
+        return match ($status) {
+            'active' => 'success',
+            'suspended' => 'danger',
+            default => 'warning',
+        };
+    }
+
+    private function formatDateTime(?string $value): string
+    {
+        if (!$value) {
+            return '-';
+        }
+
+        return date('d/m/Y H:i', strtotime($value));
     }
 }

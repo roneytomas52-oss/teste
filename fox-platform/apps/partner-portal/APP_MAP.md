@@ -4,7 +4,7 @@
 
 Portal operacional da loja parceira.
 
-## Paginas entregues ate a Fase 7
+## Paginas entregues ate a Fase 10
 
 - `/login`
 - `/dashboard`
@@ -16,11 +16,13 @@ Portal operacional da loja parceira.
 - `/store`
 - `/schedules`
 - `/profile`
+- `/team`
 - `/messages`
+- `/notifications`
 - `/support`
 - `/help`
 
 ## Proximas areas previstas
 
-- `/team`
-- `/notifications`
+- `/coupons`
+- `/campaigns`

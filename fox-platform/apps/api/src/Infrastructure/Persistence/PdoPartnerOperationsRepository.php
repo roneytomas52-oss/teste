@@ -74,6 +74,216 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         ];
     }
 
+    public function getFinance(string $userId): array
+    {
+        $store = $this->resolveStore($userId);
+        $snapshot = $this->loadFinanceSnapshot($store['id']);
+        $payouts = $this->loadPayoutsByStore($store['id']);
+        $bankAccount = $this->loadBankAccountByStore($store['id']);
+        $transactions = $this->loadTransactionsByStore($store['id']);
+
+        return [
+            'store' => [
+                'id' => $store['id'],
+                'trade_name' => $store['trade_name'],
+            ],
+            'balance' => $this->formatMoney($snapshot['available_balance']),
+            'balanceNote' => 'Saldo consolidado com base em receitas processadas, taxas da plataforma e repasses ja registrados para a loja.',
+            'stats' => [
+                ['label' => 'previsto para o proximo ciclo', 'value' => $this->formatMoney($payouts[0]['amount_raw'] ?? 0)],
+                ['label' => 'taxas e comissoes do periodo', 'value' => $this->formatMoney($snapshot['fees_total'])],
+                ['label' => 'ajustes pendentes', 'value' => (string) $snapshot['pending_adjustments']],
+            ],
+            'payouts' => array_map(fn (array $item) => [
+                'date' => $this->formatDate($item['scheduled_for']),
+                'title' => sprintf('Repasse referente ao periodo %s a %s.', $this->formatShortDate($item['period_start']), $this->formatShortDate($item['period_end'])),
+                'text' => $item['note'] ?: 'Repasse consolidado a partir dos pedidos concluidos e taxas do ciclo.',
+                'status' => $this->normalizePayoutStatusLabel($item['status']),
+                'status_type' => $this->normalizePayoutStatusType($item['status']),
+                'amount' => $this->formatMoney($item['amount_raw']),
+            ], $payouts),
+            'bank_account' => [
+                'bank_name' => $bankAccount['bank_name'] ?? '-',
+                'branch_number' => $bankAccount['branch_number'] ?? '-',
+                'account_number' => $bankAccount['account_number'] ?? '-',
+                'status' => $this->normalizeBankAccountStatusLabel($bankAccount['status'] ?? 'pending'),
+                'status_type' => $this->normalizeBankAccountStatusType($bankAccount['status'] ?? 'pending'),
+            ],
+            'transactions' => $transactions,
+        ];
+    }
+
+    public function getSupport(string $userId): array
+    {
+        $store = $this->resolveStore($userId);
+
+        return [
+            'tickets' => $this->loadSupportTicketsByStore($store['id']),
+        ];
+    }
+
+    public function createSupportTicket(string $userId, array $data): array
+    {
+        $store = $this->resolveStore($userId);
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $ticketInsert = $this->pdo->prepare(
+                "INSERT INTO support_tickets (
+                    id, scope, partner_account_id, store_id, created_by_user_id, channel, assigned_team, priority, status, subject, description, last_message_at
+                 ) VALUES (
+                    gen_random_uuid(), 'partner', :partner_account_id, :store_id, :created_by_user_id, :channel, :assigned_team, :priority, 'open', :subject, :description, NOW()
+                 )
+                 RETURNING id"
+            );
+            $ticketInsert->execute([
+                'partner_account_id' => $store['partner_account_id'],
+                'store_id' => $store['id'],
+                'created_by_user_id' => $userId,
+                'channel' => strtolower($data['channel']),
+                'assigned_team' => $this->resolveSupportTeam($data['channel']),
+                'priority' => $data['priority'],
+                'subject' => $data['subject'],
+                'description' => $data['description'],
+            ]);
+            $ticketId = (string) $ticketInsert->fetchColumn();
+
+            $messageInsert = $this->pdo->prepare(
+                "INSERT INTO support_messages (
+                    id, ticket_id, sender_user_id, sender_role, body
+                 ) VALUES (
+                    gen_random_uuid(), :ticket_id, :sender_user_id, 'partner_owner', :body
+                 )"
+            );
+            $messageInsert->execute([
+                'ticket_id' => $ticketId,
+                'sender_user_id' => $userId,
+                'body' => $data['description'],
+            ]);
+
+            $this->pdo->commit();
+        } catch (\Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
+
+        return $this->getSupport($userId);
+    }
+
+    public function getSupportThread(string $userId, string $ticketId): array
+    {
+        $store = $this->resolveStore($userId);
+        $ticket = $this->findSupportTicketByStore($store['id'], $ticketId);
+
+        if (!$ticket) {
+            throw new ApiException(404, 'SUPPORT_TICKET_NOT_FOUND', 'Chamado nao encontrado para esta loja.');
+        }
+
+        return [
+            'ticket' => $this->formatSupportTicket($ticket),
+            'messages' => $this->loadSupportThreadMessages((string) $ticket['id'], 'partner_owner'),
+        ];
+    }
+
+    public function replySupportThread(string $userId, string $ticketId, array $data): array
+    {
+        $store = $this->resolveStore($userId);
+        $ticket = $this->findSupportTicketByStore($store['id'], $ticketId);
+
+        if (!$ticket) {
+            throw new ApiException(404, 'SUPPORT_TICKET_NOT_FOUND', 'Chamado nao encontrado para esta loja.');
+        }
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $messageInsert = $this->pdo->prepare(
+                "INSERT INTO support_messages (
+                    id, ticket_id, sender_user_id, sender_role, body
+                 ) VALUES (
+                    gen_random_uuid(), :ticket_id, :sender_user_id, 'partner_owner', :body
+                 )"
+            );
+            $messageInsert->execute([
+                'ticket_id' => $ticket['id'],
+                'sender_user_id' => $userId,
+                'body' => $data['body'],
+            ]);
+
+            $ticketUpdate = $this->pdo->prepare(
+                "UPDATE support_tickets
+                 SET status = CASE WHEN status = 'resolved' THEN 'in_progress' ELSE status END,
+                     last_message_at = NOW(),
+                     updated_at = NOW()
+                 WHERE id = :ticket_id"
+            );
+            $ticketUpdate->execute([
+                'ticket_id' => $ticket['id'],
+            ]);
+
+            $this->pdo->commit();
+        } catch (\Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
+
+        return $this->getSupportThread($userId, $ticketId);
+    }
+
+    public function getNotifications(string $userId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT id, level, context, title, body, action_label, action_url, is_read, created_at
+             FROM notifications
+             WHERE scope = 'partner' AND user_id = :user_id
+             ORDER BY is_read ASC, created_at DESC
+             LIMIT 30"
+        );
+        $statement->execute(['user_id' => $userId]);
+        $rows = $statement->fetchAll() ?: [];
+
+        return [
+            'summary' => [
+                [
+                    'label' => 'nao lidas',
+                    'value' => (string) count(array_filter($rows, static fn (array $row) => !(bool) $row['is_read'])),
+                ],
+                [
+                    'label' => 'exigem atencao',
+                    'value' => (string) count(array_filter($rows, static fn (array $row) => in_array($row['level'], ['warning', 'danger'], true))),
+                ],
+                [
+                    'label' => 'total recente',
+                    'value' => (string) count($rows),
+                ],
+            ],
+            'items' => array_map(fn (array $row) => $this->formatNotificationRow($row), $rows),
+        ];
+    }
+
+    public function markNotificationRead(string $userId, string $notificationId): array
+    {
+        $statement = $this->pdo->prepare(
+            "UPDATE notifications
+             SET is_read = TRUE,
+                 read_at = NOW()
+             WHERE id = :notification_id
+               AND scope = 'partner'
+               AND user_id = :user_id"
+        );
+        $statement->execute([
+            'notification_id' => $notificationId,
+            'user_id' => $userId,
+        ]);
+
+        if ($statement->rowCount() === 0) {
+            throw new ApiException(404, 'NOTIFICATION_NOT_FOUND', 'Notificacao nao encontrada para esta conta.');
+        }
+
+        return $this->getNotifications($userId);
+    }
+
     public function updateOrderStatus(string $userId, string $orderId, array $data): array
     {
         $store = $this->resolveStore($userId);
@@ -146,7 +356,7 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
     private function resolveStore(string $userId): array
     {
         $statement = $this->pdo->prepare(
-            "SELECT s.id, s.trade_name, s.status, s.city, s.state
+            "SELECT s.id, s.trade_name, s.status, s.city, s.state, s.partner_account_id
              FROM partner_accounts ap
              INNER JOIN stores s ON s.partner_account_id = ap.id
              WHERE ap.owner_user_id = :user_id
@@ -160,6 +370,20 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         }
 
         return $store;
+    }
+
+    private function loadSupportTicketsByStore(string $storeId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT id, channel, priority, status, subject, assigned_team, created_at, last_message_at
+             FROM support_tickets
+             WHERE store_id = :store_id
+             ORDER BY last_message_at DESC, created_at DESC
+             LIMIT 20"
+        );
+        $statement->execute(['store_id' => $storeId]);
+
+        return array_map(fn (array $row) => $this->formatSupportTicket($row), $statement->fetchAll() ?: []);
     }
 
     private function loadTodayMetrics(string $storeId): array
@@ -191,6 +415,74 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         $statement->execute(['store_id' => $storeId]);
 
         return $statement->fetch() ?: [];
+    }
+
+    private function loadFinanceSnapshot(string $storeId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT
+                COALESCE(SUM(CASE WHEN direction = 'credit' THEN amount ELSE -amount END), 0) AS available_balance,
+                COALESCE(SUM(amount) FILTER (WHERE transaction_type = 'platform_fee'), 0) AS fees_total,
+                COUNT(*) FILTER (WHERE transaction_type IN ('adjustment', 'refund') AND status = 'under_review') AS pending_adjustments
+             FROM wallet_transactions
+             WHERE store_id = :store_id"
+        );
+        $statement->execute(['store_id' => $storeId]);
+
+        return $statement->fetch() ?: [];
+    }
+
+    private function loadPayoutsByStore(string $storeId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT period_start, period_end, scheduled_for, amount AS amount_raw, status, note
+             FROM payout_requests
+             WHERE store_id = :store_id
+             ORDER BY scheduled_for ASC
+             LIMIT 4"
+        );
+        $statement->execute(['store_id' => $storeId]);
+
+        return $statement->fetchAll() ?: [];
+    }
+
+    private function loadBankAccountByStore(string $storeId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT bank_name, branch_number, account_number, status
+             FROM store_bank_accounts
+             WHERE store_id = :store_id
+             ORDER BY updated_at DESC
+             LIMIT 1"
+        );
+        $statement->execute(['store_id' => $storeId]);
+
+        return $statement->fetch() ?: [];
+    }
+
+    private function loadTransactionsByStore(string $storeId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT occurred_at, description, transaction_type, status, amount, direction
+             FROM wallet_transactions
+             WHERE store_id = :store_id
+             ORDER BY occurred_at DESC
+             LIMIT 12"
+        );
+        $statement->execute(['store_id' => $storeId]);
+
+        return array_map(fn (array $row) => [
+            'date' => $this->formatDate($row['occurred_at']),
+            'description' => $row['description'],
+            'type' => $this->normalizeTransactionTypeLabel($row['transaction_type']),
+            'status' => $this->normalizeTransactionStatusLabel($row['status']),
+            'status_type' => $this->normalizeTransactionStatusType($row['status']),
+            'value' => sprintf(
+                '%s %s',
+                $row['direction'] === 'credit' ? '+' : '-',
+                $this->formatMoney($row['amount'])
+            ),
+        ], $statement->fetchAll() ?: []);
     }
 
     private function loadTopProducts(string $storeId, int $limit): array
@@ -256,6 +548,50 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         return $statement->fetch();
     }
 
+    private function findSupportTicketByStore(string $storeId, string $ticketId): array|false
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT id, channel, priority, status, subject, assigned_team, created_at, last_message_at
+             FROM support_tickets
+             WHERE store_id = :store_id
+               AND id = :ticket_id
+             LIMIT 1"
+        );
+        $statement->execute([
+            'store_id' => $storeId,
+            'ticket_id' => $ticketId,
+        ]);
+
+        return $statement->fetch();
+    }
+
+    private function loadSupportThreadMessages(string $ticketId, string $outgoingRole): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT sm.id, sm.sender_role, sm.body, sm.created_at, u.full_name
+             FROM support_messages sm
+             LEFT JOIN users u ON u.id = sm.sender_user_id
+             WHERE sm.ticket_id = :ticket_id
+             ORDER BY sm.created_at ASC"
+        );
+        $statement->execute(['ticket_id' => $ticketId]);
+
+        return array_map(function (array $row) use ($outgoingRole): array {
+            $direction = $row['sender_role'] === $outgoingRole ? 'outgoing' : 'incoming';
+
+            return [
+                'id' => $row['id'],
+                'direction' => $direction,
+                'author' => $direction === 'outgoing'
+                    ? 'Loja parceira'
+                    : ($row['full_name'] ?: 'Fox Delivery'),
+                'body' => $row['body'],
+                'time' => $this->formatDateTime((string) $row['created_at']),
+                'role' => $row['sender_role'],
+            ];
+        }, $statement->fetchAll() ?: []);
+    }
+
     private function formatOrderRow(array $row): array
     {
         [$statusLabel, $statusType, $action] = match ($row['status']) {
@@ -309,6 +645,221 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
             'suspended' => 'suspenso',
             default => $status,
         };
+    }
+
+    private function normalizePayoutStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'scheduled' => 'previsto',
+            'processing' => 'em processamento',
+            'completed' => 'concluido',
+            'blocked' => 'bloqueado',
+            default => 'em analise',
+        };
+    }
+
+    private function normalizeSupportChannelLabel(string $channel): string
+    {
+        return match ($channel) {
+            'operations' => 'Operacao',
+            'finance' => 'Financeiro',
+            'catalog' => 'Catalogo',
+            'commercial' => 'Comercial',
+            default => ucfirst($channel),
+        };
+    }
+
+    private function normalizeSupportPriorityLabel(string $priority): string
+    {
+        return match ($priority) {
+            'critical' => 'critica',
+            'high' => 'alta',
+            default => 'normal',
+        };
+    }
+
+    private function normalizeSupportStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'open' => 'aberto',
+            'in_progress' => 'em andamento',
+            'answered' => 'respondido',
+            'resolved' => 'concluido',
+            default => 'em analise',
+        };
+    }
+
+    private function normalizeSupportStatusType(string $status): string
+    {
+        return match ($status) {
+            'resolved' => 'success',
+            'in_progress' => 'warning',
+            'answered' => 'success',
+            default => 'warning',
+        };
+    }
+
+    private function formatSupportTicket(array $row): array
+    {
+        return [
+            'id' => '#SUP-' . strtoupper(substr(str_replace('-', '', (string) $row['id']), 0, 6)),
+            'ticket_id' => $row['id'],
+            'channel' => $this->normalizeSupportChannelLabel((string) $row['channel']),
+            'status' => $this->normalizeSupportStatusLabel((string) $row['status']),
+            'statusType' => $this->normalizeSupportStatusType((string) $row['status']),
+            'summary' => $row['subject'],
+            'priority' => $this->normalizeSupportPriorityLabel((string) $row['priority']),
+            'assigned_team' => $row['assigned_team'] ?: 'operacao',
+            'meta' => [
+                'Prioridade ' . $this->normalizeSupportPriorityLabel((string) $row['priority']),
+                'Atualizado em ' . $this->formatDate((string) $row['last_message_at']),
+            ],
+            'created_at' => $row['created_at'] ?? null,
+            'last_message_at' => $row['last_message_at'] ?? null,
+        ];
+    }
+
+    private function formatNotificationRow(array $row): array
+    {
+        return [
+            'id' => $row['id'],
+            'title' => $row['title'],
+            'body' => $row['body'],
+            'level' => $this->normalizeNotificationLevelLabel((string) $row['level']),
+            'level_type' => $this->normalizeNotificationLevelType((string) $row['level']),
+            'context' => $this->normalizeNotificationContextLabel((string) $row['context']),
+            'action_label' => $row['action_label'],
+            'action_url' => $row['action_url'],
+            'is_read' => filter_var($row['is_read'], FILTER_VALIDATE_BOOL),
+            'created_at' => $this->formatDateTime((string) $row['created_at']),
+        ];
+    }
+
+    private function normalizeNotificationLevelLabel(string $level): string
+    {
+        return match ($level) {
+            'success' => 'informacao confirmada',
+            'warning' => 'requer atencao',
+            'danger' => 'acao imediata',
+            default => 'informativo',
+        };
+    }
+
+    private function normalizeNotificationLevelType(string $level): string
+    {
+        return match ($level) {
+            'success' => 'success',
+            'warning' => 'warning',
+            'danger' => 'danger',
+            default => 'info',
+        };
+    }
+
+    private function normalizeNotificationContextLabel(string $context): string
+    {
+        return match ($context) {
+            'orders' => 'Pedidos',
+            'catalog' => 'Catalogo',
+            'finance' => 'Financeiro',
+            'team' => 'Equipe',
+            default => 'Operacao',
+        };
+    }
+
+    private function resolveSupportTeam(string $channel): string
+    {
+        return match (strtolower($channel)) {
+            'finance' => 'financeiro',
+            'catalog' => 'catalogo',
+            'commercial' => 'comercial',
+            default => 'operacao',
+        };
+    }
+
+    private function normalizePayoutStatusType(string $status): string
+    {
+        return match ($status) {
+            'completed' => 'success',
+            'blocked' => 'danger',
+            default => 'warning',
+        };
+    }
+
+    private function normalizeBankAccountStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'validated' => 'validada',
+            'rejected' => 'rejeitada',
+            default => 'em analise',
+        };
+    }
+
+    private function normalizeBankAccountStatusType(string $status): string
+    {
+        return match ($status) {
+            'validated' => 'success',
+            'rejected' => 'danger',
+            default => 'warning',
+        };
+    }
+
+    private function normalizeTransactionTypeLabel(string $type): string
+    {
+        return match ($type) {
+            'order_revenue' => 'credito operacional',
+            'platform_fee' => 'taxa da plataforma',
+            'payout' => 'repasse',
+            'adjustment' => 'ajuste',
+            'refund' => 'estorno',
+            default => $type,
+        };
+    }
+
+    private function normalizeTransactionStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'processed' => 'processado',
+            'scheduled' => 'agendado',
+            'sent' => 'enviado',
+            'under_review' => 'revisar',
+            default => $status,
+        };
+    }
+
+    private function normalizeTransactionStatusType(string $status): string
+    {
+        return match ($status) {
+            'processed', 'sent' => 'success',
+            'under_review' => 'danger',
+            default => 'warning',
+        };
+    }
+
+    private function formatDate(?string $value): string
+    {
+        if (!$value) {
+            return '-';
+        }
+
+        return date('d/m/Y', strtotime($value));
+    }
+
+    private function formatDateTime(?string $value): string
+    {
+        if (!$value) {
+            return '-';
+        }
+
+        return date('d/m/Y H:i', strtotime($value));
+    }
+
+    private function formatShortDate(?string $value): string
+    {
+        if (!$value) {
+            return '-';
+        }
+
+        return date('d/m', strtotime($value));
     }
 
     private function formatMoney(float|int|string|null $value): string

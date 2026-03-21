@@ -1,0 +1,50 @@
+{
+  "categories": [
+    {
+      "slug": "restaurant",
+      "name": "Restaurante",
+      "description": "Refeicoes, lanches e pratos prontos com jornada de pedido objetiva.",
+      "cta": "Explorar refeicoes",
+      "product_count": 42
+    },
+    {
+      "slug": "market",
+      "name": "Mercado",
+      "description": "Compras do dia a dia com abastecimento mais pratico para a rotina.",
+      "cta": "Ver mercado",
+      "product_count": 28
+    },
+    {
+      "slug": "pharmacy",
+      "name": "Farmacia",
+      "description": "Itens de saude, higiene e conveniencia com acesso rapido pela plataforma.",
+      "cta": "Ver farmacia",
+      "product_count": 16
+    },
+    {
+      "slug": "convenience",
+      "name": "Conveniencia",
+      "description": "Produtos essenciais para reposicao imediata e pedidos recorrentes.",
+      "cta": "Ver conveniencia",
+      "product_count": 21
+    }
+  ],
+  "metrics": [
+    {
+      "label": "cidades com operacao ativa",
+      "value": "+12"
+    },
+    {
+      "label": "parceiros ativos na plataforma",
+      "value": "+54"
+    },
+    {
+      "label": "entregadores habilitados",
+      "value": "+180"
+    },
+    {
+      "label": "pedidos concluidos no ecossistema",
+      "value": "+8.500"
+    }
+  ]
+}

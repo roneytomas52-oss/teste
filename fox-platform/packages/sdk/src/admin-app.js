@@ -1,11 +1,17 @@
 import {
+  approveAdminDriver,
+  approveAdminPartner,
   bindLogout,
   getAdminDashboard,
   getAdminData,
+  getAdminFinance,
   getAdminDriverApprovals,
   getAdminOrders,
   getAdminPartnerApprovals,
+  getAdminSupport,
   login,
+  rejectAdminDriver,
+  rejectAdminPartner,
   requireSession
 } from "./fox-platform-sdk.js";
 
@@ -49,6 +55,43 @@ function renderFinance(finance) {
     if (value) value.textContent = current.value;
     if (label) label.textContent = current.label;
   });
+
+  const highlights = document.querySelector("#fx-admin-finance-highlights");
+  if (highlights) {
+    highlights.innerHTML = (finance.highlights || [])
+      .map(
+        (item) => `
+          <article class="fx-finance-card">
+            <h3>${item.title}</h3>
+            <p class="fx-copy-sm">${item.text}</p>
+            <div class="fx-finance-meta">
+              ${(item.meta || []).map((meta) => `<span class="fx-tag">${meta}</span>`).join("")}
+            </div>
+            <div class="fx-inline-actions">
+              <a class="${item.action_tone === "secondary" ? "fx-button-secondary" : "fx-button"}" href="#">${item.action_label}</a>
+            </div>
+          </article>
+        `
+      )
+      .join("");
+  }
+
+  const payouts = document.querySelector("#fx-admin-finance-payouts");
+  if (payouts) {
+    payouts.innerHTML = (finance.payouts || [])
+      .map(
+        (item) => `
+          <tr>
+            <td>${item.partner}</td>
+            <td>${item.period}</td>
+            <td><span class="fx-status ${item.status_type || "warning"}">${item.status}</span></td>
+            <td>${item.net_amount}</td>
+            <td>${item.note}</td>
+          </tr>
+        `
+      )
+      .join("");
+  }
 }
 
 function renderAnalytics(analytics) {
@@ -63,9 +106,19 @@ function renderAnalytics(analytics) {
 }
 
 function renderSupport(data) {
-  const stream = document.querySelector(".fx-stream");
-  if (!stream) return;
-  stream.innerHTML = data.priorityQueue
+  const count = document.querySelector("#fx-admin-support-count");
+  const stream = document.querySelector("#fx-admin-support-stream");
+  const distribution = document.querySelector("#fx-admin-support-distribution");
+  const sla = document.querySelector("#fx-admin-support-sla");
+
+  if (count) {
+    count.textContent = `${(data.priorityQueue || []).length} protocolos`;
+  }
+
+  if (stream) {
+    const queue = data.priorityQueue || [];
+    stream.innerHTML = queue.length
+      ? queue
     .map(
       (item) => `
         <div class="fx-activity-row">
@@ -78,7 +131,26 @@ function renderSupport(data) {
         </div>
       `
     )
-    .join("");
+    .join("")
+      : `<div class="fx-note">Nenhum protocolo prioritario aberto no momento.</div>`;
+  }
+
+  if (distribution) {
+    distribution.innerHTML = (data.distribution || [])
+      .map(
+        (item) => `
+          <div class="fx-info-row">
+            <strong>${item.label}</strong>
+            <span>${item.value}</span>
+          </div>
+        `
+      )
+      .join("");
+  }
+
+  if (sla) {
+    sla.innerHTML = (data.sla || []).map((item) => `<li>${item}</li>`).join("");
+  }
 }
 
 function renderAudit(data) {
@@ -173,7 +245,7 @@ function renderAdminOrders(data, query = "", filter = "all") {
     .join("");
 }
 
-function renderApprovalCards(selector, items) {
+function renderApprovalCards(selector, items, scope) {
   const container = document.querySelector(selector);
   if (!container) return;
 
@@ -193,12 +265,54 @@ function renderApprovalCards(selector, items) {
           </div>
           <div class="fx-inline-actions">
             <span class="fx-status ${item.statusType}">${item.status}</span>
-            <a class="fx-button" href="#">${item.action}</a>
+            <button class="fx-button-secondary js-approval-action" type="button" data-scope="${scope}" data-decision="reject" data-approval-id="${item.id}">Rejeitar</button>
+            <button class="fx-button js-approval-action" type="button" data-scope="${scope}" data-decision="approve" data-approval-id="${item.id}">Aprovar</button>
           </div>
         </article>
       `
     )
     .join("");
+}
+
+async function handleApprovalsScreen(scope) {
+  const config = scope === "partner"
+    ? {
+        selector: "#fx-admin-partners-approvals",
+        loader: getAdminPartnerApprovals,
+        approve: approveAdminPartner,
+        reject: rejectAdminPartner
+      }
+    : {
+        selector: "#fx-admin-drivers-approvals",
+        loader: getAdminDriverApprovals,
+        approve: approveAdminDriver,
+        reject: rejectAdminDriver
+      };
+
+  let payload = await config.loader();
+  renderApprovalCards(config.selector, payload.items || [], scope);
+
+  const container = document.querySelector(config.selector);
+  if (!container) return;
+
+  container.addEventListener("click", async (event) => {
+    const button = event.target.closest(".js-approval-action");
+    if (!button) return;
+
+    button.disabled = true;
+    const approvalId = button.dataset.approvalId;
+    const decision = button.dataset.decision;
+
+    try {
+      payload = decision === "approve"
+        ? await config.approve(approvalId)
+        : await config.reject(approvalId);
+
+      renderApprovalCards(config.selector, payload.items || [], scope);
+    } catch (_error) {
+      button.disabled = false;
+    }
+  });
 }
 
 async function handleLogin() {
@@ -265,27 +379,29 @@ async function boot() {
   }
 
   if (screen === "partners-approvals") {
-    renderApprovalCards("#fx-admin-partners-approvals", (await getAdminPartnerApprovals()).items || []);
+    await handleApprovalsScreen("partner");
     return;
   }
 
   if (screen === "drivers-approvals") {
-    renderApprovalCards("#fx-admin-drivers-approvals", (await getAdminDriverApprovals()).items || []);
+    await handleApprovalsScreen("driver");
+    return;
+  }
+
+  if (screen === "finance") {
+    renderFinance(await getAdminFinance());
+    return;
+  }
+
+  if (screen === "support") {
+    renderSupport(await getAdminSupport());
     return;
   }
 
   const data = await getAdminData();
 
-  if (screen === "finance") {
-    renderFinance(data.finance);
-  }
-
   if (screen === "analytics") {
     renderAnalytics(data.analytics);
-  }
-
-  if (screen === "support") {
-    renderSupport(data.support);
   }
 
   if (screen === "audit") {

@@ -30,7 +30,9 @@
           <a class="fx-sidebar-link" href="./store.html">Loja</a>
           <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
           <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./team.html">Equipe</a>
           <a class="fx-sidebar-link" href="./messages.html">Mensagens</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
           <a class="fx-sidebar-link is-active" href="./support.html">Suporte</a>
           <a class="fx-sidebar-link" href="./help.html">Ajuda</a>
           <a class="fx-sidebar-link" href="./login.html">Sair</a>
@@ -60,75 +62,42 @@
             </section>
 
             <section class="fx-support-grid">
-              <div class="fx-ticket-list">
-                <article class="fx-ticket-card">
-                  <div class="fx-ticket-head">
-                    <strong>#SUP-8432 - Operacao</strong>
-                    <span class="fx-status warning">em andamento</span>
-                  </div>
-                  <p class="fx-copy-sm">Solicitacao para revisar tempo estimado no horario de pico do almoco.</p>
-                  <div class="fx-inline-actions">
-                    <span class="fx-tag">SLA 2h</span>
-                    <span class="fx-tag">Atualizado ha 18 min</span>
-                  </div>
-                </article>
-                <article class="fx-ticket-card">
-                  <div class="fx-ticket-head">
-                    <strong>#SUP-8397 - Financeiro</strong>
-                    <span class="fx-status success">respondido</span>
-                  </div>
-                  <p class="fx-copy-sm">Conferencia de divergencia no repasse da campanha de mercado da semana passada.</p>
-                  <div class="fx-inline-actions">
-                    <span class="fx-tag">SLA 6h</span>
-                    <span class="fx-tag">Atualizado ontem</span>
-                  </div>
-                </article>
-                <article class="fx-ticket-card">
-                  <div class="fx-ticket-head">
-                    <strong>#SUP-8350 - Catalogo</strong>
-                    <span class="fx-status success">concluido</span>
-                  </div>
-                  <p class="fx-copy-sm">Validacao concluida de variacoes e imagens da categoria sanduiches.</p>
-                  <div class="fx-inline-actions">
-                    <span class="fx-tag">Concluido</span>
-                    <span class="fx-tag">Ha 2 dias</span>
-                  </div>
-                </article>
-              </div>
+              <div class="fx-ticket-list" id="fx-partner-support-tickets"></div>
 
               <article class="fx-card">
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Abrir novo chamado</h3>
                 </div>
-                <div class="fx-form-grid">
+                <form class="fx-form-grid" id="fx-partner-support-form">
                   <div class="fx-field">
-                    <label>Canal</label>
-                    <select>
-                      <option>Operacao</option>
-                      <option>Financeiro</option>
-                      <option>Catalogo</option>
-                      <option>Comercial</option>
+                    <label for="fx-partner-support-channel">Canal</label>
+                    <select id="fx-partner-support-channel">
+                      <option value="operations">Operacao</option>
+                      <option value="finance">Financeiro</option>
+                      <option value="catalog">Catalogo</option>
+                      <option value="commercial">Comercial</option>
                     </select>
                   </div>
                   <div class="fx-field">
-                    <label>Prioridade</label>
-                    <select>
-                      <option>Normal</option>
-                      <option>Alta</option>
-                      <option>Critica</option>
+                    <label for="fx-partner-support-priority">Prioridade</label>
+                    <select id="fx-partner-support-priority">
+                      <option value="normal">Normal</option>
+                      <option value="high">Alta</option>
+                      <option value="critical">Critica</option>
                     </select>
                   </div>
                   <div class="fx-field" style="grid-column: 1 / -1;">
-                    <label>Assunto</label>
-                    <input type="text" value="Ajuste no SLA do almoco" />
+                    <label for="fx-partner-support-subject">Assunto</label>
+                    <input id="fx-partner-support-subject" type="text" value="Ajuste no SLA do almoco" />
                   </div>
                   <div class="fx-field" style="grid-column: 1 / -1;">
-                    <label>Descricao</label>
-                    <textarea>Precisamos ampliar em 5 minutos a janela de retirada entre 11h30 e 13h30 para reduzir cancelamentos no pico.</textarea>
+                    <label for="fx-partner-support-description">Descricao</label>
+                    <textarea id="fx-partner-support-description">Precisamos ampliar em 5 minutos a janela de retirada entre 11h30 e 13h30 para reduzir cancelamentos no pico.</textarea>
                   </div>
-                </div>
+                  <p class="fx-note" id="fx-partner-support-feedback" hidden></p>
+                </form>
                 <div class="fx-inline-actions">
-                  <a class="fx-button" href="#">Enviar chamado</a>
+                  <button class="fx-button" form="fx-partner-support-form" type="submit">Enviar chamado</button>
                   <a class="fx-button-ghost" href="./messages.html">Falar via mensagens</a>
                 </div>
               </article>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal | Notificacoes</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
+  </head>
+  <body data-fx-screen="notifications">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Alertas operacionais, financeiros e comerciais da loja em um fluxo unico de acompanhamento.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./team.html">Equipe</a>
+          <a class="fx-sidebar-link" href="./messages.html">Mensagens</a>
+          <a class="fx-sidebar-link is-active" href="./notifications.html">Notificacoes</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./help.html">Ajuda</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Notificacoes</div>
+            <h1 class="fx-title-sm">Alertas da loja</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="./messages.html">Abrir mensagens</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-partner-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Acompanhamento operacional</div>
+                <h2 class="fx-title-md">Receba alertas de pedido, estoque, financeiro e analise da Fox Delivery em um painel unico.</h2>
+                <p class="fx-copy">Use esta fila para acompanhar o que exige resposta imediata e o que ja foi comunicado para sua equipe.</p>
+              </div>
+            </section>
+
+            <section class="fx-compact-metrics" id="fx-notifications-summary"></section>
+            <p class="fx-note" id="fx-notifications-feedback" hidden></p>
+            <section class="fx-notification-list" id="fx-notifications-list"></section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/partner-app.js"></script>
+  </body>
+</html>

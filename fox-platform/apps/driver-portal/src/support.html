@@ -25,6 +25,7 @@
           <a class="fx-sidebar-link" href="./documents.html">Documentos</a>
           <a class="fx-sidebar-link" href="./availability.html">Disponibilidade</a>
           <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
           <a class="fx-sidebar-link is-active" href="./support.html">Suporte</a>
           <a class="fx-sidebar-link" href="./login.html">Sair</a>
         </nav>
@@ -70,51 +71,42 @@
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Chamados recentes</h3>
                 </div>
-                <div class="fx-ticket-stream">
-                  <div class="fx-timeline-item">
-                    <div>
-                      <strong>#DRV-1120</strong>
-                      <p class="fx-copy-sm">Ajuste de corrida com distancia divergente em analise.</p>
-                    </div>
-                    <span class="fx-status warning">em andamento</span>
-                  </div>
-                  <div class="fx-timeline-item">
-                    <div>
-                      <strong>#DRV-1103</strong>
-                      <p class="fx-copy-sm">Validacao de documento concluida com sucesso.</p>
-                    </div>
-                    <span class="fx-status success">concluido</span>
-                  </div>
-                </div>
+                <div class="fx-ticket-stream" id="fx-driver-support-tickets"></div>
               </article>
 
               <article class="fx-support-card">
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Abrir chamado</h3>
                 </div>
-                <div class="fx-form-grid">
+                <form class="fx-form-grid" id="fx-driver-support-form">
                   <div class="fx-field">
-                    <label>Assunto</label>
-                    <select>
-                      <option>Ganhos</option>
-                      <option>Documentos</option>
-                      <option>Operacao</option>
+                    <label for="fx-driver-support-channel">Canal</label>
+                    <select id="fx-driver-support-channel">
+                      <option value="earnings">Ganhos</option>
+                      <option value="documents">Documentos</option>
+                      <option value="operations">Operacao</option>
                     </select>
                   </div>
                   <div class="fx-field">
-                    <label>Prioridade</label>
-                    <select>
-                      <option>Normal</option>
-                      <option>Alta</option>
+                    <label for="fx-driver-support-priority">Prioridade</label>
+                    <select id="fx-driver-support-priority">
+                      <option value="normal">Normal</option>
+                      <option value="high">Alta</option>
+                      <option value="critical">Critica</option>
                     </select>
                   </div>
                   <div class="fx-field" style="grid-column: 1 / -1;">
-                    <label>Descricao</label>
-                    <textarea>Preciso revisar uma corrida com distancia divergente no repasse da semana.</textarea>
+                    <label for="fx-driver-support-subject">Assunto</label>
+                    <input id="fx-driver-support-subject" type="text" value="Revisao de corrida com distancia divergente" />
                   </div>
-                </div>
+                  <div class="fx-field" style="grid-column: 1 / -1;">
+                    <label for="fx-driver-support-description">Descricao</label>
+                    <textarea id="fx-driver-support-description">Preciso revisar uma corrida com distancia divergente no repasse da semana.</textarea>
+                  </div>
+                  <p class="fx-form-feedback" id="fx-driver-support-feedback" hidden></p>
+                </form>
                 <div class="fx-inline-actions">
-                  <a class="fx-button" href="#">Enviar chamado</a>
+                  <button class="fx-button" form="fx-driver-support-form" type="submit">Enviar chamado</button>
                 </div>
               </article>
             </section>

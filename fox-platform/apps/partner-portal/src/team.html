@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Partner Portal | Equipe</title>
+    <link rel="stylesheet" href="./partner-portal.css" />
+  </head>
+  <body data-fx-screen="team">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Partner</strong>
+              <div class="fx-copy-sm">Portal do parceiro</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Gerencie acessos da loja com perfis claros para operacao, catalogo, financeiro e suporte.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./catalog.html">Catalogo</a>
+          <a class="fx-sidebar-link" href="./inventory.html">Estoque</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./store.html">Loja</a>
+          <a class="fx-sidebar-link" href="./schedules.html">Horarios</a>
+          <a class="fx-sidebar-link" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link is-active" href="./team.html">Equipe</a>
+          <a class="fx-sidebar-link" href="./messages.html">Mensagens</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./help.html">Ajuda</a>
+          <a class="fx-sidebar-link" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Equipe</div>
+            <h1 class="fx-title-sm">Usuarios da loja</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <input class="fx-search" type="search" placeholder="Buscar membro, e-mail ou perfil" />
+            <a class="fx-button-secondary" href="./profile.html">Ver perfil principal</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-partner-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Acessos da operacao</div>
+                <h2 class="fx-title-md">Distribua responsabilidades da loja com permissoes adequadas para cada frente.</h2>
+                <p class="fx-copy">Convide membros, defina perfis e ajuste o acesso da equipe conforme a rotina de pedidos, catalogo, financeiro e atendimento.</p>
+              </div>
+            </section>
+
+            <section class="fx-compact-metrics" id="fx-team-summary"></section>
+
+            <section class="fx-page-columns">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Membros cadastrados</h3>
+                </div>
+                <div class="fx-team-grid" id="fx-team-list"></div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm" id="fx-team-form-title">Convidar novo membro</h3>
+                </div>
+                <form class="fx-form-grid" id="fx-team-form">
+                  <input id="fx-team-member-id" type="hidden" />
+                  <div class="fx-field">
+                    <label for="fx-team-full-name">Nome completo</label>
+                    <input id="fx-team-full-name" type="text" placeholder="Nome do colaborador" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-team-email">E-mail</label>
+                    <input id="fx-team-email" type="email" placeholder="email@foxdelivery.com.br" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-team-phone">Telefone</label>
+                    <input id="fx-team-phone" type="text" placeholder="(11) 99999-0000" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-team-role">Perfil de acesso</label>
+                    <select id="fx-team-role">
+                      <option value="manager">Gestao da loja</option>
+                      <option value="operations">Operacao</option>
+                      <option value="catalog">Catalogo</option>
+                      <option value="finance">Financeiro</option>
+                      <option value="support">Suporte</option>
+                    </select>
+                  </div>
+                  <div class="fx-field" style="grid-column: 1 / -1;">
+                    <label>Permissoes</label>
+                    <div class="fx-permission-grid">
+                      <label class="fx-permission-option"><input class="js-team-permission" type="checkbox" value="orders.view" /> <span>Visualizar pedidos</span></label>
+                      <label class="fx-permission-option"><input class="js-team-permission" type="checkbox" value="orders.update" /> <span>Atualizar pedidos</span></label>
+                      <label class="fx-permission-option"><input class="js-team-permission" type="checkbox" value="catalog.manage" /> <span>Gerir catalogo</span></label>
+                      <label class="fx-permission-option"><input class="js-team-permission" type="checkbox" value="inventory.manage" /> <span>Ajustar estoque</span></label>
+                      <label class="fx-permission-option"><input class="js-team-permission" type="checkbox" value="finance.view" /> <span>Ver financeiro</span></label>
+                      <label class="fx-permission-option"><input class="js-team-permission" type="checkbox" value="support.manage" /> <span>Abrir e responder suporte</span></label>
+                    </div>
+                  </div>
+                  <p class="fx-note" id="fx-team-feedback" hidden></p>
+                </form>
+                <div class="fx-inline-actions">
+                  <button class="fx-button" id="fx-team-submit" form="fx-team-form" type="submit">Enviar convite</button>
+                  <button class="fx-button-ghost" id="fx-team-reset" type="button">Limpar formulario</button>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/partner-app.js"></script>
+  </body>
+</html>

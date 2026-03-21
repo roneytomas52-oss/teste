@@ -25,6 +25,7 @@
           <a class="fx-sidebar-link" href="./documents.html">Documentos</a>
           <a class="fx-sidebar-link" href="./availability.html">Disponibilidade</a>
           <a class="fx-sidebar-link is-active" href="./profile.html">Perfil</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
           <a class="fx-sidebar-link" href="./support.html">Suporte</a>
           <a class="fx-sidebar-link" href="./login.html">Sair</a>
         </nav>
@@ -54,35 +55,44 @@
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Dados pessoais</h3>
                 </div>
-                <div class="fx-form-grid">
+                <form class="fx-form-grid" id="fx-driver-profile-form">
                   <div class="fx-field">
-                    <label>Nome completo</label>
-                    <input type="text" value="Lucas Ferreira" />
+                    <label for="fx-driver-full-name">Nome completo</label>
+                    <input id="fx-driver-full-name" type="text" />
                   </div>
                   <div class="fx-field">
-                    <label>E-mail</label>
-                    <input type="email" value="lucas.ferreira@foxdelivery.com.br" />
+                    <label for="fx-driver-email">E-mail</label>
+                    <input id="fx-driver-email" type="email" />
                   </div>
                   <div class="fx-field">
-                    <label>Telefone</label>
-                    <input type="text" value="(11) 98888-3344" />
+                    <label for="fx-driver-phone">Telefone</label>
+                    <input id="fx-driver-phone" type="text" />
                   </div>
                   <div class="fx-field">
-                    <label>Modalidade</label>
-                    <input type="text" value="Moto" />
+                    <label for="fx-driver-modal">Modalidade</label>
+                    <input id="fx-driver-modal" type="text" />
                   </div>
                   <div class="fx-field">
-                    <label>Cidade</label>
-                    <input type="text" value="Sao Paulo" />
+                    <label for="fx-driver-city">Cidade</label>
+                    <input id="fx-driver-city" type="text" />
                   </div>
                   <div class="fx-field">
-                    <label>Conta de recebimento</label>
-                    <input type="text" value="Banco Fox 341 - 45897-2" />
+                    <label for="fx-driver-bank-name">Banco</label>
+                    <input id="fx-driver-bank-name" type="text" />
                   </div>
-                </div>
-                <div class="fx-inline-actions">
-                  <a class="fx-button" href="#">Salvar perfil</a>
-                </div>
+                  <div class="fx-field">
+                    <label for="fx-driver-bank-branch-number">Agencia</label>
+                    <input id="fx-driver-bank-branch-number" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-driver-bank-account-number">Conta de recebimento</label>
+                    <input id="fx-driver-bank-account-number" type="text" />
+                  </div>
+                  <div class="fx-inline-actions fx-form-actions">
+                    <button class="fx-button" type="submit">Salvar perfil</button>
+                  </div>
+                  <p class="fx-note fx-form-feedback" id="fx-driver-profile-feedback" hidden></p>
+                </form>
               </article>
 
               <article class="fx-driver-card">
@@ -92,19 +102,19 @@
                 <div class="fx-info-list">
                   <div class="fx-info-row">
                     <strong>Status da conta</strong>
-                    <span class="fx-status success">ativa</span>
+                    <span class="fx-status success" id="fx-driver-account-status">ativa</span>
                   </div>
                   <div class="fx-info-row">
                     <strong>Ultimo acesso</strong>
-                    <span>20/03/2026 as 13:18</span>
+                    <span id="fx-driver-last-login">-</span>
                   </div>
                   <div class="fx-info-row">
                     <strong>Documentos</strong>
-                    <span class="fx-status success">validados</span>
+                    <span class="fx-status success" id="fx-driver-documents-status">validados</span>
                   </div>
                   <div class="fx-info-row">
                     <strong>Modal principal</strong>
-                    <span>Moto</span>
+                    <span id="fx-driver-main-modal">-</span>
                   </div>
                 </div>
               </article>

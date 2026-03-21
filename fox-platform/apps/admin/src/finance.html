@@ -48,49 +48,26 @@
             <section class="fx-admin-columns">
               <article class="fx-balance-card">
                 <span class="fx-pill">Volume do dia</span>
-                <div class="fx-balance-value">R$ 182.430</div>
-                <p class="fx-copy">Volume bruto processado hoje na plataforma, consolidando pedidos pagos, taxas e previsao de repasses.</p>
+                <div class="fx-balance-value">R$ 0,00</div>
+                <p class="fx-copy">Carregando resumo financeiro da plataforma.</p>
               </article>
               <div class="fx-finance-stack">
                 <article class="fx-stat">
-                  <div class="fx-stat-value">R$ 26.118</div>
+                  <div class="fx-stat-value">-</div>
                   <div class="fx-stat-label">comissoes apuradas no dia</div>
                 </article>
                 <article class="fx-stat">
-                  <div class="fx-stat-value">R$ 94.500</div>
+                  <div class="fx-stat-value">-</div>
                   <div class="fx-stat-label">repasses previstos nesta semana</div>
                 </article>
                 <article class="fx-stat">
-                  <div class="fx-stat-value">5</div>
+                  <div class="fx-stat-value">-</div>
                   <div class="fx-stat-label">ajustes financeiros pendentes</div>
                 </article>
               </div>
             </section>
 
-            <section class="fx-finance-grid">
-              <article class="fx-finance-card">
-                <h3>Repasses em processamento</h3>
-                <p class="fx-copy-sm">Lojas com ciclo financeiro ja apurado e aguardando envio bancario.</p>
-                <div class="fx-finance-meta">
-                  <span class="fx-tag">12 parceiros</span>
-                  <span class="fx-tag">R$ 94.500</span>
-                </div>
-                <div class="fx-inline-actions">
-                  <a class="fx-button" href="#">Abrir lote</a>
-                </div>
-              </article>
-              <article class="fx-finance-card">
-                <h3>Ajustes e estornos</h3>
-                <p class="fx-copy-sm">Eventos que precisam de revisao do financeiro antes do fechamento do ciclo.</p>
-                <div class="fx-finance-meta">
-                  <span class="fx-tag">5 ajustes</span>
-                  <span class="fx-tag">2 estornos</span>
-                </div>
-                <div class="fx-inline-actions">
-                  <a class="fx-button-secondary" href="#">Revisar fila</a>
-                </div>
-              </article>
-            </section>
+            <section class="fx-finance-grid" id="fx-admin-finance-highlights"></section>
 
             <section class="fx-table-card">
               <table>
@@ -103,36 +80,7 @@
                     <th>Observacao</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>Fox Burgers Centro</td>
-                    <td>17/03 a 23/03</td>
-                    <td><span class="fx-status success">aprovado</span></td>
-                    <td>R$ 8.460,32</td>
-                    <td>conta validada</td>
-                  </tr>
-                  <tr>
-                    <td>Mercado Nova Rota</td>
-                    <td>17/03 a 23/03</td>
-                    <td><span class="fx-status warning">em conferencia</span></td>
-                    <td>R$ 6.218,40</td>
-                    <td>revisar divergencia de estoque</td>
-                  </tr>
-                  <tr>
-                    <td>Farmacia Sao Lucas</td>
-                    <td>17/03 a 23/03</td>
-                    <td><span class="fx-status success">aprovado</span></td>
-                    <td>R$ 4.912,18</td>
-                    <td>pronto para envio</td>
-                  </tr>
-                  <tr>
-                    <td>Convivencia Central</td>
-                    <td>17/03 a 23/03</td>
-                    <td><span class="fx-status danger">bloqueado</span></td>
-                    <td>R$ 2.118,90</td>
-                    <td>pendencia documental</td>
-                  </tr>
-                </tbody>
+                <tbody id="fx-admin-finance-payouts"></tbody>
               </table>
             </section>
           </div>
