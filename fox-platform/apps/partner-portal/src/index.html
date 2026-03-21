@@ -106,29 +106,7 @@
                   <h3 class="fx-title-sm">Fila operacional</h3>
                   <span class="fx-pill">Pedidos</span>
                 </div>
-                <div class="fx-orders-board">
-                  <div class="fx-order-row">
-                    <div>
-                      <strong>#FD-10482</strong>
-                      <p class="fx-copy-sm">Pedido com 4 itens aguardando aceite da loja.</p>
-                    </div>
-                    <span class="fx-status warning">aguardando</span>
-                  </div>
-                  <div class="fx-order-row">
-                    <div>
-                      <strong>#FD-10479</strong>
-                      <p class="fx-copy-sm">Pedido em preparo com SLA de 10 minutos.</p>
-                    </div>
-                    <span class="fx-status success">em preparo</span>
-                  </div>
-                  <div class="fx-order-row">
-                    <div>
-                      <strong>#FD-10471</strong>
-                      <p class="fx-copy-sm">Pedido pronto e aguardando coleta do entregador.</p>
-                    </div>
-                    <span class="fx-status warning">pronto para retirada</span>
-                  </div>
-                </div>
+                <div class="fx-orders-board" id="fx-dashboard-orders"></div>
               </div>
 
               <div class="fx-grid">
@@ -172,26 +150,7 @@
                         <th>Status</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>Hambúrguer Fox Prime</td>
-                        <td>Sanduíches</td>
-                        <td>84</td>
-                        <td><span class="fx-status success">ativo</span></td>
-                      </tr>
-                      <tr>
-                        <td>Combo mercado essencial</td>
-                        <td>Mercado</td>
-                        <td>62</td>
-                        <td><span class="fx-status success">ativo</span></td>
-                      </tr>
-                      <tr>
-                        <td>Kit farmácia rápida</td>
-                        <td>Farmácia</td>
-                        <td>37</td>
-                        <td><span class="fx-status warning">estoque baixo</span></td>
-                      </tr>
-                    </tbody>
+                    <tbody id="fx-dashboard-top-products"></tbody>
                   </table>
                 </div>
               </article>
@@ -200,24 +159,7 @@
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Saúde da operação</h3>
                 </div>
-                <div class="fx-checklist">
-                  <div class="fx-check-item">
-                    <strong>Catálogo</strong>
-                    <p class="fx-copy-sm">184 itens ativos, 9 pausados e 6 aguardando revisão de estoque.</p>
-                  </div>
-                  <div class="fx-check-item">
-                    <strong>Horarios</strong>
-                    <p class="fx-copy-sm">Operação aberta até 23h00 com janela de pico entre 11h e 14h.</p>
-                  </div>
-                  <div class="fx-check-item">
-                    <strong>Perfil</strong>
-                    <p class="fx-copy-sm">Responsável validado e documentação da loja aprovada.</p>
-                  </div>
-                  <div class="fx-check-item">
-                    <strong>Financeiro</strong>
-                    <p class="fx-copy-sm">Saldo atualizado, repasses previstos e extrato semanal disponiveis.</p>
-                  </div>
-                </div>
+                <div class="fx-checklist" id="fx-dashboard-health"></div>
               </article>
             </section>
           </div>

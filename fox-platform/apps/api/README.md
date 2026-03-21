@@ -56,6 +56,7 @@ apps/api/
 - seeds iniciais de admin, parceiro e entregador
 - Partner Core inicial
 - endpoints reais de perfil, loja, horarios e documentos do parceiro
+- catalogo inicial com listagem real e ajuste de inventario
 - bridge do SDK preparada para consumir a API HTTP com fallback local
 
 ## Observacao importante

@@ -71,11 +71,95 @@
       }
     ]
   },
+  "catalog": {
+    "categories": [
+      { "id": "44444444-4444-4444-8444-444444444444", "slug": "restaurantes", "name": "Restaurante" },
+      { "id": "55555555-5555-4555-8555-555555555555", "slug": "mercado", "name": "Mercado" },
+      { "id": "66666666-6666-4666-8666-666666666666", "slug": "farmacia", "name": "Farmacia" },
+      { "id": "77777777-7777-4777-8777-777777777777", "slug": "conveniencia", "name": "Conveniencia" }
+    ],
+    "products": [
+      {
+        "id": "88888888-8888-4888-8888-888888888888",
+        "name": "Hambúrguer Fox Prime",
+        "description": "Sanduíche premium com pão brioche, carne artesanal, queijo e molho da casa.",
+        "sku": "FOX-BURGER-001",
+        "price": "R$ 34,90",
+        "base_price": 34.9,
+        "currency": "BRL",
+        "status": "active",
+        "category": "Restaurante",
+        "category_slug": "restaurantes",
+        "stock_quantity": 38,
+        "min_stock_quantity": 10,
+        "sold_count": 84,
+        "inventory_state": "normal",
+        "image_path": "/catalog/fox-prime.jpg"
+      },
+      {
+        "id": "99999999-9999-4999-8999-999999999999",
+        "name": "Combo mercado essencial",
+        "description": "Seleção de itens de mercado com alta rotatividade e entrega rápida.",
+        "sku": "FOX-MERCADO-010",
+        "price": "R$ 59,90",
+        "base_price": 59.9,
+        "currency": "BRL",
+        "status": "active",
+        "category": "Mercado",
+        "category_slug": "mercado",
+        "stock_quantity": 18,
+        "min_stock_quantity": 15,
+        "sold_count": 62,
+        "inventory_state": "normal",
+        "image_path": "/catalog/mercado-essencial.jpg"
+      },
+      {
+        "id": "aaaaaaaa-9999-4999-8999-999999999999",
+        "name": "Kit farmácia rápida",
+        "description": "Itens essenciais de farmácia com foco em velocidade e praticidade.",
+        "sku": "FOX-FARMA-021",
+        "price": "R$ 28,70",
+        "base_price": 28.7,
+        "currency": "BRL",
+        "status": "active",
+        "category": "Farmácia",
+        "category_slug": "farmacia",
+        "stock_quantity": 4,
+        "min_stock_quantity": 12,
+        "sold_count": 37,
+        "inventory_state": "low",
+        "image_path": "/catalog/farmacia-rapida.jpg"
+      },
+      {
+        "id": "bbbbbbbb-9999-4999-8999-999999999999",
+        "name": "Água 500ml",
+        "description": "Item de conveniência com giro alto e reposição recorrente.",
+        "sku": "FOX-CONV-100",
+        "price": "R$ 5,50",
+        "base_price": 5.5,
+        "currency": "BRL",
+        "status": "paused",
+        "category": "Conveniência",
+        "category_slug": "conveniencia",
+        "stock_quantity": 0,
+        "min_stock_quantity": 10,
+        "sold_count": 128,
+        "inventory_state": "out",
+        "image_path": "/catalog/agua-500ml.jpg"
+      }
+    ],
+    "inventory": {
+      "low_stock_count": 2,
+      "paused_count": 1,
+      "normal_count": 2,
+      "review_sla": "15 min"
+    }
+  },
   "orders": [
-    { "id": "#FD-10482", "customer": "Ana Souza", "status": "aguardando aceite", "statusType": "warning", "sla": "4 min", "value": "R$ 78,90", "action": "Aceitar" },
-    { "id": "#FD-10479", "customer": "Paulo Lima", "status": "em preparo", "statusType": "success", "sla": "10 min", "value": "R$ 54,20", "action": "Atualizar" },
-    { "id": "#FD-10471", "customer": "Júlia Martins", "status": "pronto para retirada", "statusType": "warning", "sla": "2 min", "value": "R$ 31,00", "action": "Sinalizar coleta" },
-    { "id": "#FD-10455", "customer": "Carlos Vieira", "status": "concluído", "statusType": "success", "sla": "entregue", "value": "R$ 92,40", "action": "Ver detalhes" }
+    { "id": "#FD-10482", "order_id": "mock-order-10482", "customer": "Ana Souza", "status": "aguardando aceite", "status_key": "pending_acceptance", "statusType": "warning", "sla": "4 min", "value": "R$ 78,90", "action": "Aceitar", "driver_name": "sem atribuicao" },
+    { "id": "#FD-10479", "order_id": "mock-order-10479", "customer": "Paulo Lima", "status": "em preparo", "status_key": "preparing", "statusType": "success", "sla": "10 min", "value": "R$ 54,20", "action": "Atualizar", "driver_name": "Lucas Ferreira" },
+    { "id": "#FD-10471", "order_id": "mock-order-10471", "customer": "Júlia Martins", "status": "pronto para retirada", "status_key": "ready_for_pickup", "statusType": "warning", "sla": "2 min", "value": "R$ 31,00", "action": "Sinalizar coleta", "driver_name": "Daniela Matos" },
+    { "id": "#FD-10455", "order_id": "mock-order-10455", "customer": "Carlos Vieira", "status": "concluído", "status_key": "completed", "statusType": "success", "sla": "entregue", "value": "R$ 92,40", "action": "Ver detalhes", "driver_name": "Lucas Ferreira" }
   ],
   "finance": {
     "balance": "R$ 18.420",

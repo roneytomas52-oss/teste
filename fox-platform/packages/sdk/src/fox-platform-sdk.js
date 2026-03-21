@@ -22,7 +22,7 @@ function resolveApiBase() {
   }
 
   if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-    return normalizeBase(`${window.location.origin}/api/`);
+    return normalizeBase(`${window.location.origin}/`);
   }
 
   return normalizeBase(new URL("../../../apps/api/public/", import.meta.url).href);
@@ -39,7 +39,11 @@ function buildMockUrl(resource) {
 }
 
 function buildApiUrl(path) {
-  return new URL(path.replace(/^\/+/, ""), API_BASE);
+  const sanitizedPath = path.replace(/^\/+/, "");
+  if (API_BASE.endsWith("/api/") && sanitizedPath.startsWith("api/")) {
+    return new URL(sanitizedPath.slice(4), API_BASE);
+  }
+  return new URL(sanitizedPath, API_BASE);
 }
 
 async function readJson(response) {
@@ -373,12 +377,367 @@ export async function addPartnerStoreDocument(document) {
   };
 }
 
+export async function getPartnerCatalog() {
+  const payload = await requestApi("api/v1/partner/catalog/products", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  return data.catalog;
+}
+
+export async function getPartnerDashboard() {
+  const payload = await requestApi("api/v1/partner/dashboard", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  return {
+    ...data.dashboard,
+    orders: (data.orders || []).slice(0, 3),
+    top_products: (data.catalog?.products || []).slice(0, 3).map((product) => ({
+      name: product.name,
+      category: product.category,
+      sold_count: product.sold_count,
+      status:
+        product.inventory_state === "out"
+          ? "esgotado"
+          : product.inventory_state === "low"
+            ? "estoque baixo"
+            : product.status === "paused"
+              ? "pausado"
+              : "ativo",
+      status_type:
+        product.inventory_state === "out" || product.inventory_state === "low"
+          ? "warning"
+          : product.status === "paused"
+            ? "danger"
+            : "success"
+    })),
+    health: [
+      {
+        title: "Catalogo",
+        text: `${data.catalog?.inventory?.normal_count || 0} itens com disponibilidade normal e ${data.catalog?.inventory?.low_stock_count || 0} em atencao.`
+      },
+      {
+        title: "Horarios",
+        text: "Turnos configurados para operar durante a semana e fim de semana."
+      },
+      {
+        title: "Pedidos",
+        text: `${(data.orders || []).length} pedidos visiveis no painel com acompanhamento por status.`
+      },
+      {
+        title: "Financeiro",
+        text: data.finance?.balanceNote || "Resumo financeiro da operacao disponivel no portal."
+      }
+    ]
+  };
+}
+
+export async function getPartnerOrders() {
+  const payload = await requestApi("api/v1/partner/orders", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  return {
+    totals: {
+      total: (data.orders || []).length,
+      pending: (data.orders || []).filter((item) => item.status === "aguardando aceite").length,
+      critical: (data.orders || []).filter((item) => item.status === "aguardando aceite" || item.status === "cancelado").length
+    },
+    orders: data.orders || []
+  };
+}
+
+export async function updatePartnerOrderStatus(orderId, body) {
+  const payload = await requestApi(`api/v1/partner/orders/${orderId}/status`, {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("partner-portal.json");
+  const orders = (data.orders || []).map((item) => {
+    if (item.order_id !== orderId && item.id !== orderId && item.id !== `#${orderId}`) {
+      return item;
+    }
+
+    const labelMap = {
+      pending_acceptance: ["aguardando aceite", "warning", "Aceitar"],
+      accepted: ["aceito", "success", "Iniciar preparo"],
+      preparing: ["em preparo", "success", "Atualizar"],
+      ready_for_pickup: ["pronto para retirada", "warning", "Sinalizar coleta"],
+      on_route: ["em rota", "success", "Acompanhar entrega"],
+      completed: ["concluido", "success", "Ver detalhes"],
+      cancelled: ["cancelado", "danger", "Registrar motivo"]
+    };
+
+    const [status, statusType, action] = labelMap[body.status] || [body.status, "warning", "Atualizar"];
+
+    return {
+      ...item,
+      order_id: item.order_id || orderId,
+      status,
+      status_key: body.status,
+      statusType,
+      action
+    };
+  });
+
+  return {
+    totals: {
+      total: orders.length,
+      pending: orders.filter((item) => item.status_key === "pending_acceptance" || item.status === "aguardando aceite").length,
+      critical: orders.filter((item) => item.status_key === "pending_acceptance" || item.status === "aguardando aceite" || item.status_key === "cancelled" || item.status === "cancelado").length
+    },
+    orders
+  };
+}
+
+export async function createPartnerProduct(body) {
+  const payload = await requestApi("api/v1/partner/catalog/products", {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerCatalog();
+  const category = (current.categories || []).find((item) => item.id === body.category_id);
+  const nextProduct = {
+    id: `mock-${Date.now()}`,
+    name: body.name,
+    description: body.description,
+    sku: body.sku,
+    price: new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: body.currency || "BRL"
+    }).format(Number(body.base_price || 0)),
+    base_price: Number(body.base_price || 0),
+    currency: body.currency || "BRL",
+    status: body.status,
+    category: category?.name || "Sem categoria",
+    category_slug: category?.slug || "sem-categoria",
+    stock_quantity: Number(body.stock_quantity || 0),
+    min_stock_quantity: Number(body.min_stock_quantity || 0),
+    sold_count: 0,
+    inventory_state:
+      Number(body.stock_quantity || 0) <= 0
+        ? "out"
+        : Number(body.stock_quantity || 0) <= Number(body.min_stock_quantity || 0)
+          ? "low"
+          : "normal",
+    image_path: body.image_path || ""
+  };
+
+  const products = [nextProduct, ...(current.products || [])];
+
+  return {
+    ...current,
+    product: nextProduct,
+    products,
+    inventory: {
+      low_stock_count: products.filter((item) => item.inventory_state === "low" || item.inventory_state === "out").length,
+      paused_count: products.filter((item) => item.status === "paused").length,
+      normal_count: products.filter((item) => item.inventory_state === "normal").length,
+      review_sla: current.inventory?.review_sla || "15 min"
+    }
+  };
+}
+
+export async function updatePartnerProduct(productId, body) {
+  const payload = await requestApi(`api/v1/partner/catalog/products/${productId}`, {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerCatalog();
+  const category = (current.categories || []).find((item) => item.id === body.category_id);
+  const products = (current.products || []).map((product) => {
+    if (product.id !== productId) {
+      return product;
+    }
+
+    const stockQuantity = Number(body.stock_quantity || 0);
+    const minStockQuantity = Number(body.min_stock_quantity || 0);
+
+    return {
+      ...product,
+      name: body.name,
+      description: body.description,
+      sku: body.sku,
+      price: new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: body.currency || "BRL"
+      }).format(Number(body.base_price || 0)),
+      base_price: Number(body.base_price || 0),
+      currency: body.currency || "BRL",
+      status: body.status,
+      category: category?.name || product.category,
+      category_slug: category?.slug || product.category_slug,
+      stock_quantity: stockQuantity,
+      min_stock_quantity: minStockQuantity,
+      inventory_state:
+        stockQuantity <= 0 ? "out" : stockQuantity <= minStockQuantity ? "low" : "normal",
+      image_path: body.image_path || product.image_path
+    };
+  });
+
+  return {
+    ...current,
+    product: products.find((item) => item.id === productId) || null,
+    products,
+    inventory: {
+      low_stock_count: products.filter((item) => item.inventory_state === "low" || item.inventory_state === "out").length,
+      paused_count: products.filter((item) => item.status === "paused").length,
+      normal_count: products.filter((item) => item.inventory_state === "normal").length,
+      review_sla: current.inventory?.review_sla || "15 min"
+    }
+  };
+}
+
+export async function updatePartnerProductInventory(productId, body) {
+  const payload = await requestApi(`api/v1/partner/catalog/products/${productId}/inventory`, {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getPartnerCatalog();
+  const products = (current.products || []).map((product) => {
+    if (product.id !== productId) return product;
+
+    const nextStock = Number(body.stock_quantity ?? product.stock_quantity ?? 0);
+    const nextMin = Number(body.min_stock_quantity ?? product.min_stock_quantity ?? 0);
+    const inventoryState = nextStock <= 0 ? "out" : (nextStock <= nextMin ? "low" : "normal");
+
+    return {
+      ...product,
+      stock_quantity: nextStock,
+      min_stock_quantity: nextMin,
+      status: body.status ?? product.status,
+      inventory_state: inventoryState
+    };
+  });
+
+  const inventory = {
+    low_stock_count: products.filter((product) => product.inventory_state === "low" || product.inventory_state === "out").length,
+    paused_count: products.filter((product) => product.status === "paused").length,
+    normal_count: products.filter((product) => product.inventory_state === "normal").length,
+    review_sla: current.inventory?.review_sla || "15 min"
+  };
+
+  const updatedProduct = products.find((product) => product.id === productId) || null;
+
+  return {
+    product: updatedProduct,
+    products,
+    inventory
+  };
+}
+
 export async function getPartnerData() {
   return loadJson("partner-portal.json");
 }
 
 export async function getAdminData() {
   return loadJson("admin.json");
+}
+
+export async function getAdminDashboard() {
+  const payload = await requestApi("api/v1/admin/dashboard", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return {
+    ...data.dashboard,
+    approvals: data.partnerApprovals || [],
+    alerts: (data.support?.priorityQueue || []).map((item) => item.summary)
+  };
+}
+
+export async function getAdminOrders() {
+  const payload = await requestApi("api/v1/admin/orders", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return {
+    totals: {
+      total: (data.orders || []).length,
+      critical: (data.orders || []).filter((item) => item.status_key === "pending_acceptance" || item.status_key === "cancelled").length
+    },
+    items: data.orders || []
+  };
+}
+
+export async function getAdminPartnerApprovals() {
+  const payload = await requestApi("api/v1/admin/approvals/partners", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return {
+    items: data.partnerApprovals || []
+  };
+}
+
+export async function getAdminDriverApprovals() {
+  const payload = await requestApi("api/v1/admin/approvals/drivers", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return {
+    items: data.driverApprovals || []
+  };
 }
 
 export async function getDriverData() {

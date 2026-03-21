@@ -42,8 +42,8 @@
             <h1 class="fx-title-sm">Produtos e categorias</h1>
           </div>
           <div class="fx-topbar-actions">
-            <input class="fx-search" type="search" placeholder="Buscar item, categoria ou SKU" />
-            <a class="fx-button" href="#">Cadastrar produto</a>
+            <input id="fx-catalog-search" class="fx-search" type="search" placeholder="Buscar item, categoria ou SKU" />
+            <button id="fx-catalog-new" class="fx-button" type="button">Novo produto</button>
           </div>
         </header>
         <div class="fx-shell-content">
@@ -58,64 +58,77 @@
                 <a class="fx-button-secondary" href="./inventory.html">Revisar estoque</a>
               </div>
             </section>
+            <div id="fx-catalog-feedback" class="fx-note fx-feedback" hidden></div>
             <section class="fx-filter-row">
-              <button class="fx-filter-chip is-active" type="button">Todos os itens</button>
-              <button class="fx-filter-chip" type="button">Mais vendidos</button>
-              <button class="fx-filter-chip" type="button">Pausados</button>
-              <button class="fx-filter-chip" type="button">Com promocoes</button>
+              <button class="fx-filter-chip is-active" data-filter="all" type="button">Todos os itens</button>
+              <button class="fx-filter-chip" data-filter="top" type="button">Mais vendidos</button>
+              <button class="fx-filter-chip" data-filter="paused" type="button">Pausados</button>
+              <button class="fx-filter-chip" data-filter="attention" type="button">Exigem atencao</button>
             </section>
-            <section class="fx-product-grid">
-              <article class="fx-product-card">
-                <div class="fx-product-thumb"></div>
+
+            <section class="fx-catalog-layout">
+              <div class="fx-form-shell">
+                <div id="fx-catalog-summary" class="fx-note">Carregando panorama do catalogo...</div>
+                <section id="fx-catalog-list" class="fx-product-grid"></section>
+              </div>
+
+              <aside class="fx-card fx-product-editor">
                 <div class="fx-card-header">
-                  <h3 class="fx-title-sm">Hamburguer Fox Prime</h3>
-                  <span class="fx-status success">ativo</span>
+                  <div>
+                    <div class="fx-pill">Editor</div>
+                    <h3 id="fx-product-form-title" class="fx-title-sm">Cadastrar novo produto</h3>
+                  </div>
                 </div>
-                <p class="fx-copy-sm">Sanduiche premium com pao brioche, carne artesanal, queijo e molho da casa.</p>
-                <div class="fx-product-meta">
-                  <span class="fx-tag">Sanduiches</span>
-                  <span class="fx-tag">R$ 34,90</span>
-                  <span class="fx-tag">84 vendas</span>
-                </div>
-                <div class="fx-inline-actions">
-                  <a class="fx-button" href="#">Editar item</a>
-                  <a class="fx-button-ghost" href="#">Duplicar</a>
-                </div>
-              </article>
-              <article class="fx-product-card">
-                <div class="fx-product-thumb"></div>
-                <div class="fx-card-header">
-                  <h3 class="fx-title-sm">Combo mercado essencial</h3>
-                  <span class="fx-status success">ativo</span>
-                </div>
-                <p class="fx-copy-sm">Selecao de itens de mercado com alta rotatividade e entrega rapida.</p>
-                <div class="fx-product-meta">
-                  <span class="fx-tag">Mercado</span>
-                  <span class="fx-tag">R$ 59,90</span>
-                  <span class="fx-tag">62 vendas</span>
-                </div>
-                <div class="fx-inline-actions">
-                  <a class="fx-button" href="#">Editar item</a>
-                  <a class="fx-button-ghost" href="#">Pausar</a>
-                </div>
-              </article>
-              <article class="fx-product-card">
-                <div class="fx-product-thumb"></div>
-                <div class="fx-card-header">
-                  <h3 class="fx-title-sm">Kit farmacia rapida</h3>
-                  <span class="fx-status warning">estoque baixo</span>
-                </div>
-                <p class="fx-copy-sm">Itens essenciais de farmacia com foco em velocidade e praticidade.</p>
-                <div class="fx-product-meta">
-                  <span class="fx-tag">Farmacia</span>
-                  <span class="fx-tag">R$ 28,70</span>
-                  <span class="fx-tag">37 vendas</span>
-                </div>
-                <div class="fx-inline-actions">
-                  <a class="fx-button" href="#">Editar item</a>
-                  <a class="fx-button-ghost" href="#">Ajustar estoque</a>
-                </div>
-              </article>
+                <form id="fx-product-form" class="fx-form-shell">
+                  <input id="fx-product-id" type="hidden" />
+                  <div class="fx-form-grid">
+                    <div class="fx-field">
+                      <label for="fx-product-name">Nome do produto</label>
+                      <input id="fx-product-name" name="name" type="text" placeholder="Ex.: Hamburguer Fox Prime" required />
+                    </div>
+                    <div class="fx-field">
+                      <label for="fx-product-category">Categoria</label>
+                      <select id="fx-product-category" name="category_id" required></select>
+                    </div>
+                    <div class="fx-field">
+                      <label for="fx-product-sku">SKU</label>
+                      <input id="fx-product-sku" name="sku" type="text" placeholder="FOX-ITEM-001" required />
+                    </div>
+                    <div class="fx-field">
+                      <label for="fx-product-price">Preco base</label>
+                      <input id="fx-product-price" name="base_price" type="number" step="0.01" min="0" placeholder="0.00" required />
+                    </div>
+                    <div class="fx-field">
+                      <label for="fx-product-stock">Estoque atual</label>
+                      <input id="fx-product-stock" name="stock_quantity" type="number" min="0" placeholder="0" required />
+                    </div>
+                    <div class="fx-field">
+                      <label for="fx-product-min-stock">Estoque minimo</label>
+                      <input id="fx-product-min-stock" name="min_stock_quantity" type="number" min="0" placeholder="0" required />
+                    </div>
+                    <div class="fx-field">
+                      <label for="fx-product-status">Status</label>
+                      <select id="fx-product-status" name="status" required>
+                        <option value="active">Ativo</option>
+                        <option value="paused">Pausado</option>
+                        <option value="draft">Rascunho</option>
+                      </select>
+                    </div>
+                    <div class="fx-field">
+                      <label for="fx-product-image">Imagem</label>
+                      <input id="fx-product-image" name="image_path" type="text" placeholder="/catalog/produto.jpg" />
+                    </div>
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-product-description">Descricao</label>
+                    <textarea id="fx-product-description" name="description" placeholder="Descreva o produto de forma clara para o cliente."></textarea>
+                  </div>
+                  <div class="fx-inline-actions">
+                    <button class="fx-button" type="submit">Salvar produto</button>
+                    <button id="fx-product-reset" class="fx-button-ghost" type="button">Limpar formulario</button>
+                  </div>
+                </form>
+              </aside>
             </section>
           </div>
         </div>

@@ -39,20 +39,27 @@
             <h1 class="fx-title-sm">Fila operacional da plataforma</h1>
           </div>
           <div class="fx-topbar-actions">
-            <input class="fx-search" type="search" placeholder="Buscar pedido, loja ou cliente" />
+            <input class="fx-search" id="fx-admin-orders-search" type="search" placeholder="Buscar pedido, loja ou cliente" />
             <a class="fx-button-secondary" href="#">Exportar fila</a>
           </div>
         </header>
         <div class="fx-shell-content">
           <div class="fx-admin-view">
             <section class="fx-filter-row">
-              <button class="fx-filter-chip is-active" type="button">Todos</button>
-              <button class="fx-filter-chip" type="button">Atrasados</button>
-              <button class="fx-filter-chip" type="button">Em preparo</button>
-              <button class="fx-filter-chip" type="button">Prontos</button>
-              <button class="fx-filter-chip" type="button">Cancelados</button>
+              <button class="fx-filter-chip is-active" type="button" data-filter="all">Todos</button>
+              <button class="fx-filter-chip" type="button" data-filter="pending_acceptance">Atrasados</button>
+              <button class="fx-filter-chip" type="button" data-filter="preparing">Em preparo</button>
+              <button class="fx-filter-chip" type="button" data-filter="ready_for_pickup">Prontos</button>
+              <button class="fx-filter-chip" type="button" data-filter="cancelled">Cancelados</button>
             </section>
             <section class="fx-table-card">
+              <div class="fx-table-tools">
+                <div class="fx-inline-actions">
+                  <span class="fx-pill">Monitoramento</span>
+                  <span class="fx-copy-sm" id="fx-admin-orders-summary">Carregando fila da plataforma.</span>
+                </div>
+              </div>
+              <div class="fx-note" id="fx-admin-orders-feedback" hidden></div>
               <table>
                 <thead>
                   <tr>
@@ -64,40 +71,7 @@
                     <th>Valor</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>#FD-10482</td>
-                    <td>Mercado Nova Rota</td>
-                    <td><span class="fx-status warning">aguardando aceite</span></td>
-                    <td>4 min</td>
-                    <td>sem atribuicao</td>
-                    <td>R$ 78,90</td>
-                  </tr>
-                  <tr>
-                    <td>#FD-10479</td>
-                    <td>Fox Burgers Centro</td>
-                    <td><span class="fx-status success">em preparo</span></td>
-                    <td>10 min</td>
-                    <td>Lucas Ferreira</td>
-                    <td>R$ 54,20</td>
-                  </tr>
-                  <tr>
-                    <td>#FD-10471</td>
-                    <td>Farmacia Sao Lucas</td>
-                    <td><span class="fx-status warning">pronto para retirada</span></td>
-                    <td>2 min</td>
-                    <td>Daniela Matos</td>
-                    <td>R$ 31,00</td>
-                  </tr>
-                  <tr>
-                    <td>#FD-10433</td>
-                    <td>Convivencia Central</td>
-                    <td><span class="fx-status danger">cancelado</span></td>
-                    <td>fora da janela</td>
-                    <td>nao atribuido</td>
-                    <td>R$ 44,90</td>
-                  </tr>
-                </tbody>
+                <tbody id="fx-admin-orders-table-body"></tbody>
               </table>
             </section>
           </div>

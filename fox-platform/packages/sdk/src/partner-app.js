@@ -1,20 +1,28 @@
 import {
   addPartnerStoreDocument,
   bindLogout,
+  createPartnerProduct,
+  getPartnerCatalog,
+  getPartnerDashboard,
   getPartnerData,
+  getPartnerOrders,
   getPartnerProfile,
   getPartnerStore,
   injectSessionLabel,
   login,
   requireSession,
+  updatePartnerOrderStatus,
+  updatePartnerProduct,
   updatePartnerProfile,
+  updatePartnerProductInventory,
   updatePartnerStore,
   updatePartnerStoreHours
 } from "./fox-platform-sdk.js";
 
 const CACHE_KEYS = {
   profile: "fox-partner-profile-cache",
-  store: "fox-partner-store-cache"
+  store: "fox-partner-store-cache",
+  catalog: "fox-partner-catalog-cache"
 };
 
 const WEEKDAYS = [
@@ -52,6 +60,10 @@ function readCache(key) {
 
 function writeCache(key, value) {
   window.localStorage.setItem(key, JSON.stringify(value));
+}
+
+function buildCacheKey(type, session) {
+  return `${CACHE_KEYS[type]}:${session?.id || "anonymous"}`;
 }
 
 function showFeedback(selector, message, tone = "success") {
@@ -110,33 +122,54 @@ function getDefaultHours() {
 }
 
 async function loadProfileState(session) {
+  const cacheKey = buildCacheKey("profile", session);
+
   if (session?.source === "api") {
     const profile = await getPartnerProfile();
-    writeCache(CACHE_KEYS.profile, profile);
+    writeCache(cacheKey, profile);
     return profile;
   }
 
-  const cached = readCache(CACHE_KEYS.profile);
+  const cached = readCache(cacheKey);
   if (cached) return cached;
 
   const profile = await getPartnerProfile();
-  writeCache(CACHE_KEYS.profile, profile);
+  writeCache(cacheKey, profile);
   return profile;
 }
 
 async function loadStoreState(session) {
+  const cacheKey = buildCacheKey("store", session);
+
   if (session?.source === "api") {
     const store = await getPartnerStore();
-    writeCache(CACHE_KEYS.store, store);
+    writeCache(cacheKey, store);
     return store;
   }
 
-  const cached = readCache(CACHE_KEYS.store);
+  const cached = readCache(cacheKey);
   if (cached) return cached;
 
   const store = await getPartnerStore();
-  writeCache(CACHE_KEYS.store, store);
+  writeCache(cacheKey, store);
   return store;
+}
+
+async function loadCatalogState(session) {
+  const cacheKey = buildCacheKey("catalog", session);
+
+  if (session?.source === "api") {
+    const catalog = await getPartnerCatalog();
+    writeCache(cacheKey, catalog);
+    return catalog;
+  }
+
+  const cached = readCache(cacheKey);
+  if (cached) return cached;
+
+  const catalog = await getPartnerCatalog();
+  writeCache(cacheKey, catalog);
+  return catalog;
 }
 
 function renderSummary(items) {
@@ -161,23 +194,146 @@ function renderMetrics(items) {
   });
 }
 
-function renderOrders(rows) {
-  const tbody = document.querySelector(".fx-table-card tbody");
-  if (!tbody) return;
-  tbody.innerHTML = rows
+function renderDashboardOrders(rows) {
+  const container = document.querySelector("#fx-dashboard-orders");
+  if (!container) return;
+
+  if (!rows?.length) {
+    container.innerHTML = `<div class="fx-note">Nenhum pedido em destaque no momento.</div>`;
+    return;
+  }
+
+  container.innerHTML = rows
     .map(
       (row) => `
+        <div class="fx-order-row">
+          <div>
+            <strong>${row.id}</strong>
+            <p class="fx-copy-sm">${row.customer} - ${row.driver_name || "sem atribuicao"}.</p>
+          </div>
+          <span class="fx-status ${row.statusType}">${row.status}</span>
+        </div>
+      `
+    )
+    .join("");
+}
+
+function renderTopProducts(rows) {
+  const tbody = document.querySelector("#fx-dashboard-top-products");
+  if (!tbody) return;
+
+  tbody.innerHTML = (rows || [])
+    .map(
+      (row) => `
+        <tr>
+          <td>${row.name}</td>
+          <td>${row.category}</td>
+          <td>${row.sold_count}</td>
+          <td><span class="fx-status ${row.status_type || "success"}">${row.status}</span></td>
+        </tr>
+      `
+    )
+    .join("");
+}
+
+function renderHealth(rows) {
+  const container = document.querySelector("#fx-dashboard-health");
+  if (!container) return;
+
+  container.innerHTML = (rows || [])
+    .map(
+      (row) => `
+        <div class="fx-check-item">
+          <strong>${row.title}</strong>
+          <p class="fx-copy-sm">${row.text}</p>
+        </div>
+      `
+    )
+    .join("");
+}
+
+function getNextPartnerOrderAction(statusKey) {
+  const transitions = {
+    pending_acceptance: { next: "accepted", label: "Aceitar" },
+    accepted: { next: "preparing", label: "Iniciar preparo" },
+    preparing: { next: "ready_for_pickup", label: "Marcar como pronto" },
+    ready_for_pickup: { next: "on_route", label: "Sinalizar coleta" },
+    on_route: { next: "completed", label: "Concluir pedido" }
+  };
+
+  return transitions[statusKey] || null;
+}
+
+function filterOrders(items, query, filter) {
+  const normalizedQuery = query.trim().toLowerCase();
+
+  return (items || []).filter((item) => {
+    const matchesQuery =
+      normalizedQuery === "" ||
+      item.id.toLowerCase().includes(normalizedQuery) ||
+      item.customer.toLowerCase().includes(normalizedQuery) ||
+      (item.driver_name || "").toLowerCase().includes(normalizedQuery);
+
+    if (!matchesQuery) {
+      return false;
+    }
+
+    if (filter === "all") {
+      return true;
+    }
+
+    return item.status_key === filter;
+  });
+}
+
+function renderOrdersTable(payload, query = "", filter = "all") {
+  const tbody = document.querySelector("#fx-orders-table-body");
+  const summary = document.querySelector("#fx-orders-summary");
+  if (!tbody) return;
+
+  const rows = filterOrders(payload.orders || [], query, filter);
+
+  if (summary) {
+    summary.textContent = `${payload.totals?.total || rows.length} pedidos mapeados, ${payload.totals?.pending || 0} aguardando aceite e ${payload.totals?.critical || 0} criticos.`;
+  }
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="fx-note">Nenhum pedido encontrado para este filtro.</div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows
+    .map((row) => {
+      const nextAction = getNextPartnerOrderAction(row.status_key);
+
+      return `
         <tr>
           <td>${row.id}</td>
           <td>${row.customer}</td>
           <td><span class="fx-status ${row.statusType}">${row.status}</span></td>
           <td>${row.sla}</td>
           <td>${row.value}</td>
-          <td><a class="fx-button-ghost" href="#">${row.action}</a></td>
+          <td>
+            ${
+              nextAction
+                ? `<button class="fx-button-ghost js-order-status" type="button" data-order-id="${row.order_id || row.id}" data-next-status="${nextAction.next}">${nextAction.label}</button>`
+                : `<span class="fx-copy-sm">${row.action || "-"}</span>`
+            }
+          </td>
         </tr>
-      `
-    )
+      `;
+    })
     .join("");
+}
+
+function renderDashboard(data) {
+  setText(".fx-hero-content .fx-title-lg", data.heroTitle);
+  setText(".fx-hero-content .fx-lead", data.heroLead);
+  renderSummary(data.summary || []);
+  renderMetrics(data.metrics || []);
+  renderDashboardOrders(data.orders || []);
+  renderTopProducts(data.top_products || []);
+  renderHealth(data.health || []);
 }
 
 function renderFinance(finance) {
@@ -326,6 +482,210 @@ function renderStore(storeState) {
   renderDocuments(storeState.documents || []);
 }
 
+function getInventoryTone(product) {
+  if (product.status === "paused") return "danger";
+  if (product.inventory_state === "out" || product.inventory_state === "low") return "warning";
+  return "success";
+}
+
+function getInventoryLabel(product) {
+  if (product.status === "paused") return "pausado";
+  if (product.inventory_state === "out") return "esgotado";
+  if (product.inventory_state === "low") return "estoque baixo";
+  return "ativo";
+}
+
+function filterCatalogProducts(products, query, filter) {
+  const normalizedQuery = query.trim().toLowerCase();
+
+  return products.filter((product) => {
+    const matchesQuery =
+      normalizedQuery === "" ||
+      product.name.toLowerCase().includes(normalizedQuery) ||
+      product.category.toLowerCase().includes(normalizedQuery) ||
+      product.sku.toLowerCase().includes(normalizedQuery);
+
+    if (!matchesQuery) {
+      return false;
+    }
+
+    if (filter === "top") return product.sold_count >= 60;
+    if (filter === "paused") return product.status === "paused";
+    if (filter === "attention") return product.inventory_state === "low" || product.inventory_state === "out";
+
+    return true;
+  });
+}
+
+function normalizeCatalogState(catalog) {
+  return {
+    categories: catalog?.categories || [],
+    products: catalog?.products || [],
+    inventory: catalog?.inventory || {}
+  };
+}
+
+function renderCatalogSummary(catalog) {
+  const target = document.querySelector("#fx-catalog-summary");
+  if (!target) return;
+
+  const productCount = catalog.products?.length || 0;
+  const activeCount = (catalog.products || []).filter((product) => product.status === "active").length;
+  const pausedCount = catalog.inventory?.paused_count || 0;
+
+  target.textContent = `${productCount} itens cadastrados, ${activeCount} ativos e ${pausedCount} pausados no catalogo da loja.`;
+}
+
+function renderCategoryOptions(categories) {
+  const select = document.querySelector("#fx-product-category");
+  if (!select) return;
+
+  select.innerHTML = categories
+    .map((category) => `<option value="${category.id}">${category.name}</option>`)
+    .join("");
+}
+
+function renderCatalog(products, selectedProductId = "") {
+  const container = document.querySelector("#fx-catalog-list");
+  if (!container) return;
+
+  if (!products.length) {
+    container.innerHTML = `<div class="fx-note">Nenhum produto encontrado para este filtro.</div>`;
+    return;
+  }
+
+  container.innerHTML = products
+    .map(
+      (product) => `
+        <article class="fx-product-card${selectedProductId === product.id ? " is-selected" : ""}">
+          <div class="fx-product-thumb"></div>
+          <div class="fx-card-header">
+            <h3 class="fx-title-sm">${product.name}</h3>
+            <span class="fx-status ${getInventoryTone(product)}">${getInventoryLabel(product)}</span>
+          </div>
+          <p class="fx-copy-sm">${product.description}</p>
+          <div class="fx-product-meta">
+            <span class="fx-tag">${product.category}</span>
+            <span class="fx-tag">${product.price}</span>
+            <span class="fx-tag">${product.sold_count} vendas</span>
+          </div>
+          <div class="fx-inline-actions">
+            <button class="fx-button-secondary js-product-edit" type="button" data-product-id="${product.id}">Editar</button>
+            <a class="fx-button" href="./inventory.html">Ajustar estoque</a>
+            <button class="fx-button-ghost js-catalog-pause" type="button" data-product-id="${product.id}">
+              ${product.status === "paused" ? "Reativar" : "Pausar"}
+            </button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function populateProductForm(product, categories) {
+  const title = document.querySelector("#fx-product-form-title");
+  const resetButton = document.querySelector("#fx-product-reset");
+
+  if (!product) {
+    setInputValue("#fx-product-id", "");
+    setInputValue("#fx-product-name", "");
+    setInputValue("#fx-product-sku", "");
+    setInputValue("#fx-product-price", "");
+    setInputValue("#fx-product-stock", "0");
+    setInputValue("#fx-product-min-stock", "0");
+    setInputValue("#fx-product-image", "");
+    setInputValue("#fx-product-description", "");
+    setInputValue("#fx-product-status", "active");
+    setInputValue("#fx-product-category", categories[0]?.id || "");
+    if (title) title.textContent = "Cadastrar novo produto";
+    if (resetButton) resetButton.textContent = "Limpar formulario";
+    return;
+  }
+
+  setInputValue("#fx-product-id", product.id);
+  setInputValue("#fx-product-name", product.name);
+  setInputValue("#fx-product-sku", product.sku);
+  setInputValue("#fx-product-price", String(product.base_price ?? ""));
+  setInputValue("#fx-product-stock", String(product.stock_quantity ?? 0));
+  setInputValue("#fx-product-min-stock", String(product.min_stock_quantity ?? 0));
+  setInputValue("#fx-product-image", product.image_path || "");
+  setInputValue("#fx-product-description", product.description || "");
+  setInputValue("#fx-product-status", product.status || "active");
+
+  const matchingCategory = categories.find(
+    (category) => category.id === product.category_id || category.slug === product.category_slug || category.name === product.category
+  );
+  setInputValue("#fx-product-category", matchingCategory?.id || categories[0]?.id || "");
+
+  if (title) title.textContent = `Editar produto: ${product.name}`;
+  if (resetButton) resetButton.textContent = "Cancelar edicao";
+}
+
+function buildProductPayload() {
+  return {
+    category_id: document.querySelector("#fx-product-category")?.value ?? "",
+    name: document.querySelector("#fx-product-name")?.value?.trim() ?? "",
+    description: document.querySelector("#fx-product-description")?.value?.trim() ?? "",
+    sku: document.querySelector("#fx-product-sku")?.value?.trim().toUpperCase() ?? "",
+    base_price: Number(document.querySelector("#fx-product-price")?.value ?? 0),
+    currency: "BRL",
+    status: document.querySelector("#fx-product-status")?.value ?? "active",
+    stock_quantity: Number(document.querySelector("#fx-product-stock")?.value ?? 0),
+    min_stock_quantity: Number(document.querySelector("#fx-product-min-stock")?.value ?? 0),
+    image_path: document.querySelector("#fx-product-image")?.value?.trim() ?? ""
+  };
+}
+
+function renderInventorySummary(metrics) {
+  const values = [
+    { value: String(metrics.low_stock_count || 0), label: "itens abaixo do mínimo" },
+    { value: String(metrics.paused_count || 0), label: "itens pausados" },
+    { value: String(metrics.normal_count || 0), label: "itens com disponibilidade normal" },
+    { value: metrics.review_sla || "15 min", label: "tempo médio para revisão de ruptura" }
+  ];
+
+  document.querySelectorAll(".fx-compact-metric").forEach((element, index) => {
+    const current = values[index];
+    if (!current) return;
+    const strong = element.querySelector("strong");
+    const span = element.querySelector("span");
+    if (strong) strong.textContent = current.value;
+    if (span) span.textContent = current.label;
+  });
+}
+
+function renderInventoryTable(products) {
+  const tbody = document.querySelector("#fx-inventory-table-body");
+  if (!tbody) return;
+
+  tbody.innerHTML = products
+    .map(
+      (product) => `
+        <tr>
+          <td>${product.name}</td>
+          <td>${product.category}</td>
+          <td>${product.stock_quantity}</td>
+          <td>${product.min_stock_quantity}</td>
+          <td><span class="fx-status ${getInventoryTone(product)}">${getInventoryLabel(product)}</span></td>
+          <td>
+            <button
+              class="fx-button-ghost js-inventory-update"
+              type="button"
+              data-product-id="${product.id}"
+              data-stock="${product.stock_quantity}"
+              data-min-stock="${product.min_stock_quantity}"
+              data-status="${product.status}"
+              data-name="${product.name}"
+            >
+              Ajustar
+            </button>
+          </td>
+        </tr>
+      `
+    )
+    .join("");
+}
+
 function renderSchedules(hours) {
   const list = document.querySelector("#fx-schedule-list");
   if (!list) return;
@@ -360,6 +720,209 @@ function renderSchedules(hours) {
       `
     )
     .join("");
+}
+
+async function handleDashboardScreen() {
+  const dashboard = await getPartnerDashboard();
+  renderDashboard(dashboard);
+}
+
+async function handleOrdersScreen() {
+  const search = document.querySelector("#fx-orders-search");
+  const chips = document.querySelectorAll(".fx-filter-chip");
+  let activeFilter = "all";
+  let payload = await getPartnerOrders();
+
+  const rerender = () => {
+    renderOrdersTable(payload, search?.value ?? "", activeFilter);
+  };
+
+  rerender();
+  search?.addEventListener("input", rerender);
+
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      chips.forEach((item) => item.classList.remove("is-active"));
+      chip.classList.add("is-active");
+      activeFilter = chip.dataset.filter || "all";
+      rerender();
+    });
+  });
+
+  document.querySelector("#fx-orders-table-body")?.addEventListener("click", async (event) => {
+    const trigger = event.target.closest(".js-order-status");
+    if (!trigger) return;
+
+    try {
+      payload = await updatePartnerOrderStatus(trigger.dataset.orderId, {
+        status: trigger.dataset.nextStatus,
+        note: "Atualizacao manual via portal do parceiro"
+      });
+      rerender();
+      showFeedback("#fx-orders-feedback", "Status do pedido atualizado com sucesso.");
+    } catch (error) {
+      showFeedback("#fx-orders-feedback", error.message, "error");
+    }
+  });
+}
+
+async function handleCatalogScreen(session) {
+  const search = document.querySelector("#fx-catalog-search");
+  const chips = document.querySelectorAll(".fx-filter-chip");
+  const form = document.querySelector("#fx-product-form");
+  const reset = document.querySelector("#fx-product-reset");
+  const newButton = document.querySelector("#fx-catalog-new");
+  let activeFilter = "all";
+  let selectedProductId = "";
+  let catalog = normalizeCatalogState(await loadCatalogState(session));
+
+  const rerender = () => {
+    const query = search?.value ?? "";
+    renderCatalogSummary(catalog);
+    renderCategoryOptions(catalog.categories);
+    renderCatalog(filterCatalogProducts(catalog.products || [], query, activeFilter), selectedProductId);
+  };
+
+  populateProductForm(null, catalog.categories);
+  rerender();
+
+  search?.addEventListener("input", rerender);
+  newButton?.addEventListener("click", () => {
+    selectedProductId = "";
+    populateProductForm(null, catalog.categories);
+    rerender();
+  });
+  reset?.addEventListener("click", () => {
+    selectedProductId = "";
+    populateProductForm(null, catalog.categories);
+    rerender();
+  });
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      chips.forEach((item) => item.classList.remove("is-active"));
+      chip.classList.add("is-active");
+      activeFilter = chip.dataset.filter || "all";
+      rerender();
+    });
+  });
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    try {
+      const productId = document.querySelector("#fx-product-id")?.value ?? "";
+      const payload = buildProductPayload();
+      const response = productId
+        ? await updatePartnerProduct(productId, payload)
+        : await createPartnerProduct(payload);
+
+      catalog = normalizeCatalogState({
+        categories: response.categories || catalog.categories || [],
+        products: response.products || catalog.products || [],
+        inventory: response.inventory || catalog.inventory || {}
+      });
+      writeCache(buildCacheKey("catalog", session), catalog);
+      selectedProductId = response.product?.id || productId || "";
+      populateProductForm(
+        (catalog.products || []).find((product) => product.id === selectedProductId) || null,
+        catalog.categories
+      );
+      rerender();
+      showFeedback("#fx-catalog-feedback", productId ? "Produto atualizado com sucesso." : "Produto cadastrado com sucesso.");
+    } catch (error) {
+      showFeedback("#fx-catalog-feedback", error.message, "error");
+    }
+  });
+
+  document.querySelector("#fx-catalog-list")?.addEventListener("click", async (event) => {
+    const editTrigger = event.target.closest(".js-product-edit");
+    if (editTrigger) {
+      selectedProductId = editTrigger.dataset.productId || "";
+      const currentProduct = (catalog.products || []).find((product) => product.id === selectedProductId) || null;
+      populateProductForm(currentProduct, catalog.categories);
+      rerender();
+      return;
+    }
+
+    const trigger = event.target.closest(".js-catalog-pause");
+    if (!trigger || document.body.dataset.fxScreen !== "catalog") return;
+
+    const productId = trigger.dataset.productId;
+    const current = (catalog.products || []).find((product) => product.id === productId);
+    if (!current) return;
+
+    try {
+      const response = await updatePartnerProductInventory(productId, {
+        stock_quantity: current.stock_quantity,
+        min_stock_quantity: current.min_stock_quantity,
+        status: current.status === "paused" ? "active" : "paused",
+        note: "Atualização rápida via catálogo"
+      });
+
+      catalog = {
+        categories: response.categories || catalog.categories || [],
+        products: response.products || catalog.products || [],
+        inventory: response.inventory || catalog.inventory || {}
+      };
+      writeCache(buildCacheKey("catalog", session), catalog);
+      if (selectedProductId === productId) {
+        const refreshed = (catalog.products || []).find((product) => product.id === productId) || null;
+        populateProductForm(refreshed, catalog.categories);
+      }
+      rerender();
+      showFeedback("#fx-catalog-feedback", "Status do produto atualizado com sucesso.");
+    } catch (error) {
+      showFeedback("#fx-catalog-feedback", error.message, "error");
+    }
+  });
+}
+
+async function handleInventoryScreen(session) {
+  let catalog = await loadCatalogState(session);
+  renderInventorySummary(catalog.inventory || {});
+  renderInventoryTable(catalog.products || []);
+
+  document.querySelector("#fx-inventory-table-body")?.addEventListener("click", async (event) => {
+    const trigger = event.target.closest(".js-inventory-update");
+    if (!trigger) return;
+
+    const productId = trigger.dataset.productId;
+    const current = (catalog.products || []).find((product) => product.id === productId);
+    if (!current) return;
+
+    const nextStock = window.prompt(`Novo estoque para ${current.name}:`, String(current.stock_quantity));
+    if (nextStock === null) return;
+
+    const nextMinStock = window.prompt(`Novo estoque mínimo para ${current.name}:`, String(current.min_stock_quantity));
+    if (nextMinStock === null) return;
+
+    const parsedStock = Number(nextStock);
+    const parsedMinStock = Number(nextMinStock);
+    if (Number.isNaN(parsedStock) || Number.isNaN(parsedMinStock) || parsedStock < 0 || parsedMinStock < 0) {
+      showFeedback("#fx-inventory-feedback", "Informe valores numéricos válidos para o estoque.", "error");
+      return;
+    }
+
+    try {
+      const response = await updatePartnerProductInventory(productId, {
+        stock_quantity: parsedStock,
+        min_stock_quantity: parsedMinStock,
+        status: current.status,
+        note: "Ajuste manual via tela de estoque"
+      });
+
+      catalog = {
+        products: response.products || catalog.products || [],
+        inventory: response.inventory || catalog.inventory || {}
+      };
+      writeCache(buildCacheKey("catalog", session), catalog);
+      renderInventorySummary(catalog.inventory || {});
+      renderInventoryTable(catalog.products || []);
+      showFeedback("#fx-inventory-feedback", "Estoque atualizado com sucesso.");
+    } catch (error) {
+      showFeedback("#fx-inventory-feedback", error.message, "error");
+    }
+  });
 }
 
 async function handleLogin() {
@@ -407,7 +970,7 @@ async function handleProfileScreen(session) {
       };
 
       const updated = await updatePartnerProfile(payload);
-      writeCache(CACHE_KEYS.profile, updated);
+      writeCache(buildCacheKey("profile", session), updated);
       renderProfile(updated);
       showFeedback("#fx-profile-feedback", "Perfil atualizado com sucesso.");
     } catch (error) {
@@ -442,7 +1005,7 @@ async function handleStoreScreen(session) {
       };
 
       storeState = await updatePartnerStore(payload);
-      writeCache(CACHE_KEYS.store, storeState);
+      writeCache(buildCacheKey("store", session), storeState);
       renderStore(storeState);
       hydrateBrand(storeState, session);
       showFeedback("#fx-store-feedback", "Dados da loja atualizados com sucesso.");
@@ -473,7 +1036,7 @@ async function handleStoreScreen(session) {
         ...storeState,
         documents: response.documents || storeState.documents || []
       };
-      writeCache(CACHE_KEYS.store, storeState);
+      writeCache(buildCacheKey("store", session), storeState);
       renderStore(storeState);
       documentForm.reset();
       showFeedback("#fx-store-feedback", "Documento adicionado à fila de análise.");
@@ -507,7 +1070,7 @@ async function handleSchedulesScreen(session) {
         ...storeState,
         hours: response.hours || hours
       };
-      writeCache(CACHE_KEYS.store, storeState);
+      writeCache(buildCacheKey("store", session), storeState);
       renderSchedules(storeState.hours || []);
       showFeedback("#fx-hours-feedback", "Horários atualizados com sucesso.");
     } catch (error) {
@@ -527,7 +1090,12 @@ async function boot() {
   if (!session) return;
 
   bindLogout("partner");
-  injectSessionLabel(".fx-brand-chip strong", session);
+  try {
+    const sharedStoreState = await loadStoreState(session);
+    hydrateBrand(sharedStoreState, session);
+  } catch (_error) {
+    injectSessionLabel(".fx-brand-chip strong", session);
+  }
 
   if (screen === "profile") {
     await handleProfileScreen(session);
@@ -544,18 +1112,27 @@ async function boot() {
     return;
   }
 
-  const data = await getPartnerData();
+  if (screen === "catalog") {
+    await handleCatalogScreen(session);
+    return;
+  }
+
+  if (screen === "inventory") {
+    await handleInventoryScreen(session);
+    return;
+  }
 
   if (screen === "dashboard") {
-    setText(".fx-hero-content .fx-title-lg", data.dashboard.heroTitle);
-    setText(".fx-hero-content .fx-lead", data.dashboard.heroLead);
-    renderSummary(data.dashboard.summary);
-    renderMetrics(data.dashboard.metrics);
+    await handleDashboardScreen();
+    return;
   }
 
   if (screen === "orders") {
-    renderOrders(data.orders);
+    await handleOrdersScreen();
+    return;
   }
+
+  const data = await getPartnerData();
 
   if (screen === "finance") {
     renderFinance(data.finance);

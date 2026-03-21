@@ -55,6 +55,7 @@
                 <p class="fx-copy">O estoque influencia o aceite, a conversao do pedido e a experiencia do cliente. Esta visao concentra os itens que precisam de atencao.</p>
               </div>
             </section>
+            <div id="fx-inventory-feedback" class="fx-note fx-feedback" hidden></div>
             <section class="fx-compact-metrics">
               <article class="fx-compact-metric"><strong>6</strong><span>itens abaixo do minimo</span></article>
               <article class="fx-compact-metric"><strong>9</strong><span>itens pausados</span></article>
@@ -66,12 +67,7 @@
                 <thead>
                   <tr><th>Item</th><th>Categoria</th><th>Estoque atual</th><th>Estoque minimo</th><th>Status</th><th>Acao rapida</th></tr>
                 </thead>
-                <tbody>
-                  <tr><td>Kit farmacia rapida</td><td>Farmacia</td><td>4</td><td>12</td><td><span class="fx-status warning">baixo</span></td><td><a class="fx-button-ghost" href="#">Repor</a></td></tr>
-                  <tr><td>Agua 500ml</td><td>Convivencia</td><td>0</td><td>10</td><td><span class="fx-status danger">esgotado</span></td><td><a class="fx-button-ghost" href="#">Pausar</a></td></tr>
-                  <tr><td>Hamburguer Fox Prime</td><td>Sanduiches</td><td>38</td><td>10</td><td><span class="fx-status success">normal</span></td><td><a class="fx-button-ghost" href="#">Ajustar</a></td></tr>
-                  <tr><td>Combo mercado essencial</td><td>Mercado</td><td>18</td><td>15</td><td><span class="fx-status warning">atencao</span></td><td><a class="fx-button-ghost" href="#">Aumentar</a></td></tr>
-                </tbody>
+                <tbody id="fx-inventory-table-body"></tbody>
               </table>
             </section>
           </div>

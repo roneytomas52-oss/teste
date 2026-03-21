@@ -44,7 +44,7 @@
             <h1 class="fx-title-sm">Fila e histórico operacional</h1>
           </div>
           <div class="fx-topbar-actions">
-            <input class="fx-search" type="search" placeholder="Buscar número do pedido ou cliente" />
+            <input class="fx-search" id="fx-orders-search" type="search" placeholder="Buscar numero do pedido ou cliente" />
             <a class="fx-button-secondary" href="#">Exportar pedidos</a>
           </div>
         </header>
@@ -64,24 +64,25 @@
             </section>
 
             <section class="fx-filter-row">
-              <button class="fx-filter-chip is-active" type="button">Todos</button>
-              <button class="fx-filter-chip" type="button">Aguardando aceite</button>
-              <button class="fx-filter-chip" type="button">Em preparo</button>
-              <button class="fx-filter-chip" type="button">Prontos</button>
-              <button class="fx-filter-chip" type="button">Concluídos</button>
-              <button class="fx-filter-chip" type="button">Cancelados</button>
+              <button class="fx-filter-chip is-active" type="button" data-filter="all">Todos</button>
+              <button class="fx-filter-chip" type="button" data-filter="pending_acceptance">Aguardando aceite</button>
+              <button class="fx-filter-chip" type="button" data-filter="preparing">Em preparo</button>
+              <button class="fx-filter-chip" type="button" data-filter="ready_for_pickup">Prontos</button>
+              <button class="fx-filter-chip" type="button" data-filter="completed">Concluidos</button>
+              <button class="fx-filter-chip" type="button" data-filter="cancelled">Cancelados</button>
             </section>
 
             <section class="fx-table-card">
               <div class="fx-table-tools">
                 <div class="fx-inline-actions">
                   <span class="fx-pill">Hoje</span>
-                  <span class="fx-copy-sm">37 pedidos processados, 4 em andamento e 1 com atenção.</span>
+                  <span class="fx-copy-sm" id="fx-orders-summary">Carregando resumo operacional.</span>
                 </div>
                 <div class="fx-inline-actions">
                   <a class="fx-button-ghost" href="#">Atualizar fila</a>
                 </div>
               </div>
+              <div class="fx-note" id="fx-orders-feedback" hidden></div>
               <table>
                 <thead>
                   <tr>
@@ -93,48 +94,7 @@
                     <th>Ações</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>#FD-10482</td>
-                    <td>Ana Souza</td>
-                    <td><span class="fx-status warning">aguardando aceite</span></td>
-                    <td>4 min</td>
-                    <td>R$ 78,90</td>
-                    <td><a class="fx-button-ghost" href="#">Aceitar</a></td>
-                  </tr>
-                  <tr>
-                    <td>#FD-10479</td>
-                    <td>Paulo Lima</td>
-                    <td><span class="fx-status success">em preparo</span></td>
-                    <td>10 min</td>
-                    <td>R$ 54,20</td>
-                    <td><a class="fx-button-ghost" href="#">Atualizar</a></td>
-                  </tr>
-                  <tr>
-                    <td>#FD-10471</td>
-                    <td>Júlia Martins</td>
-                    <td><span class="fx-status warning">pronto para retirada</span></td>
-                    <td>2 min</td>
-                    <td>R$ 31,00</td>
-                    <td><a class="fx-button-ghost" href="#">Sinalizar coleta</a></td>
-                  </tr>
-                  <tr>
-                    <td>#FD-10455</td>
-                    <td>Carlos Vieira</td>
-                    <td><span class="fx-status success">concluído</span></td>
-                    <td>entregue</td>
-                    <td>R$ 92,40</td>
-                    <td><a class="fx-button-ghost" href="#">Ver detalhes</a></td>
-                  </tr>
-                  <tr>
-                    <td>#FD-10433</td>
-                    <td>Mariana Costa</td>
-                    <td><span class="fx-status danger">cancelado</span></td>
-                    <td>fora da janela</td>
-                    <td>R$ 44,90</td>
-                    <td><a class="fx-button-ghost" href="#">Registrar motivo</a></td>
-                  </tr>
-                </tbody>
+                <tbody id="fx-orders-table-body"></tbody>
               </table>
             </section>
           </div>

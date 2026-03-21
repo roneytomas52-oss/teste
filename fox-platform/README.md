@@ -99,9 +99,11 @@ Ja definido e materializado:
 - perfil, loja, horarios e documentos conectados ao backend do parceiro
 - SDK do parceiro em modo API-first com fallback local
 - credenciais de demonstracao alinhadas entre mock e seed inicial
+- catalogo inicial e estoque da loja conectados ao backend do parceiro
+- rotas reais para listagem de produtos e ajuste de inventario
 
 Proxima etapa recomendada:
 
-- entrar na Sprint 3 da Fase 9 com catalogo real
-- ligar estoque e pedidos reais ao portal do parceiro
+- concluir a Sprint 3 da Fase 9 com criacao e edicao de produto
+- ligar pedidos reais ao portal do parceiro
 - iniciar o primeiro dashboard administrativo com leitura de banco

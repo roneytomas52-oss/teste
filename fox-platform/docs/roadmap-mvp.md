@@ -78,8 +78,12 @@
   - perfil real do parceiro
   - loja, horarios e documentos com rotas reais
   - SDK do parceiro em modo API-first com fallback local
+- Sprint 3 iniciada:
+  - catalogo real ligado ao backend
+  - ajuste de estoque por produto
+  - telas de catalogo e estoque conectadas
 - Proximo foco:
-  - catalogo real
+  - criacao e edicao real de produto
   - pedidos reais
   - dashboard e admin consumindo banco
 

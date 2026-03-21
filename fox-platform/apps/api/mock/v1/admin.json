@@ -12,8 +12,29 @@
       { "label": "entregadores habilitados", "value": "3.912" },
       { "label": "pedidos dentro do SLA", "value": "97,4%" },
       { "label": "alertas críticos abertos", "value": "12" }
+    ],
+    "alerts": [
+      "8 lojas com pausa operacional acima de 30 minutos.",
+      "3 repasses aguardando conferência financeira.",
+      "12 pedidos com atraso acima do padrão."
     ]
   },
+  "orders": [
+    { "id": "#FD-10482", "store_name": "Mercado Nova Rota", "customer": "Ana Souza", "status": "aguardando aceite", "status_key": "pending_acceptance", "statusType": "warning", "sla": "4 min", "driver_name": "sem atribuicao", "value": "R$ 78,90" },
+    { "id": "#FD-10479", "store_name": "Fox Burgers Centro", "customer": "Paulo Lima", "status": "em preparo", "status_key": "preparing", "statusType": "success", "sla": "10 min", "driver_name": "Lucas Ferreira", "value": "R$ 54,20" },
+    { "id": "#FD-10471", "store_name": "Farmácia São Lucas", "customer": "Júlia Martins", "status": "pronto para retirada", "status_key": "ready_for_pickup", "statusType": "warning", "sla": "2 min", "driver_name": "Daniela Matos", "value": "R$ 31,00" },
+    { "id": "#FD-10433", "store_name": "Conveniência Central", "customer": "Mariana Costa", "status": "cancelado", "status_key": "cancelled", "statusType": "danger", "sla": "fora da janela", "driver_name": "nao atribuido", "value": "R$ 44,90" }
+  ],
+  "partnerApprovals": [
+    { "id": "approval-partner-1", "name": "Mercado Nova Rota", "summary": "Cadastro aguardando revisão documental, enquadramento comercial e conferência operacional.", "meta": ["Mercado", "São Paulo", "análise inicial"], "status": "documentação pendente", "statusType": "warning", "action": "Abrir cadastro" },
+    { "id": "approval-partner-2", "name": "Farmácia São Lucas", "summary": "Documentos ok, conta bancária validada e operação pronta para ativação após revisão de horário.", "meta": ["Farmácia", "Campinas", "alto potencial"], "status": "apto para ativação", "statusType": "success", "action": "Ativar loja" },
+    { "id": "approval-partner-3", "name": "Conveniência Central", "summary": "Cadastro novo com divergência entre razão social e documento informado no responsável.", "meta": ["Conveniência", "Guarulhos", "atenção cadastral"], "status": "revisão manual", "statusType": "danger", "action": "Solicitar correções" }
+  ],
+  "driverApprovals": [
+    { "id": "approval-driver-1", "name": "Lucas Ferreira", "summary": "Moto validada, CNH conferida e conta bancária pronta para ativação.", "meta": ["Moto", "São Paulo", "documentos ok"], "status": "apto para ativação", "statusType": "success", "action": "Ativar entregador" },
+    { "id": "approval-driver-2", "name": "Marina Costa", "summary": "Perfil com divergência entre comprovante e documento principal. Requer revisão manual.", "meta": ["Bike", "Santos", "risco médio"], "status": "revisão manual", "statusType": "danger", "action": "Abrir documentos" },
+    { "id": "approval-driver-3", "name": "Rafael Gomes", "summary": "Aguardando envio de foto frontal do documento e validação do veículo.", "meta": ["Carro", "Osasco", "pendência"], "status": "documentação pendente", "statusType": "warning", "action": "Solicitar ajuste" }
+  ],
   "finance": {
     "balance": "R$ 182.430",
     "balanceNote": "Volume bruto processado hoje na plataforma, consolidando pedidos pagos, taxas e previsão de repasses.",
