@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fox Platform Admin | Aprovacao de entregadores</title>
+    <title>Fox Platform Admin | NotificaÃ§Ãµes</title>
     <link rel="stylesheet" href="./admin.css" />
   </head>
-  <body data-fx-screen="drivers-approvals">
+  <body data-fx-screen="notifications">
     <div class="fx-app-shell">
       <aside class="fx-sidebar">
         <div class="fx-brand-lockup">
@@ -17,12 +17,13 @@
               <div class="fx-copy-sm">Admin da operacao</div>
             </div>
           </div>
-          <p class="fx-copy-sm">Validacao da entrada de entregadores por documentos, modalidade e risco operacional.</p>
+          <p class="fx-copy-sm">Leitura central das notificacoes administrativas com priorizacao por criticidade e contexto operacional.</p>
         </div>
+
         <nav class="fx-sidebar-nav">
           <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
           <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
-          <a class="fx-sidebar-link is-active" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
           <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
           <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
           <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
@@ -30,33 +31,46 @@
           <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
           <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
           <a class="fx-sidebar-link" href="./support.html">Suporte</a>
-          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
-                    <a class="fx-sidebar-link" href="./permissions.html">Permissoes</a>
-                    <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
+          <a class="fx-sidebar-link is-active" href="./notifications.html">Notificacoes</a>
+          <a class="fx-sidebar-link" href="./permissions.html">Permissoes</a>
+          <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
           <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
         </nav>
       </aside>
+
       <main class="fx-shell-main">
         <header class="fx-shell-topbar">
           <div>
-            <div class="fx-pill">Entregadores</div>
-            <h1 class="fx-title-sm">Fila de aprovacao operacional</h1>
+            <div class="fx-pill">Notificacoes</div>
+            <h1 class="fx-title-sm">Fila de alertas e comunicados do admin</h1>
           </div>
           <div class="fx-topbar-actions">
-            <input class="fx-search" type="search" placeholder="Buscar entregador, CPF ou placa" />
-            <a class="fx-button-secondary" href="#">Baixar fila</a>
+            <a class="fx-button-secondary" href="./support.html">Abrir suporte</a>
           </div>
         </header>
+
         <div class="fx-shell-content">
           <div class="fx-admin-view">
             <section class="fx-page-header">
               <div class="fx-page-header-copy">
-                <div class="fx-eyebrow">Entrada de entregadores</div>
-                <h2 class="fx-title-md">Valide documentacao, modalidade e seguranca antes da ativacao do entregador.</h2>
-                <p class="fx-copy">A aprovacao operacional garante coerencia documental, readiness da modalidade e aderencia ao criterio da plataforma.</p>
+                <div class="fx-eyebrow">Sinalizacao operacional</div>
+                <h2 class="fx-title-md">Acompanhe alertas da plataforma, convites de acesso e contextos que exigem decisao administrativa.</h2>
+                <p class="fx-copy">As notificacoes abaixo consolidam sinais do sistema, eventos de acesso e filas que precisam de acompanhamento do time interno.</p>
               </div>
             </section>
-            <section class="fx-approval-grid" id="fx-admin-drivers-approvals"></section>
+
+            <section class="fx-admin-grid" id="fx-admin-notifications-summary"></section>
+
+            <section class="fx-card">
+              <div class="fx-card-header">
+                <div>
+                  <span class="fx-pill">Timeline</span>
+                  <h3 class="fx-title-sm">Notificacoes recentes</h3>
+                </div>
+              </div>
+              <div class="fx-notification-list" id="fx-admin-notifications-list"></div>
+              <p class="fx-note" id="fx-admin-notifications-feedback" hidden></p>
+            </section>
           </div>
         </div>
       </main>

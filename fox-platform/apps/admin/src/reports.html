@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Relatórios</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="reports">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Consolidado administrativo de parceiros, entregadores, suporte e principais contas da operacao.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link is-active" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
+          <a class="fx-sidebar-link" href="./permissions.html">Permissoes</a>
+          <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Relatorios</div>
+            <h1 class="fx-title-sm">Consolidado administrativo da plataforma</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="./analytics.html">Abrir analytics</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Fechamento operacional</div>
+                <h2 class="fx-title-md">Leia rapidamente a situacao da base de parceiros, entregadores, suporte e lojas com maior impacto na operacao.</h2>
+                <p class="fx-copy">Os blocos abaixo consolidam o estado atual do ecossistema para leitura gerencial e acompanhamento administrativo.</p>
+              </div>
+            </section>
+
+            <section class="fx-admin-grid" id="fx-admin-reports-summary"></section>
+
+            <section class="fx-chart-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Status de parceiros</h3>
+                  <span class="fx-pill">base atual</span>
+                </div>
+                <div class="fx-info-list" id="fx-admin-reports-partner-status"></div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Status de entregadores</h3>
+                  <span class="fx-pill">base atual</span>
+                </div>
+                <div class="fx-info-list" id="fx-admin-reports-driver-status"></div>
+              </article>
+            </section>
+
+            <section class="fx-chart-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Fila por time</h3>
+                  <span class="fx-pill">suporte</span>
+                </div>
+                <div class="fx-info-list" id="fx-admin-reports-support-teams"></div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Lojas com maior volume</h3>
+                  <span class="fx-pill">pedidos</span>
+                </div>
+                <div class="fx-table-wrap">
+                  <table class="fx-table">
+                    <thead>
+                      <tr>
+                        <th>Loja</th>
+                        <th>Pedidos</th>
+                        <th>Volume bruto</th>
+                      </tr>
+                    </thead>
+                    <tbody id="fx-admin-reports-top-stores"></tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

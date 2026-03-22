@@ -134,9 +134,39 @@
   - detalhe operacional de pedidos para admin
   - lista de pedidos com navegacao para detalhe nas duas interfaces
   - smoke test expandido e validado contra os endpoints novos
+- Sprint 14 concluida:
+  - detalhe do ticket de suporte no admin
+  - resposta do admin ao ticket pela API
+  - atualizacao de status do ticket pela API
+  - fila do suporte ligada a tela de atendimento
+  - smoke test expandido e validado contra os endpoints de suporte do admin
+- Sprint 15 concluida:
+  - acoes operacionais do admin em pedidos
+  - atualizacao de status de pedido pela API
+  - observacao interna de pedido pela API
+  - detalhe do pedido no admin com formularios operacionais
+  - smoke test expandido e validado contra `admin.order.status` e `admin.order.note`
+- Sprint 16 concluida:
+  - analise detalhada de aprovacao de parceiros no admin
+  - analise detalhada de aprovacao de entregadores no admin
+  - historico persistido de revisao administrativa por cadastro
+  - decisao com observacao para parceiro e entregador pela API
+  - smoke test expandido e validado contra os fluxos de detalhe e decisao de aprovacao
+- Sprint 17 concluida:
+  - gestao de acessos internos do admin pela API
+  - tela de permissoes e acessos administrativos no painel interno
+  - notificacoes administrativas com leitura e acompanhamento por tela dedicada
+  - seed complementar de equipe interna e notificacoes do admin
+  - smoke test expandido e validado contra `admin.notifications` e `admin.access.*`
+ - Sprint 18 concluida:
+   - analytics do admin ligado ao backend real
+   - relatorios administrativos consolidados via API
+   - nova tela `reports.html` integrada ao painel interno
+   - fallback do admin alinhado ao novo contrato de analytics e relatorios
+   - smoke test expandido e validado contra `admin.analytics` e `admin.reports`
 - Proximo foco:
-  - iniciar Sprint 14 com acoes operacionais do admin sobre suporte e pedidos
-  - expandir CRUDs administrativos e trilhas de resolucao sobre o runtime validado
+  - endurecer RBAC do admin por perfil funcional nas rotas ja existentes
+  - exportacao e filtros operacionais mais profundos para relatorios administrativos
 
 ## Entregavel minimo para primeira versao
 

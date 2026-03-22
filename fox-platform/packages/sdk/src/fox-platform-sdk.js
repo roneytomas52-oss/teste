@@ -1066,6 +1066,24 @@ export async function getAdminDashboard() {
   };
 }
 
+export async function getAdminAnalytics() {
+  const payload = await requestApi("api/v1/admin/analytics", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return data.analytics || {
+    cards: [],
+    status_distribution: [],
+    city_distribution: [],
+    highlights: []
+  };
+}
+
 export async function getAdminFinance() {
   const payload = await requestApi("api/v1/admin/finance/overview", {
     allowFallback: true
@@ -1180,6 +1198,107 @@ export async function getAdminOrderDetail(orderId) {
   };
 }
 
+function buildFallbackAdminOrderStatusMeta(status) {
+  const mapping = {
+    pending_acceptance: { label: "aguardando aceite", tone: "warning" },
+    accepted: { label: "aceito", tone: "success" },
+    preparing: { label: "em preparo", tone: "success" },
+    ready_for_pickup: { label: "pronto para retirada", tone: "warning" },
+    on_route: { label: "em rota", tone: "success" },
+    completed: { label: "concluido", tone: "success" },
+    cancelled: { label: "cancelado", tone: "danger" }
+  };
+
+  return mapping[status] || { label: status, tone: "warning" };
+}
+
+export async function updateAdminOrderStatus(orderId, body) {
+  const payload = await requestApi(`api/v1/admin/orders/${orderId}/status`, {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getAdminOrderDetail(orderId);
+  const meta = buildFallbackAdminOrderStatusMeta(body.status);
+  const nextTimeline = [
+    ...(current.timeline || []),
+    {
+      title: `Status atualizado para ${meta.label}`,
+      description: body.note || "Atualizacao manual via Admin Fox Platform.",
+      actor: "Fox Platform",
+      created_at: "agora"
+    }
+  ];
+
+  return {
+    ...current,
+    order: {
+      ...current.order,
+      status: meta.label,
+      status_key: body.status,
+      status_type: meta.tone,
+      accepted_at:
+        body.status === "accepted" && (!current.order?.accepted_at || current.order.accepted_at === "-")
+          ? "agora"
+          : current.order?.accepted_at || "-",
+      completed_at: body.status === "completed" ? "agora" : current.order?.completed_at || "-",
+      cancelled_at: body.status === "cancelled" ? "agora" : body.status !== "cancelled" ? "-" : current.order?.cancelled_at || "-"
+    },
+    timeline: nextTimeline
+  };
+}
+
+export async function addAdminOrderNote(orderId, body) {
+  const payload = await requestApi(`api/v1/admin/orders/${orderId}/note`, {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getAdminOrderDetail(orderId);
+
+  return {
+    ...current,
+    timeline: [
+      ...(current.timeline || []),
+      {
+        title: "Observacao interna registrada",
+        description: body.note,
+        actor: "Fox Platform",
+        created_at: "agora"
+      }
+    ]
+  };
+}
+
+export async function getAdminReports() {
+  const payload = await requestApi("api/v1/admin/reports", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return data.reports || {
+    summary: [],
+    partner_status: [],
+    driver_status: [],
+    support_teams: [],
+    top_stores: []
+  };
+}
+
 export async function getAdminPartnerApprovals() {
   const payload = await requestApi("api/v1/admin/approvals/partners", {
     allowFallback: true
@@ -1195,6 +1314,79 @@ export async function getAdminPartnerApprovals() {
   };
 }
 
+export async function getAdminPartnerApprovalDetail(partnerId) {
+  const payload = await requestApi(`api/v1/admin/approvals/partners/${partnerId}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const list = await getAdminPartnerApprovals();
+  const item = (list.items || []).find((entry) => entry.id === partnerId) || list.items?.[0];
+
+  return {
+    approval: {
+      id: item?.id || partnerId,
+      name: item?.name || "Parceiro Fox Delivery",
+      legal_name: item?.name || "Empresa parceira",
+      document_number: "00.000.000/0001-00",
+      status: item?.status || "documentacao pendente",
+      status_type: item?.statusType || "warning",
+      city: item?.meta?.[0] || "-",
+      state: item?.meta?.[1] || "-",
+      store_email: "contato@parceirofox.com.br",
+      store_phone: "+55 11 90000-0000",
+      owner_name: "Responsavel da operacao",
+      owner_email: "responsavel@parceirofox.com.br",
+      owner_phone: "+55 11 90000-0001",
+      account_status: "pendente"
+    },
+    documents: [
+      { label: "Comprovante de CNPJ", type: "cnpj", file_name: "cnpj.pdf", status: "aprovado", status_type: "success", meta: "issuer: Receita Federal", updated_at: "agora" },
+      { label: "Alvara de funcionamento", type: "alvara", file_name: "alvara.pdf", status: "pendente", status_type: "warning", meta: "notes: aguardando vigencia", updated_at: "agora" }
+    ],
+    review_history: [
+      { title: "Observacao administrativa", description: "Fila criada para revisao documental.", actor: "Fox Platform", created_at: "agora" }
+    ]
+  };
+}
+
+export async function reviewAdminPartnerApproval(partnerId, body) {
+  const payload = await requestApi(`api/v1/admin/approvals/partners/${partnerId}/decision`, {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const detail = await getAdminPartnerApprovalDetail(partnerId);
+  const approved = body.decision === "approve";
+
+  return {
+    ...detail,
+    approval: {
+      ...detail.approval,
+      status: approved ? "ativo" : "revisao manual",
+      status_type: approved ? "success" : "danger",
+      account_status: approved ? "ativa" : "revisao manual"
+    },
+    review_history: [
+      {
+        title: approved ? "Cadastro aprovado" : "Cadastro movido para revisao",
+        description: body.note || (approved ? "Cadastro aprovado pela operacao administrativa." : "Cadastro movido para revisao manual."),
+        actor: "Fox Platform",
+        created_at: "agora"
+      },
+      ...(detail.review_history || [])
+    ]
+  };
+}
+
 export async function getAdminDriverApprovals() {
   const payload = await requestApi("api/v1/admin/approvals/drivers", {
     allowFallback: true
@@ -1207,6 +1399,76 @@ export async function getAdminDriverApprovals() {
   const data = await loadJson("admin.json");
   return {
     items: data.driverApprovals || []
+  };
+}
+
+export async function getAdminDriverApprovalDetail(driverId) {
+  const payload = await requestApi(`api/v1/admin/approvals/drivers/${driverId}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const list = await getAdminDriverApprovals();
+  const item = (list.items || []).find((entry) => entry.id === driverId) || list.items?.[0];
+
+  return {
+    approval: {
+      id: item?.id || driverId,
+      name: item?.name || "Entregador Fox Delivery",
+      email: "entregador@foxdelivery.com.br",
+      phone: "+55 11 90000-0003",
+      modal: item?.meta?.[0] || "Moto",
+      status: item?.status || "documentacao pendente",
+      status_type: item?.statusType || "warning",
+      city: item?.meta?.[1] || "-",
+      state: item?.meta?.[2] || "-",
+      bank_account: "Banco Fox 1524 - 99341-0",
+      rating: "4,90",
+      last_active_at: "agora"
+    },
+    documents: [
+      { label: "Documento de identidade", type: "identidade", file_name: "identidade.pdf", status: "aprovado", status_type: "success", meta: "-", updated_at: "agora" },
+      { label: "Comprovante complementar", type: "cadastro", file_name: "cadastro.pdf", status: "pendente", status_type: "warning", meta: "-", updated_at: "agora" }
+    ],
+    review_history: [
+      { title: "Observacao administrativa", description: "Cadastro aguardando validacao complementar.", actor: "Fox Platform", created_at: "agora" }
+    ]
+  };
+}
+
+export async function reviewAdminDriverApproval(driverId, body) {
+  const payload = await requestApi(`api/v1/admin/approvals/drivers/${driverId}/decision`, {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const detail = await getAdminDriverApprovalDetail(driverId);
+  const approved = body.decision === "approve";
+
+  return {
+    ...detail,
+    approval: {
+      ...detail.approval,
+      status: approved ? "ativo" : "revisao manual",
+      status_type: approved ? "success" : "danger"
+    },
+    review_history: [
+      {
+        title: approved ? "Cadastro aprovado" : "Cadastro movido para revisao",
+        description: body.note || (approved ? "Cadastro aprovado pela operacao administrativa." : "Cadastro movido para revisao manual."),
+        actor: "Fox Platform",
+        created_at: "agora"
+      },
+      ...(detail.review_history || [])
+    ]
   };
 }
 
@@ -1480,6 +1742,172 @@ export async function updateAdminSettings(body) {
       ...current.security,
       ...(body.security || {})
     }
+  };
+}
+
+export async function getAdminAccess() {
+  const payload = await requestApi("api/v1/admin/access", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return data.access || {
+    summary: [],
+    roles: [],
+    members: [],
+    allowed_roles: []
+  };
+}
+
+export async function createAdminAccessMember(body) {
+  const payload = await requestApi("api/v1/admin/access/members", {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getAdminAccess();
+  const role = (current.roles || []).find((item) => item.slug === body.role_slug) || {
+    slug: body.role_slug,
+    name: body.role_slug,
+    permissions: []
+  };
+  const memberId = `admin-member-${Date.now()}`;
+
+  return {
+    ...current,
+    summary: [
+      { label: "usuarios internos", value: String((current.members || []).length + 1) },
+      ...(current.summary || []).slice(1)
+    ],
+    members: [
+      {
+        id: memberId,
+        user_id: memberId,
+        full_name: body.full_name,
+        email: body.email,
+        phone: body.phone || "-",
+        department: body.department || "Operacao",
+        role_slug: body.role_slug,
+        role_label: role.name || body.role_slug,
+        permissions: role.permissions || [],
+        status: body.status === "active" ? "ativo" : body.status === "suspended" ? "suspenso" : body.status === "blocked" ? "bloqueado" : "pendente",
+        status_key: body.status,
+        status_type: body.status === "active" ? "success" : body.status === "blocked" ? "danger" : "warning",
+        is_super: body.role_slug === "super_admin",
+        last_login_at: "-",
+        created_at: "agora"
+      },
+      ...(current.members || [])
+    ]
+  };
+}
+
+export async function updateAdminAccessMember(memberId, body) {
+  const payload = await requestApi(`api/v1/admin/access/members/${memberId}`, {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getAdminAccess();
+  const role = (current.roles || []).find((item) => item.slug === body.role_slug) || {
+    slug: body.role_slug,
+    name: body.role_slug,
+    permissions: []
+  };
+
+  return {
+    ...current,
+    members: (current.members || []).map((member) =>
+      member.id === memberId
+        ? {
+            ...member,
+            full_name: body.full_name,
+            email: body.email,
+            phone: body.phone || "-",
+            department: body.department || "Operacao",
+            role_slug: body.role_slug,
+            role_label: role.name || body.role_slug,
+            permissions: role.permissions || [],
+            status: body.status === "active" ? "ativo" : body.status === "suspended" ? "suspenso" : body.status === "blocked" ? "bloqueado" : "pendente",
+            status_key: body.status,
+            status_type: body.status === "active" ? "success" : body.status === "blocked" ? "danger" : "warning",
+            is_super: body.role_slug === "super_admin"
+          }
+        : member
+    )
+  };
+}
+
+export async function updateAdminAccessMemberStatus(memberId, status) {
+  const payload = await requestApi(`api/v1/admin/access/members/${memberId}/status`, {
+    method: "PUT",
+    body: { status },
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getAdminAccess();
+  return {
+    ...current,
+    members: (current.members || []).map((member) =>
+      member.id === memberId
+        ? {
+            ...member,
+            status: status === "active" ? "ativo" : status === "suspended" ? "suspenso" : status === "blocked" ? "bloqueado" : "pendente",
+            status_key: status,
+            status_type: status === "active" ? "success" : status === "blocked" ? "danger" : "warning"
+          }
+        : member
+    )
+  };
+}
+
+export async function getAdminNotifications() {
+  const payload = await requestApi("api/v1/admin/notifications", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return data.notifications || { summary: [], items: [] };
+}
+
+export async function markAdminNotificationRead(notificationId) {
+  const payload = await requestApi(`api/v1/admin/notifications/${notificationId}/read`, {
+    method: "POST",
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getAdminNotifications();
+  return {
+    ...current,
+    items: (current.items || []).map((item) =>
+      item.id === notificationId ? { ...item, is_read: true } : item
+    )
   };
 }
 

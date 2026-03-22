@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Detalhe do suporte</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="support-detail">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Atendimento interno com historico, resposta e controle de status do ticket.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link is-active" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
+                    <a class="fx-sidebar-link" href="./permissions.html">Permissoes</a>
+                    <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Suporte</div>
+            <h1 class="fx-title-sm">Atendimento detalhado do ticket</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="./support.html">Voltar para a fila</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Ticket operacional</div>
+                <h2 class="fx-title-md" id="fx-admin-support-detail-subject">Carregando ticket...</h2>
+                <p class="fx-copy" id="fx-admin-support-detail-meta">Aguarde enquanto os dados do protocolo sao carregados.</p>
+              </div>
+              <div class="fx-inline-actions">
+                <span class="fx-pill" id="fx-admin-support-detail-id">-</span>
+                <span class="fx-status warning" id="fx-admin-support-detail-status-label">-</span>
+              </div>
+            </section>
+
+            <section class="fx-support-detail-grid">
+              <article class="fx-support-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Contexto do chamado</h3>
+                </div>
+                <div class="fx-info-list">
+                  <div class="fx-info-row"><strong>Escopo</strong><span id="fx-admin-support-detail-scope">-</span></div>
+                  <div class="fx-info-row"><strong>Origem</strong><span id="fx-admin-support-detail-counterpart">-</span></div>
+                  <div class="fx-info-row"><strong>Canal</strong><span id="fx-admin-support-detail-channel">-</span></div>
+                  <div class="fx-info-row"><strong>Prioridade</strong><span id="fx-admin-support-detail-priority">-</span></div>
+                  <div class="fx-info-row"><strong>Time responsavel</strong><span id="fx-admin-support-detail-team">-</span></div>
+                  <div class="fx-info-row"><strong>Criado em</strong><span id="fx-admin-support-detail-created-at">-</span></div>
+                  <div class="fx-info-row"><strong>Ultima atualizacao</strong><span id="fx-admin-support-detail-last-message-at">-</span></div>
+                </div>
+              </article>
+
+              <article class="fx-support-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Atualizar status</h3>
+                </div>
+                <form class="fx-form-grid" id="fx-admin-support-status-form">
+                  <label class="fx-field">
+                    <span>Status do ticket</span>
+                    <select id="fx-admin-support-status-input">
+                      <option value="open">Aberto</option>
+                      <option value="in_progress">Em andamento</option>
+                      <option value="answered">Respondido</option>
+                      <option value="resolved">Concluido</option>
+                    </select>
+                  </label>
+                  <label class="fx-field">
+                    <span>Observacao interna</span>
+                    <textarea id="fx-admin-support-status-note" placeholder="Registre um resumo da mudanca de status"></textarea>
+                  </label>
+                  <div class="fx-inline-actions">
+                    <button class="fx-button" type="submit">Salvar status</button>
+                  </div>
+                </form>
+              </article>
+            </section>
+
+            <section class="fx-support-detail-grid">
+              <article class="fx-support-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Historico da conversa</h3>
+                </div>
+                <div class="fx-message-window">
+                  <div class="fx-message-stream" id="fx-admin-support-thread-stream"></div>
+                </div>
+              </article>
+
+              <article class="fx-support-card">
+                <div class="fx-card-header">
+                  <h3 class="fx-title-sm">Responder ticket</h3>
+                </div>
+                <form class="fx-message-composer" id="fx-admin-support-reply-form">
+                  <label class="fx-field">
+                    <span>Resposta para o protocolo</span>
+                    <textarea id="fx-admin-support-reply-body" placeholder="Digite a resposta que sera enviada no ticket"></textarea>
+                  </label>
+                  <p class="fx-note" id="fx-admin-support-feedback" hidden></p>
+                  <div class="fx-inline-actions">
+                    <button class="fx-button" type="submit">Enviar resposta</button>
+                    <a class="fx-button-secondary" href="./support.html">Voltar para a fila</a>
+                  </div>
+                </form>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

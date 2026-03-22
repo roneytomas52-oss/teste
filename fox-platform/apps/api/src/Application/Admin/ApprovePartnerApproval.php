@@ -13,8 +13,8 @@ class ApprovePartnerApproval
     ) {
     }
 
-    public function __invoke(string $partnerId): array
+    public function __invoke(string $userId, string $partnerId): array
     {
-        return $this->operations->reviewPartnerApproval($partnerId, 'approve');
+        return $this->operations->reviewPartnerApproval($userId, $partnerId, 'approve');
     }
 }

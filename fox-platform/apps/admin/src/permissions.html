@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | PermissÃµes</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="permissions">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Governanca de acessos, perfis administrativos e escopo de atuacao no painel interno.</p>
+        </div>
+
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
+          <a class="fx-sidebar-link is-active" href="./permissions.html">Permissoes</a>
+          <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Permissoes</div>
+            <h1 class="fx-title-sm">Acessos administrativos da plataforma</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="./settings.html">Abrir configuracoes</a>
+          </div>
+        </header>
+
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Governanca interna</div>
+                <h2 class="fx-title-md">Controle quem acessa o admin, quais perfis estao ativos e quais permissoes cada funcao herda.</h2>
+                <p class="fx-copy">A tela concentra o cadastro da equipe interna, a situacao de cada acesso e a matriz basica de permissoes por perfil.</p>
+              </div>
+            </section>
+
+            <section class="fx-admin-grid" id="fx-admin-access-summary"></section>
+
+            <section class="fx-access-layout">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Equipe</span>
+                    <h3 class="fx-title-sm" id="fx-admin-access-form-title">Novo membro administrativo</h3>
+                  </div>
+                </div>
+                <form id="fx-admin-access-form" class="fx-grid">
+                  <input id="fx-admin-access-member-id" type="hidden" />
+                  <div class="fx-field">
+                    <label for="fx-admin-access-full-name">Nome completo</label>
+                    <input id="fx-admin-access-full-name" type="text" required />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-admin-access-email">E-mail</label>
+                    <input id="fx-admin-access-email" type="email" required />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-admin-access-phone">Telefone</label>
+                    <input id="fx-admin-access-phone" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-admin-access-department">Departamento</label>
+                    <input id="fx-admin-access-department" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-admin-access-role">Perfil</label>
+                    <select id="fx-admin-access-role" required>
+                      <option value="super_admin">Super Admin</option>
+                      <option value="admin_operacional">Admin Operacional</option>
+                      <option value="admin_financeiro">Admin Financeiro</option>
+                      <option value="admin_comercial">Admin Comercial</option>
+                      <option value="suporte">Suporte</option>
+                    </select>
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-admin-access-status">Status</label>
+                    <select id="fx-admin-access-status" required>
+                      <option value="active">Ativo</option>
+                      <option value="pending">Pendente</option>
+                      <option value="suspended">Suspenso</option>
+                      <option value="blocked">Bloqueado</option>
+                    </select>
+                  </div>
+                  <div class="fx-inline-actions">
+                    <button class="fx-button" id="fx-admin-access-submit" type="submit">Salvar acesso</button>
+                    <button class="fx-button-secondary" id="fx-admin-access-reset" type="button">Limpar</button>
+                  </div>
+                  <p class="fx-note" id="fx-admin-access-feedback" hidden></p>
+                </form>
+              </article>
+
+              <div class="fx-access-stack">
+                <article class="fx-card">
+                  <div class="fx-card-header">
+                    <div>
+                      <span class="fx-pill">Perfis</span>
+                      <h3 class="fx-title-sm">Matriz de permissoes</h3>
+                    </div>
+                  </div>
+                  <div class="fx-access-role-grid" id="fx-admin-access-roles"></div>
+                </article>
+              </div>
+            </section>
+
+            <section class="fx-card">
+              <div class="fx-card-header">
+                <div>
+                  <span class="fx-pill">Usuarios</span>
+                  <h3 class="fx-title-sm">Equipe administrativa cadastrada</h3>
+                </div>
+              </div>
+              <div class="fx-access-member-list" id="fx-admin-access-members"></div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

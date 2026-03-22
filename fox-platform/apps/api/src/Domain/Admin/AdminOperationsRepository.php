@@ -12,11 +12,17 @@ interface AdminOperationsRepository
 
     public function getOrderDetail(string $orderId): array;
 
+    public function updateOrderStatus(string $userId, string $orderId, array $data): array;
+
+    public function addOrderNote(string $userId, string $orderId, array $data): array;
+
     public function getPartnerApprovals(): array;
 
-    public function getDriverApprovals(): array;
-
     public function getFinance(): array;
+
+    public function getAnalytics(): array;
+
+    public function getReports(): array;
 
     public function getSupport(): array;
 
@@ -30,7 +36,29 @@ interface AdminOperationsRepository
 
     public function updateSettings(string $userId, array $settings): array;
 
-    public function reviewPartnerApproval(string $partnerId, string $decision): array;
+    public function getAccess(): array;
 
-    public function reviewDriverApproval(string $driverId, string $decision): array;
+    public function createAccessMember(string $userId, array $data): array;
+
+    public function updateAccessMember(string $userId, string $memberId, array $data): array;
+
+    public function updateAccessMemberStatus(string $userId, string $memberId, array $data): array;
+
+    public function getNotifications(string $userId): array;
+
+    public function markNotificationRead(string $userId, string $notificationId): array;
+
+    public function getPartnerApprovalDetail(string $partnerId): array;
+
+    public function reviewPartnerApproval(string $userId, string $partnerId, string $decision): array;
+
+    public function resolvePartnerApproval(string $userId, string $partnerId, array $data): array;
+
+    public function getDriverApprovals(): array;
+
+    public function getDriverApprovalDetail(string $driverId): array;
+
+    public function reviewDriverApproval(string $userId, string $driverId, string $decision): array;
+
+    public function resolveDriverApproval(string $userId, string $driverId, array $data): array;
 }

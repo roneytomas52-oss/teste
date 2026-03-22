@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -27,9 +27,12 @@
           <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
           <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
           <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
           <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
           <a class="fx-sidebar-link" href="./support.html">Suporte</a>
-          <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
+                    <a class="fx-sidebar-link" href="./permissions.html">Permissoes</a>
+                    <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
           <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
         </nav>
       </aside>
@@ -57,6 +60,56 @@
             </section>
 
             <p class="fx-note" id="fx-admin-order-detail-feedback" hidden></p>
+
+            <section class="fx-admin-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Acoes</span>
+                    <h3 class="fx-title-sm">Atualizar status do pedido</h3>
+                  </div>
+                </div>
+                <form class="fx-message-composer" id="fx-admin-order-status-form">
+                  <div class="fx-field">
+                    <label for="fx-admin-order-status-input">Novo status</label>
+                    <select id="fx-admin-order-status-input" name="status">
+                      <option value="pending_acceptance">Aguardando aceite</option>
+                      <option value="accepted">Aceito</option>
+                      <option value="preparing">Em preparo</option>
+                      <option value="ready_for_pickup">Pronto para retirada</option>
+                      <option value="on_route">Em rota</option>
+                      <option value="completed">Concluido</option>
+                      <option value="cancelled">Cancelado</option>
+                    </select>
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-admin-order-status-note">Observacao operacional</label>
+                    <textarea id="fx-admin-order-status-note" name="note" rows="4" placeholder="Registre contexto para a timeline do pedido."></textarea>
+                  </div>
+                  <div class="fx-inline-actions">
+                    <button class="fx-button" type="submit">Atualizar status</button>
+                  </div>
+                </form>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Observacoes</span>
+                    <h3 class="fx-title-sm">Registrar nota interna</h3>
+                  </div>
+                </div>
+                <form class="fx-message-composer" id="fx-admin-order-note-form">
+                  <div class="fx-field">
+                    <label for="fx-admin-order-note-input">Nota administrativa</label>
+                    <textarea id="fx-admin-order-note-input" name="note" rows="6" placeholder="Adicione informacoes para a equipe financeira, operacao ou suporte."></textarea>
+                  </div>
+                  <div class="fx-inline-actions">
+                    <button class="fx-button-secondary" type="submit">Salvar observacao</button>
+                  </div>
+                </form>
+              </article>
+            </section>
 
             <section class="fx-admin-grid">
               <article class="fx-card">

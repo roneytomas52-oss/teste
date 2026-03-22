@@ -9,16 +9,18 @@ Painel interno da Fox Delivery para operacao, aprovacao, financeiro e auditoria.
 - `/login`
 - `/dashboard`
 - `/partners-approvals`
+- `/partner-approval-detail`
 - `/drivers-approvals`
+- `/driver-approval-detail`
 - `/orders`
+- `/order-detail`
 - `/operations`
 - `/finance`
 - `/analytics`
+- `/reports`
 - `/audit`
 - `/support`
-- `/settings`
-
-## Proximas areas previstas
-
-- `/reports`
+- `/support-detail`
+- `/notifications`
 - `/permissions`
+- `/settings`

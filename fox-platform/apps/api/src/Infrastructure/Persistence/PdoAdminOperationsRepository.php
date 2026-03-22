@@ -12,6 +12,8 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
 {
     use SupportsSqlDialect;
 
+    private const DEFAULT_PASSWORD_HASH = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+
     public function __construct(
         private readonly PDO $pdo
     ) {
@@ -109,6 +111,129 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
         ];
     }
 
+    public function updateOrderStatus(string $userId, string $orderId, array $data): array
+    {
+        $current = $this->findOrderRecord($orderId);
+
+        if (!$current) {
+            throw new ApiException(404, 'ORDER_NOT_FOUND', 'Pedido nao encontrado para a operacao.');
+        }
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $acceptedAt = $current['accepted_at'];
+            $completedAt = $current['completed_at'];
+            $cancelledAt = $current['cancelled_at'];
+
+            if ($data['status'] === 'accepted' && !$acceptedAt) {
+                $acceptedAt = date(DATE_ATOM);
+            }
+
+            if ($data['status'] === 'completed') {
+                $completedAt = date(DATE_ATOM);
+                $cancelledAt = null;
+            }
+
+            if ($data['status'] === 'cancelled') {
+                $cancelledAt = date(DATE_ATOM);
+            }
+
+            if ($data['status'] !== 'cancelled') {
+                $cancelledAt = null;
+            }
+
+            $update = $this->pdo->prepare(
+                "UPDATE orders
+                 SET status = :status,
+                     accepted_at = :accepted_at,
+                     completed_at = :completed_at,
+                     cancelled_at = :cancelled_at,
+                     updated_at = NOW()
+                 WHERE id = :order_id"
+            );
+            $update->execute([
+                'status' => $data['status'],
+                'accepted_at' => $acceptedAt,
+                'completed_at' => $completedAt,
+                'cancelled_at' => $cancelledAt,
+                'order_id' => $orderId,
+            ]);
+
+            $log = $this->pdo->prepare(
+                sprintf(
+                    "INSERT INTO order_status_logs (
+                        id, order_id, previous_status, next_status, actor_user_id, note
+                     ) VALUES (
+                        %s, :order_id, :previous_status, :next_status, :actor_user_id, :note
+                     )",
+                    $this->uuidExpression()
+                )
+            );
+            $log->execute([
+                'order_id' => $orderId,
+                'previous_status' => $current['status'],
+                'next_status' => $data['status'],
+                'actor_user_id' => $userId,
+                'note' => $data['note'] !== '' ? $data['note'] : 'Atualizacao manual via Admin Fox Platform',
+            ]);
+
+            $this->pdo->commit();
+        } catch (\Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
+
+        return $this->getOrderDetail($orderId);
+    }
+
+    public function addOrderNote(string $userId, string $orderId, array $data): array
+    {
+        $current = $this->findOrderRecord($orderId);
+
+        if (!$current) {
+            throw new ApiException(404, 'ORDER_NOT_FOUND', 'Pedido nao encontrado para a operacao.');
+        }
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $touch = $this->pdo->prepare(
+                "UPDATE orders
+                 SET updated_at = NOW()
+                 WHERE id = :order_id"
+            );
+            $touch->execute([
+                'order_id' => $orderId,
+            ]);
+
+            $log = $this->pdo->prepare(
+                sprintf(
+                    "INSERT INTO order_status_logs (
+                        id, order_id, previous_status, next_status, actor_user_id, note
+                     ) VALUES (
+                        %s, :order_id, :previous_status, :next_status, :actor_user_id, :note
+                     )",
+                    $this->uuidExpression()
+                )
+            );
+            $log->execute([
+                'order_id' => $orderId,
+                'previous_status' => $current['status'],
+                'next_status' => $current['status'],
+                'actor_user_id' => $userId,
+                'note' => $data['note'],
+            ]);
+
+            $this->pdo->commit();
+        } catch (\Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
+
+        return $this->getOrderDetail($orderId);
+    }
+
     public function getFinance(): array
     {
         $metrics = $this->loadFinanceMetrics();
@@ -125,6 +250,46 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
             ],
             'highlights' => $highlights,
             'payouts' => $payouts,
+        ];
+    }
+
+    public function getAnalytics(): array
+    {
+        $platform = $this->loadPlatformMetrics();
+        $finance = $this->loadFinanceMetrics();
+
+        return [
+            'cards' => [
+                ['label' => 'volume bruto no mes', 'value' => $this->formatMoney($this->loadCurrentMonthGross())],
+                ['label' => 'pedidos concluidos', 'value' => (string) $this->loadCompletedOrdersCount()],
+                ['label' => 'pedidos dentro do SLA', 'value' => $this->loadSlaRate()],
+                ['label' => 'comissoes no dia', 'value' => $this->formatMoney($finance['fees_today'] ?? 0)],
+            ],
+            'status_distribution' => $this->loadOrderStatusDistribution(),
+            'city_distribution' => $this->loadStoreCityDistribution(),
+            'highlights' => [
+                sprintf('%d parceiros ativos sustentam a operacao atual.', (int) ($platform['active_partners'] ?? 0)),
+                sprintf('%d entregadores estao habilitados para a malha operacional.', (int) ($platform['active_drivers'] ?? 0)),
+                sprintf('%d pedidos seguem em andamento neste momento.', (int) ($platform['in_progress_orders'] ?? 0)),
+            ],
+        ];
+    }
+
+    public function getReports(): array
+    {
+        $platform = $this->loadPlatformMetrics();
+
+        return [
+            'summary' => [
+                ['label' => 'parceiros ativos', 'value' => (string) ($platform['active_partners'] ?? 0)],
+                ['label' => 'entregadores ativos', 'value' => (string) ($platform['active_drivers'] ?? 0)],
+                ['label' => 'tickets em aberto', 'value' => (string) $this->loadOpenSupportCount()],
+                ['label' => 'repasses em processamento', 'value' => (string) $this->loadProcessingPayoutCount()],
+            ],
+            'partner_status' => $this->loadStoreStatusReport(),
+            'driver_status' => $this->loadDriverStatusReport(),
+            'support_teams' => $this->loadSupportDistribution(),
+            'top_stores' => $this->loadTopStoresReport(),
         ];
     }
 
@@ -153,22 +318,85 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
         return ['items' => $items];
     }
 
-    public function reviewPartnerApproval(string $partnerId, string $decision): array
+    public function getPartnerApprovalDetail(string $partnerId): array
     {
-        $nextStatus = $decision === 'approve' ? 'active' : 'rejected';
+        $partner = $this->findPartnerApproval($partnerId);
 
-        $statement = $this->pdo->prepare(
-            "UPDATE stores
-             SET status = :status,
-                 updated_at = NOW()
-             WHERE id = :partner_id"
-        );
-        $statement->execute([
-            'status' => $nextStatus,
-            'partner_id' => $partnerId,
-        ]);
+        if (!$partner) {
+            throw new ApiException(404, 'PARTNER_APPROVAL_NOT_FOUND', 'Parceiro nao encontrado para analise.');
+        }
+
+        return [
+            'approval' => $this->formatPartnerApprovalDetail($partner),
+            'documents' => $this->loadPartnerApprovalDocuments($partnerId),
+            'review_history' => $this->loadApprovalReviewHistory('partner', $partnerId),
+        ];
+    }
+
+    public function reviewPartnerApproval(string $userId, string $partnerId, string $decision): array
+    {
+        $this->applyPartnerApprovalDecision($userId, $partnerId, $decision, '');
 
         return $this->getPartnerApprovals();
+    }
+
+    public function resolvePartnerApproval(string $userId, string $partnerId, array $data): array
+    {
+        $this->applyPartnerApprovalDecision($userId, $partnerId, $data['decision'], $data['note'] ?? '');
+
+        return $this->getPartnerApprovalDetail($partnerId);
+    }
+
+    private function applyPartnerApprovalDecision(string $userId, string $partnerId, string $decision, string $note): void
+    {
+        $partner = $this->findPartnerApproval($partnerId);
+
+        if (!$partner) {
+            throw new ApiException(404, 'PARTNER_APPROVAL_NOT_FOUND', 'Parceiro nao encontrado para analise.');
+        }
+
+        $nextStatus = $decision === 'approve' ? 'active' : 'rejected';
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $storeUpdate = $this->pdo->prepare(
+                "UPDATE stores
+                 SET status = :status,
+                     updated_at = NOW()
+                 WHERE id = :partner_id"
+            );
+            $storeUpdate->execute([
+                'status' => $nextStatus,
+                'partner_id' => $partnerId,
+            ]);
+
+            $accountUpdate = $this->pdo->prepare(
+                "UPDATE partner_accounts
+                 SET status = :status,
+                     updated_at = NOW()
+                 WHERE id = :partner_account_id"
+            );
+            $accountUpdate->execute([
+                'status' => $nextStatus,
+                'partner_account_id' => $partner['partner_account_id'],
+            ]);
+
+            $this->recordApprovalReview(
+                'partner',
+                $partnerId,
+                $decision,
+                $note !== '' ? $note : ($decision === 'approve'
+                    ? 'Cadastro aprovado pela operacao administrativa.'
+                    : 'Cadastro movido para revisao manual pela operacao administrativa.'),
+                $userId
+            );
+
+            $this->pdo->commit();
+        } catch (\Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
     }
 
     public function getSupport(): array
@@ -400,6 +628,241 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
         return $this->getSettings();
     }
 
+    public function getAccess(): array
+    {
+        $members = $this->loadAdminMembers();
+        $roles = $this->loadAdminRoles();
+
+        return [
+            'summary' => [
+                ['label' => 'usuarios internos', 'value' => (string) count($members)],
+                ['label' => 'ativos', 'value' => (string) count(array_filter($members, static fn (array $member) => $member['status_key'] === 'active'))],
+                ['label' => 'super admins', 'value' => (string) count(array_filter($members, static fn (array $member) => (bool) ($member['is_super'] ?? false)))],
+                ['label' => 'pendentes ou suspensos', 'value' => (string) count(array_filter($members, static fn (array $member) => in_array($member['status_key'], ['pending', 'suspended', 'blocked'], true)))],
+            ],
+            'roles' => $roles,
+            'members' => $members,
+            'allowed_roles' => array_map(
+                static fn (array $role): array => [
+                    'slug' => $role['slug'],
+                    'label' => $role['name'],
+                ],
+                $roles
+            ),
+        ];
+    }
+
+    public function createAccessMember(string $userId, array $data): array
+    {
+        $emailStatement = $this->pdo->prepare(
+            'SELECT id FROM users WHERE LOWER(email) = LOWER(:email) AND deleted_at IS NULL LIMIT 1'
+        );
+        $emailStatement->execute(['email' => $data['email']]);
+        if ($emailStatement->fetch()) {
+            throw new ApiException(409, 'ADMIN_MEMBER_EMAIL_EXISTS', 'Ja existe um usuario com este e-mail.');
+        }
+
+        $role = $this->findAdminRoleBySlug($data['role_slug']);
+
+        if (!$role) {
+            throw new ApiException(404, 'ADMIN_ROLE_NOT_FOUND', 'Perfil administrativo nao encontrado.');
+        }
+
+        $memberId = $this->newUuid();
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $userInsert = $this->pdo->prepare(
+                "INSERT INTO users (
+                    id, full_name, email, phone, password_hash, status, locale
+                 ) VALUES (
+                    :id, :full_name, :email, :phone, :password_hash, :status, 'pt_BR'
+                 )"
+            );
+            $userInsert->execute([
+                'id' => $memberId,
+                'full_name' => $data['full_name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'password_hash' => self::DEFAULT_PASSWORD_HASH,
+                'status' => $data['status'],
+            ]);
+
+            $profileInsert = $this->pdo->prepare(
+                sprintf(
+                    "INSERT INTO admin_profiles (
+                        id, user_id, department, is_super
+                     ) VALUES (
+                        %s, :user_id, :department, :is_super
+                     )",
+                    $this->uuidExpression()
+                )
+            );
+            $profileInsert->execute([
+                'user_id' => $memberId,
+                'department' => $data['department'],
+                'is_super' => $data['role_slug'] === 'super_admin' ? 1 : 0,
+            ]);
+
+            $this->replaceAdminRole($memberId, $role['id']);
+            $this->createAdminWelcomeNotification($memberId, $data['role_slug']);
+
+            $this->pdo->commit();
+        } catch (\Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
+
+        return $this->getAccess();
+    }
+
+    public function updateAccessMember(string $userId, string $memberId, array $data): array
+    {
+        $member = $this->findAdminMemberRecord($memberId);
+
+        if (!$member) {
+            throw new ApiException(404, 'ADMIN_MEMBER_NOT_FOUND', 'Membro administrativo nao encontrado.');
+        }
+
+        $emailStatement = $this->pdo->prepare(
+            'SELECT id FROM users WHERE LOWER(email) = LOWER(:email) AND id <> :user_id AND deleted_at IS NULL LIMIT 1'
+        );
+        $emailStatement->execute([
+            'email' => $data['email'],
+            'user_id' => $memberId,
+        ]);
+        if ($emailStatement->fetch()) {
+            throw new ApiException(409, 'ADMIN_MEMBER_EMAIL_EXISTS', 'Ja existe um usuario com este e-mail.');
+        }
+
+        $role = $this->findAdminRoleBySlug($data['role_slug']);
+
+        if (!$role) {
+            throw new ApiException(404, 'ADMIN_ROLE_NOT_FOUND', 'Perfil administrativo nao encontrado.');
+        }
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $userUpdate = $this->pdo->prepare(
+                "UPDATE users
+                 SET full_name = :full_name,
+                     email = :email,
+                     phone = :phone,
+                     updated_at = NOW()
+                 WHERE id = :user_id"
+            );
+            $userUpdate->execute([
+                'full_name' => $data['full_name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'user_id' => $memberId,
+            ]);
+
+            $profileUpdate = $this->pdo->prepare(
+                "UPDATE admin_profiles
+                 SET department = :department,
+                     is_super = :is_super,
+                     updated_at = NOW()
+                 WHERE user_id = :user_id"
+            );
+            $profileUpdate->execute([
+                'department' => $data['department'],
+                'is_super' => $data['role_slug'] === 'super_admin' ? 1 : 0,
+                'user_id' => $memberId,
+            ]);
+
+            $this->replaceAdminRole($memberId, $role['id']);
+
+            if ($member['status'] !== $data['status']) {
+                $statusUpdate = $this->pdo->prepare(
+                    "UPDATE users
+                     SET status = :status,
+                         updated_at = NOW()
+                     WHERE id = :user_id"
+                );
+                $statusUpdate->execute([
+                    'status' => $data['status'],
+                    'user_id' => $memberId,
+                ]);
+            }
+
+            $this->pdo->commit();
+        } catch (\Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
+
+        return $this->getAccess();
+    }
+
+    public function updateAccessMemberStatus(string $userId, string $memberId, array $data): array
+    {
+        $member = $this->findAdminMemberRecord($memberId);
+
+        if (!$member) {
+            throw new ApiException(404, 'ADMIN_MEMBER_NOT_FOUND', 'Membro administrativo nao encontrado.');
+        }
+
+        $statement = $this->pdo->prepare(
+            "UPDATE users
+             SET status = :status,
+                 updated_at = NOW()
+             WHERE id = :user_id"
+        );
+        $statement->execute([
+            'status' => $data['status'],
+            'user_id' => $memberId,
+        ]);
+
+        return $this->getAccess();
+    }
+
+    public function getNotifications(string $userId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT id, level, context, title, body, action_label, action_url, is_read, created_at
+             FROM notifications
+             WHERE scope = 'admin' AND user_id = :user_id
+             ORDER BY is_read ASC, created_at DESC
+             LIMIT 40"
+        );
+        $statement->execute(['user_id' => $userId]);
+        $rows = $statement->fetchAll() ?: [];
+
+        return [
+            'summary' => [
+                ['label' => 'nao lidas', 'value' => (string) count(array_filter($rows, static fn (array $row) => !(bool) $row['is_read']))],
+                ['label' => 'criticas ou altas', 'value' => (string) count(array_filter($rows, static fn (array $row) => in_array($row['level'], ['warning', 'danger'], true)))],
+                ['label' => 'total recente', 'value' => (string) count($rows)],
+            ],
+            'items' => array_map(fn (array $row) => $this->formatAdminNotificationRow($row), $rows),
+        ];
+    }
+
+    public function markNotificationRead(string $userId, string $notificationId): array
+    {
+        $statement = $this->pdo->prepare(
+            "UPDATE notifications
+             SET is_read = TRUE,
+                 read_at = NOW()
+             WHERE id = :notification_id
+               AND scope = 'admin'
+               AND user_id = :user_id"
+        );
+        $statement->execute([
+            'notification_id' => $notificationId,
+            'user_id' => $userId,
+        ]);
+
+        if ($statement->rowCount() === 0) {
+            throw new ApiException(404, 'NOTIFICATION_NOT_FOUND', 'Notificacao nao encontrada para esta conta administrativa.');
+        }
+
+        return $this->getNotifications($userId);
+    }
+
     public function getDriverApprovals(): array
     {
         $statement = $this->pdo->query(
@@ -426,22 +889,85 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
         return ['items' => $items];
     }
 
-    public function reviewDriverApproval(string $driverId, string $decision): array
+    public function getDriverApprovalDetail(string $driverId): array
     {
-        $nextStatus = $decision === 'approve' ? 'active' : 'rejected';
+        $driver = $this->findDriverApproval($driverId);
 
-        $statement = $this->pdo->prepare(
-            "UPDATE driver_profiles
-             SET status = :status,
-                 updated_at = NOW()
-             WHERE id = :driver_id"
-        );
-        $statement->execute([
-            'status' => $nextStatus,
-            'driver_id' => $driverId,
-        ]);
+        if (!$driver) {
+            throw new ApiException(404, 'DRIVER_APPROVAL_NOT_FOUND', 'Entregador nao encontrado para analise.');
+        }
+
+        return [
+            'approval' => $this->formatDriverApprovalDetail($driver),
+            'documents' => $this->loadDriverApprovalDocuments($driverId),
+            'review_history' => $this->loadApprovalReviewHistory('driver', $driverId),
+        ];
+    }
+
+    public function reviewDriverApproval(string $userId, string $driverId, string $decision): array
+    {
+        $this->applyDriverApprovalDecision($userId, $driverId, $decision, '');
 
         return $this->getDriverApprovals();
+    }
+
+    public function resolveDriverApproval(string $userId, string $driverId, array $data): array
+    {
+        $this->applyDriverApprovalDecision($userId, $driverId, $data['decision'], $data['note'] ?? '');
+
+        return $this->getDriverApprovalDetail($driverId);
+    }
+
+    private function applyDriverApprovalDecision(string $userId, string $driverId, string $decision, string $note): void
+    {
+        $driver = $this->findDriverApproval($driverId);
+
+        if (!$driver) {
+            throw new ApiException(404, 'DRIVER_APPROVAL_NOT_FOUND', 'Entregador nao encontrado para analise.');
+        }
+
+        $nextStatus = $decision === 'approve' ? 'active' : 'rejected';
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $profileUpdate = $this->pdo->prepare(
+                "UPDATE driver_profiles
+                 SET status = :status,
+                     updated_at = NOW()
+                 WHERE id = :driver_id"
+            );
+            $profileUpdate->execute([
+                'status' => $nextStatus,
+                'driver_id' => $driverId,
+            ]);
+
+            $userUpdate = $this->pdo->prepare(
+                "UPDATE users
+                 SET status = :status,
+                     updated_at = NOW()
+                 WHERE id = :user_id"
+            );
+            $userUpdate->execute([
+                'status' => $nextStatus === 'active' ? 'active' : 'pending',
+                'user_id' => $driver['user_id'],
+            ]);
+
+            $this->recordApprovalReview(
+                'driver',
+                $driverId,
+                $decision,
+                $note !== '' ? $note : ($decision === 'approve'
+                    ? 'Cadastro aprovado pela operacao administrativa.'
+                    : 'Cadastro movido para revisao manual pela operacao administrativa.'),
+                $userId
+            );
+
+            $this->pdo->commit();
+        } catch (\Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
     }
 
     private function loadPlatformMetrics(): array
@@ -476,6 +1002,177 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
         );
 
         return $statement->fetch() ?: [];
+    }
+
+    private function loadCurrentMonthGross(): float
+    {
+        $statement = $this->pdo->query(
+            "SELECT COALESCE(SUM(total), 0) AS gross_month
+             FROM orders
+             WHERE status <> 'cancelled'
+               AND YEAR(placed_at) = YEAR(CURRENT_DATE)
+               AND MONTH(placed_at) = MONTH(CURRENT_DATE)"
+        );
+
+        return (float) (($statement->fetch()['gross_month'] ?? 0));
+    }
+
+    private function loadCompletedOrdersCount(): int
+    {
+        $statement = $this->pdo->query(
+            "SELECT COUNT(*) AS total
+             FROM orders
+             WHERE status = 'completed'"
+        );
+
+        return (int) (($statement->fetch()['total'] ?? 0));
+    }
+
+    private function loadSlaRate(): string
+    {
+        $statement = $this->pdo->query(
+            "SELECT
+                SUM(CASE WHEN status IN ('accepted', 'preparing', 'ready_for_pickup', 'on_route', 'completed') THEN 1 ELSE 0 END) AS inside_sla,
+                COUNT(*) AS total
+             FROM orders"
+        );
+        $row = $statement->fetch() ?: ['inside_sla' => 0, 'total' => 0];
+
+        $total = (int) ($row['total'] ?? 0);
+        if ($total === 0) {
+            return '0%';
+        }
+
+        $ratio = ((int) ($row['inside_sla'] ?? 0)) / $total * 100;
+
+        return number_format($ratio, 1, ',', '.') . '%';
+    }
+
+    private function loadOrderStatusDistribution(): array
+    {
+        $statement = $this->pdo->query(
+            "SELECT status, COUNT(*) AS total
+             FROM orders
+             GROUP BY status
+             ORDER BY total DESC, status ASC"
+        );
+        $rows = $statement->fetchAll() ?: [];
+        $total = array_sum(array_map(static fn (array $row): int => (int) $row['total'], $rows));
+
+        if ($total === 0) {
+            return [];
+        }
+
+        return array_map(function (array $row) use ($total): array {
+            $count = (int) $row['total'];
+            return [
+                'label' => $this->normalizeOrderStatusLabel((string) $row['status']),
+                'value' => $count,
+                'share' => round(($count / $total) * 100, 1),
+            ];
+        }, $rows);
+    }
+
+    private function loadStoreCityDistribution(): array
+    {
+        $statement = $this->pdo->query(
+            "SELECT COALESCE(city, 'Sem cidade') AS city, COUNT(*) AS total
+             FROM stores
+             GROUP BY COALESCE(city, 'Sem cidade')
+             ORDER BY total DESC, city ASC
+             LIMIT 5"
+        );
+        $rows = $statement->fetchAll() ?: [];
+        $total = array_sum(array_map(static fn (array $row): int => (int) $row['total'], $rows));
+
+        if ($total === 0) {
+            return [];
+        }
+
+        return array_map(static function (array $row) use ($total): array {
+            $count = (int) $row['total'];
+            return [
+                'label' => $row['city'],
+                'value' => $count,
+                'share' => round(($count / $total) * 100, 1),
+            ];
+        }, $rows);
+    }
+
+    private function loadOpenSupportCount(): int
+    {
+        $statement = $this->pdo->query(
+            "SELECT COUNT(*) AS total
+             FROM support_tickets
+             WHERE status IN ('open', 'in_progress')"
+        );
+
+        return (int) (($statement->fetch()['total'] ?? 0));
+    }
+
+    private function loadProcessingPayoutCount(): int
+    {
+        $statement = $this->pdo->query(
+            "SELECT COUNT(*) AS total
+             FROM payout_requests
+             WHERE status IN ('scheduled', 'processing')"
+        );
+
+        return (int) (($statement->fetch()['total'] ?? 0));
+    }
+
+    private function loadStoreStatusReport(): array
+    {
+        $statement = $this->pdo->query(
+            "SELECT status, COUNT(*) AS total
+             FROM stores
+             GROUP BY status
+             ORDER BY total DESC, status ASC"
+        );
+
+        return array_map(function (array $row): array {
+            return [
+                'label' => $this->normalizeStoreStatusLabel((string) $row['status']),
+                'value' => (string) $row['total'],
+            ];
+        }, $statement->fetchAll() ?: []);
+    }
+
+    private function loadDriverStatusReport(): array
+    {
+        $statement = $this->pdo->query(
+            "SELECT status, COUNT(*) AS total
+             FROM driver_profiles
+             GROUP BY status
+             ORDER BY total DESC, status ASC"
+        );
+
+        return array_map(function (array $row): array {
+            return [
+                'label' => $this->normalizeDriverStatusLabel((string) $row['status']),
+                'value' => (string) $row['total'],
+            ];
+        }, $statement->fetchAll() ?: []);
+    }
+
+    private function loadTopStoresReport(): array
+    {
+        $statement = $this->pdo->query(
+            "SELECT s.trade_name, COUNT(o.id) AS total_orders, COALESCE(SUM(o.total), 0) AS gross_total
+             FROM stores s
+             LEFT JOIN orders o ON o.store_id = s.id
+             GROUP BY s.id, s.trade_name
+             ORDER BY total_orders DESC, gross_total DESC, s.trade_name ASC
+             LIMIT 6"
+        );
+
+        return array_map(function (array $row): array {
+            return [
+                'label' => $row['trade_name'],
+                'orders' => (string) $row['total_orders'],
+                'gross' => $this->formatMoney($row['gross_total']),
+            ];
+        }, $statement->fetchAll() ?: []);
     }
 
     private function loadFinanceHighlights(): array
@@ -667,6 +1364,288 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
         ];
     }
 
+    private function loadAdminMembers(): array
+    {
+        $statement = $this->pdo->query(
+            "SELECT
+                u.id AS user_id,
+                u.full_name,
+                u.email,
+                u.phone,
+                u.status,
+                u.last_login_at,
+                u.created_at,
+                ap.department,
+                ap.is_super,
+                r.slug AS role_slug,
+                r.name AS role_name
+             FROM admin_profiles ap
+             INNER JOIN users u ON u.id = ap.user_id
+             LEFT JOIN user_roles ur ON ur.user_id = u.id
+             LEFT JOIN roles r ON r.id = ur.role_id AND r.scope = 'admin'
+             WHERE u.deleted_at IS NULL
+             ORDER BY ap.is_super DESC, u.created_at DESC, u.full_name ASC"
+        );
+
+        $permissionMap = $this->loadAdminRolePermissionMap();
+
+        return array_map(function (array $row) use ($permissionMap): array {
+            $roleSlug = (string) ($row['role_slug'] ?: 'super_admin');
+            $permissions = $permissionMap[$roleSlug]['names'] ?? [];
+
+            return [
+                'id' => $row['user_id'],
+                'user_id' => $row['user_id'],
+                'full_name' => $row['full_name'],
+                'email' => $row['email'],
+                'phone' => $row['phone'] ?: '-',
+                'department' => $row['department'] ?: 'Operacao',
+                'role_slug' => $roleSlug,
+                'role_label' => $row['role_name'] ?: 'Super Admin',
+                'permissions' => $permissions,
+                'status' => $this->normalizeUserStatusLabel((string) $row['status']),
+                'status_key' => (string) $row['status'],
+                'status_type' => $this->normalizeUserStatusType((string) $row['status']),
+                'is_super' => (bool) ($row['is_super'] ?? false),
+                'last_login_at' => $row['last_login_at'] ? $this->formatDateTime((string) $row['last_login_at']) : '-',
+                'created_at' => $this->formatDateTime((string) $row['created_at']),
+            ];
+        }, $statement->fetchAll() ?: []);
+    }
+
+    private function loadAdminRoles(): array
+    {
+        $statement = $this->pdo->query(
+            "SELECT
+                r.id,
+                r.slug,
+                r.name,
+                r.description,
+                p.slug AS permission_slug,
+                p.name AS permission_name
+             FROM roles r
+             LEFT JOIN role_permissions rp ON rp.role_id = r.id
+             LEFT JOIN permissions p ON p.id = rp.permission_id
+             WHERE r.scope = 'admin'
+             ORDER BY r.name ASC, p.name ASC"
+        );
+
+        $roles = [];
+
+        foreach ($statement->fetchAll() ?: [] as $row) {
+            $slug = (string) $row['slug'];
+
+            if (!isset($roles[$slug])) {
+                $roles[$slug] = [
+                    'id' => $row['id'],
+                    'slug' => $slug,
+                    'name' => $row['name'],
+                    'description' => $row['description'] ?: '',
+                    'permissions' => [],
+                    'permission_slugs' => [],
+                ];
+            }
+
+            if (!empty($row['permission_slug'])) {
+                $roles[$slug]['permissions'][] = $row['permission_name'];
+                $roles[$slug]['permission_slugs'][] = $row['permission_slug'];
+            }
+        }
+
+        return array_values($roles);
+    }
+
+    private function loadAdminRolePermissionMap(): array
+    {
+        $statement = $this->pdo->query(
+            "SELECT r.slug AS role_slug, p.slug AS permission_slug, p.name AS permission_name
+             FROM roles r
+             LEFT JOIN role_permissions rp ON rp.role_id = r.id
+             LEFT JOIN permissions p ON p.id = rp.permission_id
+             WHERE r.scope = 'admin'
+             ORDER BY r.slug ASC, p.name ASC"
+        );
+
+        $map = [];
+
+        foreach ($statement->fetchAll() ?: [] as $row) {
+            $roleSlug = (string) $row['role_slug'];
+
+            if (!isset($map[$roleSlug])) {
+                $map[$roleSlug] = [
+                    'slugs' => [],
+                    'names' => [],
+                ];
+            }
+
+            if (!empty($row['permission_slug'])) {
+                $map[$roleSlug]['slugs'][] = $row['permission_slug'];
+                $map[$roleSlug]['names'][] = $row['permission_name'];
+            }
+        }
+
+        return $map;
+    }
+
+    private function findAdminRoleBySlug(string $roleSlug): array|false
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT id, slug, name
+             FROM roles
+             WHERE slug = :slug
+               AND scope = 'admin'
+             LIMIT 1"
+        );
+        $statement->execute(['slug' => $roleSlug]);
+
+        return $statement->fetch();
+    }
+
+    private function findAdminMemberRecord(string $memberId): array|false
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT
+                u.id,
+                u.full_name,
+                u.email,
+                u.phone,
+                u.status,
+                ap.department,
+                ap.is_super,
+                r.slug AS role_slug,
+                r.name AS role_name
+             FROM admin_profiles ap
+             INNER JOIN users u ON u.id = ap.user_id
+             LEFT JOIN user_roles ur ON ur.user_id = u.id
+             LEFT JOIN roles r ON r.id = ur.role_id AND r.scope = 'admin'
+             WHERE u.id = :member_id
+               AND u.deleted_at IS NULL
+             LIMIT 1"
+        );
+        $statement->execute(['member_id' => $memberId]);
+
+        return $statement->fetch();
+    }
+
+    private function replaceAdminRole(string $userId, string $roleId): void
+    {
+        $deleteStatement = $this->pdo->prepare(
+            "DELETE FROM user_roles
+             WHERE user_id = :user_id
+               AND role_id IN (
+                   SELECT id FROM roles WHERE scope = 'admin'
+               )"
+        );
+        $deleteStatement->execute(['user_id' => $userId]);
+
+        $insertStatement = $this->pdo->prepare(
+            sprintf(
+                "INSERT INTO user_roles (id, user_id, role_id, scope_type, scope_id)
+                 VALUES (%s, :user_id, :role_id, NULL, NULL)",
+                $this->uuidExpression()
+            )
+        );
+        $insertStatement->execute([
+            'user_id' => $userId,
+            'role_id' => $roleId,
+        ]);
+    }
+
+    private function createAdminWelcomeNotification(string $userId, string $roleSlug): void
+    {
+        $title = match ($roleSlug) {
+            'admin_financeiro' => 'Acesso financeiro criado',
+            'admin_comercial' => 'Acesso comercial criado',
+            'suporte' => 'Acesso de suporte criado',
+            'admin_operacional' => 'Acesso operacional criado',
+            default => 'Acesso administrativo criado',
+        };
+
+        $body = match ($roleSlug) {
+            'admin_financeiro' => 'O perfil financeiro foi habilitado com acesso aos modulos financeiros da Fox Platform.',
+            'admin_comercial' => 'O perfil comercial foi habilitado para apoiar aprovacoes e jornadas de parceiros.',
+            'suporte' => 'O perfil de suporte foi habilitado para atuar na fila de atendimento da plataforma.',
+            'admin_operacional' => 'O perfil operacional foi habilitado para pedidos, fila de aprovacao e acompanhamento da operacao.',
+            default => 'O novo membro administrativo recebeu acesso inicial ao ecossistema interno da Fox Platform.',
+        };
+
+        $statement = $this->pdo->prepare(
+            sprintf(
+                "INSERT INTO notifications (
+                    id, scope, user_id, level, context, title, body, action_label, action_url, is_read, created_at
+                 ) VALUES (
+                    %s, 'admin', :user_id, 'info', 'access', :title, :body, :action_label, :action_url, FALSE, NOW()
+                 )",
+                $this->uuidExpression()
+            )
+        );
+        $statement->execute([
+            'user_id' => $userId,
+            'title' => $title,
+            'body' => $body,
+            'action_label' => 'Abrir painel',
+            'action_url' => './index.html',
+        ]);
+    }
+
+    private function formatAdminNotificationRow(array $row): array
+    {
+        $level = (string) ($row['level'] ?? 'info');
+
+        return [
+            'id' => $row['id'],
+            'context' => ucfirst((string) ($row['context'] ?: 'plataforma')),
+            'title' => $row['title'],
+            'body' => $row['body'],
+            'action_label' => $row['action_label'] ?: 'Abrir',
+            'action_url' => $row['action_url'] ?: '',
+            'is_read' => (bool) ($row['is_read'] ?? false),
+            'created_at' => $this->formatDateTime((string) $row['created_at']),
+            'level' => $this->normalizeNotificationLevelLabel($level),
+            'level_type' => $this->normalizeNotificationLevelType($level),
+        ];
+    }
+
+    private function normalizeUserStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'active' => 'ativo',
+            'suspended' => 'suspenso',
+            'blocked' => 'bloqueado',
+            default => 'pendente',
+        };
+    }
+
+    private function normalizeUserStatusType(string $status): string
+    {
+        return match ($status) {
+            'active' => 'success',
+            'blocked' => 'danger',
+            'suspended' => 'warning',
+            default => 'warning',
+        };
+    }
+
+    private function normalizeNotificationLevelLabel(string $level): string
+    {
+        return match ($level) {
+            'success' => 'confirmada',
+            'warning' => 'atencao',
+            'danger' => 'critica',
+            default => 'informativa',
+        };
+    }
+
+    private function normalizeNotificationLevelType(string $level): string
+    {
+        return match ($level) {
+            'success' => 'success',
+            'warning' => 'warning',
+            'danger' => 'danger',
+            default => 'warning',
+        };
+    }
+
     private function loadOrderItems(string $orderId): array
     {
         $statement = $this->pdo->prepare(
@@ -703,6 +1682,215 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
             'actor' => $row['actor_name'] ?: 'Fox Platform',
             'created_at' => $this->formatDateTime((string) $row['created_at']),
         ], $statement->fetchAll() ?: []);
+    }
+
+    private function findPartnerApproval(string $partnerId): array|false
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT
+                s.id,
+                s.partner_account_id,
+                s.trade_name,
+                s.legal_name,
+                s.document_number,
+                s.email,
+                s.phone,
+                s.status,
+                s.city,
+                s.state,
+                ap.status AS account_status,
+                u.full_name AS owner_name,
+                u.email AS owner_email,
+                u.phone AS owner_phone
+             FROM stores s
+             INNER JOIN partner_accounts ap ON ap.id = s.partner_account_id
+             INNER JOIN users u ON u.id = ap.owner_user_id
+             WHERE s.id = :partner_id
+             LIMIT 1"
+        );
+        $statement->execute([
+            'partner_id' => $partnerId,
+        ]);
+
+        return $statement->fetch();
+    }
+
+    private function loadPartnerApprovalDocuments(string $partnerId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT document_type, label, file_name, status, metadata, updated_at
+             FROM store_documents
+             WHERE store_id = :partner_id
+             ORDER BY updated_at DESC, created_at DESC"
+        );
+        $statement->execute([
+            'partner_id' => $partnerId,
+        ]);
+
+        return array_map(fn (array $row) => [
+            'label' => $row['label'],
+            'type' => $row['document_type'],
+            'file_name' => $row['file_name'] ?: '-',
+            'status' => $this->normalizeDocumentStatusLabel((string) $row['status']),
+            'status_type' => $this->normalizeDocumentStatusType((string) $row['status']),
+            'meta' => $this->formatDocumentMetadata($row['metadata'] ?? null),
+            'updated_at' => $this->formatDateTime((string) $row['updated_at']),
+        ], $statement->fetchAll() ?: []);
+    }
+
+    private function findDriverApproval(string $driverId): array|false
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT
+                dp.id,
+                dp.user_id,
+                dp.modal,
+                dp.status,
+                dp.city,
+                dp.state,
+                dp.bank_name,
+                dp.bank_branch_number,
+                dp.bank_account_number,
+                dp.rating,
+                dp.last_active_at,
+                u.full_name,
+                u.email,
+                u.phone
+             FROM driver_profiles dp
+             INNER JOIN users u ON u.id = dp.user_id
+             WHERE dp.id = :driver_id
+             LIMIT 1"
+        );
+        $statement->execute([
+            'driver_id' => $driverId,
+        ]);
+
+        return $statement->fetch();
+    }
+
+    private function loadDriverApprovalDocuments(string $driverId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT document_type, label, file_name, status, created_at
+             FROM driver_documents
+             WHERE driver_profile_id = :driver_id
+             ORDER BY created_at DESC"
+        );
+        $statement->execute([
+            'driver_id' => $driverId,
+        ]);
+
+        return array_map(fn (array $row) => [
+            'label' => $row['label'],
+            'type' => $row['document_type'],
+            'file_name' => $row['file_name'],
+            'status' => $this->normalizeDocumentStatusLabel((string) $row['status']),
+            'status_type' => $this->normalizeDocumentStatusType((string) $row['status']),
+            'meta' => '-',
+            'updated_at' => $this->formatDateTime((string) $row['created_at']),
+        ], $statement->fetchAll() ?: []);
+    }
+
+    private function loadApprovalReviewHistory(string $entityType, string $entityId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT ar.decision, ar.note, ar.created_at, u.full_name
+             FROM approval_reviews ar
+             LEFT JOIN users u ON u.id = ar.actor_user_id
+             WHERE ar.entity_type = :entity_type
+               AND ar.entity_id = :entity_id
+             ORDER BY ar.created_at DESC"
+        );
+        $statement->execute([
+            'entity_type' => $entityType,
+            'entity_id' => $entityId,
+        ]);
+
+        return array_map(fn (array $row) => [
+            'title' => $this->normalizeApprovalDecisionTitle((string) $row['decision']),
+            'description' => $row['note'] ?: 'Sem observacao adicional.',
+            'actor' => $row['full_name'] ?: 'Fox Platform',
+            'created_at' => $this->formatDateTime((string) $row['created_at']),
+        ], $statement->fetchAll() ?: []);
+    }
+
+    private function recordApprovalReview(string $entityType, string $entityId, string $decision, string $note, string $userId): void
+    {
+        $statement = $this->pdo->prepare(
+            sprintf(
+                "INSERT INTO approval_reviews (
+                    id, entity_type, entity_id, decision, note, actor_user_id
+                 ) VALUES (
+                    %s, :entity_type, :entity_id, :decision, :note, :actor_user_id
+                 )",
+                $this->uuidExpression()
+            )
+        );
+        $statement->execute([
+            'entity_type' => $entityType,
+            'entity_id' => $entityId,
+            'decision' => $decision,
+            'note' => $note,
+            'actor_user_id' => $userId,
+        ]);
+    }
+
+    private function findOrderRecord(string $orderId): array|false
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT id, status, accepted_at, completed_at, cancelled_at
+             FROM orders
+             WHERE id = :order_id
+             LIMIT 1"
+        );
+        $statement->execute([
+            'order_id' => $orderId,
+        ]);
+
+        return $statement->fetch();
+    }
+
+    private function formatPartnerApprovalDetail(array $row): array
+    {
+        return [
+            'id' => $row['id'],
+            'name' => $row['trade_name'],
+            'legal_name' => $row['legal_name'],
+            'document_number' => $row['document_number'],
+            'status' => $row['status'] === 'rejected' ? 'revisao manual' : ($row['status'] === 'active' ? 'ativo' : 'documentacao pendente'),
+            'status_type' => $row['status'] === 'rejected' ? 'danger' : ($row['status'] === 'active' ? 'success' : 'warning'),
+            'city' => $row['city'] ?: '-',
+            'state' => $row['state'] ?: '-',
+            'store_email' => $row['email'] ?: '-',
+            'store_phone' => $row['phone'] ?: '-',
+            'owner_name' => $row['owner_name'] ?: '-',
+            'owner_email' => $row['owner_email'] ?: '-',
+            'owner_phone' => $row['owner_phone'] ?: '-',
+            'account_status' => $row['account_status'] === 'active' ? 'ativa' : ($row['account_status'] === 'rejected' ? 'revisao manual' : 'pendente'),
+        ];
+    }
+
+    private function formatDriverApprovalDetail(array $row): array
+    {
+        return [
+            'id' => $row['id'],
+            'name' => $row['full_name'],
+            'email' => $row['email'] ?: '-',
+            'phone' => $row['phone'] ?: '-',
+            'modal' => ucfirst((string) $row['modal']),
+            'status' => $row['status'] === 'rejected' ? 'revisao manual' : ($row['status'] === 'active' ? 'ativo' : 'documentacao pendente'),
+            'status_type' => $row['status'] === 'rejected' ? 'danger' : ($row['status'] === 'active' ? 'success' : 'warning'),
+            'city' => $row['city'] ?: '-',
+            'state' => $row['state'] ?: '-',
+            'bank_account' => trim(sprintf(
+                '%s %s - %s',
+                $row['bank_name'] ?: 'Banco nao informado',
+                $row['bank_branch_number'] ?: '-',
+                $row['bank_account_number'] ?: '-'
+            )),
+            'rating' => $row['rating'] ? number_format((float) $row['rating'], 2, ',', '.') : '-',
+            'last_active_at' => $row['last_active_at'] ? $this->formatDateTime((string) $row['last_active_at']) : '-',
+        ];
     }
 
     private function formatOrderRow(array $row): array
@@ -864,6 +2052,78 @@ class PdoAdminOperationsRepository implements AdminOperationsRepository
             'in_progress' => 'warning',
             default => 'warning',
         };
+    }
+
+    private function normalizeDocumentStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'approved' => 'aprovado',
+            'rejected' => 'rejeitado',
+            default => 'pendente',
+        };
+    }
+
+    private function normalizeDocumentStatusType(string $status): string
+    {
+        return match ($status) {
+            'approved' => 'success',
+            'rejected' => 'danger',
+            default => 'warning',
+        };
+    }
+
+    private function normalizeStoreStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'active' => 'ativas',
+            'paused' => 'pausadas',
+            'suspended' => 'suspensas',
+            'rejected' => 'rejeitadas',
+            default => 'pendentes',
+        };
+    }
+
+    private function normalizeDriverStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'active' => 'ativos',
+            'suspended' => 'suspensos',
+            'rejected' => 'rejeitados',
+            default => 'pendentes',
+        };
+    }
+
+    private function normalizeApprovalDecisionTitle(string $decision): string
+    {
+        return match ($decision) {
+            'approve' => 'Cadastro aprovado',
+            'reject' => 'Cadastro movido para revisao',
+            default => 'Observacao administrativa',
+        };
+    }
+
+    private function formatDocumentMetadata(mixed $value): string
+    {
+        if (is_string($value) && $value !== '') {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                return implode(' | ', array_map(
+                    static fn (string $key, mixed $item): string => sprintf('%s: %s', $key, (string) $item),
+                    array_keys($decoded),
+                    array_values($decoded)
+                ));
+            }
+        }
+
+        if (is_array($value)) {
+            return implode(' | ', array_map(
+                static fn (string $key, mixed $item): string => sprintf('%s: %s', $key, (string) $item),
+                array_keys($value),
+                array_values($value)
+            ));
+        }
+
+        return '-';
     }
 
     private function formatSupportTicketDetail(array $row): array

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -28,8 +28,11 @@
           <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
           <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
           <a class="fx-sidebar-link is-active" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
           <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
           <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
+          <a class="fx-sidebar-link" href="./permissions.html">Permissoes</a>
           <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
           <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
         </nav>
@@ -67,36 +70,22 @@
             <section class="fx-chart-grid">
               <article class="fx-card">
                 <div class="fx-card-header">
-                  <h3 class="fx-title-sm">Volume por vertical</h3>
+                  <h3 class="fx-title-sm">Pedidos por status</h3>
                   <span class="fx-pill">30 dias</span>
                 </div>
-                <div class="fx-bar-list">
-                  <div class="fx-bar-row">
-                    <div class="fx-bar-head"><span>Restaurantes</span><strong>44%</strong></div>
-                    <div class="fx-bar-track"><div class="fx-bar-fill" style="width: 44%;"></div></div>
-                  </div>
-                  <div class="fx-bar-row">
-                    <div class="fx-bar-head"><span>Mercado</span><strong>29%</strong></div>
-                    <div class="fx-bar-track"><div class="fx-bar-fill" style="width: 29%;"></div></div>
-                  </div>
-                  <div class="fx-bar-row">
-                    <div class="fx-bar-head"><span>Farmacia</span><strong>17%</strong></div>
-                    <div class="fx-bar-track"><div class="fx-bar-fill" style="width: 17%;"></div></div>
-                  </div>
-                  <div class="fx-bar-row">
-                    <div class="fx-bar-head"><span>Convivencia</span><strong>10%</strong></div>
-                    <div class="fx-bar-track"><div class="fx-bar-fill" style="width: 10%;"></div></div>
-                  </div>
-                </div>
+                <div class="fx-bar-list" id="fx-admin-analytics-status"></div>
               </article>
 
               <article class="fx-support-card">
+                <h3 class="fx-title-sm">Lojas por cidade</h3>
+                <div class="fx-bar-list" id="fx-admin-analytics-cities"></div>
+              </article>
+            </section>
+
+            <section class="fx-chart-grid">
+              <article class="fx-support-card">
                 <h3 class="fx-title-sm">Destaques do periodo</h3>
-                <ul class="fx-list">
-                  <li>Sao Paulo lidera volume e ticket medio no periodo.</li>
-                  <li>Mercado foi a vertical com maior crescimento relativo.</li>
-                  <li>Cancelamentos cairam 0,8 p.p. apos ajustes de horario e estoque.</li>
-                </ul>
+                <ul class="fx-list" id="fx-admin-analytics-highlights"></ul>
               </article>
             </section>
           </div>

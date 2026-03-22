@@ -9,11 +9,25 @@ use FoxPlatform\Api\Application\Auth\RefreshToken;
 use FoxPlatform\Api\Application\Auth\RequestPasswordReset;
 use FoxPlatform\Api\Application\Auth\ResetPassword;
 use FoxPlatform\Api\Application\Admin\GetAdminDashboard;
+use FoxPlatform\Api\Application\Admin\GetAdminAnalytics;
+use FoxPlatform\Api\Application\Admin\GetAdminAccess;
+use FoxPlatform\Api\Application\Admin\CreateAdminAccessMember;
+use FoxPlatform\Api\Application\Admin\UpdateAdminAccessMember;
+use FoxPlatform\Api\Application\Admin\UpdateAdminAccessMemberStatus;
 use FoxPlatform\Api\Application\Admin\GetAdminFinance;
+use FoxPlatform\Api\Application\Admin\GetAdminReports;
 use FoxPlatform\Api\Application\Admin\GetAdminDriverApprovals;
+use FoxPlatform\Api\Application\Admin\GetAdminDriverApprovalDetail;
+use FoxPlatform\Api\Application\Admin\GetAdminNotifications;
 use FoxPlatform\Api\Application\Admin\GetAdminOrders;
 use FoxPlatform\Api\Application\Admin\GetAdminOrderDetail;
+use FoxPlatform\Api\Application\Admin\MarkAdminNotificationRead;
+use FoxPlatform\Api\Application\Admin\UpdateAdminOrderStatus;
+use FoxPlatform\Api\Application\Admin\AddAdminOrderNote;
 use FoxPlatform\Api\Application\Admin\GetAdminPartnerApprovals;
+use FoxPlatform\Api\Application\Admin\GetAdminPartnerApprovalDetail;
+use FoxPlatform\Api\Application\Admin\ResolveAdminPartnerApproval;
+use FoxPlatform\Api\Application\Admin\ResolveAdminDriverApproval;
 use FoxPlatform\Api\Application\Admin\GetAdminSettings;
 use FoxPlatform\Api\Application\Admin\GetAdminSupport;
 use FoxPlatform\Api\Application\Admin\GetAdminSupportThread;
@@ -97,6 +111,11 @@ use FoxPlatform\Api\Interfaces\Http\Middleware\JsonOnly;
 use FoxPlatform\Api\Interfaces\Http\Middleware\RequirePermission;
 use FoxPlatform\Api\Interfaces\Http\Middleware\RequireRole;
 use FoxPlatform\Api\Interfaces\Http\Requests\AdminSettingsUpdateRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminAccessMemberStatusRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminAccessMemberUpsertRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminApprovalDecisionRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminOrderNoteCreateRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminOrderStatusUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\DriverLeadCreateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\ForgotPasswordRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\DriverProfileUpdateRequest;
@@ -257,7 +276,25 @@ return static function (string $apiRoot): Container {
     $container->set(GetAdminDashboard::class, static fn (Container $c) => new GetAdminDashboard(
         $c->get(PdoAdminOperationsRepository::class)
     ));
+    $container->set(GetAdminAnalytics::class, static fn (Container $c) => new GetAdminAnalytics(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(GetAdminAccess::class, static fn (Container $c) => new GetAdminAccess(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(CreateAdminAccessMember::class, static fn (Container $c) => new CreateAdminAccessMember(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(UpdateAdminAccessMember::class, static fn (Container $c) => new UpdateAdminAccessMember(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(UpdateAdminAccessMemberStatus::class, static fn (Container $c) => new UpdateAdminAccessMemberStatus(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
     $container->set(GetAdminFinance::class, static fn (Container $c) => new GetAdminFinance(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(GetAdminReports::class, static fn (Container $c) => new GetAdminReports(
         $c->get(PdoAdminOperationsRepository::class)
     ));
     $container->set(GetAdminOrders::class, static fn (Container $c) => new GetAdminOrders(
@@ -266,13 +303,37 @@ return static function (string $apiRoot): Container {
     $container->set(GetAdminOrderDetail::class, static fn (Container $c) => new GetAdminOrderDetail(
         $c->get(PdoAdminOperationsRepository::class)
     ));
+    $container->set(UpdateAdminOrderStatus::class, static fn (Container $c) => new UpdateAdminOrderStatus(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(AddAdminOrderNote::class, static fn (Container $c) => new AddAdminOrderNote(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
     $container->set(GetAdminPartnerApprovals::class, static fn (Container $c) => new GetAdminPartnerApprovals(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(GetAdminPartnerApprovalDetail::class, static fn (Container $c) => new GetAdminPartnerApprovalDetail(
         $c->get(PdoAdminOperationsRepository::class)
     ));
     $container->set(GetAdminDriverApprovals::class, static fn (Container $c) => new GetAdminDriverApprovals(
         $c->get(PdoAdminOperationsRepository::class)
     ));
+    $container->set(GetAdminDriverApprovalDetail::class, static fn (Container $c) => new GetAdminDriverApprovalDetail(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(ResolveAdminPartnerApproval::class, static fn (Container $c) => new ResolveAdminPartnerApproval(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(ResolveAdminDriverApproval::class, static fn (Container $c) => new ResolveAdminDriverApproval(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
     $container->set(GetAdminSupport::class, static fn (Container $c) => new GetAdminSupport(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(GetAdminNotifications::class, static fn (Container $c) => new GetAdminNotifications(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(MarkAdminNotificationRead::class, static fn (Container $c) => new MarkAdminNotificationRead(
         $c->get(PdoAdminOperationsRepository::class)
     ));
     $container->set(GetAdminSupportThread::class, static fn (Container $c) => new GetAdminSupportThread(
@@ -366,6 +427,11 @@ return static function (string $apiRoot): Container {
     $container->set(PartnerStoreDocumentRequest::class, static fn () => new PartnerStoreDocumentRequest());
     $container->set(PartnerTeamMemberUpsertRequest::class, static fn () => new PartnerTeamMemberUpsertRequest());
     $container->set(PartnerTeamMemberStatusRequest::class, static fn () => new PartnerTeamMemberStatusRequest());
+    $container->set(AdminApprovalDecisionRequest::class, static fn () => new AdminApprovalDecisionRequest());
+    $container->set(AdminAccessMemberUpsertRequest::class, static fn () => new AdminAccessMemberUpsertRequest());
+    $container->set(AdminAccessMemberStatusRequest::class, static fn () => new AdminAccessMemberStatusRequest());
+    $container->set(AdminOrderStatusUpdateRequest::class, static fn () => new AdminOrderStatusUpdateRequest());
+    $container->set(AdminOrderNoteCreateRequest::class, static fn () => new AdminOrderNoteCreateRequest());
     $container->set(AdminSettingsUpdateRequest::class, static fn () => new AdminSettingsUpdateRequest());
     $container->set(AdminSupportTicketStatusUpdateRequest::class, static fn () => new AdminSupportTicketStatusUpdateRequest());
     $container->set(SupportMessageCreateRequest::class, static fn () => new SupportMessageCreateRequest());
@@ -429,11 +495,25 @@ return static function (string $apiRoot): Container {
     ));
     $container->set(AdminController::class, static fn (Container $c) => new AdminController(
         $c->get(GetAdminDashboard::class),
+        $c->get(GetAdminAnalytics::class),
+        $c->get(GetAdminAccess::class),
+        $c->get(CreateAdminAccessMember::class),
+        $c->get(UpdateAdminAccessMember::class),
+        $c->get(UpdateAdminAccessMemberStatus::class),
         $c->get(GetAdminFinance::class),
+        $c->get(GetAdminReports::class),
         $c->get(GetAdminOrders::class),
         $c->get(GetAdminOrderDetail::class),
+        $c->get(UpdateAdminOrderStatus::class),
+        $c->get(AddAdminOrderNote::class),
         $c->get(GetAdminPartnerApprovals::class),
+        $c->get(GetAdminPartnerApprovalDetail::class),
         $c->get(GetAdminDriverApprovals::class),
+        $c->get(GetAdminDriverApprovalDetail::class),
+        $c->get(ResolveAdminPartnerApproval::class),
+        $c->get(ResolveAdminDriverApproval::class),
+        $c->get(GetAdminNotifications::class),
+        $c->get(MarkAdminNotificationRead::class),
         $c->get(GetAdminSupport::class),
         $c->get(GetAdminSupportThread::class),
         $c->get(GetAdminSettings::class),
@@ -444,6 +524,11 @@ return static function (string $apiRoot): Container {
         $c->get(RejectPartnerApproval::class),
         $c->get(ApproveDriverApproval::class),
         $c->get(RejectDriverApproval::class),
+        $c->get(AdminAccessMemberUpsertRequest::class),
+        $c->get(AdminAccessMemberStatusRequest::class),
+        $c->get(AdminOrderStatusUpdateRequest::class),
+        $c->get(AdminOrderNoteCreateRequest::class),
+        $c->get(AdminApprovalDecisionRequest::class),
         $c->get(AdminSettingsUpdateRequest::class),
         $c->get(AdminSupportTicketStatusUpdateRequest::class),
         $c->get(SupportMessageCreateRequest::class)

@@ -71,6 +71,10 @@ fox-platform/
 - [Entrega da Fase 9 - Sprint 11](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-11-unified-team-auth-and-admin-settings.md)
 - [Entrega da Fase 9 - Sprint 12](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-12-runtime-hardening.md)
 - [Entrega da Fase 9 - Sprint 13](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-13-order-detail-and-operational-view.md)
+- [Entrega da Fase 9 - Sprint 14](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-14-admin-support-actions.md)
+- [Entrega da Fase 9 - Sprint 15](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-15-admin-order-actions.md)
+- [Entrega da Fase 9 - Sprint 16](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-16-admin-approval-resolution.md)
+- [Entrega da Fase 9 - Sprint 17](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-17-admin-access-and-notifications.md)
 - [Mapa do portal do parceiro](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/partner-portal-sitemap.md)
 - [Superficie de APIs](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/api-surface.md)
 - [Roadmap do MVP](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/roadmap-mvp.md)
@@ -148,7 +152,28 @@ Ja definido e materializado:
 - detalhe operacional de pedidos entregue no partner portal
 - detalhe operacional de pedidos entregue no admin
 - smoke test expandido para cobrir os endpoints de detalhe de pedidos
+- detalhe operacional do ticket de suporte entregue no admin
+- resposta e atualizacao de status de tickets do admin validadas pela API
+- smoke test expandido para cobrir thread, reply e status do suporte do admin
+- acoes operacionais do admin em pedidos entregues no runtime real
+- atualizacao de status e observacoes internas de pedidos pela API
+- smoke test expandido para cobrir `admin.order.status` e `admin.order.note`
+- detalhe operacional de aprovacao de parceiros entregue no admin
+- detalhe operacional de aprovacao de entregadores entregue no admin
+- historico persistido de revisao administrativa por cadastro
+- decisao administrativa com observacao validada pela API
+- smoke test expandido para cobrir detalhe e decisao de aprovacoes
+- gestao de acessos internos do admin com criacao, edicao e status pela API
+- tela de permissoes administrativas com matriz de perfis e membros internos
+- timeline de notificacoes administrativas com marcacao de leitura
+- seed complementar de usuarios internos do admin
+- smoke test expandido para cobrir `admin.notifications` e `admin.access.*`
+- analytics do admin lendo consolidacao real do backend
+- relatorios administrativos ligados a API com resumo, status e top lojas
+- nova tela de relatorios administrativos integrada ao painel interno
+- fallback do admin ajustado ao contrato final de analytics e relatorios
+- smoke test expandido para cobrir `admin.analytics` e `admin.reports`
 
 Proxima etapa recomendada:
 
-- iniciar a Sprint 14 com acoes operacionais do admin em suporte e pedidos
+- endurecer RBAC do admin por perfil funcional nas rotas ja existentes

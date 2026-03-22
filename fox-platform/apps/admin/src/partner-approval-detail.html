@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Analise de parceiro</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="partner-approval-detail">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Analise detalhada do cadastro de parceiro, com documentos, contato e historico da decisao.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link is-active" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./reports.html">Relatorios</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./notifications.html">Notificacoes</a>
+                    <a class="fx-sidebar-link" href="./permissions.html">Permissoes</a>
+                    <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Parceiros</div>
+            <h1 class="fx-title-sm">Analise detalhada do parceiro</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="./partners-approvals.html">Voltar para fila</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Cadastro em revisao</div>
+                <h2 class="fx-title-md" id="fx-admin-partner-approval-name">Carregando parceiro</h2>
+                <p class="fx-copy" id="fx-admin-partner-approval-subtitle">Carregando contexto operacional.</p>
+              </div>
+              <div class="fx-inline-actions">
+                <span class="fx-status warning" id="fx-admin-partner-approval-status">carregando</span>
+              </div>
+            </section>
+
+            <p class="fx-note" id="fx-admin-partner-approval-feedback" hidden></p>
+
+            <section class="fx-admin-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Cadastro</span>
+                    <h3 class="fx-title-sm">Dados da operacao</h3>
+                  </div>
+                </div>
+                <div class="fx-stack-sm">
+                  <div class="fx-info-row"><strong>Razao social</strong><span id="fx-admin-partner-approval-legal-name">-</span></div>
+                  <div class="fx-info-row"><strong>CNPJ</strong><span id="fx-admin-partner-approval-document">-</span></div>
+                  <div class="fx-info-row"><strong>Email da loja</strong><span id="fx-admin-partner-approval-store-email">-</span></div>
+                  <div class="fx-info-row"><strong>Telefone da loja</strong><span id="fx-admin-partner-approval-store-phone">-</span></div>
+                  <div class="fx-info-row"><strong>Status da conta</strong><span id="fx-admin-partner-approval-account-status">-</span></div>
+                </div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Responsavel</span>
+                    <h3 class="fx-title-sm">Contato principal</h3>
+                  </div>
+                </div>
+                <div class="fx-stack-sm">
+                  <div class="fx-info-row"><strong>Nome</strong><span id="fx-admin-partner-approval-owner-name">-</span></div>
+                  <div class="fx-info-row"><strong>Email</strong><span id="fx-admin-partner-approval-owner-email">-</span></div>
+                  <div class="fx-info-row"><strong>Telefone</strong><span id="fx-admin-partner-approval-owner-phone">-</span></div>
+                </div>
+              </article>
+            </section>
+
+            <section class="fx-admin-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Documentos</span>
+                    <h3 class="fx-title-sm">Checklist da analise</h3>
+                  </div>
+                </div>
+                <div class="fx-stack-sm" id="fx-admin-partner-approval-documents"></div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Decisao</span>
+                    <h3 class="fx-title-sm">Registrar parecer</h3>
+                  </div>
+                </div>
+                <form class="fx-message-composer" id="fx-admin-partner-approval-decision-form">
+                  <div class="fx-field">
+                    <label for="fx-admin-partner-approval-decision-input">Decisao</label>
+                    <select id="fx-admin-partner-approval-decision-input" name="decision">
+                      <option value="approve">Aprovar cadastro</option>
+                      <option value="reject">Mover para revisao manual</option>
+                    </select>
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-admin-partner-approval-note-input">Observacao operacional</label>
+                    <textarea id="fx-admin-partner-approval-note-input" name="note" rows="6" placeholder="Registre o contexto da decisao para a trilha administrativa."></textarea>
+                  </div>
+                  <div class="fx-inline-actions">
+                    <button class="fx-button" type="submit">Salvar analise</button>
+                  </div>
+                </form>
+              </article>
+            </section>
+
+            <section class="fx-card">
+              <div class="fx-card-header">
+                <div>
+                  <span class="fx-pill">Historico</span>
+                  <h3 class="fx-title-sm">Trilha de revisao</h3>
+                </div>
+              </div>
+              <div class="fx-stack-sm" id="fx-admin-partner-approval-history"></div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

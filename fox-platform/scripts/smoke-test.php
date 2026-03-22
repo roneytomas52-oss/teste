@@ -182,21 +182,194 @@ try {
     }
 
     $adminDashboard = expectSuccess('admin.dashboard', request('GET', $baseUrl . '/api/v1/admin/dashboard', null, bearer($adminLogin['access_token'])));
+    expectSuccess('admin.analytics', request('GET', $baseUrl . '/api/v1/admin/analytics', null, bearer($adminLogin['access_token'])));
+    expectSuccess('admin.reports', request('GET', $baseUrl . '/api/v1/admin/reports', null, bearer($adminLogin['access_token'])));
     $adminSettings = expectSuccess('admin.settings.get', request('GET', $baseUrl . '/api/v1/admin/settings', null, bearer($adminLogin['access_token'])));
     expectSuccess(
         'admin.settings.put',
         request('PUT', $baseUrl . '/api/v1/admin/settings', $adminSettings, bearer($adminLogin['access_token']))
     );
-    expectSuccess('admin.support', request('GET', $baseUrl . '/api/v1/admin/support/queue', null, bearer($adminLogin['access_token'])));
+    $adminNotifications = expectSuccess('admin.notifications', request('GET', $baseUrl . '/api/v1/admin/notifications', null, bearer($adminLogin['access_token'])));
+    if (!empty($adminNotifications['items'][0]['id'] ?? null)) {
+        expectSuccess(
+            'admin.notifications.read',
+            request(
+                'POST',
+                $baseUrl . '/api/v1/admin/notifications/' . $adminNotifications['items'][0]['id'] . '/read',
+                null,
+                bearer($adminLogin['access_token'])
+            )
+        );
+    }
+    $adminAccess = expectSuccess('admin.access', request('GET', $baseUrl . '/api/v1/admin/access', null, bearer($adminLogin['access_token'])));
+    $adminMemberEmail = sprintf('admin-sprint17-%s@foxplatform.com', $timestamp);
+    $adminAccess = expectSuccess(
+        'admin.access.create',
+        request(
+            'POST',
+            $baseUrl . '/api/v1/admin/access/members',
+            [
+                'full_name' => 'Admin Sprint 17 ' . $timestamp,
+                'email' => $adminMemberEmail,
+                'phone' => '+55 11 93333-0000',
+                'department' => 'Operacao',
+                'role_slug' => 'admin_operacional',
+                'status' => 'active',
+            ],
+            bearer($adminLogin['access_token'])
+        )
+    );
+    $createdAdminMember = null;
+    foreach (($adminAccess['members'] ?? []) as $member) {
+        if (($member['email'] ?? '') === $adminMemberEmail) {
+            $createdAdminMember = $member;
+            break;
+        }
+    }
+    if (!$createdAdminMember || empty($createdAdminMember['id'] ?? null)) {
+        fail('admin.access.create', 'Nao foi possivel localizar o membro administrativo criado no retorno da API.');
+    }
+    expectSuccess(
+        'admin.access.update',
+        request(
+            'PUT',
+            $baseUrl . '/api/v1/admin/access/members/' . $createdAdminMember['id'],
+            [
+                'full_name' => 'Admin Sprint 17 Atualizado ' . $timestamp,
+                'email' => $adminMemberEmail,
+                'phone' => '+55 11 93333-0001',
+                'department' => 'Financeiro',
+                'role_slug' => 'admin_financeiro',
+                'status' => 'active',
+            ],
+            bearer($adminLogin['access_token'])
+        )
+    );
+    expectSuccess(
+        'admin.access.status',
+        request(
+            'PUT',
+            $baseUrl . '/api/v1/admin/access/members/' . $createdAdminMember['id'] . '/status',
+            [
+                'status' => 'suspended',
+            ],
+            bearer($adminLogin['access_token'])
+        )
+    );
+    $adminSupport = expectSuccess('admin.support', request('GET', $baseUrl . '/api/v1/admin/support/queue', null, bearer($adminLogin['access_token'])));
     $adminOrders = expectSuccess('admin.orders', request('GET', $baseUrl . '/api/v1/admin/orders', null, bearer($adminLogin['access_token'])));
-    expectSuccess('admin.approvals.partners', request('GET', $baseUrl . '/api/v1/admin/approvals/partners', null, bearer($adminLogin['access_token'])));
-    expectSuccess('admin.approvals.drivers', request('GET', $baseUrl . '/api/v1/admin/approvals/drivers', null, bearer($adminLogin['access_token'])));
+    $adminPartnerApprovals = expectSuccess('admin.approvals.partners', request('GET', $baseUrl . '/api/v1/admin/approvals/partners', null, bearer($adminLogin['access_token'])));
+    $adminDriverApprovals = expectSuccess('admin.approvals.drivers', request('GET', $baseUrl . '/api/v1/admin/approvals/drivers', null, bearer($adminLogin['access_token'])));
     $firstAdminOrderId = $adminOrders['items'][0]['order_id'] ?? null;
+    $firstAdminTicketId = $adminSupport['priorityQueue'][0]['ticket_id'] ?? null;
+    $firstPartnerApprovalId = $adminPartnerApprovals['items'][0]['id'] ?? null;
+    $firstDriverApprovalId = $adminDriverApprovals['items'][0]['id'] ?? null;
 
     if ($firstAdminOrderId) {
         expectSuccess(
             'admin.order-detail',
             request('GET', $baseUrl . '/api/v1/admin/orders/' . $firstAdminOrderId, null, bearer($adminLogin['access_token']))
+        );
+        expectSuccess(
+            'admin.order.status',
+            request(
+                'PUT',
+                $baseUrl . '/api/v1/admin/orders/' . $firstAdminOrderId . '/status',
+                [
+                    'status' => 'preparing',
+                    'note' => 'Pedido movido para preparo pelo smoke test.'
+                ],
+                bearer($adminLogin['access_token'])
+            )
+        );
+        expectSuccess(
+            'admin.order.note',
+            request(
+                'POST',
+                $baseUrl . '/api/v1/admin/orders/' . $firstAdminOrderId . '/note',
+                [
+                    'note' => 'Observacao administrativa registrada pela validacao automatica.'
+                ],
+                bearer($adminLogin['access_token'])
+            )
+        );
+    }
+
+    if ($firstAdminTicketId) {
+        expectSuccess(
+            'admin.support.thread',
+            request('GET', $baseUrl . '/api/v1/admin/support/' . $firstAdminTicketId, null, bearer($adminLogin['access_token']))
+        );
+        expectSuccess(
+            'admin.support.reply',
+            request(
+                'POST',
+                $baseUrl . '/api/v1/admin/support/' . $firstAdminTicketId . '/messages',
+                [
+                    'body' => 'Resposta automatica do smoke test.'
+                ],
+                bearer($adminLogin['access_token'])
+            )
+        );
+        expectSuccess(
+            'admin.support.status',
+            request(
+                'PUT',
+                $baseUrl . '/api/v1/admin/support/' . $firstAdminTicketId . '/status',
+                [
+                    'status' => 'in_progress',
+                    'note' => 'Ticket movido para atendimento pela verificacao automatica.'
+                ],
+                bearer($adminLogin['access_token'])
+            )
+        );
+    }
+
+    if ($firstPartnerApprovalId) {
+        expectSuccess(
+            'admin.approvals.partner-detail',
+            request(
+                'GET',
+                $baseUrl . '/api/v1/admin/approvals/partners/' . $firstPartnerApprovalId,
+                null,
+                bearer($adminLogin['access_token'])
+            )
+        );
+        expectSuccess(
+            'admin.approvals.partner-decision',
+            request(
+                'PUT',
+                $baseUrl . '/api/v1/admin/approvals/partners/' . $firstPartnerApprovalId . '/decision',
+                [
+                    'decision' => 'reject',
+                    'note' => 'Cadastro mantido em revisao pelo smoke test da Sprint 16.',
+                ],
+                bearer($adminLogin['access_token'])
+            )
+        );
+    }
+
+    if ($firstDriverApprovalId) {
+        expectSuccess(
+            'admin.approvals.driver-detail',
+            request(
+                'GET',
+                $baseUrl . '/api/v1/admin/approvals/drivers/' . $firstDriverApprovalId,
+                null,
+                bearer($adminLogin['access_token'])
+            )
+        );
+        expectSuccess(
+            'admin.approvals.driver-decision',
+            request(
+                'PUT',
+                $baseUrl . '/api/v1/admin/approvals/drivers/' . $firstDriverApprovalId . '/decision',
+                [
+                    'decision' => 'reject',
+                    'note' => 'Cadastro mantido em revisao pelo smoke test da Sprint 16.',
+                ],
+                bearer($adminLogin['access_token'])
+            )
         );
     }
 

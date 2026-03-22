@@ -56,11 +56,25 @@ return static function (Router $router, Container $container): void {
     $router->put('/api/v1/partner/catalog/products/{product_id}/inventory', [PartnerCatalogController::class, 'updateInventory'], ['cors', 'auth', 'json', 'role:partner_owner,partner_manager,partner_staff', 'permission:inventory.manage']);
 
     $router->get('/api/v1/admin/dashboard', [AdminController::class, 'dashboard'], ['cors', 'auth', 'role:super_admin']);
+    $router->get('/api/v1/admin/analytics', [AdminController::class, 'analytics'], ['cors', 'auth', 'role:super_admin', 'permission:reports.view']);
+    $router->get('/api/v1/admin/access', [AdminController::class, 'access'], ['cors', 'auth', 'role:super_admin', 'permission:settings.manage']);
+    $router->post('/api/v1/admin/access/members', [AdminController::class, 'createAccessMember'], ['cors', 'auth', 'role:super_admin', 'permission:settings.manage', 'json']);
+    $router->put('/api/v1/admin/access/members/{member_id}', [AdminController::class, 'updateAccessMember'], ['cors', 'auth', 'role:super_admin', 'permission:settings.manage', 'json']);
+    $router->put('/api/v1/admin/access/members/{member_id}/status', [AdminController::class, 'updateAccessMemberStatus'], ['cors', 'auth', 'role:super_admin', 'permission:settings.manage', 'json']);
     $router->get('/api/v1/admin/finance/overview', [AdminController::class, 'finance'], ['cors', 'auth', 'role:super_admin']);
+    $router->get('/api/v1/admin/reports', [AdminController::class, 'reports'], ['cors', 'auth', 'role:super_admin', 'permission:reports.view']);
+    $router->get('/api/v1/admin/notifications', [AdminController::class, 'notifications'], ['cors', 'auth', 'role:super_admin', 'permission:dashboard.view']);
+    $router->post('/api/v1/admin/notifications/{notification_id}/read', [AdminController::class, 'markNotificationRead'], ['cors', 'auth', 'role:super_admin', 'permission:dashboard.view']);
     $router->get('/api/v1/admin/orders', [AdminController::class, 'orders'], ['cors', 'auth', 'role:super_admin']);
     $router->get('/api/v1/admin/orders/{order_id}', [AdminController::class, 'orderDetail'], ['cors', 'auth', 'role:super_admin']);
+    $router->put('/api/v1/admin/orders/{order_id}/status', [AdminController::class, 'updateOrderStatus'], ['cors', 'auth', 'role:super_admin', 'json']);
+    $router->post('/api/v1/admin/orders/{order_id}/note', [AdminController::class, 'addOrderNote'], ['cors', 'auth', 'role:super_admin', 'json']);
     $router->get('/api/v1/admin/approvals/partners', [AdminController::class, 'partnerApprovals'], ['cors', 'auth', 'role:super_admin']);
+    $router->get('/api/v1/admin/approvals/partners/{partner_id}', [AdminController::class, 'partnerApprovalDetail'], ['cors', 'auth', 'role:super_admin']);
+    $router->put('/api/v1/admin/approvals/partners/{partner_id}/decision', [AdminController::class, 'resolvePartnerApproval'], ['cors', 'auth', 'role:super_admin', 'json']);
     $router->get('/api/v1/admin/approvals/drivers', [AdminController::class, 'driverApprovals'], ['cors', 'auth', 'role:super_admin']);
+    $router->get('/api/v1/admin/approvals/drivers/{driver_id}', [AdminController::class, 'driverApprovalDetail'], ['cors', 'auth', 'role:super_admin']);
+    $router->put('/api/v1/admin/approvals/drivers/{driver_id}/decision', [AdminController::class, 'resolveDriverApproval'], ['cors', 'auth', 'role:super_admin', 'json']);
     $router->post('/api/v1/admin/approvals/partners/{partner_id}/approve', [AdminController::class, 'approvePartner'], ['cors', 'auth', 'role:super_admin']);
     $router->post('/api/v1/admin/approvals/partners/{partner_id}/reject', [AdminController::class, 'rejectPartner'], ['cors', 'auth', 'role:super_admin']);
     $router->post('/api/v1/admin/approvals/drivers/{driver_id}/approve', [AdminController::class, 'approveDriver'], ['cors', 'auth', 'role:super_admin']);

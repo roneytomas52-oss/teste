@@ -1,96 +1,658 @@
-{
-  "dashboard": {
-    "heroTitle": "Controle parceiros, pedidos e saúde operacional da Fox Delivery em um único lugar.",
-    "heroLead": "Aprovações, indicadores críticos, suporte, auditoria e financeiro organizados por prioridade operacional.",
-    "summary": [
-      { "label": "pedidos em andamento", "value": "148" },
-      { "label": "cadastros aguardando aprovação", "value": "23" },
-      { "label": "volume bruto processado hoje", "value": "R$ 182 mil" }
-    ],
-    "metrics": [
-      { "label": "parceiros ativos na operação", "value": "1.284" },
-      { "label": "entregadores habilitados", "value": "3.912" },
-      { "label": "pedidos dentro do SLA", "value": "97,4%" },
-      { "label": "alertas críticos abertos", "value": "12" }
-    ],
-    "alerts": [
-      "8 lojas com pausa operacional acima de 30 minutos.",
-      "3 repasses aguardando conferência financeira.",
-      "12 pedidos com atraso acima do padrão."
-    ]
-  },
-  "orders": [
-    { "id": "#FD-10482", "store_name": "Mercado Nova Rota", "customer": "Ana Souza", "status": "aguardando aceite", "status_key": "pending_acceptance", "statusType": "warning", "sla": "4 min", "driver_name": "sem atribuicao", "value": "R$ 78,90" },
-    { "id": "#FD-10479", "store_name": "Fox Burgers Centro", "customer": "Paulo Lima", "status": "em preparo", "status_key": "preparing", "statusType": "success", "sla": "10 min", "driver_name": "Lucas Ferreira", "value": "R$ 54,20" },
-    { "id": "#FD-10471", "store_name": "Farmácia São Lucas", "customer": "Júlia Martins", "status": "pronto para retirada", "status_key": "ready_for_pickup", "statusType": "warning", "sla": "2 min", "driver_name": "Daniela Matos", "value": "R$ 31,00" },
-    { "id": "#FD-10433", "store_name": "Conveniência Central", "customer": "Mariana Costa", "status": "cancelado", "status_key": "cancelled", "statusType": "danger", "sla": "fora da janela", "driver_name": "nao atribuido", "value": "R$ 44,90" }
-  ],
-  "partnerApprovals": [
-    { "id": "approval-partner-1", "name": "Mercado Nova Rota", "summary": "Cadastro aguardando revisão documental, enquadramento comercial e conferência operacional.", "meta": ["Mercado", "São Paulo", "análise inicial"], "status": "documentação pendente", "statusType": "warning", "action": "Abrir cadastro" },
-    { "id": "approval-partner-2", "name": "Farmácia São Lucas", "summary": "Documentos ok, conta bancária validada e operação pronta para ativação após revisão de horário.", "meta": ["Farmácia", "Campinas", "alto potencial"], "status": "apto para ativação", "statusType": "success", "action": "Ativar loja" },
-    { "id": "approval-partner-3", "name": "Conveniência Central", "summary": "Cadastro novo com divergência entre razão social e documento informado no responsável.", "meta": ["Conveniência", "Guarulhos", "atenção cadastral"], "status": "revisão manual", "statusType": "danger", "action": "Solicitar correções" }
-  ],
-  "driverApprovals": [
-    { "id": "approval-driver-1", "name": "Lucas Ferreira", "summary": "Moto validada, CNH conferida e conta bancária pronta para ativação.", "meta": ["Moto", "São Paulo", "documentos ok"], "status": "apto para ativação", "statusType": "success", "action": "Ativar entregador" },
-    { "id": "approval-driver-2", "name": "Marina Costa", "summary": "Perfil com divergência entre comprovante e documento principal. Requer revisão manual.", "meta": ["Bike", "Santos", "risco médio"], "status": "revisão manual", "statusType": "danger", "action": "Abrir documentos" },
-    { "id": "approval-driver-3", "name": "Rafael Gomes", "summary": "Aguardando envio de foto frontal do documento e validação do veículo.", "meta": ["Carro", "Osasco", "pendência"], "status": "documentação pendente", "statusType": "warning", "action": "Solicitar ajuste" }
-  ],
-  "finance": {
-    "balance": "R$ 182.430",
-    "balanceNote": "Volume bruto processado hoje na plataforma, consolidando pedidos pagos, taxas e previsão de repasses.",
-    "stats": [
-      { "label": "comissões apuradas no dia", "value": "R$ 26.118" },
-      { "label": "repasses previstos nesta semana", "value": "R$ 94.500" },
-      { "label": "ajustes financeiros pendentes", "value": "5" }
-    ]
-  },
-  "support": {
-    "priorityQueue": [
-      { "title": "#SUP-4120 - Parceiro", "summary": "Mercado Nova Rota reporta divergência de repasse e pausa operacional no almoço.", "status": "crítico", "statusType": "danger" },
-      { "title": "#SUP-4116 - Entregador", "summary": "Lucas Ferreira aguarda revisão de corrida com distância divergente.", "status": "alta", "statusType": "warning" },
-      { "title": "#SUP-4108 - Catálogo", "summary": "Loja solicita revisão de imagem e disponibilidade em lote.", "status": "normal", "statusType": "success" }
-    ]
-  },
-  "audit": {
-    "events": [
-      { "time": "14:08", "title": "Aprovação de parceiro", "summary": "Amanda Ribeiro aprovou o cadastro da Farmácia São Lucas após revisão documental." },
-      { "time": "13:41", "title": "Ajuste financeiro", "summary": "Carlos Silva aplicou compensação manual em lote de repasse #PAYOUT-119." },
-      { "time": "12:52", "title": "Bloqueio temporário", "summary": "Operação pausou a loja Conveniência Central por divergência de horário e estoque." }
-    ]
-  },
-  "analytics": {
-    "cards": [
-      { "label": "volume bruto no mês", "value": "R$ 5,4 mi" },
-      { "label": "pedidos concluídos", "value": "128 mil" },
-      { "label": "pedidos dentro do SLA", "value": "97,6%" }
-    ],
-    "verticals": [
-      { "name": "Restaurantes", "share": "44%" },
-      { "name": "Mercado", "share": "29%" },
-      { "name": "Farmácia", "share": "17%" },
-      { "name": "Conveniência", "share": "10%" }
-    ]
-  },
-  "settings": {
-    "branding": {
-      "platform_name": "Fox Delivery",
-      "support_email": "suporte@foxdelivery.com.br",
-      "partner_login_url": "https://foxgodelivery.com.br/login/parceiro"
-    },
-    "operations": {
-      "default_order_sla_minutes": 35,
-      "partner_review_window_hours": 24,
-      "driver_review_window_hours": 18
-    },
-    "notifications": {
-      "partner_polling_seconds": 30,
-      "driver_polling_seconds": 30,
-      "admin_digest_enabled": true
-    },
-    "security": {
-      "access_token_ttl_minutes": 60,
-      "refresh_token_ttl_days": 14,
-      "password_reset_token_ttl_minutes": 30
-    }
-  }
+﻿{
+    "dashboard":  {
+                      "heroTitle":  "Controle parceiros, pedidos e saÃºde operacional da Fox Delivery em um Ãºnico lugar.",
+                      "heroLead":  "AprovaÃ§Ãµes, indicadores crÃ­ticos, suporte, auditoria e financeiro organizados por prioridade operacional.",
+                      "summary":  [
+                                      {
+                                          "label":  "pedidos em andamento",
+                                          "value":  "148"
+                                      },
+                                      {
+                                          "label":  "cadastros aguardando aprovaÃ§Ã£o",
+                                          "value":  "23"
+                                      },
+                                      {
+                                          "label":  "volume bruto processado hoje",
+                                          "value":  "R$ 182 mil"
+                                      }
+                                  ],
+                      "metrics":  [
+                                      {
+                                          "label":  "parceiros ativos na operaÃ§Ã£o",
+                                          "value":  "1.284"
+                                      },
+                                      {
+                                          "label":  "entregadores habilitados",
+                                          "value":  "3.912"
+                                      },
+                                      {
+                                          "label":  "pedidos dentro do SLA",
+                                          "value":  "97,4%"
+                                      },
+                                      {
+                                          "label":  "alertas crÃ­ticos abertos",
+                                          "value":  "12"
+                                      }
+                                  ],
+                      "alerts":  [
+                                     "8 lojas com pausa operacional acima de 30 minutos.",
+                                     "3 repasses aguardando conferÃªncia financeira.",
+                                     "12 pedidos com atraso acima do padrÃ£o."
+                                 ]
+                  },
+    "orders":  [
+                   {
+                       "id":  "#FD-10482",
+                       "store_name":  "Mercado Nova Rota",
+                       "customer":  "Ana Souza",
+                       "status":  "aguardando aceite",
+                       "status_key":  "pending_acceptance",
+                       "statusType":  "warning",
+                       "sla":  "4 min",
+                       "driver_name":  "sem atribuicao",
+                       "value":  "R$ 78,90"
+                   },
+                   {
+                       "id":  "#FD-10479",
+                       "store_name":  "Fox Burgers Centro",
+                       "customer":  "Paulo Lima",
+                       "status":  "em preparo",
+                       "status_key":  "preparing",
+                       "statusType":  "success",
+                       "sla":  "10 min",
+                       "driver_name":  "Lucas Ferreira",
+                       "value":  "R$ 54,20"
+                   },
+                   {
+                       "id":  "#FD-10471",
+                       "store_name":  "FarmÃ¡cia SÃ£o Lucas",
+                       "customer":  "JÃºlia Martins",
+                       "status":  "pronto para retirada",
+                       "status_key":  "ready_for_pickup",
+                       "statusType":  "warning",
+                       "sla":  "2 min",
+                       "driver_name":  "Daniela Matos",
+                       "value":  "R$ 31,00"
+                   },
+                   {
+                       "id":  "#FD-10433",
+                       "store_name":  "ConveniÃªncia Central",
+                       "customer":  "Mariana Costa",
+                       "status":  "cancelado",
+                       "status_key":  "cancelled",
+                       "statusType":  "danger",
+                       "sla":  "fora da janela",
+                       "driver_name":  "nao atribuido",
+                       "value":  "R$ 44,90"
+                   }
+               ],
+    "partnerApprovals":  [
+                             {
+                                 "id":  "approval-partner-1",
+                                 "name":  "Mercado Nova Rota",
+                                 "summary":  "Cadastro aguardando revisÃ£o documental, enquadramento comercial e conferÃªncia operacional.",
+                                 "meta":  [
+                                              "Mercado",
+                                              "SÃ£o Paulo",
+                                              "anÃ¡lise inicial"
+                                          ],
+                                 "status":  "documentaÃ§Ã£o pendente",
+                                 "statusType":  "warning",
+                                 "action":  "Abrir cadastro"
+                             },
+                             {
+                                 "id":  "approval-partner-2",
+                                 "name":  "FarmÃ¡cia SÃ£o Lucas",
+                                 "summary":  "Documentos ok, conta bancÃ¡ria validada e operaÃ§Ã£o pronta para ativaÃ§Ã£o apÃ³s revisÃ£o de horÃ¡rio.",
+                                 "meta":  [
+                                              "FarmÃ¡cia",
+                                              "Campinas",
+                                              "alto potencial"
+                                          ],
+                                 "status":  "apto para ativaÃ§Ã£o",
+                                 "statusType":  "success",
+                                 "action":  "Ativar loja"
+                             },
+                             {
+                                 "id":  "approval-partner-3",
+                                 "name":  "ConveniÃªncia Central",
+                                 "summary":  "Cadastro novo com divergÃªncia entre razÃ£o social e documento informado no responsÃ¡vel.",
+                                 "meta":  [
+                                              "ConveniÃªncia",
+                                              "Guarulhos",
+                                              "atenÃ§Ã£o cadastral"
+                                          ],
+                                 "status":  "revisÃ£o manual",
+                                 "statusType":  "danger",
+                                 "action":  "Solicitar correÃ§Ãµes"
+                             }
+                         ],
+    "driverApprovals":  [
+                            {
+                                "id":  "approval-driver-1",
+                                "name":  "Lucas Ferreira",
+                                "summary":  "Moto validada, CNH conferida e conta bancÃ¡ria pronta para ativaÃ§Ã£o.",
+                                "meta":  [
+                                             "Moto",
+                                             "SÃ£o Paulo",
+                                             "documentos ok"
+                                         ],
+                                "status":  "apto para ativaÃ§Ã£o",
+                                "statusType":  "success",
+                                "action":  "Ativar entregador"
+                            },
+                            {
+                                "id":  "approval-driver-2",
+                                "name":  "Marina Costa",
+                                "summary":  "Perfil com divergÃªncia entre comprovante e documento principal. Requer revisÃ£o manual.",
+                                "meta":  [
+                                             "Bike",
+                                             "Santos",
+                                             "risco mÃ©dio"
+                                         ],
+                                "status":  "revisÃ£o manual",
+                                "statusType":  "danger",
+                                "action":  "Abrir documentos"
+                            },
+                            {
+                                "id":  "approval-driver-3",
+                                "name":  "Rafael Gomes",
+                                "summary":  "Aguardando envio de foto frontal do documento e validaÃ§Ã£o do veÃ­culo.",
+                                "meta":  [
+                                             "Carro",
+                                             "Osasco",
+                                             "pendÃªncia"
+                                         ],
+                                "status":  "documentaÃ§Ã£o pendente",
+                                "statusType":  "warning",
+                                "action":  "Solicitar ajuste"
+                            }
+                        ],
+    "finance":  {
+                    "balance":  "R$ 182.430",
+                    "balanceNote":  "Volume bruto processado hoje na plataforma, consolidando pedidos pagos, taxas e previsÃ£o de repasses.",
+                    "stats":  [
+                                  {
+                                      "label":  "comissÃµes apuradas no dia",
+                                      "value":  "R$ 26.118"
+                                  },
+                                  {
+                                      "label":  "repasses previstos nesta semana",
+                                      "value":  "R$ 94.500"
+                                  },
+                                  {
+                                      "label":  "ajustes financeiros pendentes",
+                                      "value":  "5"
+                                  }
+                              ]
+                },
+    "support":  {
+                    "priorityQueue":  [
+                                          {
+                                              "title":  "#SUP-4120 - Parceiro",
+                                              "summary":  "Mercado Nova Rota reporta divergÃªncia de repasse e pausa operacional no almoÃ§o.",
+                                              "status":  "crÃ­tico",
+                                              "statusType":  "danger"
+                                          },
+                                          {
+                                              "title":  "#SUP-4116 - Entregador",
+                                              "summary":  "Lucas Ferreira aguarda revisÃ£o de corrida com distÃ¢ncia divergente.",
+                                              "status":  "alta",
+                                              "statusType":  "warning"
+                                          },
+                                          {
+                                              "title":  "#SUP-4108 - CatÃ¡logo",
+                                              "summary":  "Loja solicita revisÃ£o de imagem e disponibilidade em lote.",
+                                              "status":  "normal",
+                                              "statusType":  "success"
+                                          }
+                                      ]
+                },
+    "audit":  {
+                  "events":  [
+                                 {
+                                     "time":  "14:08",
+                                     "title":  "AprovaÃ§Ã£o de parceiro",
+                                     "summary":  "Amanda Ribeiro aprovou o cadastro da FarmÃ¡cia SÃ£o Lucas apÃ³s revisÃ£o documental."
+                                 },
+                                 {
+                                     "time":  "13:41",
+                                     "title":  "Ajuste financeiro",
+                                     "summary":  "Carlos Silva aplicou compensaÃ§Ã£o manual em lote de repasse #PAYOUT-119."
+                                 },
+                                 {
+                                     "time":  "12:52",
+                                     "title":  "Bloqueio temporÃ¡rio",
+                                     "summary":  "OperaÃ§Ã£o pausou a loja ConveniÃªncia Central por divergÃªncia de horÃ¡rio e estoque."
+                                 }
+                             ]
+              },
+    "analytics":  {
+                      "cards":  [
+                                    {
+                                        "label":  "volume bruto no mes",
+                                        "value":  "R$ 5,4 mi"
+                                    },
+                                    {
+                                        "label":  "pedidos concluidos",
+                                        "value":  "128 mil"
+                                    },
+                                    {
+                                        "label":  "pedidos dentro do SLA",
+                                        "value":  "97,6%"
+                                    },
+                                    {
+                                        "label":  "comissoes no dia",
+                                        "value":  "R$ 26,1 mil"
+                                    }
+                                ],
+                      "status_distribution":  [
+                                                  {
+                                                      "label":  "Concluidos",
+                                                      "share":  62.4
+                                                  },
+                                                  {
+                                                      "label":  "Em preparo",
+                                                      "share":  17.1
+                                                  },
+                                                  {
+                                                      "label":  "Em rota",
+                                                      "share":  11.3
+                                                  },
+                                                  {
+                                                      "label":  "Cancelados",
+                                                      "share":  9.2
+                                                  }
+                                              ],
+                      "city_distribution":  [
+                                                {
+                                                    "label":  "Sao Paulo",
+                                                    "share":  41.6
+                                                },
+                                                {
+                                                    "label":  "Campinas",
+                                                    "share":  21.9
+                                                },
+                                                {
+                                                    "label":  "Guarulhos",
+                                                    "share":  18.4
+                                                },
+                                                {
+                                                    "label":  "Santos",
+                                                    "share":  18.1
+                                                }
+                                            ],
+                      "highlights":  [
+                                         "Mercado Nova Rota lidera o volume bruto da semana.",
+                                         "Campinas ganhou share apos a expansao de multicategorias.",
+                                         "O cancelamento caiu na faixa de conveniencia nos ultimos 7 dias."
+                                     ]
+                  },
+    "settings":  {
+                     "branding":  {
+                                      "platform_name":  "Fox Delivery",
+                                      "support_email":  "suporte@foxdelivery.com.br",
+                                      "partner_login_url":  "https://foxgodelivery.com.br/login/parceiro"
+                                  },
+                     "operations":  {
+                                        "default_order_sla_minutes":  35,
+                                        "partner_review_window_hours":  24,
+                                        "driver_review_window_hours":  18
+                                    },
+                     "notifications":  {
+                                           "partner_polling_seconds":  30,
+                                           "driver_polling_seconds":  30,
+                                           "admin_digest_enabled":  true
+                                       },
+                     "security":  {
+                                      "access_token_ttl_minutes":  60,
+                                      "refresh_token_ttl_days":  14,
+                                      "password_reset_token_ttl_minutes":  30
+                                  }
+                 },
+    "access":  {
+                   "summary":  [
+                                   {
+                                       "label":  "usuarios internos",
+                                       "value":  "4"
+                                   },
+                                   {
+                                       "label":  "ativos",
+                                       "value":  "3"
+                                   },
+                                   {
+                                       "label":  "super admins",
+                                       "value":  "1"
+                                   },
+                                   {
+                                       "label":  "pendentes ou suspensos",
+                                       "value":  "1"
+                                   }
+                               ],
+                   "roles":  [
+                                 {
+                                     "id":  "role-super-admin",
+                                     "slug":  "super_admin",
+                                     "name":  "Super Admin",
+                                     "description":  "Controle total da plataforma.",
+                                     "permissions":  [
+                                                         "Ver dashboard",
+                                                         "Gerir pedidos",
+                                                         "Aprovar cadastros",
+                                                         "Gerir configuracoes"
+                                                     ],
+                                     "permission_slugs":  [
+                                                              "dashboard.view",
+                                                              "orders.manage",
+                                                              "approvals.approve",
+                                                              "settings.manage"
+                                                          ]
+                                 },
+                                 {
+                                     "id":  "role-admin-operacional",
+                                     "slug":  "admin_operacional",
+                                     "name":  "Admin Operacional",
+                                     "description":  "Opera pedidos, suporte e aprovacoes.",
+                                     "permissions":  [
+                                                         "Ver dashboard",
+                                                         "Gerir pedidos",
+                                                         "Gerir atendimento",
+                                                         "Aprovar cadastros"
+                                                     ],
+                                     "permission_slugs":  [
+                                                              "dashboard.view",
+                                                              "orders.manage",
+                                                              "support.manage",
+                                                              "approvals.approve"
+                                                          ]
+                                 },
+                                 {
+                                     "id":  "role-admin-financeiro",
+                                     "slug":  "admin_financeiro",
+                                     "name":  "Admin Financeiro",
+                                     "description":  "Opera repasses, exportacoes e leitura financeira.",
+                                     "permissions":  [
+                                                         "Ver dashboard",
+                                                         "Ver financeiro",
+                                                         "Exportar financeiro",
+                                                         "Ver relatorios"
+                                                     ],
+                                     "permission_slugs":  [
+                                                              "dashboard.view",
+                                                              "finance.view",
+                                                              "finance.export",
+                                                              "reports.view"
+                                                          ]
+                                 },
+                                 {
+                                     "id":  "role-suporte",
+                                     "slug":  "suporte",
+                                     "name":  "Suporte",
+                                     "description":  "Atendimento e tratativa de chamados operacionais.",
+                                     "permissions":  [
+                                                         "Ver dashboard",
+                                                         "Gerir atendimento"
+                                                     ],
+                                     "permission_slugs":  [
+                                                              "dashboard.view",
+                                                              "support.manage"
+                                                          ]
+                                 }
+                             ],
+                   "allowed_roles":  [
+                                         {
+                                             "slug":  "super_admin",
+                                             "label":  "Super Admin"
+                                         },
+                                         {
+                                             "slug":  "admin_operacional",
+                                             "label":  "Admin Operacional"
+                                         },
+                                         {
+                                             "slug":  "admin_financeiro",
+                                             "label":  "Admin Financeiro"
+                                         },
+                                         {
+                                             "slug":  "admin_comercial",
+                                             "label":  "Admin Comercial"
+                                         },
+                                         {
+                                             "slug":  "suporte",
+                                             "label":  "Suporte"
+                                         }
+                                     ],
+                   "members":  [
+                                   {
+                                       "id":  "11111111-1111-4111-8111-111111111111",
+                                       "user_id":  "11111111-1111-4111-8111-111111111111",
+                                       "full_name":  "Admin Fox Platform",
+                                       "email":  "admin@foxplatform.com",
+                                       "phone":  "+55 11 90000-0001",
+                                       "department":  "Plataforma",
+                                       "role_slug":  "super_admin",
+                                       "role_label":  "Super Admin",
+                                       "permissions":  [
+                                                           "Ver dashboard",
+                                                           "Gerir pedidos",
+                                                           "Aprovar cadastros",
+                                                           "Gerir configuracoes"
+                                                       ],
+                                       "status":  "ativo",
+                                       "status_key":  "active",
+                                       "status_type":  "success",
+                                       "is_super":  true,
+                                       "last_login_at":  "22/03/2026 09:12",
+                                       "created_at":  "20/03/2026 08:00"
+                                   },
+                                   {
+                                       "id":  "77777777-7777-4777-8777-777777777777",
+                                       "user_id":  "77777777-7777-4777-8777-777777777777",
+                                       "full_name":  "Carla Nascimento",
+                                       "email":  "carla.nascimento@foxplatform.com",
+                                       "phone":  "+55 11 98888-2201",
+                                       "department":  "Operacao",
+                                       "role_slug":  "admin_operacional",
+                                       "role_label":  "Admin Operacional",
+                                       "permissions":  [
+                                                           "Ver dashboard",
+                                                           "Gerir pedidos",
+                                                           "Gerir atendimento",
+                                                           "Aprovar cadastros"
+                                                       ],
+                                       "status":  "ativo",
+                                       "status_key":  "active",
+                                       "status_type":  "success",
+                                       "is_super":  false,
+                                       "last_login_at":  "22/03/2026 08:54",
+                                       "created_at":  "21/03/2026 10:14"
+                                   },
+                                   {
+                                       "id":  "88888888-8888-4888-8888-888888888888",
+                                       "user_id":  "88888888-8888-4888-8888-888888888888",
+                                       "full_name":  "Juliana Prado",
+                                       "email":  "juliana.prado@foxplatform.com",
+                                       "phone":  "+55 11 98888-2202",
+                                       "department":  "Financeiro",
+                                       "role_slug":  "admin_financeiro",
+                                       "role_label":  "Admin Financeiro",
+                                       "permissions":  [
+                                                           "Ver dashboard",
+                                                           "Ver financeiro",
+                                                           "Exportar financeiro",
+                                                           "Ver relatorios"
+                                                       ],
+                                       "status":  "ativo",
+                                       "status_key":  "active",
+                                       "status_type":  "success",
+                                       "is_super":  false,
+                                       "last_login_at":  "21/03/2026 18:20",
+                                       "created_at":  "21/03/2026 10:20"
+                                   },
+                                   {
+                                       "id":  "99999999-9999-4999-8999-999999999999",
+                                       "user_id":  "99999999-9999-4999-8999-999999999999",
+                                       "full_name":  "Fabio Ribeiro",
+                                       "email":  "fabio.ribeiro@foxplatform.com",
+                                       "phone":  "+55 11 98888-2203",
+                                       "department":  "Suporte",
+                                       "role_slug":  "suporte",
+                                       "role_label":  "Suporte",
+                                       "permissions":  [
+                                                           "Ver dashboard",
+                                                           "Gerir atendimento"
+                                                       ],
+                                       "status":  "suspenso",
+                                       "status_key":  "suspended",
+                                       "status_type":  "warning",
+                                       "is_super":  false,
+                                       "last_login_at":  "-",
+                                       "created_at":  "21/03/2026 10:26"
+                                   }
+                               ]
+               },
+    "notifications":  {
+                          "summary":  [
+                                          {
+                                              "label":  "nao lidas",
+                                              "value":  "2"
+                                          },
+                                          {
+                                              "label":  "criticas ou altas",
+                                              "value":  "1"
+                                          },
+                                          {
+                                              "label":  "total recente",
+                                              "value":  "3"
+                                          }
+                                      ],
+                          "items":  [
+                                        {
+                                            "id":  "admin-notification-1",
+                                            "context":  "Operations",
+                                            "title":  "Fila de aprovacao com pendencias",
+                                            "body":  "Existem cadastros de parceiros e entregadores aguardando decisao com analise manual pendente.",
+                                            "action_label":  "Abrir aprovacoes",
+                                            "action_url":  "./partners-approvals.html",
+                                            "is_read":  false,
+                                            "created_at":  "22/03/2026 08:40",
+                                            "level":  "critica",
+                                            "level_type":  "danger"
+                                        },
+                                        {
+                                            "id":  "admin-notification-2",
+                                            "context":  "Access",
+                                            "title":  "Novo acesso interno criado",
+                                            "body":  "Um novo perfil administrativo foi liberado para o time operacional e exige revisao do escopo.",
+                                            "action_label":  "Abrir permissoes",
+                                            "action_url":  "./permissions.html",
+                                            "is_read":  false,
+                                            "created_at":  "22/03/2026 08:05",
+                                            "level":  "informativa",
+                                            "level_type":  "warning"
+                                        },
+                                        {
+                                            "id":  "admin-notification-3",
+                                            "context":  "Finance",
+                                            "title":  "Lote financeiro consolidado",
+                                            "body":  "O fechamento financeiro do ultimo ciclo foi consolidado e esta pronto para conferencia final.",
+                                            "action_label":  "Abrir financeiro",
+                                            "action_url":  "./finance.html",
+                                            "is_read":  true,
+                                            "created_at":  "21/03/2026 19:25",
+                                            "level":  "confirmada",
+                                            "level_type":  "success"
+                                        }
+                                    ]
+                      },
+    "reports":  {
+                    "summary":  [
+                                    {
+                                        "label":  "parceiros ativos",
+                                        "value":  "1.284"
+                                    },
+                                    {
+                                        "label":  "entregadores ativos",
+                                        "value":  "3.912"
+                                    },
+                                    {
+                                        "label":  "tickets abertos",
+                                        "value":  "28"
+                                    },
+                                    {
+                                        "label":  "lojas monitoradas",
+                                        "value":  "1.406"
+                                    }
+                                ],
+                    "partner_status":  [
+                                           {
+                                               "label":  "Ativos",
+                                               "value":  "1.284"
+                                           },
+                                           {
+                                               "label":  "Em analise",
+                                               "value":  "23"
+                                           },
+                                           {
+                                               "label":  "Pausados",
+                                               "value":  "41"
+                                           },
+                                           {
+                                               "label":  "Bloqueados",
+                                               "value":  "8"
+                                           }
+                                       ],
+                    "driver_status":  [
+                                          {
+                                              "label":  "Ativos",
+                                              "value":  "3.912"
+                                          },
+                                          {
+                                              "label":  "Em analise",
+                                              "value":  "17"
+                                          },
+                                          {
+                                              "label":  "Offline",
+                                              "value":  "204"
+                                          },
+                                          {
+                                              "label":  "Bloqueados",
+                                              "value":  "12"
+                                          }
+                                      ],
+                    "support_teams":  [
+                                          {
+                                              "label":  "Operacao",
+                                              "value":  "11 tickets"
+                                          },
+                                          {
+                                              "label":  "Financeiro",
+                                              "value":  "7 tickets"
+                                          },
+                                          {
+                                              "label":  "Cadastro",
+                                              "value":  "6 tickets"
+                                          },
+                                          {
+                                              "label":  "Tecnologia",
+                                              "value":  "4 tickets"
+                                          }
+                                      ],
+                    "top_stores":  [
+                                       {
+                                           "label":  "Mercado Nova Rota",
+                                           "orders":  "418",
+                                           "gross":  "R$ 126,4 mil"
+                                       },
+                                       {
+                                           "label":  "Fox Burgers Centro",
+                                           "orders":  "366",
+                                           "gross":  "R$ 88,9 mil"
+                                       },
+                                       {
+                                           "label":  "Farmacia Sao Lucas",
+                                           "orders":  "219",
+                                           "gross":  "R$ 41,2 mil"
+                                       }
+                                   ]
+                }
 }

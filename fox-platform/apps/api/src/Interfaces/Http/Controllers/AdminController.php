@@ -5,11 +5,25 @@ declare(strict_types=1);
 namespace FoxPlatform\Api\Interfaces\Http\Controllers;
 
 use FoxPlatform\Api\Application\Admin\GetAdminDashboard;
+use FoxPlatform\Api\Application\Admin\GetAdminAnalytics;
+use FoxPlatform\Api\Application\Admin\GetAdminAccess;
+use FoxPlatform\Api\Application\Admin\CreateAdminAccessMember;
+use FoxPlatform\Api\Application\Admin\UpdateAdminAccessMember;
+use FoxPlatform\Api\Application\Admin\UpdateAdminAccessMemberStatus;
 use FoxPlatform\Api\Application\Admin\GetAdminFinance;
+use FoxPlatform\Api\Application\Admin\GetAdminReports;
 use FoxPlatform\Api\Application\Admin\GetAdminDriverApprovals;
+use FoxPlatform\Api\Application\Admin\GetAdminDriverApprovalDetail;
+use FoxPlatform\Api\Application\Admin\GetAdminNotifications;
 use FoxPlatform\Api\Application\Admin\GetAdminOrders;
 use FoxPlatform\Api\Application\Admin\GetAdminOrderDetail;
+use FoxPlatform\Api\Application\Admin\MarkAdminNotificationRead;
+use FoxPlatform\Api\Application\Admin\UpdateAdminOrderStatus;
+use FoxPlatform\Api\Application\Admin\AddAdminOrderNote;
 use FoxPlatform\Api\Application\Admin\GetAdminPartnerApprovals;
+use FoxPlatform\Api\Application\Admin\GetAdminPartnerApprovalDetail;
+use FoxPlatform\Api\Application\Admin\ResolveAdminPartnerApproval;
+use FoxPlatform\Api\Application\Admin\ResolveAdminDriverApproval;
 use FoxPlatform\Api\Application\Admin\GetAdminSettings;
 use FoxPlatform\Api\Application\Admin\GetAdminSupport;
 use FoxPlatform\Api\Application\Admin\GetAdminSupportThread;
@@ -22,6 +36,11 @@ use FoxPlatform\Api\Application\Admin\ApproveDriverApproval;
 use FoxPlatform\Api\Application\Admin\RejectDriverApproval;
 use FoxPlatform\Api\Infrastructure\Http\Request;
 use FoxPlatform\Api\Interfaces\Http\Responses\ApiResponse;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminAccessMemberStatusRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminAccessMemberUpsertRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminOrderNoteCreateRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminOrderStatusUpdateRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminApprovalDecisionRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\AdminSupportTicketStatusUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\AdminSettingsUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\SupportMessageCreateRequest;
@@ -30,11 +49,25 @@ class AdminController
 {
     public function __construct(
         private readonly GetAdminDashboard $getAdminDashboard,
+        private readonly GetAdminAnalytics $getAdminAnalytics,
+        private readonly GetAdminAccess $getAdminAccess,
+        private readonly CreateAdminAccessMember $createAdminAccessMember,
+        private readonly UpdateAdminAccessMember $updateAdminAccessMember,
+        private readonly UpdateAdminAccessMemberStatus $updateAdminAccessMemberStatus,
         private readonly GetAdminFinance $getAdminFinance,
+        private readonly GetAdminReports $getAdminReports,
         private readonly GetAdminOrders $getAdminOrders,
         private readonly GetAdminOrderDetail $getAdminOrderDetail,
+        private readonly UpdateAdminOrderStatus $updateAdminOrderStatus,
+        private readonly AddAdminOrderNote $addAdminOrderNote,
         private readonly GetAdminPartnerApprovals $getAdminPartnerApprovals,
+        private readonly GetAdminPartnerApprovalDetail $getAdminPartnerApprovalDetail,
         private readonly GetAdminDriverApprovals $getAdminDriverApprovals,
+        private readonly GetAdminDriverApprovalDetail $getAdminDriverApprovalDetail,
+        private readonly ResolveAdminPartnerApproval $resolveAdminPartnerApproval,
+        private readonly ResolveAdminDriverApproval $resolveAdminDriverApproval,
+        private readonly GetAdminNotifications $getAdminNotifications,
+        private readonly MarkAdminNotificationRead $markAdminNotificationRead,
         private readonly GetAdminSupport $getAdminSupport,
         private readonly GetAdminSupportThread $getAdminSupportThread,
         private readonly GetAdminSettings $getAdminSettings,
@@ -45,6 +78,11 @@ class AdminController
         private readonly RejectPartnerApproval $rejectPartnerApproval,
         private readonly ApproveDriverApproval $approveDriverApproval,
         private readonly RejectDriverApproval $rejectDriverApproval,
+        private readonly AdminAccessMemberUpsertRequest $adminAccessMemberUpsertRequest,
+        private readonly AdminAccessMemberStatusRequest $adminAccessMemberStatusRequest,
+        private readonly AdminOrderStatusUpdateRequest $adminOrderStatusUpdateRequest,
+        private readonly AdminOrderNoteCreateRequest $adminOrderNoteCreateRequest,
+        private readonly AdminApprovalDecisionRequest $adminApprovalDecisionRequest,
         private readonly AdminSettingsUpdateRequest $adminSettingsUpdateRequest,
         private readonly AdminSupportTicketStatusUpdateRequest $adminSupportTicketStatusUpdateRequest,
         private readonly SupportMessageCreateRequest $supportMessageCreateRequest
@@ -54,6 +92,59 @@ class AdminController
     public function dashboard(Request $request)
     {
         return ApiResponse::success(($this->getAdminDashboard)());
+    }
+
+    public function analytics(Request $request)
+    {
+        return ApiResponse::success(($this->getAdminAnalytics)());
+    }
+
+    public function access(Request $request)
+    {
+        return ApiResponse::success(($this->getAdminAccess)());
+    }
+
+    public function createAccessMember(Request $request)
+    {
+        $validated = $this->adminAccessMemberUpsertRequest->validate($request);
+
+        return ApiResponse::success(
+            ($this->createAdminAccessMember)(
+                (string) $request->attribute('auth', [])['user_id'],
+                $validated
+            ),
+            'Membro administrativo registrado com sucesso.',
+            [],
+            201
+        );
+    }
+
+    public function updateAccessMember(Request $request)
+    {
+        $validated = $this->adminAccessMemberUpsertRequest->validate($request);
+
+        return ApiResponse::success(
+            ($this->updateAdminAccessMember)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('member_id'),
+                $validated
+            ),
+            'Membro administrativo atualizado com sucesso.'
+        );
+    }
+
+    public function updateAccessMemberStatus(Request $request)
+    {
+        $validated = $this->adminAccessMemberStatusRequest->validate($request);
+
+        return ApiResponse::success(
+            ($this->updateAdminAccessMemberStatus)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('member_id'),
+                $validated
+            ),
+            'Status do membro administrativo atualizado com sucesso.'
+        );
     }
 
     public function orders(Request $request)
@@ -68,9 +159,42 @@ class AdminController
         );
     }
 
+    public function updateOrderStatus(Request $request)
+    {
+        $validated = $this->adminOrderStatusUpdateRequest->validate($request);
+
+        return ApiResponse::success(
+            ($this->updateAdminOrderStatus)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('order_id'),
+                $validated
+            ),
+            'Status do pedido atualizado com sucesso.'
+        );
+    }
+
+    public function addOrderNote(Request $request)
+    {
+        $validated = $this->adminOrderNoteCreateRequest->validate($request);
+
+        return ApiResponse::success(
+            ($this->addAdminOrderNote)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('order_id'),
+                $validated
+            ),
+            'Observacao registrada com sucesso.'
+        );
+    }
+
     public function finance(Request $request)
     {
         return ApiResponse::success(($this->getAdminFinance)());
+    }
+
+    public function reports(Request $request)
+    {
+        return ApiResponse::success(($this->getAdminReports)());
     }
 
     public function partnerApprovals(Request $request)
@@ -78,14 +202,74 @@ class AdminController
         return ApiResponse::success(($this->getAdminPartnerApprovals)());
     }
 
+    public function partnerApprovalDetail(Request $request)
+    {
+        return ApiResponse::success(
+            ($this->getAdminPartnerApprovalDetail)((string) $request->attribute('partner_id'))
+        );
+    }
+
+    public function resolvePartnerApproval(Request $request)
+    {
+        $validated = $this->adminApprovalDecisionRequest->validate($request);
+
+        return ApiResponse::success(
+            ($this->resolveAdminPartnerApproval)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('partner_id'),
+                $validated
+            ),
+            'Analise do parceiro registrada com sucesso.'
+        );
+    }
+
     public function driverApprovals(Request $request)
     {
         return ApiResponse::success(($this->getAdminDriverApprovals)());
     }
 
+    public function driverApprovalDetail(Request $request)
+    {
+        return ApiResponse::success(
+            ($this->getAdminDriverApprovalDetail)((string) $request->attribute('driver_id'))
+        );
+    }
+
+    public function resolveDriverApproval(Request $request)
+    {
+        $validated = $this->adminApprovalDecisionRequest->validate($request);
+
+        return ApiResponse::success(
+            ($this->resolveAdminDriverApproval)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('driver_id'),
+                $validated
+            ),
+            'Analise do entregador registrada com sucesso.'
+        );
+    }
+
     public function support(Request $request)
     {
         return ApiResponse::success(($this->getAdminSupport)());
+    }
+
+    public function notifications(Request $request)
+    {
+        return ApiResponse::success(
+            ($this->getAdminNotifications)((string) $request->attribute('auth', [])['user_id'])
+        );
+    }
+
+    public function markNotificationRead(Request $request)
+    {
+        return ApiResponse::success(
+            ($this->markAdminNotificationRead)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('notification_id')
+            ),
+            'Notificacao marcada como lida.'
+        );
     }
 
     public function supportThread(Request $request)
@@ -144,7 +328,10 @@ class AdminController
     public function approvePartner(Request $request)
     {
         return ApiResponse::success(
-            ($this->approvePartnerApproval)((string) $request->attribute('partner_id')),
+            ($this->approvePartnerApproval)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('partner_id')
+            ),
             'Parceiro aprovado com sucesso.'
         );
     }
@@ -152,7 +339,10 @@ class AdminController
     public function rejectPartner(Request $request)
     {
         return ApiResponse::success(
-            ($this->rejectPartnerApproval)((string) $request->attribute('partner_id')),
+            ($this->rejectPartnerApproval)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('partner_id')
+            ),
             'Parceiro movido para revisao manual.'
         );
     }
@@ -160,7 +350,10 @@ class AdminController
     public function approveDriver(Request $request)
     {
         return ApiResponse::success(
-            ($this->approveDriverApproval)((string) $request->attribute('driver_id')),
+            ($this->approveDriverApproval)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('driver_id')
+            ),
             'Entregador aprovado com sucesso.'
         );
     }
@@ -168,7 +361,10 @@ class AdminController
     public function rejectDriver(Request $request)
     {
         return ApiResponse::success(
-            ($this->rejectDriverApproval)((string) $request->attribute('driver_id')),
+            ($this->rejectDriverApproval)(
+                (string) $request->attribute('auth', [])['user_id'],
+                (string) $request->attribute('driver_id')
+            ),
             'Entregador movido para revisao manual.'
         );
     }

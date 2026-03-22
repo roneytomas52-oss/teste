@@ -13,8 +13,8 @@ class ApproveDriverApproval
     ) {
     }
 
-    public function __invoke(string $driverId): array
+    public function __invoke(string $userId, string $driverId): array
     {
-        return $this->operations->reviewDriverApproval($driverId, 'approve');
+        return $this->operations->reviewDriverApproval($userId, $driverId, 'approve');
     }
 }
