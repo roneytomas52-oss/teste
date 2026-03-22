@@ -225,6 +225,39 @@
   color: #7a2014;
 }
 
+.fx-note[data-tone="success"] {
+  background: rgba(228, 253, 240, 0.92);
+  border-color: rgba(67, 188, 115, 0.35);
+  color: #0f5a2a;
+}
+
+.fx-note[data-tone="error"],
+.fx-note[data-tone="danger"] {
+  background: rgba(255, 239, 238, 0.94);
+  border-color: rgba(234, 43, 18, 0.28);
+  color: #7a2014;
+}
+
+.fx-order-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--fx-space-4);
+  align-items: flex-start;
+  padding: var(--fx-space-4);
+  border-radius: var(--fx-radius-sm);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(242, 209, 191, 0.75);
+}
+
+.fx-order-line strong {
+  display: block;
+  color: var(--fx-color-ink);
+}
+
+.fx-order-line .fx-copy-sm {
+  margin-top: 6px;
+}
+
 #fx-catalog-summary.fx-note {
   margin-bottom: 0;
 }
@@ -690,6 +723,12 @@
   }
 
   .fx-permission-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fx-order-line,
+  .fx-thread-head,
+  .fx-ticket-head {
     grid-template-columns: 1fr;
   }
 }

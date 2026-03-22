@@ -24,12 +24,22 @@ class GetAuthenticatedUser
 
         $roles = $this->users->getRolesForUser($authContext['user_id']);
         $permissions = $this->users->getPermissionsForUser($authContext['user_id']);
+        $partnerAccess = $authContext['partner_access'] ?? (
+            ($authContext['guard'] ?? '') === 'partner'
+                ? $this->users->getPartnerAccessContext($authContext['user_id'])
+                : null
+        );
+        $permissionSlugs = array_values(array_unique(array_filter(array_merge(
+            array_column($permissions, 'slug'),
+            $partnerAccess['permissions'] ?? []
+        ))));
 
         return new AuthenticatedUserView(
             $user,
             $roles,
-            $permissions,
-            $authContext['guard']
+            $permissionSlugs,
+            $authContext['guard'],
+            $partnerAccess
         );
     }
 }

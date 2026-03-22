@@ -10,6 +10,8 @@ use FoxPlatform\Api\Infrastructure\Support\ApiException;
 
 class PdoDriverPortalRepository implements DriverPortalRepository
 {
+    use SupportsSqlDialect;
+
     public function __construct(
         private readonly PDO $pdo
     ) {
@@ -224,15 +226,16 @@ class PdoDriverPortalRepository implements DriverPortalRepository
         $this->pdo->beginTransaction();
 
         try {
+            $ticketId = $this->newUuid();
             $ticketInsert = $this->pdo->prepare(
                 "INSERT INTO support_tickets (
                     id, scope, driver_profile_id, created_by_user_id, channel, assigned_team, priority, status, subject, description, last_message_at
                  ) VALUES (
-                    gen_random_uuid(), 'driver', :driver_profile_id, :created_by_user_id, :channel, :assigned_team, :priority, 'open', :subject, :description, NOW()
-                 )
-                 RETURNING id"
+                    :id, 'driver', :driver_profile_id, :created_by_user_id, :channel, :assigned_team, :priority, 'open', :subject, :description, NOW()
+                 )"
             );
             $ticketInsert->execute([
+                'id' => $ticketId,
                 'driver_profile_id' => $driver['id'],
                 'created_by_user_id' => $userId,
                 'channel' => strtolower($data['channel']),
@@ -241,14 +244,16 @@ class PdoDriverPortalRepository implements DriverPortalRepository
                 'subject' => $data['subject'],
                 'description' => $data['description'],
             ]);
-            $ticketId = (string) $ticketInsert->fetchColumn();
 
             $messageInsert = $this->pdo->prepare(
+                sprintf(
                 "INSERT INTO support_messages (
                     id, ticket_id, sender_user_id, sender_role, body
                  ) VALUES (
-                    gen_random_uuid(), :ticket_id, :sender_user_id, 'driver', :body
-                 )"
+                    %s, :ticket_id, :sender_user_id, 'driver', :body
+                 )",
+                 $this->uuidExpression()
+                )
             );
             $messageInsert->execute([
                 'ticket_id' => $ticketId,
@@ -293,11 +298,14 @@ class PdoDriverPortalRepository implements DriverPortalRepository
 
         try {
             $messageInsert = $this->pdo->prepare(
+                sprintf(
                 "INSERT INTO support_messages (
                     id, ticket_id, sender_user_id, sender_role, body
                  ) VALUES (
-                    gen_random_uuid(), :ticket_id, :sender_user_id, 'driver', :body
-                 )"
+                    %s, :ticket_id, :sender_user_id, 'driver', :body
+                 )",
+                 $this->uuidExpression()
+                )
             );
             $messageInsert->execute([
                 'ticket_id' => $ticket['id'],
@@ -404,54 +412,65 @@ class PdoDriverPortalRepository implements DriverPortalRepository
     private function loadWeeklyMetrics(string $driverProfileId): array
     {
         $statement = $this->pdo->prepare(
-            "SELECT
-                COALESCE(
-                    (
-                        SELECT SUM(CASE WHEN direction = 'credit' THEN amount ELSE -amount END)
-                        FROM driver_wallet_transactions
-                        WHERE driver_profile_id = :driver_profile_id
-                    ),
-                    0
-                ) AS net_earnings,
-                COALESCE(
-                    (
-                        SELECT COUNT(*)
-                        FROM orders
-                        WHERE driver_profile_id = :driver_profile_id
-                          AND status = 'completed'
-                    ),
-                    0
-                ) AS completed_runs,
-                COALESCE(
-                    (
-                        SELECT AVG(EXTRACT(EPOCH FROM (completed_at - placed_at)) / 60)
-                        FROM orders
-                        WHERE driver_profile_id = :driver_profile_id
-                          AND status = 'completed'
-                          AND completed_at IS NOT NULL
-                    ),
-                    0
-                ) AS avg_run_minutes,
-                COALESCE(
-                    (
-                        SELECT
-                            SUM(CASE WHEN direction = 'credit' THEN amount ELSE 0 END)
-                            / NULLIF(
-                                (
-                                    SELECT COUNT(*)
-                                    FROM orders
-                                    WHERE driver_profile_id = :driver_profile_id
-                                      AND status = 'completed'
-                                ),
-                                0
-                            )
-                        FROM driver_wallet_transactions
-                        WHERE driver_profile_id = :driver_profile_id
-                    ),
-                    0
-                ) AS average_per_run"
+            sprintf(
+                "SELECT
+                    COALESCE(
+                        (
+                            SELECT SUM(CASE WHEN direction = 'credit' THEN amount ELSE -amount END)
+                            FROM driver_wallet_transactions
+                            WHERE driver_profile_id = :driver_profile_id_1
+                        ),
+                        0
+                    ) AS net_earnings,
+                    COALESCE(
+                        (
+                            SELECT COUNT(*)
+                            FROM orders
+                            WHERE driver_profile_id = :driver_profile_id_2
+                              AND status = 'completed'
+                        ),
+                        0
+                    ) AS completed_runs,
+                    COALESCE(
+                        (
+                            SELECT AVG(%s)
+                            FROM orders
+                            WHERE driver_profile_id = :driver_profile_id_3
+                              AND status = 'completed'
+                              AND completed_at IS NOT NULL
+                        ),
+                        0
+                    ) AS avg_run_minutes,
+                    COALESCE(
+                        (
+                            SELECT
+                                SUM(CASE WHEN direction = 'credit' THEN amount ELSE 0 END)
+                                / NULLIF(
+                                    (
+                                        SELECT COUNT(*)
+                                        FROM orders
+                                        WHERE driver_profile_id = :driver_profile_id_4
+                                          AND status = 'completed'
+                                    ),
+                                    0
+                                )
+                            FROM driver_wallet_transactions
+                            WHERE driver_profile_id = :driver_profile_id_5
+                        ),
+                        0
+                    ) AS average_per_run",
+                $this->isMySql()
+                    ? 'TIMESTAMPDIFF(MINUTE, placed_at, completed_at)'
+                    : 'EXTRACT(EPOCH FROM (completed_at - placed_at)) / 60'
+            )
         );
-        $statement->execute(['driver_profile_id' => $driverProfileId]);
+        $statement->execute([
+            'driver_profile_id_1' => $driverProfileId,
+            'driver_profile_id_2' => $driverProfileId,
+            'driver_profile_id_3' => $driverProfileId,
+            'driver_profile_id_4' => $driverProfileId,
+            'driver_profile_id_5' => $driverProfileId,
+        ]);
 
         return $statement->fetch() ?: [];
     }
@@ -480,8 +499,8 @@ class PdoDriverPortalRepository implements DriverPortalRepository
     {
         $statement = $this->pdo->prepare(
             "SELECT
-                COUNT(*) FILTER (WHERE status = 'approved') AS approved_documents,
-                COUNT(*) FILTER (WHERE status <> 'approved') AS pending_documents
+                SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) AS approved_documents,
+                SUM(CASE WHEN status <> 'approved' THEN 1 ELSE 0 END) AS pending_documents
              FROM driver_documents
              WHERE driver_profile_id = :driver_profile_id"
         );
@@ -493,10 +512,15 @@ class PdoDriverPortalRepository implements DriverPortalRepository
     private function loadDocumentRows(string $driverProfileId): array
     {
         $statement = $this->pdo->prepare(
-            "SELECT document_type, status, note, expires_at, reviewed_at
+            $this->isMySql()
+                ? "SELECT document_type, label, file_name, status, created_at
+                   FROM driver_documents
+                   WHERE driver_profile_id = :driver_profile_id
+                   ORDER BY created_at DESC"
+                : "SELECT document_type, label, file_name, status, created_at
              FROM driver_documents
              WHERE driver_profile_id = :driver_profile_id
-             ORDER BY reviewed_at DESC NULLS LAST, expires_at ASC NULLS LAST, created_at DESC"
+             ORDER BY created_at DESC"
         );
         $statement->execute(['driver_profile_id' => $driverProfileId]);
 
@@ -504,9 +528,13 @@ class PdoDriverPortalRepository implements DriverPortalRepository
             'title' => $this->normalizeDocumentTitle((string) $row['document_type']),
             'status' => $this->normalizeDocumentStatusLabel((string) $row['status']),
             'status_type' => $this->normalizeDocumentStatusType((string) $row['status']),
-            'description' => $row['note'] ?: 'Documento registrado no perfil operacional.',
-            'expires_at' => $row['expires_at'] ? $this->formatDate((string) $row['expires_at']) : '-',
-            'reviewed_at' => $row['reviewed_at'] ? $this->formatDateTime((string) $row['reviewed_at']) : '-',
+            'description' => trim(sprintf(
+                '%s%s',
+                (string) ($row['label'] ?? 'Documento registrado no perfil operacional.'),
+                !empty($row['file_name']) ? ' · ' . (string) $row['file_name'] : ''
+            )),
+            'expires_at' => '-',
+            'reviewed_at' => !empty($row['created_at']) ? $this->formatDateTime((string) $row['created_at']) : '-',
         ], $statement->fetchAll() ?: []);
     }
 

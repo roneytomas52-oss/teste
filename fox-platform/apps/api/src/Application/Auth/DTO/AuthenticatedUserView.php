@@ -12,7 +12,8 @@ class AuthenticatedUserView
         public readonly User $user,
         public readonly array $roles,
         public readonly array $permissions,
-        public readonly string $guard
+        public readonly string $guard,
+        public readonly ?array $partnerAccess = null
     ) {
     }
 
@@ -34,10 +35,8 @@ class AuthenticatedUserView
                 ],
                 $this->roles
             )),
-            'permissions' => array_values(array_map(
-                static fn (array $permission) => $permission['slug'],
-                $this->permissions
-            )),
+            'permissions' => array_values($this->permissions),
+            'partner_access' => $this->partnerAccess,
         ];
     }
 }

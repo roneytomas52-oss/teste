@@ -3,16 +3,19 @@ import {
   approveAdminPartner,
   bindLogout,
   getAdminDashboard,
+  getAdminOrderDetail,
   getAdminData,
   getAdminFinance,
   getAdminDriverApprovals,
   getAdminOrders,
   getAdminPartnerApprovals,
+  getAdminSettings,
   getAdminSupport,
   login,
   rejectAdminDriver,
   rejectAdminPartner,
-  requireSession
+  requireSession,
+  updateAdminSettings
 } from "./fox-platform-sdk.js";
 
 function setText(selector, value) {
@@ -153,6 +156,93 @@ function renderSupport(data) {
   }
 }
 
+function renderSettings(settings) {
+  setText("#fx-settings-platform-name", settings.branding?.platform_name || "Fox Delivery");
+  setText("#fx-settings-support-email", settings.branding?.support_email || "-");
+  setText("#fx-settings-partner-login-url", settings.branding?.partner_login_url || "-");
+
+  const fields = [
+    ["#fx-settings-platform-name-input", settings.branding?.platform_name],
+    ["#fx-settings-support-email-input", settings.branding?.support_email],
+    ["#fx-settings-partner-login-url-input", settings.branding?.partner_login_url],
+    ["#fx-settings-default-order-sla-input", settings.operations?.default_order_sla_minutes],
+    ["#fx-settings-partner-review-window-input", settings.operations?.partner_review_window_hours],
+    ["#fx-settings-driver-review-window-input", settings.operations?.driver_review_window_hours],
+    ["#fx-settings-partner-polling-input", settings.notifications?.partner_polling_seconds],
+    ["#fx-settings-driver-polling-input", settings.notifications?.driver_polling_seconds],
+    ["#fx-settings-access-token-ttl-input", settings.security?.access_token_ttl_minutes],
+    ["#fx-settings-refresh-token-ttl-input", settings.security?.refresh_token_ttl_days],
+    ["#fx-settings-reset-token-ttl-input", settings.security?.password_reset_token_ttl_minutes]
+  ];
+
+  fields.forEach(([selector, value]) => {
+    const field = document.querySelector(selector);
+    if (field) {
+      field.value = value ?? "";
+    }
+  });
+
+  const digestToggle = document.querySelector("#fx-settings-admin-digest-input");
+  if (digestToggle) {
+    digestToggle.checked = Boolean(settings.notifications?.admin_digest_enabled);
+  }
+}
+
+async function handleSettingsScreen() {
+  const form = document.querySelector("#fx-admin-settings-form");
+  if (!form) return;
+
+  let settings = await getAdminSettings();
+  renderSettings(settings);
+
+  if (form.dataset.bound === "true") return;
+  form.dataset.bound = "true";
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    try {
+      settings = await updateAdminSettings({
+        branding: {
+          platform_name: document.querySelector("#fx-settings-platform-name-input")?.value?.trim() || "",
+          support_email: document.querySelector("#fx-settings-support-email-input")?.value?.trim() || "",
+          partner_login_url: document.querySelector("#fx-settings-partner-login-url-input")?.value?.trim() || ""
+        },
+        operations: {
+          default_order_sla_minutes: Number(document.querySelector("#fx-settings-default-order-sla-input")?.value || 0),
+          partner_review_window_hours: Number(document.querySelector("#fx-settings-partner-review-window-input")?.value || 0),
+          driver_review_window_hours: Number(document.querySelector("#fx-settings-driver-review-window-input")?.value || 0)
+        },
+        notifications: {
+          partner_polling_seconds: Number(document.querySelector("#fx-settings-partner-polling-input")?.value || 0),
+          driver_polling_seconds: Number(document.querySelector("#fx-settings-driver-polling-input")?.value || 0),
+          admin_digest_enabled: Boolean(document.querySelector("#fx-settings-admin-digest-input")?.checked)
+        },
+        security: {
+          access_token_ttl_minutes: Number(document.querySelector("#fx-settings-access-token-ttl-input")?.value || 0),
+          refresh_token_ttl_days: Number(document.querySelector("#fx-settings-refresh-token-ttl-input")?.value || 0),
+          password_reset_token_ttl_minutes: Number(document.querySelector("#fx-settings-reset-token-ttl-input")?.value || 0)
+        }
+      });
+
+      renderSettings(settings);
+      const feedback = document.querySelector("#fx-admin-settings-feedback");
+      if (feedback) {
+        feedback.hidden = false;
+        feedback.dataset.tone = "success";
+        feedback.textContent = "Configuracoes atualizadas com sucesso.";
+      }
+    } catch (error) {
+      const feedback = document.querySelector("#fx-admin-settings-feedback");
+      if (feedback) {
+        feedback.hidden = false;
+        feedback.dataset.tone = "danger";
+        feedback.textContent = error?.message || "Nao foi possivel salvar as configuracoes da plataforma.";
+      }
+    }
+  });
+}
+
 function renderAudit(data) {
   const stream = document.querySelector(".fx-stream");
   if (!stream) return;
@@ -225,7 +315,7 @@ function renderAdminOrders(data, query = "", filter = "all") {
   }
 
   if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="6"><div class="fx-note">Nenhum pedido encontrado para este filtro.</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="fx-note">Nenhum pedido encontrado para este filtro.</div></td></tr>`;
     return;
   }
 
@@ -239,10 +329,79 @@ function renderAdminOrders(data, query = "", filter = "all") {
           <td>${item.sla}</td>
           <td>${item.driver_name}</td>
           <td>${item.value}</td>
+          <td><a class="fx-button-secondary" href="./order-detail.html?order=${item.order_id || item.id}">Detalhar</a></td>
         </tr>
       `
     )
     .join("");
+}
+
+function renderAdminOrderDetail(data) {
+  const order = data.order || {};
+
+  setText("#fx-admin-order-detail-id", order.id || "-");
+  setText("#fx-admin-order-detail-status", order.status || "-");
+  setText("#fx-admin-order-detail-store", order.store_name || "-");
+  setText("#fx-admin-order-detail-customer", order.customer || "-");
+  setText("#fx-admin-order-detail-customer-phone", order.customer_phone || "-");
+  setText("#fx-admin-order-detail-address", order.customer_address || "-");
+  setText("#fx-admin-order-detail-driver", order.driver_name || "-");
+  setText("#fx-admin-order-detail-payment-method", order.payment_method || "-");
+  setText("#fx-admin-order-detail-payment-status", order.payment_status || "-");
+  setText("#fx-admin-order-detail-subtotal", order.subtotal || "-");
+  setText("#fx-admin-order-detail-delivery-fee", order.delivery_fee || "-");
+  setText("#fx-admin-order-detail-total", order.total || "-");
+  setText("#fx-admin-order-detail-placed-at", order.placed_at || "-");
+  setText("#fx-admin-order-detail-accepted-at", order.accepted_at || "-");
+  setText("#fx-admin-order-detail-completed-at", order.completed_at || "-");
+  setText("#fx-admin-order-detail-cancelled-at", order.cancelled_at || "-");
+  setText("#fx-admin-order-detail-sla", order.sla || "-");
+
+  const status = document.querySelector("#fx-admin-order-detail-status");
+  if (status) {
+    status.className = `fx-status ${order.status_type || "warning"}`;
+  }
+
+  const items = document.querySelector("#fx-admin-order-detail-items");
+  if (items) {
+    items.innerHTML = (data.items || []).length
+      ? (data.items || []).map((item) => `
+          <div class="fx-order-line">
+            <div>
+              <strong>${item.name}</strong>
+              <p class="fx-copy-sm">${item.quantity} unidade(s) · ${item.unit_price}</p>
+            </div>
+            <div>
+              <strong>${item.total_price}</strong>
+              <p class="fx-copy-sm">${item.notes}</p>
+            </div>
+          </div>
+        `).join("")
+      : `<div class="fx-note">Nenhum item registrado neste pedido.</div>`;
+  }
+
+  const timeline = document.querySelector("#fx-admin-order-detail-timeline");
+  if (timeline) {
+    timeline.innerHTML = (data.timeline || []).length
+      ? (data.timeline || []).map((entry) => `
+          <div class="fx-order-line">
+            <div>
+              <strong>${entry.title}</strong>
+              <p class="fx-copy-sm">${entry.description}</p>
+            </div>
+            <div>
+              <strong>${entry.actor}</strong>
+              <p class="fx-copy-sm">${entry.created_at}</p>
+            </div>
+          </div>
+        `).join("")
+      : `<div class="fx-note">Ainda nao existem eventos na linha do tempo deste pedido.</div>`;
+  }
+}
+
+function getOrderIdFromLocation() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("order") || "";
 }
 
 function renderApprovalCards(selector, items, scope) {
@@ -357,6 +516,30 @@ async function handleOrdersScreen() {
   });
 }
 
+async function handleOrderDetailScreen() {
+  const orderId = getOrderIdFromLocation();
+  const feedback = document.querySelector("#fx-admin-order-detail-feedback");
+
+  if (!orderId) {
+    if (feedback) {
+      feedback.hidden = false;
+      feedback.dataset.tone = "danger";
+      feedback.textContent = "Pedido nao informado para consulta.";
+    }
+    return;
+  }
+
+  try {
+    renderAdminOrderDetail(await getAdminOrderDetail(orderId));
+  } catch (error) {
+    if (feedback) {
+      feedback.hidden = false;
+      feedback.dataset.tone = "danger";
+      feedback.textContent = error?.message || "Nao foi possivel carregar o pedido.";
+    }
+  }
+}
+
 async function boot() {
   const screen = document.body.dataset.fxScreen;
   if (screen === "login") {
@@ -378,6 +561,11 @@ async function boot() {
     return;
   }
 
+  if (screen === "order-detail") {
+    await handleOrderDetailScreen();
+    return;
+  }
+
   if (screen === "partners-approvals") {
     await handleApprovalsScreen("partner");
     return;
@@ -395,6 +583,11 @@ async function boot() {
 
   if (screen === "support") {
     renderSupport(await getAdminSupport());
+    return;
+  }
+
+  if (screen === "settings") {
+    await handleSettingsScreen();
     return;
   }
 

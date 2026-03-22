@@ -14,7 +14,26 @@
       "email": "parceiro@foxdelivery.com.br",
       "password": "password",
       "name": "Fox Burgers Centro",
-      "accountLabel": "Fox Burgers Centro"
+      "accountLabel": "Fox Burgers Centro",
+      "permissions": ["dashboard.view", "store.manage", "team.manage", "catalog.manage", "inventory.manage", "orders.manage", "finance.view", "reports.view", "support.manage"]
+    },
+    {
+      "id": "partner-002",
+      "role": "partner",
+      "email": "mariana.costa@foxburgers.com.br",
+      "password": "password",
+      "name": "Mariana Costa",
+      "accountLabel": "Fox Burgers Centro",
+      "permissions": ["dashboard.view", "store.manage", "team.manage", "catalog.manage", "inventory.manage", "orders.manage", "finance.view", "reports.view", "support.manage"]
+    },
+    {
+      "id": "partner-003",
+      "role": "partner",
+      "email": "rafael.martins@foxburgers.com.br",
+      "password": "password",
+      "name": "Rafael Martins",
+      "accountLabel": "Fox Burgers Centro",
+      "permissions": ["dashboard.view", "catalog.manage", "inventory.manage", "orders.manage", "support.manage"]
     },
     {
       "id": "driver-001",

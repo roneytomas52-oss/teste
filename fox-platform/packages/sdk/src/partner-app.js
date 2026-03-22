@@ -9,12 +9,14 @@ import {
   getPartnerFinance,
   getPartnerData,
   getPartnerNotifications,
+  getPartnerOrderDetail,
   getPartnerOrders,
   getPartnerProfile,
   getPartnerStore,
   getPartnerSupport,
   getPartnerSupportThread,
   getPartnerTeam,
+  getAuthenticatedUser,
   injectSessionLabel,
   login,
   markPartnerNotificationRead,
@@ -45,6 +47,91 @@ const WEEKDAYS = [
   "Sexta-feira",
   "Sábado"
 ];
+
+const PARTNER_SCREEN_PERMISSIONS = {
+  dashboard: ["dashboard.view"],
+  profile: ["dashboard.view"],
+  store: ["store.manage"],
+  schedules: ["store.manage"],
+  catalog: ["catalog.manage"],
+  inventory: ["inventory.manage"],
+  orders: ["orders.manage"],
+  "order-detail": ["orders.manage"],
+  finance: ["finance.view"],
+  reports: ["reports.view"],
+  team: ["team.manage"],
+  messages: ["support.manage"],
+  support: ["support.manage"],
+  notifications: ["dashboard.view"],
+  help: ["dashboard.view"]
+};
+
+const PARTNER_NAV_PERMISSIONS = {
+  "index.html": ["dashboard.view"],
+  "orders.html": ["orders.manage"],
+  "order-detail.html": ["orders.manage"],
+  "catalog.html": ["catalog.manage"],
+  "inventory.html": ["inventory.manage"],
+  "finance.html": ["finance.view"],
+  "reports.html": ["reports.view"],
+  "store.html": ["store.manage"],
+  "schedules.html": ["store.manage"],
+  "profile.html": ["dashboard.view"],
+  "team.html": ["team.manage"],
+  "messages.html": ["support.manage"],
+  "notifications.html": ["dashboard.view"],
+  "support.html": ["support.manage"],
+  "help.html": ["dashboard.view"]
+};
+
+function buildPermissionSet(authUser, session) {
+  return new Set([
+    ...(authUser?.permissions || []),
+    ...(session?.permissions || [])
+  ]);
+}
+
+function hasAnyPermission(permissionSet, required = []) {
+  if (!required.length) return true;
+  return required.some((permission) => permissionSet.has(permission));
+}
+
+function applyPartnerNavigationPermissions(permissionSet) {
+  document.querySelectorAll(".fx-sidebar-link[href]").forEach((link) => {
+    const href = link.getAttribute("href") || "";
+    const required = PARTNER_NAV_PERMISSIONS[href];
+
+    if (!required || hasAnyPermission(permissionSet, required)) {
+      link.hidden = false;
+      link.removeAttribute("aria-hidden");
+      return;
+    }
+
+    link.hidden = true;
+    link.setAttribute("aria-hidden", "true");
+  });
+}
+
+function renderPartnerAccessDenied() {
+  const content = document.querySelector(".fx-shell-content");
+  if (!content) return;
+
+  content.innerHTML = `
+    <div class="fx-partner-view">
+      <section class="fx-page-header">
+        <div class="fx-page-header-copy">
+          <div class="fx-eyebrow">Acesso restrito</div>
+          <h2 class="fx-title-md">Sua conta nao tem permissao para abrir esta area.</h2>
+          <p class="fx-copy">Fale com o proprietario da loja ou com a equipe Fox Delivery para ajustar o perfil de acesso desta conta.</p>
+        </div>
+      </section>
+      <div class="fx-inline-actions">
+        <a class="fx-button" href="./index.html">Voltar ao dashboard</a>
+        <a class="fx-button-secondary" href="./support.html">Falar com o suporte</a>
+      </div>
+    </div>
+  `;
+}
 
 function setText(selector, value) {
   const target = document.querySelector(selector);
@@ -325,16 +412,86 @@ function renderOrdersTable(payload, query = "", filter = "all") {
           <td>${row.sla}</td>
           <td>${row.value}</td>
           <td>
-            ${
-              nextAction
-                ? `<button class="fx-button-ghost js-order-status" type="button" data-order-id="${row.order_id || row.id}" data-next-status="${nextAction.next}">${nextAction.label}</button>`
-                : `<span class="fx-copy-sm">${row.action || "-"}</span>`
-            }
+            <div class="fx-inline-actions">
+              <a class="fx-button-secondary" href="./order-detail.html?order=${row.order_id || row.id}">Ver detalhes</a>
+              ${
+                nextAction
+                  ? `<button class="fx-button-ghost js-order-status" type="button" data-order-id="${row.order_id || row.id}" data-next-status="${nextAction.next}">${nextAction.label}</button>`
+                  : ""
+              }
+            </div>
           </td>
         </tr>
       `;
     })
     .join("");
+}
+
+function renderOrderDetail(data) {
+  const order = data.order || {};
+
+  setText("#fx-order-detail-id", order.id || "-");
+  setText("#fx-order-detail-status", order.status || "-");
+  setText("#fx-order-detail-customer", order.customer || "-");
+  setText("#fx-order-detail-customer-phone", order.customer_phone || "-");
+  setText("#fx-order-detail-address", order.customer_address || "-");
+  setText("#fx-order-detail-driver", order.driver_name || "-");
+  setText("#fx-order-detail-payment-method", order.payment_method || "-");
+  setText("#fx-order-detail-payment-status", order.payment_status || "-");
+  setText("#fx-order-detail-subtotal", order.subtotal || "-");
+  setText("#fx-order-detail-delivery-fee", order.delivery_fee || "-");
+  setText("#fx-order-detail-total", order.total || "-");
+  setText("#fx-order-detail-placed-at", order.placed_at || "-");
+  setText("#fx-order-detail-accepted-at", order.accepted_at || "-");
+  setText("#fx-order-detail-completed-at", order.completed_at || "-");
+  setText("#fx-order-detail-cancelled-at", order.cancelled_at || "-");
+  setText("#fx-order-detail-sla", order.sla || "-");
+
+  const status = document.querySelector("#fx-order-detail-status");
+  if (status) {
+    status.className = `fx-status ${order.status_type || "warning"}`;
+  }
+
+  const items = document.querySelector("#fx-order-detail-items");
+  if (items) {
+    items.innerHTML = (data.items || []).length
+      ? (data.items || []).map((item) => `
+          <div class="fx-order-line">
+            <div>
+              <strong>${item.name}</strong>
+              <p class="fx-copy-sm">${item.quantity} unidade(s) · ${item.unit_price}</p>
+            </div>
+            <div>
+              <strong>${item.total_price}</strong>
+              <p class="fx-copy-sm">${item.notes}</p>
+            </div>
+          </div>
+        `).join("")
+      : `<div class="fx-note">Nenhum item registrado neste pedido.</div>`;
+  }
+
+  const timeline = document.querySelector("#fx-order-detail-timeline");
+  if (timeline) {
+    timeline.innerHTML = (data.timeline || []).length
+      ? (data.timeline || []).map((entry) => `
+          <div class="fx-order-line">
+            <div>
+              <strong>${entry.title}</strong>
+              <p class="fx-copy-sm">${entry.description}</p>
+            </div>
+            <div>
+              <strong>${entry.actor}</strong>
+              <p class="fx-copy-sm">${entry.created_at}</p>
+            </div>
+          </div>
+        `).join("")
+      : `<div class="fx-note">Ainda nao existem eventos na linha do tempo deste pedido.</div>`;
+  }
+}
+
+function getOrderIdFromLocation() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("order") || "";
 }
 
 function renderDashboard(data) {
@@ -709,6 +866,26 @@ async function handleNotificationsScreen() {
   const list = document.querySelector("#fx-notifications-list");
   let payload = await getPartnerNotifications();
   renderNotifications(payload);
+
+  let pollingHandle = window.setInterval(async () => {
+    try {
+      payload = await getPartnerNotifications();
+      renderNotifications(payload);
+    } catch (_error) {
+      // Mantem a ultima renderizacao disponivel.
+    }
+  }, 30000);
+
+  window.addEventListener(
+    "beforeunload",
+    () => {
+      if (pollingHandle) {
+        window.clearInterval(pollingHandle);
+        pollingHandle = null;
+      }
+    },
+    { once: true }
+  );
 
   list?.addEventListener("click", async (event) => {
     const trigger = event.target.closest(".js-notification-read");
@@ -1193,6 +1370,21 @@ async function handleOrdersScreen() {
   });
 }
 
+async function handleOrderDetailScreen() {
+  const orderId = getOrderIdFromLocation();
+  if (!orderId) {
+    showFeedback("#fx-order-detail-feedback", "Pedido nao informado para consulta.", "error");
+    return;
+  }
+
+  try {
+    const payload = await getPartnerOrderDetail(orderId);
+    renderOrderDetail(payload);
+  } catch (error) {
+    showFeedback("#fx-order-detail-feedback", error.message, "error");
+  }
+}
+
 async function handleCatalogScreen(session) {
   const search = document.querySelector("#fx-catalog-search");
   const chips = document.querySelectorAll(".fx-filter-chip");
@@ -1516,12 +1708,27 @@ async function boot() {
   const session = requireSession("partner", "partner");
   if (!session) return;
 
+  const authUser = await getAuthenticatedUser();
+  const permissionSet = buildPermissionSet(authUser, session);
+  applyPartnerNavigationPermissions(permissionSet);
+
+  const requiredPermissions = PARTNER_SCREEN_PERMISSIONS[screen] || [];
+  if (!hasAnyPermission(permissionSet, requiredPermissions)) {
+    renderPartnerAccessDenied();
+    return;
+  }
+
   bindLogout("partner");
   try {
     const sharedStoreState = await loadStoreState(session);
     hydrateBrand(sharedStoreState, session);
   } catch (_error) {
-    injectSessionLabel(".fx-brand-chip strong", session);
+    injectSessionLabel(".fx-brand-chip strong", {
+      accountLabel:
+        authUser?.partner_access?.trade_name ||
+        authUser?.partner_access?.store_name ||
+        session?.accountLabel
+    });
   }
 
   if (screen === "profile") {
@@ -1556,6 +1763,11 @@ async function boot() {
 
   if (screen === "orders") {
     await handleOrdersScreen();
+    return;
+  }
+
+  if (screen === "order-detail") {
+    await handleOrderDetailScreen();
     return;
   }
 

@@ -9,6 +9,8 @@ use FoxPlatform\Api\Domain\Public\PublicLandingRepository;
 
 class PdoPublicLandingRepository implements PublicLandingRepository
 {
+    use SupportsSqlDialect;
+
     public function __construct(
         private readonly PDO $pdo
     ) {
@@ -20,7 +22,7 @@ class PdoPublicLandingRepository implements PublicLandingRepository
             "SELECT
                 c.slug,
                 c.name,
-                COUNT(p.id) FILTER (WHERE p.status = 'active') AS active_products
+                SUM(CASE WHEN p.status = 'active' THEN 1 ELSE 0 END) AS active_products
              FROM categories c
              LEFT JOIN products p ON p.category_id = c.id
              WHERE c.status = 'active'
@@ -78,15 +80,16 @@ class PdoPublicLandingRepository implements PublicLandingRepository
 
     public function createPartnerLead(array $data): array
     {
+        $leadId = $this->newUuid();
         $statement = $this->pdo->prepare(
             "INSERT INTO partner_leads (
                 id, company_name, contact_name, email, phone, city, business_type, status, source
              ) VALUES (
-                gen_random_uuid(), :company_name, :contact_name, :email, :phone, :city, :business_type, 'new', 'landing'
-             )
-             RETURNING id, created_at"
+                :id, :company_name, :contact_name, :email, :phone, :city, :business_type, 'new', 'landing'
+             )"
         );
         $statement->execute([
+            'id' => $leadId,
             'company_name' => $data['company_name'],
             'contact_name' => $data['contact_name'],
             'email' => strtolower($data['email']),
@@ -95,10 +98,8 @@ class PdoPublicLandingRepository implements PublicLandingRepository
             'business_type' => $data['business_type'],
         ]);
 
-        $lead = $statement->fetch() ?: [];
-
         return [
-            'protocol' => 'PAR-' . strtoupper(substr(str_replace('-', '', (string) ($lead['id'] ?? '')), 0, 8)),
+            'protocol' => 'PAR-' . strtoupper(substr(str_replace('-', '', $leadId), 0, 8)),
             'status' => 'recebido',
             'next_step' => 'Nossa equipe comercial vai analisar o perfil da operacao e retornar com os proximos passos.',
         ];
@@ -106,15 +107,16 @@ class PdoPublicLandingRepository implements PublicLandingRepository
 
     public function createDriverLead(array $data): array
     {
+        $leadId = $this->newUuid();
         $statement = $this->pdo->prepare(
             "INSERT INTO driver_leads (
                 id, full_name, email, phone, city, modal, status, source
              ) VALUES (
-                gen_random_uuid(), :full_name, :email, :phone, :city, :modal, 'new', 'landing'
-             )
-             RETURNING id, created_at"
+                :id, :full_name, :email, :phone, :city, :modal, 'new', 'landing'
+             )"
         );
         $statement->execute([
+            'id' => $leadId,
             'full_name' => $data['full_name'],
             'email' => strtolower($data['email']),
             'phone' => $data['phone'],
@@ -122,10 +124,8 @@ class PdoPublicLandingRepository implements PublicLandingRepository
             'modal' => $data['modal'],
         ]);
 
-        $lead = $statement->fetch() ?: [];
-
         return [
-            'protocol' => 'DRV-' . strtoupper(substr(str_replace('-', '', (string) ($lead['id'] ?? '')), 0, 8)),
+            'protocol' => 'DRV-' . strtoupper(substr(str_replace('-', '', $leadId), 0, 8)),
             'status' => 'recebido',
             'next_step' => 'O time operacional vai revisar seus dados e orientar a proxima etapa do cadastro.',
         ];

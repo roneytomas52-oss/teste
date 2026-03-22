@@ -16,9 +16,9 @@ Painel interno da Fox Delivery para operacao, aprovacao, financeiro e auditoria.
 - `/analytics`
 - `/audit`
 - `/support`
+- `/settings`
 
 ## Proximas areas previstas
 
 - `/reports`
-- `/settings`
 - `/permissions`

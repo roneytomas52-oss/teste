@@ -1,0 +1,12 @@
+{
+  "name": "fox-platform",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Workspace local da Fox Platform",
+  "scripts": {
+    "dev:api": "php -S 127.0.0.1:8099 -t apps/api/public apps/api/public/router.php",
+    "serve:static": "node scripts/serve-static.js . 3000 fox-platform",
+    "dev:stack": "node scripts/dev-stack.js",
+    "smoke": "php scripts/smoke-test.php"
+  }
+}

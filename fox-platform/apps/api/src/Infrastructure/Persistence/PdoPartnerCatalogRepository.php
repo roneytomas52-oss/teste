@@ -10,6 +10,8 @@ use FoxPlatform\Api\Infrastructure\Support\ApiException;
 
 class PdoPartnerCatalogRepository implements PartnerCatalogRepository
 {
+    use SupportsSqlDialect;
+
     public function __construct(
         private readonly PDO $pdo
     ) {
@@ -34,13 +36,16 @@ class PdoPartnerCatalogRepository implements PartnerCatalogRepository
         $this->assertCategoryExists($data['category_id']);
 
         $statement = $this->pdo->prepare(
+            sprintf(
             'INSERT INTO products (
                 id, store_id, category_id, name, description, sku, base_price, currency, status,
                 stock_quantity, min_stock_quantity, image_path
              ) VALUES (
-                gen_random_uuid(), :store_id, :category_id, :name, :description, :sku, :base_price, :currency, :status,
+                %s, :store_id, :category_id, :name, :description, :sku, :base_price, :currency, :status,
                 :stock_quantity, :min_stock_quantity, :image_path
-             )'
+             )',
+             $this->uuidExpression()
+            )
         );
 
         try {
@@ -123,11 +128,14 @@ class PdoPartnerCatalogRepository implements PartnerCatalogRepository
             (string) $current['status'] !== (string) $data['status']
         ) {
             $movement = $this->pdo->prepare(
+                sprintf(
                 'INSERT INTO inventory_movements (
                     id, product_id, movement_type, quantity_before, quantity_after, note, actor_user_id
                  ) VALUES (
-                    gen_random_uuid(), :product_id, :movement_type, :quantity_before, :quantity_after, :note, :actor_user_id
-                 )'
+                    %s, :product_id, :movement_type, :quantity_before, :quantity_after, :note, :actor_user_id
+                 )',
+                 $this->uuidExpression()
+                )
             );
             $movement->execute([
                 'product_id' => $productId,
@@ -174,11 +182,14 @@ class PdoPartnerCatalogRepository implements PartnerCatalogRepository
             ]);
 
             $movement = $this->pdo->prepare(
+                sprintf(
                 'INSERT INTO inventory_movements (
                     id, product_id, movement_type, quantity_before, quantity_after, note, actor_user_id
                  ) VALUES (
-                    gen_random_uuid(), :product_id, :movement_type, :quantity_before, :quantity_after, :note, :actor_user_id
-                 )'
+                    %s, :product_id, :movement_type, :quantity_before, :quantity_after, :note, :actor_user_id
+                 )',
+                 $this->uuidExpression()
+                )
             );
             $movement->execute([
                 'product_id' => $productId,
@@ -215,13 +226,26 @@ class PdoPartnerCatalogRepository implements PartnerCatalogRepository
     private function resolveStoreId(string $userId): string
     {
         $statement = $this->pdo->prepare(
-            'SELECT s.id
-             FROM partner_accounts ap
-             INNER JOIN stores s ON s.partner_account_id = ap.id
-             WHERE ap.owner_user_id = :user_id
+            'SELECT store_id
+             FROM (
+                SELECT s.id AS store_id
+                FROM partner_accounts ap
+                INNER JOIN stores s ON s.partner_account_id = ap.id
+                WHERE ap.owner_user_id = :owner_user_id
+
+                UNION ALL
+
+                SELECT stm.store_id
+                FROM store_team_members stm
+                WHERE stm.user_id = :team_user_id
+                  AND stm.status = \'active\'
+             ) stores
              LIMIT 1'
         );
-        $statement->execute(['user_id' => $userId]);
+        $statement->execute([
+            'owner_user_id' => $userId,
+            'team_user_id' => $userId,
+        ]);
         $storeId = $statement->fetchColumn();
 
         if (!$storeId) {
@@ -252,10 +276,10 @@ class PdoPartnerCatalogRepository implements PartnerCatalogRepository
     private function loadCategories(): array
     {
         $statement = $this->pdo->query(
-            "SELECT id, slug, name
+            'SELECT id, slug, name
              FROM categories
-             WHERE status = 'active'
-             ORDER BY name"
+             WHERE status = \'active\'
+             ORDER BY name'
         );
 
         return array_map(

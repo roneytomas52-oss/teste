@@ -116,10 +116,27 @@
   - mensagens detalhadas por ticket no portal do parceiro
   - equipe e permissoes da loja ligadas ao backend
   - notificacoes operacionais no portal do parceiro e do entregador
+- Sprint 11 concluida:
+  - autenticacao unificada da equipe da loja com contexto de acesso por store
+  - permissoes aplicadas no partner portal para dono, gerente e equipe
+  - configuracoes administrativas da plataforma no admin
+  - notificacoes do parceiro e do entregador com polling de atualizacao
+  - fallback do SDK ajustado para ignorar respostas externas nao compatíveis com a API da Fox Platform
+  - validacao de runtime com health check real da API
+- Sprint 12 concluida:
+  - runtime local endurecido com router PHP valido para a API
+  - servidor estatico unico para os apps web da plataforma
+  - smoke test completo validado contra a API real
+  - contrato de admin settings estabilizado para MySQL
+  - leitura de documentos do entregador alinhada ao schema real
+- Sprint 13 concluida:
+  - detalhe operacional de pedidos para parceiro
+  - detalhe operacional de pedidos para admin
+  - lista de pedidos com navegacao para detalhe nas duas interfaces
+  - smoke test expandido e validado contra os endpoints novos
 - Proximo foco:
-  - autenticacao unificada da equipe da loja
-  - configuracoes administrativas da plataforma
-  - notificacoes em tempo real e historico operacional
+  - iniciar Sprint 14 com acoes operacionais do admin sobre suporte e pedidos
+  - expandir CRUDs administrativos e trilhas de resolucao sobre o runtime validado
 
 ## Entregavel minimo para primeira versao
 

@@ -70,5 +70,27 @@
       { "name": "Farmácia", "share": "17%" },
       { "name": "Conveniência", "share": "10%" }
     ]
+  },
+  "settings": {
+    "branding": {
+      "platform_name": "Fox Delivery",
+      "support_email": "suporte@foxdelivery.com.br",
+      "partner_login_url": "https://foxgodelivery.com.br/login/parceiro"
+    },
+    "operations": {
+      "default_order_sla_minutes": 35,
+      "partner_review_window_hours": 24,
+      "driver_review_window_hours": 18
+    },
+    "notifications": {
+      "partner_polling_seconds": 30,
+      "driver_polling_seconds": 30,
+      "admin_digest_enabled": true
+    },
+    "security": {
+      "access_token_ttl_minutes": 60,
+      "refresh_token_ttl_days": 14,
+      "password_reset_token_ttl_minutes": 30
+    }
   }
 }

@@ -10,6 +10,8 @@ use FoxPlatform\Api\Infrastructure\Support\ApiException;
 
 class PdoPartnerOperationsRepository implements PartnerOperationsRepository
 {
+    use SupportsSqlDialect;
+
     public function __construct(
         private readonly PDO $pdo
     ) {
@@ -74,6 +76,22 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         ];
     }
 
+    public function getOrderDetail(string $userId, string $orderId): array
+    {
+        $store = $this->resolveStore($userId);
+        $order = $this->loadOrderDetailRow($store['id'], $orderId);
+
+        if (!$order) {
+            throw new ApiException(404, 'ORDER_NOT_FOUND', 'Pedido nao encontrado para esta loja.');
+        }
+
+        return [
+            'order' => $this->formatOrderDetailRow($order),
+            'items' => $this->loadOrderItems($orderId),
+            'timeline' => $this->loadOrderTimeline($orderId),
+        ];
+    }
+
     public function getFinance(string $userId): array
     {
         $store = $this->resolveStore($userId);
@@ -129,15 +147,18 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         $this->pdo->beginTransaction();
 
         try {
+            $ticketId = $this->newUuid();
             $ticketInsert = $this->pdo->prepare(
+                sprintf(
                 "INSERT INTO support_tickets (
                     id, scope, partner_account_id, store_id, created_by_user_id, channel, assigned_team, priority, status, subject, description, last_message_at
                  ) VALUES (
-                    gen_random_uuid(), 'partner', :partner_account_id, :store_id, :created_by_user_id, :channel, :assigned_team, :priority, 'open', :subject, :description, NOW()
-                 )
-                 RETURNING id"
+                    :id, 'partner', :partner_account_id, :store_id, :created_by_user_id, :channel, :assigned_team, :priority, 'open', :subject, :description, NOW()
+                 )"
+                )
             );
             $ticketInsert->execute([
+                'id' => $ticketId,
                 'partner_account_id' => $store['partner_account_id'],
                 'store_id' => $store['id'],
                 'created_by_user_id' => $userId,
@@ -147,14 +168,16 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
                 'subject' => $data['subject'],
                 'description' => $data['description'],
             ]);
-            $ticketId = (string) $ticketInsert->fetchColumn();
 
             $messageInsert = $this->pdo->prepare(
+                sprintf(
                 "INSERT INTO support_messages (
                     id, ticket_id, sender_user_id, sender_role, body
                  ) VALUES (
-                    gen_random_uuid(), :ticket_id, :sender_user_id, 'partner_owner', :body
-                 )"
+                    %s, :ticket_id, :sender_user_id, 'partner_owner', :body
+                 )",
+                 $this->uuidExpression()
+                )
             );
             $messageInsert->execute([
                 'ticket_id' => $ticketId,
@@ -199,11 +222,14 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
 
         try {
             $messageInsert = $this->pdo->prepare(
+                sprintf(
                 "INSERT INTO support_messages (
                     id, ticket_id, sender_user_id, sender_role, body
                  ) VALUES (
-                    gen_random_uuid(), :ticket_id, :sender_user_id, 'partner_owner', :body
-                 )"
+                    %s, :ticket_id, :sender_user_id, 'partner_owner', :body
+                 )",
+                 $this->uuidExpression()
+                )
             );
             $messageInsert->execute([
                 'ticket_id' => $ticket['id'],
@@ -314,9 +340,9 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
             $update = $this->pdo->prepare(
                 "UPDATE orders
                  SET status = :status,
-                     accepted_at = COALESCE(CAST(:accepted_at AS timestamptz), accepted_at),
-                     completed_at = CASE WHEN :completed_at IS NULL THEN completed_at ELSE CAST(:completed_at AS timestamptz) END,
-                     cancelled_at = CASE WHEN :cancelled_at IS NULL THEN cancelled_at ELSE CAST(:cancelled_at AS timestamptz) END,
+                     accepted_at = COALESCE(:accepted_at, accepted_at),
+                     completed_at = CASE WHEN :completed_at IS NULL THEN completed_at ELSE :completed_at END,
+                     cancelled_at = CASE WHEN :cancelled_at IS NULL THEN cancelled_at ELSE :cancelled_at END,
                      updated_at = NOW()
                  WHERE id = :order_id AND store_id = :store_id"
             );
@@ -330,11 +356,14 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
             ]);
 
             $log = $this->pdo->prepare(
+                sprintf(
                 "INSERT INTO order_status_logs (
                     id, order_id, previous_status, next_status, actor_user_id, note
                  ) VALUES (
-                    gen_random_uuid(), :order_id, :previous_status, :next_status, :actor_user_id, :note
-                 )"
+                    %s, :order_id, :previous_status, :next_status, :actor_user_id, :note
+                 )",
+                 $this->uuidExpression()
+                )
             );
             $log->execute([
                 'order_id' => $orderId,
@@ -356,13 +385,27 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
     private function resolveStore(string $userId): array
     {
         $statement = $this->pdo->prepare(
-            "SELECT s.id, s.trade_name, s.status, s.city, s.state, s.partner_account_id
-             FROM partner_accounts ap
-             INNER JOIN stores s ON s.partner_account_id = ap.id
-             WHERE ap.owner_user_id = :user_id
+            "SELECT id, trade_name, status, city, state, partner_account_id
+             FROM (
+                SELECT s.id, s.trade_name, s.status, s.city, s.state, s.partner_account_id
+                FROM partner_accounts ap
+                INNER JOIN stores s ON s.partner_account_id = ap.id
+                WHERE ap.owner_user_id = :owner_user_id
+
+                UNION ALL
+
+                SELECT s.id, s.trade_name, s.status, s.city, s.state, s.partner_account_id
+                FROM store_team_members stm
+                INNER JOIN stores s ON s.id = stm.store_id
+                WHERE stm.user_id = :team_user_id
+                  AND stm.status = 'active'
+             ) partner_store
              LIMIT 1"
         );
-        $statement->execute(['user_id' => $userId]);
+        $statement->execute([
+            'owner_user_id' => $userId,
+            'team_user_id' => $userId,
+        ]);
         $store = $statement->fetch();
 
         if (!$store) {
@@ -390,11 +433,11 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
     {
         $statement = $this->pdo->prepare(
             "SELECT
-                COUNT(*) FILTER (WHERE DATE(placed_at) = CURRENT_DATE) AS orders_today,
-                COUNT(*) FILTER (WHERE status IN ('accepted', 'preparing', 'ready_for_pickup', 'on_route')) AS in_progress_orders,
-                COUNT(*) FILTER (WHERE status = 'completed' AND DATE(placed_at) = CURRENT_DATE) AS completed_orders,
-                COALESCE(SUM(total) FILTER (WHERE DATE(placed_at) = CURRENT_DATE AND status <> 'cancelled'), 0) AS gross_revenue_today,
-                COALESCE(AVG(total) FILTER (WHERE DATE(placed_at) = CURRENT_DATE AND status <> 'cancelled'), 0) AS average_ticket_today
+                SUM(CASE WHEN DATE(placed_at) = CURRENT_DATE THEN 1 ELSE 0 END) AS orders_today,
+                SUM(CASE WHEN status IN ('accepted', 'preparing', 'ready_for_pickup', 'on_route') THEN 1 ELSE 0 END) AS in_progress_orders,
+                SUM(CASE WHEN status = 'completed' AND DATE(placed_at) = CURRENT_DATE THEN 1 ELSE 0 END) AS completed_orders,
+                COALESCE(SUM(CASE WHEN DATE(placed_at) = CURRENT_DATE AND status <> 'cancelled' THEN total ELSE 0 END), 0) AS gross_revenue_today,
+                COALESCE(AVG(CASE WHEN DATE(placed_at) = CURRENT_DATE AND status <> 'cancelled' THEN total END), 0) AS average_ticket_today
              FROM orders
              WHERE store_id = :store_id"
         );
@@ -407,8 +450,8 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
     {
         $statement = $this->pdo->prepare(
             "SELECT
-                COUNT(*) FILTER (WHERE status = 'active') AS active_products,
-                COUNT(*) FILTER (WHERE stock_quantity <= min_stock_quantity OR stock_quantity = 0 OR status = 'paused') AS attention_products
+                SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) AS active_products,
+                SUM(CASE WHEN stock_quantity <= min_stock_quantity OR stock_quantity = 0 OR status = 'paused' THEN 1 ELSE 0 END) AS attention_products
              FROM products
              WHERE store_id = :store_id"
         );
@@ -422,8 +465,8 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         $statement = $this->pdo->prepare(
             "SELECT
                 COALESCE(SUM(CASE WHEN direction = 'credit' THEN amount ELSE -amount END), 0) AS available_balance,
-                COALESCE(SUM(amount) FILTER (WHERE transaction_type = 'platform_fee'), 0) AS fees_total,
-                COUNT(*) FILTER (WHERE transaction_type IN ('adjustment', 'refund') AND status = 'under_review') AS pending_adjustments
+                COALESCE(SUM(CASE WHEN transaction_type = 'platform_fee' THEN amount ELSE 0 END), 0) AS fees_total,
+                SUM(CASE WHEN transaction_type IN ('adjustment', 'refund') AND status = 'under_review' THEN 1 ELSE 0 END) AS pending_adjustments
              FROM wallet_transactions
              WHERE store_id = :store_id"
         );
@@ -548,6 +591,81 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         return $statement->fetch();
     }
 
+    private function loadOrderDetailRow(string $storeId, string $orderId): array|false
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT
+                o.id,
+                o.order_number,
+                o.customer_name,
+                o.customer_phone,
+                o.customer_address,
+                o.status,
+                o.payment_method,
+                o.payment_status,
+                o.subtotal,
+                o.delivery_fee,
+                o.total,
+                o.placed_at,
+                o.accepted_at,
+                o.completed_at,
+                o.cancelled_at,
+                s.trade_name AS store_name,
+                COALESCE(du.full_name, 'sem atribuicao') AS driver_name
+             FROM orders o
+             INNER JOIN stores s ON s.id = o.store_id
+             LEFT JOIN driver_profiles dp ON dp.id = o.driver_profile_id
+             LEFT JOIN users du ON du.id = dp.user_id
+             WHERE o.id = :order_id
+               AND o.store_id = :store_id
+             LIMIT 1"
+        );
+        $statement->execute([
+            'order_id' => $orderId,
+            'store_id' => $storeId,
+        ]);
+
+        return $statement->fetch();
+    }
+
+    private function loadOrderItems(string $orderId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT product_name, quantity, unit_price, total_price, notes
+             FROM order_items
+             WHERE order_id = :order_id
+             ORDER BY created_at ASC"
+        );
+        $statement->execute(['order_id' => $orderId]);
+
+        return array_map(fn (array $row) => [
+            'name' => $row['product_name'],
+            'quantity' => (int) $row['quantity'],
+            'unit_price' => $this->formatMoney($row['unit_price']),
+            'total_price' => $this->formatMoney($row['total_price']),
+            'notes' => $row['notes'] ?: '-',
+        ], $statement->fetchAll() ?: []);
+    }
+
+    private function loadOrderTimeline(string $orderId): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT osl.previous_status, osl.next_status, osl.note, osl.created_at, u.full_name AS actor_name
+             FROM order_status_logs osl
+             LEFT JOIN users u ON u.id = osl.actor_user_id
+             WHERE osl.order_id = :order_id
+             ORDER BY osl.created_at ASC"
+        );
+        $statement->execute(['order_id' => $orderId]);
+
+        return array_map(fn (array $row) => [
+            'title' => sprintf('Status atualizado para %s', $this->normalizeOrderStatusLabel((string) $row['next_status'])),
+            'description' => $row['note'] ?: 'Atualizacao operacional registrada no portal.',
+            'actor' => $row['actor_name'] ?: 'Fox Platform',
+            'created_at' => $this->formatDateTime((string) $row['created_at']),
+        ], $statement->fetchAll() ?: []);
+    }
+
     private function findSupportTicketByStore(string $storeId, string $ticketId): array|false
     {
         $statement = $this->pdo->prepare(
@@ -619,6 +737,34 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         ];
     }
 
+    private function formatOrderDetailRow(array $row): array
+    {
+        [$statusLabel, $statusType] = $this->normalizeOrderStatusMeta((string) $row['status']);
+
+        return [
+            'id' => '#' . $row['order_number'],
+            'order_id' => $row['id'],
+            'store_name' => $row['store_name'],
+            'customer' => $row['customer_name'],
+            'customer_phone' => $row['customer_phone'] ?: '-',
+            'customer_address' => $row['customer_address'] ?: '-',
+            'driver_name' => $row['driver_name'],
+            'status' => $statusLabel,
+            'status_key' => $row['status'],
+            'status_type' => $statusType,
+            'payment_method' => $this->normalizePaymentMethodLabel((string) $row['payment_method']),
+            'payment_status' => $this->normalizePaymentStatusLabel((string) $row['payment_status']),
+            'subtotal' => $this->formatMoney($row['subtotal']),
+            'delivery_fee' => $this->formatMoney($row['delivery_fee']),
+            'total' => $this->formatMoney($row['total']),
+            'placed_at' => $this->formatDateTime((string) $row['placed_at']),
+            'accepted_at' => $row['accepted_at'] ? $this->formatDateTime((string) $row['accepted_at']) : '-',
+            'completed_at' => $row['completed_at'] ? $this->formatDateTime((string) $row['completed_at']) : '-',
+            'cancelled_at' => $row['cancelled_at'] ? $this->formatDateTime((string) $row['cancelled_at']) : '-',
+            'sla' => $this->buildSlaLabel($row['placed_at'], $row['completed_at'], $row['status']),
+        ];
+    }
+
     private function buildSlaLabel(?string $placedAt, ?string $completedAt, string $status): string
     {
         if ($status === 'completed') {
@@ -634,6 +780,45 @@ class PdoPartnerOperationsRepository implements PartnerOperationsRepository
         }
 
         return sprintf('%d min', max(1, (int) floor((time() - strtotime($placedAt)) / 60)));
+    }
+
+    private function normalizeOrderStatusMeta(string $status): array
+    {
+        return match ($status) {
+            'pending_acceptance' => ['aguardando aceite', 'warning'],
+            'accepted' => ['aceito', 'success'],
+            'preparing' => ['em preparo', 'success'],
+            'ready_for_pickup' => ['pronto para retirada', 'warning'],
+            'on_route' => ['em rota', 'success'],
+            'completed' => ['concluido', 'success'],
+            'cancelled' => ['cancelado', 'danger'],
+            default => [$status, 'warning'],
+        };
+    }
+
+    private function normalizeOrderStatusLabel(string $status): string
+    {
+        return $this->normalizeOrderStatusMeta($status)[0];
+    }
+
+    private function normalizePaymentMethodLabel(string $method): string
+    {
+        return match ($method) {
+            'online_card' => 'Cartao online',
+            'cash' => 'Dinheiro',
+            'pix' => 'Pix',
+            default => ucfirst(str_replace('_', ' ', $method)),
+        };
+    }
+
+    private function normalizePaymentStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'pending' => 'Pendente',
+            'paid' => 'Pago',
+            'refunded' => 'Reembolsado',
+            default => ucfirst($status),
+        };
     }
 
     private function normalizeStatusLabel(string $status): string

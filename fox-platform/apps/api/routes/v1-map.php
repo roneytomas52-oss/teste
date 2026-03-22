@@ -20,6 +20,8 @@ return [
         'POST /api/v1/admin/approvals/drivers/{driver_id}/approve',
         'POST /api/v1/admin/approvals/drivers/{driver_id}/reject',
         'GET /api/v1/admin/support/queue',
+        'GET /api/v1/admin/settings',
+        'PUT /api/v1/admin/settings',
     ],
     'partner' => [
         'GET /api/v1/partner/profile',

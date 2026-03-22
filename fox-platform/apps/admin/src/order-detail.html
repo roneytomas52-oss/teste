@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Platform Admin | Detalhe do pedido</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body data-fx-screen="order-detail">
+    <div class="fx-app-shell">
+      <aside class="fx-sidebar">
+        <div class="fx-brand-lockup">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Platform</strong>
+              <div class="fx-copy-sm">Admin da operacao</div>
+            </div>
+          </div>
+          <p class="fx-copy-sm">Inspecione o pedido em detalhe com cliente, loja, itens e historico operacional.</p>
+        </div>
+        <nav class="fx-sidebar-nav">
+          <a class="fx-sidebar-link" href="./index.html">Dashboard</a>
+          <a class="fx-sidebar-link" href="./partners-approvals.html">Aprovacao de parceiros</a>
+          <a class="fx-sidebar-link" href="./drivers-approvals.html">Aprovacao de entregadores</a>
+          <a class="fx-sidebar-link is-active" href="./orders.html">Pedidos</a>
+          <a class="fx-sidebar-link" href="./operations.html">Operacao</a>
+          <a class="fx-sidebar-link" href="./finance.html">Financeiro</a>
+          <a class="fx-sidebar-link" href="./analytics.html">Analytics</a>
+          <a class="fx-sidebar-link" href="./audit.html">Auditoria</a>
+          <a class="fx-sidebar-link" href="./support.html">Suporte</a>
+          <a class="fx-sidebar-link" href="./settings.html">Configuracoes</a>
+          <a class="fx-sidebar-link js-fx-logout" href="./login.html">Sair</a>
+        </nav>
+      </aside>
+      <main class="fx-shell-main">
+        <header class="fx-shell-topbar">
+          <div>
+            <div class="fx-pill">Pedido</div>
+            <h1 class="fx-title-sm">Detalhe operacional</h1>
+          </div>
+          <div class="fx-topbar-actions">
+            <a class="fx-button-secondary" href="./orders.html">Voltar para pedidos</a>
+          </div>
+        </header>
+        <div class="fx-shell-content">
+          <div class="fx-admin-view">
+            <section class="fx-page-header">
+              <div class="fx-page-header-copy">
+                <div class="fx-eyebrow">Pedido em foco</div>
+                <h2 class="fx-title-md" id="fx-admin-order-detail-id">Carregando pedido</h2>
+                <p class="fx-copy">Use esta visao para analisar cliente, loja, pagamento, itens e historico de status do pedido.</p>
+              </div>
+              <div class="fx-inline-actions">
+                <span class="fx-status warning" id="fx-admin-order-detail-status">carregando</span>
+              </div>
+            </section>
+
+            <p class="fx-note" id="fx-admin-order-detail-feedback" hidden></p>
+
+            <section class="fx-admin-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Contexto</span>
+                    <h3 class="fx-title-sm">Loja, cliente e entrega</h3>
+                  </div>
+                </div>
+                <div class="fx-stack-sm">
+                  <div class="fx-info-row"><strong>Loja</strong><span id="fx-admin-order-detail-store">-</span></div>
+                  <div class="fx-info-row"><strong>Cliente</strong><span id="fx-admin-order-detail-customer">-</span></div>
+                  <div class="fx-info-row"><strong>Telefone</strong><span id="fx-admin-order-detail-customer-phone">-</span></div>
+                  <div class="fx-info-row"><strong>Endereco</strong><span id="fx-admin-order-detail-address">-</span></div>
+                  <div class="fx-info-row"><strong>Entregador</strong><span id="fx-admin-order-detail-driver">-</span></div>
+                  <div class="fx-info-row"><strong>SLA</strong><span id="fx-admin-order-detail-sla">-</span></div>
+                </div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Financeiro</span>
+                    <h3 class="fx-title-sm">Pagamento e composicao</h3>
+                  </div>
+                </div>
+                <div class="fx-stack-sm">
+                  <div class="fx-info-row"><strong>Metodo</strong><span id="fx-admin-order-detail-payment-method">-</span></div>
+                  <div class="fx-info-row"><strong>Status</strong><span id="fx-admin-order-detail-payment-status">-</span></div>
+                  <div class="fx-info-row"><strong>Subtotal</strong><span id="fx-admin-order-detail-subtotal">-</span></div>
+                  <div class="fx-info-row"><strong>Entrega</strong><span id="fx-admin-order-detail-delivery-fee">-</span></div>
+                  <div class="fx-info-row"><strong>Total</strong><span id="fx-admin-order-detail-total">-</span></div>
+                </div>
+              </article>
+            </section>
+
+            <section class="fx-admin-grid">
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Itens</span>
+                    <h3 class="fx-title-sm">Resumo do pedido</h3>
+                  </div>
+                </div>
+                <div class="fx-stack-sm" id="fx-admin-order-detail-items"></div>
+              </article>
+
+              <article class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <span class="fx-pill">Timeline</span>
+                    <h3 class="fx-title-sm">Historico operacional</h3>
+                  </div>
+                </div>
+                <div class="fx-stack-sm">
+                  <div class="fx-info-row"><strong>Recebido em</strong><span id="fx-admin-order-detail-placed-at">-</span></div>
+                  <div class="fx-info-row"><strong>Aceito em</strong><span id="fx-admin-order-detail-accepted-at">-</span></div>
+                  <div class="fx-info-row"><strong>Concluido em</strong><span id="fx-admin-order-detail-completed-at">-</span></div>
+                  <div class="fx-info-row"><strong>Cancelado em</strong><span id="fx-admin-order-detail-cancelled-at">-</span></div>
+                </div>
+                <div class="fx-stack-sm" id="fx-admin-order-detail-timeline"></div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/admin-app.js"></script>
+  </body>
+</html>

@@ -28,6 +28,33 @@ VALUES
     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
     'active',
     'pt_BR'
+  ),
+  (
+    '44444444-4444-4444-8444-444444444444',
+    'Mariana Costa',
+    'mariana.costa@foxburgers.com.br',
+    '+55 11 97777-2201',
+    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    'active',
+    'pt_BR'
+  ),
+  (
+    '55555555-5555-4555-8555-555555555555',
+    'Rafael Martins',
+    'rafael.martins@foxburgers.com.br',
+    '+55 11 97777-2202',
+    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    'active',
+    'pt_BR'
+  ),
+  (
+    '66666666-6666-4666-8666-666666666666',
+    'Beatriz Oliveira',
+    'beatriz.oliveira@foxburgers.com.br',
+    '+55 11 97777-2203',
+    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    'pending',
+    'pt_BR'
   )
 ON CONFLICT (email) DO UPDATE
 SET
@@ -142,4 +169,28 @@ INSERT INTO user_roles (
 SELECT gen_random_uuid(), '33333333-3333-4333-8333-333333333333', r.id
 FROM roles r
 WHERE r.slug = 'driver'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO user_roles (
+  id, user_id, role_id
+)
+SELECT gen_random_uuid(), '44444444-4444-4444-8444-444444444444', r.id
+FROM roles r
+WHERE r.slug = 'partner_manager'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO user_roles (
+  id, user_id, role_id
+)
+SELECT gen_random_uuid(), '55555555-5555-4555-8555-555555555555', r.id
+FROM roles r
+WHERE r.slug = 'partner_staff'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO user_roles (
+  id, user_id, role_id
+)
+SELECT gen_random_uuid(), '66666666-6666-4666-8666-666666666666', r.id
+FROM roles r
+WHERE r.slug = 'partner_staff'
 ON CONFLICT DO NOTHING;

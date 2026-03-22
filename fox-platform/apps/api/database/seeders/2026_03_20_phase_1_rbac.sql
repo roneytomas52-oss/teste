@@ -105,6 +105,7 @@ JOIN permissions p ON p.slug IN (
   'finance.view',
   'store.manage',
   'team.manage',
+  'support.manage',
   'reports.view'
 )
 WHERE r.slug = 'partner_owner'
@@ -118,6 +119,7 @@ JOIN permissions p ON p.slug IN (
   'orders.manage',
   'catalog.manage',
   'inventory.manage',
+  'support.manage',
   'reports.view'
 )
 WHERE r.slug = 'partner_manager'
@@ -141,4 +143,3 @@ JOIN permissions p ON p.slug IN (
 )
 WHERE r.slug = 'driver'
 ON CONFLICT DO NOTHING;
-

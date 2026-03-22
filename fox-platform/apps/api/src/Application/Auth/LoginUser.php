@@ -50,6 +50,18 @@ class LoginUser
         }
 
         $permissions = $this->users->getPermissionsForUser($user->id);
+        $partnerAccess = $input->guard === 'partner'
+            ? $this->users->getPartnerAccessContext($user->id)
+            : null;
+
+        if ($input->guard === 'partner' && !$partnerAccess) {
+            throw new ApiException(403, 'AUTH_PARTNER_STORE_NOT_FOUND', 'Nao foi possivel localizar uma loja vinculada para este acesso.');
+        }
+
+        $permissionSlugs = array_values(array_unique(array_filter(array_merge(
+            array_column($permissions, 'slug'),
+            $partnerAccess['permissions'] ?? []
+        ))));
         $accessTtl = (int) ($this->config['tokens']['access_ttl_seconds'] ?? 900);
         $refreshTtl = (int) ($this->config['tokens']['refresh_ttl_seconds'] ?? 2592000);
         $refreshBytes = (int) ($this->config['tokens']['refresh_token_bytes'] ?? 32);
@@ -61,7 +73,8 @@ class LoginUser
             'email' => $user->email,
             'guard' => $input->guard,
             'roles' => array_column($guardRoles, 'slug'),
-            'permissions' => array_column($permissions, 'slug'),
+            'permissions' => $permissionSlugs,
+            'partner_access' => $partnerAccess,
             'iat' => $now->getTimestamp(),
             'exp' => $now->modify(sprintf('+%d seconds', $accessTtl))->getTimestamp(),
             'jti' => $this->uuidGenerator->uuid(),
@@ -89,6 +102,8 @@ class LoginUser
                 'email' => $user->email,
                 'guard' => $input->guard,
                 'roles' => array_column($guardRoles, 'slug'),
+                'permissions' => $permissionSlugs,
+                'partner_access' => $partnerAccess,
             ]
         );
     }

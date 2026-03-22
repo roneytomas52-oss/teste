@@ -68,6 +68,9 @@ fox-platform/
 - [Entrega da Fase 9 - Sprint 8](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-8-public-landing-core.md)
 - [Entrega da Fase 9 - Sprint 9](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-9-admin-approval-actions.md)
 - [Entrega da Fase 9 - Sprint 10](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-10-team-notifications-and-ticket-threads.md)
+- [Entrega da Fase 9 - Sprint 11](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-11-unified-team-auth-and-admin-settings.md)
+- [Entrega da Fase 9 - Sprint 12](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-12-runtime-hardening.md)
+- [Entrega da Fase 9 - Sprint 13](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-13-order-detail-and-operational-view.md)
 - [Mapa do portal do parceiro](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/partner-portal-sitemap.md)
 - [Superficie de APIs](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/api-surface.md)
 - [Roadmap do MVP](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/roadmap-mvp.md)
@@ -133,10 +136,19 @@ Ja definido e materializado:
 - equipe da loja com membros, perfis e status ligados ao backend
 - notificacoes operacionais no portal do parceiro
 - notificacoes operacionais no portal do entregador
+- autenticacao unificada para dono e equipe da loja no login do parceiro
+- permissoes da equipe aplicadas na navegacao do portal do parceiro
+- tela de configuracoes administrativas da plataforma no painel admin
+- fallback do SDK protegido contra respostas externas nao compativeis com a API da Fox Platform
+- health check da API validado em runtime com PHP local
+- smoke test completo validado contra a API real
+- stack local com servidor PHP e servidor estatico unificado
+- router dedicado para servir todas as rotas da API em desenvolvimento
+- scripts locais para subir e validar o ecossistema
+- detalhe operacional de pedidos entregue no partner portal
+- detalhe operacional de pedidos entregue no admin
+- smoke test expandido para cobrir os endpoints de detalhe de pedidos
 
 Proxima etapa recomendada:
 
-- iniciar a Sprint 11 da Fase 9
-- unificar autenticacao da equipe da loja
-- abrir configuracoes administrativas da plataforma
-- evoluir notificacoes para tempo real
+- iniciar a Sprint 14 com acoes operacionais do admin em suporte e pedidos

@@ -10,6 +10,8 @@ interface PartnerOperationsRepository
 
     public function getOrders(string $userId): array;
 
+    public function getOrderDetail(string $userId, string $orderId): array;
+
     public function updateOrderStatus(string $userId, string $orderId, array $data): array;
 
     public function getFinance(string $userId): array;

@@ -304,6 +304,26 @@ async function handleNotificationsScreen() {
   let payload = await getDriverNotifications();
   renderNotifications(payload);
 
+  let pollingHandle = window.setInterval(async () => {
+    try {
+      payload = await getDriverNotifications();
+      renderNotifications(payload);
+    } catch (_error) {
+      // Mantem a ultima fila exibida.
+    }
+  }, 30000);
+
+  window.addEventListener(
+    "beforeunload",
+    () => {
+      if (pollingHandle) {
+        window.clearInterval(pollingHandle);
+        pollingHandle = null;
+      }
+    },
+    { once: true }
+  );
+
   list?.addEventListener("click", async (event) => {
     const trigger = event.target.closest(".js-driver-notification-read");
     if (!trigger) return;

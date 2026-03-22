@@ -39,12 +39,21 @@ class Authenticate
 
         $roles = $this->users->getRolesForUser($user->id);
         $permissions = $this->users->getPermissionsForUser($user->id);
+        $partnerAccess = ((string) ($payload['guard'] ?? '') === 'partner')
+            ? $this->users->getPartnerAccessContext($user->id)
+            : null;
+        $permissionSlugs = array_values(array_unique(array_filter(array_merge(
+            array_column($permissions, 'slug'),
+            $partnerAccess['permissions'] ?? []
+        ))));
 
         return $next($request->withAttribute('auth', [
             'user_id' => $user->id,
             'guard' => (string) ($payload['guard'] ?? ''),
             'roles' => $roles,
-            'permissions' => $permissions,
+            'permissions' => $permissionSlugs,
+            'permission_records' => $permissions,
+            'partner_access' => $partnerAccess,
             'claims' => $payload,
         ]));
     }

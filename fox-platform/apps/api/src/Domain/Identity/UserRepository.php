@@ -10,6 +10,8 @@ interface UserRepository
 
     public function findById(string $id): ?User;
 
+    public function getPartnerAccessContext(string $userId): ?array;
+
     public function getRolesForUser(string $userId): array;
 
     public function getPermissionsForUser(string $userId): array;

@@ -12,8 +12,14 @@ use FoxPlatform\Api\Application\Admin\GetAdminDashboard;
 use FoxPlatform\Api\Application\Admin\GetAdminFinance;
 use FoxPlatform\Api\Application\Admin\GetAdminDriverApprovals;
 use FoxPlatform\Api\Application\Admin\GetAdminOrders;
+use FoxPlatform\Api\Application\Admin\GetAdminOrderDetail;
 use FoxPlatform\Api\Application\Admin\GetAdminPartnerApprovals;
+use FoxPlatform\Api\Application\Admin\GetAdminSettings;
 use FoxPlatform\Api\Application\Admin\GetAdminSupport;
+use FoxPlatform\Api\Application\Admin\GetAdminSupportThread;
+use FoxPlatform\Api\Application\Admin\UpdateAdminSettings;
+use FoxPlatform\Api\Application\Admin\ReplyAdminSupportThread;
+use FoxPlatform\Api\Application\Admin\UpdateAdminSupportTicketStatus;
 use FoxPlatform\Api\Application\Admin\ApprovePartnerApproval;
 use FoxPlatform\Api\Application\Admin\RejectPartnerApproval;
 use FoxPlatform\Api\Application\Admin\ApproveDriverApproval;
@@ -38,6 +44,7 @@ use FoxPlatform\Api\Application\Partner\CreatePartnerProduct;
 use FoxPlatform\Api\Application\Partner\GetPartnerDashboard;
 use FoxPlatform\Api\Application\Partner\GetPartnerFinance;
 use FoxPlatform\Api\Application\Partner\GetPartnerNotifications;
+use FoxPlatform\Api\Application\Partner\GetPartnerOrderDetail;
 use FoxPlatform\Api\Application\Partner\GetPartnerOrders;
 use FoxPlatform\Api\Application\Partner\GetPartnerProfile;
 use FoxPlatform\Api\Application\Partner\GetPartnerSupport;
@@ -87,7 +94,9 @@ use FoxPlatform\Api\Interfaces\Http\Controllers\PublicLandingController;
 use FoxPlatform\Api\Interfaces\Http\Middleware\Authenticate;
 use FoxPlatform\Api\Interfaces\Http\Middleware\CorsMiddleware;
 use FoxPlatform\Api\Interfaces\Http\Middleware\JsonOnly;
+use FoxPlatform\Api\Interfaces\Http\Middleware\RequirePermission;
 use FoxPlatform\Api\Interfaces\Http\Middleware\RequireRole;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminSettingsUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\DriverLeadCreateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\ForgotPasswordRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\DriverProfileUpdateRequest;
@@ -96,6 +105,7 @@ use FoxPlatform\Api\Interfaces\Http\Requests\PartnerLeadCreateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerProfileUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerTeamMemberStatusRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerTeamMemberUpsertRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\AdminSupportTicketStatusUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerInventoryUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerOrderStatusUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerProductUpsertRequest;
@@ -208,6 +218,9 @@ return static function (string $apiRoot): Container {
     $container->set(GetPartnerOrders::class, static fn (Container $c) => new GetPartnerOrders(
         $c->get(PdoPartnerOperationsRepository::class)
     ));
+    $container->set(GetPartnerOrderDetail::class, static fn (Container $c) => new GetPartnerOrderDetail(
+        $c->get(PdoPartnerOperationsRepository::class)
+    ));
     $container->set(GetPartnerSupport::class, static fn (Container $c) => new GetPartnerSupport(
         $c->get(PdoPartnerOperationsRepository::class)
     ));
@@ -250,6 +263,9 @@ return static function (string $apiRoot): Container {
     $container->set(GetAdminOrders::class, static fn (Container $c) => new GetAdminOrders(
         $c->get(PdoAdminOperationsRepository::class)
     ));
+    $container->set(GetAdminOrderDetail::class, static fn (Container $c) => new GetAdminOrderDetail(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
     $container->set(GetAdminPartnerApprovals::class, static fn (Container $c) => new GetAdminPartnerApprovals(
         $c->get(PdoAdminOperationsRepository::class)
     ));
@@ -257,6 +273,21 @@ return static function (string $apiRoot): Container {
         $c->get(PdoAdminOperationsRepository::class)
     ));
     $container->set(GetAdminSupport::class, static fn (Container $c) => new GetAdminSupport(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(GetAdminSupportThread::class, static fn (Container $c) => new GetAdminSupportThread(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(GetAdminSettings::class, static fn (Container $c) => new GetAdminSettings(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(UpdateAdminSettings::class, static fn (Container $c) => new UpdateAdminSettings(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(ReplyAdminSupportThread::class, static fn (Container $c) => new ReplyAdminSupportThread(
+        $c->get(PdoAdminOperationsRepository::class)
+    ));
+    $container->set(UpdateAdminSupportTicketStatus::class, static fn (Container $c) => new UpdateAdminSupportTicketStatus(
         $c->get(PdoAdminOperationsRepository::class)
     ));
     $container->set(ApprovePartnerApproval::class, static fn (Container $c) => new ApprovePartnerApproval(
@@ -335,6 +366,8 @@ return static function (string $apiRoot): Container {
     $container->set(PartnerStoreDocumentRequest::class, static fn () => new PartnerStoreDocumentRequest());
     $container->set(PartnerTeamMemberUpsertRequest::class, static fn () => new PartnerTeamMemberUpsertRequest());
     $container->set(PartnerTeamMemberStatusRequest::class, static fn () => new PartnerTeamMemberStatusRequest());
+    $container->set(AdminSettingsUpdateRequest::class, static fn () => new AdminSettingsUpdateRequest());
+    $container->set(AdminSupportTicketStatusUpdateRequest::class, static fn () => new AdminSupportTicketStatusUpdateRequest());
     $container->set(SupportMessageCreateRequest::class, static fn () => new SupportMessageCreateRequest());
     $container->set(SupportTicketCreateRequest::class, static fn () => new SupportTicketCreateRequest());
 
@@ -382,6 +415,7 @@ return static function (string $apiRoot): Container {
         $c->get(GetPartnerDashboard::class),
         $c->get(GetPartnerFinance::class),
         $c->get(GetPartnerOrders::class),
+        $c->get(GetPartnerOrderDetail::class),
         $c->get(GetPartnerSupport::class),
         $c->get(GetPartnerSupportThread::class),
         $c->get(CreatePartnerSupportTicket::class),
@@ -397,13 +431,22 @@ return static function (string $apiRoot): Container {
         $c->get(GetAdminDashboard::class),
         $c->get(GetAdminFinance::class),
         $c->get(GetAdminOrders::class),
+        $c->get(GetAdminOrderDetail::class),
         $c->get(GetAdminPartnerApprovals::class),
         $c->get(GetAdminDriverApprovals::class),
         $c->get(GetAdminSupport::class),
+        $c->get(GetAdminSupportThread::class),
+        $c->get(GetAdminSettings::class),
+        $c->get(UpdateAdminSettings::class),
+        $c->get(ReplyAdminSupportThread::class),
+        $c->get(UpdateAdminSupportTicketStatus::class),
         $c->get(ApprovePartnerApproval::class),
         $c->get(RejectPartnerApproval::class),
         $c->get(ApproveDriverApproval::class),
-        $c->get(RejectDriverApproval::class)
+        $c->get(RejectDriverApproval::class),
+        $c->get(AdminSettingsUpdateRequest::class),
+        $c->get(AdminSupportTicketStatusUpdateRequest::class),
+        $c->get(SupportMessageCreateRequest::class)
     ));
     $container->set(DriverController::class, static fn (Container $c) => new DriverController(
         $c->get(GetDriverDashboard::class),
@@ -438,6 +481,7 @@ return static function (string $apiRoot): Container {
         $c->get(PdoUserRepository::class)
     ));
     $container->set('middleware.role', static fn () => new RequireRole());
+    $container->set('middleware.permission', static fn () => new RequirePermission());
     $container->set('middleware.cors', static fn (Container $c) => new CorsMiddleware(
         $c->get('config.cors')
     ));

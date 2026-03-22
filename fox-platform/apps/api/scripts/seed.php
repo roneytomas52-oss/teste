@@ -6,18 +6,25 @@ $apiRoot = dirname(__DIR__);
 
 require_once $apiRoot . '/bootstrap/autoload.php';
 require_once $apiRoot . '/bootstrap/env.php';
+require_once __DIR__ . '/SqlDialectTransformer.php';
 
 fox_api_load_env($apiRoot);
 
 $containerFactory = require $apiRoot . '/bootstrap/container.php';
 $container = $containerFactory($apiRoot);
 $pdo = $container->get(\FoxPlatform\Api\Infrastructure\Persistence\DatabaseConnection::class)->pdo();
+$driver = (string) $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
 $pdo->exec(
-    'CREATE TABLE IF NOT EXISTS seed_runs (
-        filename VARCHAR(255) PRIMARY KEY,
-        executed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    )'
+    $driver === 'mysql'
+        ? 'CREATE TABLE IF NOT EXISTS seed_runs (
+            filename VARCHAR(255) PRIMARY KEY,
+            executed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )'
+        : 'CREATE TABLE IF NOT EXISTS seed_runs (
+            filename VARCHAR(255) PRIMARY KEY,
+            executed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )'
 );
 
 $files = glob($apiRoot . '/database/seeders/*.sql') ?: [];
@@ -35,15 +42,22 @@ foreach ($files as $file) {
 
     echo "[run] {$filename}" . PHP_EOL;
     $sql = file_get_contents($file);
+    $sql = \FoxPlatform\Api\Scripts\SqlDialectTransformer::transform((string) $sql, $driver);
 
-    $pdo->beginTransaction();
     try {
+        if ($driver !== 'mysql') {
+            $pdo->beginTransaction();
+        }
         $pdo->exec($sql);
         $insert = $pdo->prepare('INSERT INTO seed_runs (filename) VALUES (:filename)');
         $insert->execute(['filename' => $filename]);
-        $pdo->commit();
+        if ($pdo->inTransaction()) {
+            $pdo->commit();
+        }
     } catch (Throwable $exception) {
-        $pdo->rollBack();
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
         fwrite(STDERR, "[error] {$filename}: {$exception->getMessage()}" . PHP_EOL);
         exit(1);
     }

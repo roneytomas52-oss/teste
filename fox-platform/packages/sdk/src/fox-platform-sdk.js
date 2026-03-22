@@ -21,6 +21,19 @@ function resolveApiBase() {
     return normalizeBase(explicit);
   }
 
+  const hostname = window.location.hostname;
+  const isLocalHost =
+    hostname === "127.0.0.1" ||
+    hostname === "localhost" ||
+    hostname === "";
+
+  if (
+    window.location.protocol === "file:" ||
+    (isLocalHost && window.location.port !== "8099")
+  ) {
+    return "http://127.0.0.1:8099/";
+  }
+
   if (window.location.protocol === "http:" || window.location.protocol === "https:") {
     return normalizeBase(`${window.location.origin}/`);
   }
@@ -95,12 +108,22 @@ async function requestApi(path, { method = "GET", body, auth = true, allowFallba
       return payload;
     }
 
-    if (allowFallback && [404, 405, 500, 502, 503].includes(response.status)) {
+    const isFoxPlatformError = Boolean(payload?.error?.code);
+    const isGenericGatewayStyleError =
+      typeof payload?.detail === "string" &&
+      payload.detail.trim().toLowerCase() === "bad request";
+
+    if (
+      allowFallback &&
+      (!isFoxPlatformError || isGenericGatewayStyleError || [400, 404, 405, 500, 502, 503].includes(response.status))
+    ) {
       return null;
     }
 
     const error = new Error(
       payload?.error?.message ||
+        (isGenericGatewayStyleError ? "A requisicao nao foi atendida pela API da Fox Platform." : null) ||
+        payload?.detail ||
         payload?.message ||
         `Nao foi possivel concluir a requisicao (${response.status}).`
     );
@@ -136,6 +159,8 @@ async function mockLogin(role, email, password) {
     name: user.name,
     accountLabel: user.accountLabel,
     email: user.email,
+    permissions: user.permissions || [],
+    partnerAccess: user.partnerAccess || null,
     loggedAt: new Date().toISOString(),
     source: "mock"
   };
@@ -191,14 +216,19 @@ export async function login(role, email, password) {
     role,
     guard: role,
     name: data.user.name,
-    accountLabel: data.user.name,
+    accountLabel:
+      data.user.partner_access?.trade_name ||
+      data.user.partner_access?.store_name ||
+      data.user.name,
     email: data.user.email,
     accessToken: data.access_token,
     refreshToken: data.refresh_token,
     expiresIn: data.expires_in,
     loggedAt: new Date().toISOString(),
     source: "api",
-    roles: data.user.roles ?? []
+    roles: data.user.roles ?? [],
+    permissions: data.user.permissions ?? [],
+    partnerAccess: data.user.partner_access ?? null
   };
 
   setSession(session);
@@ -265,7 +295,9 @@ export async function getAuthenticatedUser() {
       name: session.name,
       email: session.email,
       guard: session.guard || session.role,
-      roles: (session.roles || []).map((slug) => ({ slug }))
+      roles: (session.roles || []).map((slug) => ({ slug })),
+      permissions: session.permissions || [],
+      partner_access: session.partnerAccess || null
     };
   }
 
@@ -638,6 +670,46 @@ export async function getPartnerOrders() {
       critical: (data.orders || []).filter((item) => item.status === "aguardando aceite" || item.status === "cancelado").length
     },
     orders: data.orders || []
+  };
+}
+
+export async function getPartnerOrderDetail(orderId) {
+  const payload = await requestApi(`api/v1/partner/orders/${orderId}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const orders = await getPartnerOrders();
+  const item = (orders.orders || []).find((entry) => (entry.order_id || entry.id) === orderId);
+
+  return {
+    order: {
+      id: item?.id || orderId,
+      order_id: item?.order_id || orderId,
+      store_name: orders.store?.trade_name || "Fox Delivery",
+      customer: item?.customer || "Cliente Fox",
+      customer_phone: "-",
+      customer_address: "-",
+      driver_name: item?.driver_name || "sem atribuicao",
+      status: item?.status || "em analise",
+      status_key: item?.status_key || "pending_acceptance",
+      status_type: item?.statusType || "warning",
+      payment_method: "Cartao online",
+      payment_status: "Pago",
+      subtotal: item?.value || "R$ 0,00",
+      delivery_fee: "R$ 0,00",
+      total: item?.value || "R$ 0,00",
+      placed_at: item?.placed_at || "-",
+      accepted_at: "-",
+      completed_at: "-",
+      cancelled_at: "-",
+      sla: item?.sla || "-"
+    },
+    items: [],
+    timeline: []
   };
 }
 
@@ -1068,6 +1140,46 @@ export async function getAdminOrders() {
   };
 }
 
+export async function getAdminOrderDetail(orderId) {
+  const payload = await requestApi(`api/v1/admin/orders/${orderId}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const orders = await getAdminOrders();
+  const item = (orders.items || []).find((entry) => (entry.order_id || entry.id) === orderId);
+
+  return {
+    order: {
+      id: item?.id || orderId,
+      order_id: item?.order_id || orderId,
+      store_name: item?.store_name || "Fox Delivery",
+      customer: item?.customer || "Cliente Fox",
+      customer_phone: "-",
+      customer_address: "-",
+      driver_name: item?.driver_name || "sem atribuicao",
+      status: item?.status || "em analise",
+      status_key: item?.status_key || "pending_acceptance",
+      status_type: item?.statusType || "warning",
+      payment_method: "Cartao online",
+      payment_status: "Pago",
+      subtotal: item?.value || "R$ 0,00",
+      delivery_fee: "R$ 0,00",
+      total: item?.value || "R$ 0,00",
+      placed_at: "-",
+      accepted_at: "-",
+      completed_at: "-",
+      cancelled_at: "-",
+      sla: item?.sla || "-"
+    },
+    items: [],
+    timeline: []
+  };
+}
+
 export async function getAdminPartnerApprovals() {
   const payload = await requestApi("api/v1/admin/approvals/partners", {
     allowFallback: true
@@ -1180,6 +1292,194 @@ export async function getAdminSupport() {
       "85% da fila dentro do SLA acordado.",
       "2 chamados escalados para revisao manual."
     ]
+  };
+}
+
+function buildFallbackAdminSupportTickets(data) {
+  return (data.support?.priorityQueue || []).map((item, index) => ({
+    id: item.ticket_id || item.id || `mock-admin-ticket-${index + 1}`,
+    title: item.title || `#SUP-MOCK-${index + 1}`,
+    summary: item.summary || "Chamado sem resumo disponivel no fallback.",
+    status: item.status || "em analise",
+    statusType: item.statusType || "warning",
+    channel: item.channel || "Operacao",
+    counterpart: item.counterpart || "Parceiro/Entregador",
+    priority: item.priority || (item.statusType === "danger" ? "critico" : "normal"),
+    priority_type: item.priority_type || item.statusType || "warning",
+    assigned_team: item.assigned_team || "Operacao",
+    created_at: item.created_at || "agora",
+    last_message_at: item.last_message_at || "agora",
+    scope: item.scope || "Parceiro",
+    subject: item.subject || item.title || "Chamado operacional",
+    description: item.description || item.summary || "Sem descricao adicional."
+  }));
+}
+
+export async function getAdminSupportThread(ticketId) {
+  const payload = await requestApi(`api/v1/admin/support/${ticketId}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  const tickets = buildFallbackAdminSupportTickets(data);
+  const ticket = tickets.find((item) => item.id === ticketId) || tickets[0] || null;
+
+  if (!ticket) {
+    throw new Error("Chamado nao encontrado para atendimento.");
+  }
+
+  return {
+    ticket,
+    messages: [
+      {
+        id: `${ticket.id}-incoming`,
+        direction: "incoming",
+        author: ticket.counterpart,
+        body: ticket.summary,
+        time: ticket.last_message_at,
+        role: ticket.scope?.toLowerCase() === "entregador" ? "driver" : "partner"
+      },
+      {
+        id: `${ticket.id}-outgoing`,
+        direction: "outgoing",
+        author: "Fox Platform",
+        body: "Time interno ciente do protocolo. Seguimos acompanhando a tratativa.",
+        time: ticket.last_message_at,
+        role: "admin"
+      }
+    ]
+  };
+}
+
+export async function replyAdminSupportThread(ticketId, body) {
+  const payload = await requestApi(`api/v1/admin/support/${ticketId}/messages`, {
+    method: "POST",
+    body: { body },
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const thread = await getAdminSupportThread(ticketId);
+  return {
+    ...thread,
+    messages: [
+      ...(thread.messages || []),
+      {
+        id: `${ticketId}-reply-${Date.now()}`,
+        direction: "outgoing",
+        author: "Fox Platform",
+        body,
+        time: "agora",
+        role: "admin"
+      }
+    ]
+  };
+}
+
+export async function updateAdminSupportTicketStatus(ticketId, update) {
+  const payload = await requestApi(`api/v1/admin/support/${ticketId}/status`, {
+    method: "PUT",
+    body: update,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const thread = await getAdminSupportThread(ticketId);
+  const nextStatus = update?.status || thread.ticket.status;
+  const label = {
+    open: "aberto",
+    in_progress: "em andamento",
+    answered: "respondido",
+    resolved: "concluido"
+  }[nextStatus] || nextStatus;
+  const tone = {
+    open: "warning",
+    in_progress: "warning",
+    answered: "success",
+    resolved: "success"
+  }[nextStatus] || "warning";
+
+  return {
+    ...thread,
+    ticket: {
+      ...thread.ticket,
+      status: label,
+      status_type: tone,
+      last_message_at: "agora"
+    },
+    messages: update?.note
+      ? [
+          ...(thread.messages || []),
+          {
+            id: `${ticketId}-status-${Date.now()}`,
+            direction: "outgoing",
+            author: "Fox Platform",
+            body: update.note,
+            time: "agora",
+            role: "admin"
+          }
+        ]
+      : thread.messages || []
+  };
+}
+
+export async function getAdminSettings() {
+  const payload = await requestApi("api/v1/admin/settings", {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("admin.json");
+  return data.settings || {
+    branding: {},
+    operations: {},
+    notifications: {},
+    security: {}
+  };
+}
+
+export async function updateAdminSettings(body) {
+  const payload = await requestApi("api/v1/admin/settings", {
+    method: "PUT",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const current = await getAdminSettings();
+  return {
+    branding: {
+      ...current.branding,
+      ...(body.branding || {})
+    },
+    operations: {
+      ...current.operations,
+      ...(body.operations || {})
+    },
+    notifications: {
+      ...current.notifications,
+      ...(body.notifications || {})
+    },
+    security: {
+      ...current.security,
+      ...(body.security || {})
+    }
   };
 }
 

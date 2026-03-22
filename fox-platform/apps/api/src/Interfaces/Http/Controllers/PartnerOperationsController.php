@@ -7,6 +7,7 @@ namespace FoxPlatform\Api\Interfaces\Http\Controllers;
 use FoxPlatform\Api\Application\Partner\GetPartnerDashboard;
 use FoxPlatform\Api\Application\Partner\GetPartnerFinance;
 use FoxPlatform\Api\Application\Partner\GetPartnerNotifications;
+use FoxPlatform\Api\Application\Partner\GetPartnerOrderDetail;
 use FoxPlatform\Api\Application\Partner\GetPartnerOrders;
 use FoxPlatform\Api\Application\Partner\GetPartnerSupport;
 use FoxPlatform\Api\Application\Partner\GetPartnerSupportThread;
@@ -26,6 +27,7 @@ class PartnerOperationsController
         private readonly GetPartnerDashboard $getPartnerDashboard,
         private readonly GetPartnerFinance $getPartnerFinance,
         private readonly GetPartnerOrders $getPartnerOrders,
+        private readonly GetPartnerOrderDetail $getPartnerOrderDetail,
         private readonly GetPartnerSupport $getPartnerSupport,
         private readonly GetPartnerSupportThread $getPartnerSupportThread,
         private readonly CreatePartnerSupportTicket $createPartnerSupportTicket,
@@ -49,6 +51,15 @@ class PartnerOperationsController
     {
         $auth = $request->attribute('auth');
         return ApiResponse::success(($this->getPartnerOrders)($auth['user_id']));
+    }
+
+    public function orderDetail(Request $request)
+    {
+        $auth = $request->attribute('auth');
+
+        return ApiResponse::success(
+            ($this->getPartnerOrderDetail)($auth['user_id'], (string) $request->attribute('order_id'))
+        );
     }
 
     public function finance(Request $request)
