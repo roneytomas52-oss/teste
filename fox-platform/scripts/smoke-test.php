@@ -393,6 +393,31 @@ try {
 
     expectSuccess('public.categories', request('GET', $baseUrl . '/api/v1/public/categories'));
     expectSuccess('public.metrics', request('GET', $baseUrl . '/api/v1/public/platform-metrics'));
+    $publicStores = expectSuccess('public.stores', request('GET', $baseUrl . '/api/v1/public/stores'));
+    $firstPublicStoreId = $publicStores['items'][0]['id'] ?? null;
+    $publicStoreDetail = null;
+    if ($firstPublicStoreId) {
+        $publicStoreDetail = expectSuccess('public.store-detail', request('GET', $baseUrl . '/api/v1/public/stores/' . $firstPublicStoreId));
+    }
+    if ($firstPublicStoreId && !empty($publicStoreDetail['products'][0]['id'] ?? null)) {
+        expectSuccess(
+            'public.order.create',
+            request('POST', $baseUrl . '/api/v1/public/orders', [
+                'store_id' => $firstPublicStoreId,
+                'customer_name' => 'Cliente Smoke ' . $timestamp,
+                'customer_phone' => '+55 11 93333-4444',
+                'customer_address' => 'Rua Smoke Teste, 123',
+                'payment_method' => 'pix',
+                'items' => [
+                    [
+                        'product_id' => $publicStoreDetail['products'][0]['id'],
+                        'quantity' => 1,
+                        'notes' => 'Sem observacoes.'
+                    ]
+                ]
+            ])
+        );
+    }
     expectSuccess(
         'public.partner-lead',
         request('POST', $baseUrl . '/api/v1/public/partner-leads', [

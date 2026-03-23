@@ -2245,6 +2245,78 @@ export async function getPublicPlatformMetrics() {
   };
 }
 
+export async function getPublicStores(filters = {}) {
+  const query = new URLSearchParams();
+  if (filters.city) query.set("city", filters.city);
+  if (filters.category) query.set("category", filters.category);
+  if (filters.search) query.set("search", filters.search);
+
+  const path = `api/v1/public/stores${query.toString() ? `?${query.toString()}` : ""}`;
+  const payload = await requestApi(path, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("landing.json");
+  const items = data.stores || [];
+  const normalized = items.filter((item) => {
+    const cityMatch = !filters.city || String(item.city || "").toLowerCase() === String(filters.city).toLowerCase();
+    const categoryMatch = !filters.category || String(item.primary_category_slug || "").toLowerCase() === String(filters.category).toLowerCase();
+    const searchMatch = !filters.search || `${item.trade_name} ${item.city}`.toLowerCase().includes(String(filters.search).toLowerCase());
+    return cityMatch && categoryMatch && searchMatch;
+  });
+
+  return {
+    filters,
+    items: normalized
+  };
+}
+
+export async function getPublicStoreDetail(storeId) {
+  const payload = await requestApi(`api/v1/public/stores/${storeId}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("landing.json");
+  const store = (data.stores || []).find((item) => item.id === storeId) || null;
+  const detail = data.store_details?.[storeId] || null;
+
+  if (!store || !detail) {
+    throw new Error("Loja nao encontrada.");
+  }
+
+  return detail;
+}
+
+export async function createPublicOrder(body) {
+  const payload = await requestApi("api/v1/public/orders", {
+    method: "POST",
+    body,
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  return {
+    order_id: `mock-${Date.now()}`,
+    order_number: `FD-${String(Date.now()).slice(-8)}`,
+    store_name: "Fox Delivery",
+    status: "recebido",
+    status_key: "pending_acceptance",
+    total: "R$ 0,00",
+    next_step: "A loja recebeu o pedido e vai iniciar a analise para aceite e preparo."
+  };
+}
+
 export async function createPublicPartnerLead(body) {
   const payload = await requestApi("api/v1/public/partner-leads", {
     method: "POST",

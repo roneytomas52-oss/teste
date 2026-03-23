@@ -164,9 +164,16 @@
    - nova tela `reports.html` integrada ao painel interno
    - fallback do admin alinhado ao novo contrato de analytics e relatorios
    - smoke test expandido e validado contra `admin.analytics` e `admin.reports`
+ - Sprint 19 concluida:
+   - descoberta publica de lojas via API
+   - detalhe publico da loja com catalogo ativo
+   - criacao de pedido guest pela API publica
+   - novas telas `stores.html` e `store.html` na landing
+   - smoke test expandido e validado contra `public.stores`, `public.store-detail` e `public.order.create`
 - Proximo foco:
   - endurecer RBAC do admin por perfil funcional nas rotas ja existentes
   - exportacao e filtros operacionais mais profundos para relatorios administrativos
+  - consolidar checkout, status publico do pedido e trilha de cliente
 
 ## Entregavel minimo para primeira versao
 
@@ -178,6 +185,8 @@
 - configuracoes da loja
 - financeiro basico
 - painel admin basico
+- descoberta publica de lojas
+- detalhe de loja e criacao de pedido guest
 
 ## O que fica para depois
 

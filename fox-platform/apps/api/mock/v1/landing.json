@@ -46,5 +46,96 @@
       "label": "pedidos concluidos no ecossistema",
       "value": "+8.500"
     }
-  ]
+  ],
+  "stores": [
+    {
+      "id": "store-fox-burgers-centro",
+      "trade_name": "Fox Burgers Centro",
+      "city": "Sao Paulo",
+      "state": "SP",
+      "primary_category": "Restaurante",
+      "primary_category_slug": "restaurant",
+      "product_count": 5,
+      "completed_orders": 366,
+      "lead": "Fox Burgers Centro em Sao Paulo com 5 itens ativos e operacao pronta para pedido."
+    },
+    {
+      "id": "store-mercado-nova-rota",
+      "trade_name": "Mercado Nova Rota",
+      "city": "Campinas",
+      "state": "SP",
+      "primary_category": "Mercado",
+      "primary_category_slug": "market",
+      "product_count": 6,
+      "completed_orders": 418,
+      "lead": "Mercado Nova Rota em Campinas com 6 itens ativos e operacao pronta para pedido."
+    },
+    {
+      "id": "store-farmacia-sao-lucas",
+      "trade_name": "Farmacia Sao Lucas",
+      "city": "Santos",
+      "state": "SP",
+      "primary_category": "Farmacia",
+      "primary_category_slug": "pharmacy",
+      "product_count": 4,
+      "completed_orders": 219,
+      "lead": "Farmacia Sao Lucas em Santos com 4 itens ativos e operacao pronta para pedido."
+    }
+  ],
+  "store_details": {
+    "store-fox-burgers-centro": {
+      "store": {
+        "id": "store-fox-burgers-centro",
+        "trade_name": "Fox Burgers Centro",
+        "legal_name": "Fox Burgers Centro LTDA",
+        "city": "Sao Paulo",
+        "state": "SP",
+        "phone": "1133330000",
+        "email": "contato@foxburgers.com.br",
+        "product_count": 5,
+        "completed_orders": 366,
+        "lead": "Fox Burgers Centro opera em Sao Paulo com catalogo ativo pronto para pedido."
+      },
+      "products": [
+        { "id": "product-fx-burger-1", "name": "Fox Burger Classic", "description": "Burger com queijo, salada e molho da casa.", "price": "R$ 32,90", "price_value": 32.9, "stock_quantity": 20, "category_name": "Restaurante", "category_slug": "restaurant" },
+        { "id": "product-fx-burger-2", "name": "Combo Fox Delivery", "description": "Burger, fritas e refrigerante.", "price": "R$ 41,90", "price_value": 41.9, "stock_quantity": 16, "category_name": "Restaurante", "category_slug": "restaurant" }
+      ]
+    },
+    "store-mercado-nova-rota": {
+      "store": {
+        "id": "store-mercado-nova-rota",
+        "trade_name": "Mercado Nova Rota",
+        "legal_name": "Mercado Nova Rota LTDA",
+        "city": "Campinas",
+        "state": "SP",
+        "phone": "1933330000",
+        "email": "contato@novarota.com.br",
+        "product_count": 6,
+        "completed_orders": 418,
+        "lead": "Mercado Nova Rota opera em Campinas com catalogo ativo pronto para pedido."
+      },
+      "products": [
+        { "id": "product-market-1", "name": "Cesta essencial", "description": "Itens basicos para reposicao rapida da casa.", "price": "R$ 54,90", "price_value": 54.9, "stock_quantity": 18, "category_name": "Mercado", "category_slug": "market" },
+        { "id": "product-market-2", "name": "Kit cafe da manha", "description": "Pao, leite, cafe e frutas para a rotina.", "price": "R$ 39,90", "price_value": 39.9, "stock_quantity": 12, "category_name": "Mercado", "category_slug": "market" }
+      ]
+    },
+    "store-farmacia-sao-lucas": {
+      "store": {
+        "id": "store-farmacia-sao-lucas",
+        "trade_name": "Farmacia Sao Lucas",
+        "legal_name": "Farmacia Sao Lucas LTDA",
+        "city": "Santos",
+        "state": "SP",
+        "phone": "1333330000",
+        "email": "contato@saolucas.com.br",
+        "product_count": 4,
+        "completed_orders": 219,
+        "lead": "Farmacia Sao Lucas opera em Santos com catalogo ativo pronto para pedido."
+      },
+      "products": [
+        { "id": "product-pharmacy-1", "name": "Kit primeiros cuidados", "description": "Itens essenciais para a rotina de saude.", "price": "R$ 27,90", "price_value": 27.9, "stock_quantity": 24, "category_name": "Farmacia", "category_slug": "pharmacy" },
+        { "id": "product-pharmacy-2", "name": "Vitaminas Fox", "description": "Suplemento para apoio da rotina diaria.", "price": "R$ 19,90", "price_value": 19.9, "stock_quantity": 30, "category_name": "Farmacia", "category_slug": "pharmacy" }
+      ]
+    }
+  }
 }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery | Lojas</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <link rel="stylesheet" href="./landing.css" />
+  </head>
+  <body data-fx-screen="landing-stores">
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Plataforma nacional de entregas</div>
+            </div>
+          </div>
+          <nav class="fx-landing-nav">
+            <a href="./index.html">Home</a>
+            <a href="./stores.html">Lojas</a>
+            <a href="./index.html#fx-partner-lead-form">Para parceiros</a>
+            <a href="./index.html#fx-driver-lead-form">Para entregadores</a>
+          </nav>
+          <div class="fx-landing-actions">
+            <a class="fx-button-secondary" href="../../admin/src/login.html">Entrar no painel</a>
+          </div>
+        </div>
+      </header>
+      <main class="fx-section">
+        <div class="fx-container">
+          <section class="fx-page-header">
+            <div class="fx-page-header-copy">
+              <div class="fx-eyebrow">Lojas ativas</div>
+              <h1 class="fx-title-lg">Escolha uma loja e monte seu pedido.</h1>
+              <p class="fx-copy">Explore restaurantes, mercados, farmácias e conveniência em uma vitrine pública conectada à Fox Delivery.</p>
+            </div>
+          </section>
+          <section class="fx-card" style="margin-bottom: var(--fx-space-6);">
+            <form class="fx-store-filters" id="fx-public-store-filters">
+              <div class="fx-field">
+                <label for="fx-public-store-search">Buscar loja</label>
+                <input id="fx-public-store-search" type="search" placeholder="Nome da loja ou cidade" />
+              </div>
+              <div class="fx-field">
+                <label for="fx-public-store-city">Cidade</label>
+                <input id="fx-public-store-city" type="text" placeholder="São Paulo" />
+              </div>
+              <div class="fx-field">
+                <label for="fx-public-store-category">Categoria</label>
+                <select id="fx-public-store-category">
+                  <option value="">Todas</option>
+                  <option value="restaurant">Restaurante</option>
+                  <option value="market">Mercado</option>
+                  <option value="pharmacy">Farmácia</option>
+                  <option value="convenience">Conveniência</option>
+                </select>
+              </div>
+              <div class="fx-inline-actions">
+                <button class="fx-button" type="submit">Aplicar</button>
+              </div>
+            </form>
+          </section>
+          <section class="fx-store-grid" id="fx-public-stores"></section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/landing-app.js"></script>
+  </body>
+</html>

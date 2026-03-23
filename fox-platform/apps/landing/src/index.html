@@ -3,135 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fox Delivery Landing</title>
+    <title>Fox Delivery</title>
     <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
-    <style>
-      .fx-landing-page {
-        min-height: 100vh;
-        background:
-          radial-gradient(circle at top, rgba(255, 199, 159, 0.2), transparent 20%),
-          linear-gradient(180deg, #fffaf7 0%, #fff4ec 100%);
-      }
-
-      .fx-landing-header {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        border-bottom: 1px solid rgba(242, 209, 191, 0.58);
-        background: rgba(255, 250, 247, 0.92);
-        backdrop-filter: blur(14px);
-      }
-
-      .fx-landing-header .fx-container,
-      .fx-landing-nav,
-      .fx-landing-actions {
-        display: flex;
-        align-items: center;
-      }
-
-      .fx-landing-header .fx-container {
-        justify-content: space-between;
-        gap: var(--fx-space-6);
-        padding: var(--fx-space-5) 0;
-      }
-
-      .fx-landing-nav,
-      .fx-landing-actions {
-        gap: var(--fx-space-5);
-      }
-
-      .fx-landing-hero {
-        padding: var(--fx-space-10) 0;
-      }
-
-      .fx-landing-hero .fx-hero-banner {
-        overflow: hidden;
-      }
-
-      .fx-landing-proof {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: var(--fx-space-5);
-      }
-
-      .fx-landing-categories,
-      .fx-landing-leads {
-        display: grid;
-        gap: var(--fx-space-5);
-      }
-
-      .fx-landing-categories {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-
-      .fx-landing-leads {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .fx-landing-form {
-        display: grid;
-        gap: var(--fx-space-4);
-      }
-
-      .fx-landing-form-grid {
-        display: grid;
-        gap: var(--fx-space-4);
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .fx-landing-form .fx-field {
-        display: grid;
-        gap: var(--fx-space-2);
-      }
-
-      .fx-landing-form label {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--fx-color-ink);
-      }
-
-      .fx-landing-form input,
-      .fx-landing-form select {
-        width: 100%;
-        min-height: 48px;
-        border: 1px solid rgba(217, 86, 37, 0.16);
-        border-radius: var(--fx-radius-md);
-        padding: 0 var(--fx-space-4);
-        background: #fff;
-      }
-
-      .fx-landing-feedback {
-        margin: 0;
-        padding: var(--fx-space-4) var(--fx-space-5);
-        border-radius: var(--fx-radius-md);
-        background: rgba(15, 23, 42, 0.04);
-        color: var(--fx-color-ink);
-      }
-
-      .fx-landing-feedback[data-tone="danger"] {
-        background: rgba(214, 51, 42, 0.08);
-        color: var(--fx-color-danger);
-      }
-
-      @media (max-width: 900px) {
-        .fx-landing-header .fx-container {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .fx-landing-nav,
-        .fx-landing-actions {
-          flex-wrap: wrap;
-        }
-
-        .fx-landing-proof,
-        .fx-landing-categories,
-        .fx-landing-leads,
-        .fx-landing-form-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="./landing.css" />
   </head>
   <body>
     <div class="fx-landing-page">
@@ -147,29 +21,30 @@
 
           <nav class="fx-landing-nav">
             <a href="#fx-landing-categories">Categorias</a>
+            <a href="./stores.html">Lojas</a>
             <a href="#fx-partner-lead-form">Para parceiros</a>
             <a href="#fx-driver-lead-form">Para entregadores</a>
             <a href="#">Ajuda</a>
           </nav>
 
           <div class="fx-landing-actions">
-            <a class="fx-button-secondary" href="#">Entrar no painel</a>
-            <a class="fx-button" href="#fx-partner-lead-form">Baixar app</a>
+            <a class="fx-button-secondary" href="../../admin/src/login.html">Entrar no painel</a>
+            <a class="fx-button" href="./stores.html">Pedir agora</a>
           </div>
         </div>
       </header>
 
-      <main>
+      <main data-fx-screen="landing-home">
         <section class="fx-landing-hero">
           <div class="fx-container">
             <div class="fx-hero-banner">
               <div class="fx-hero-grid">
                 <div class="fx-hero-content">
                   <div class="fx-eyebrow">Fox Delivery</div>
-                  <h1 class="fx-title-xl">Entrega para clientes, operacao para parceiros e jornada organizada para entregadores.</h1>
-                  <p class="fx-lead">A Fox Delivery conecta pedidos, lojas e entregadores em uma plataforma propria, pensada para operacao real e escala nacional.</p>
+                  <h1 class="fx-title-xl">Peça comida, mercado, farmácia e conveniência em uma jornada real de delivery.</h1>
+                  <p class="fx-lead">A Fox Delivery conecta clientes, lojas e entregadores em uma operação própria, pronta para descobrir lojas, montar pedidos e acompanhar a entrega.</p>
                   <div class="fx-hero-actions">
-                    <a class="fx-button" href="#fx-landing-categories">Pedir agora</a>
+                    <a class="fx-button" href="./stores.html">Pedir agora</a>
                     <a class="fx-button-secondary" href="#fx-partner-lead-form">Seja parceiro</a>
                     <a class="fx-button-ghost" href="#fx-driver-lead-form">Seja entregador</a>
                   </div>
@@ -178,7 +53,7 @@
                   <div class="fx-pill">Entradas principais</div>
                   <div class="fx-mini-kpi">
                     <strong>Cliente</strong>
-                    <span>pede restaurante, mercado, farmacia e conveniencia</span>
+                    <span>descobre lojas, escolhe itens e inicia o pedido</span>
                   </div>
                   <div class="fx-mini-kpi">
                     <strong>Parceiro</strong>
@@ -207,9 +82,9 @@
                   <h3 class="fx-title-sm">Cliente</h3>
                   <span class="fx-pill">Pedido</span>
                 </div>
-                <p class="fx-copy">Pede comida, mercado, farmacia e conveniencia com uma experiencia direta e organizada.</p>
+                <p class="fx-copy">Descobre lojas ativas, entra no catálogo e inicia o pedido em uma jornada pública conectada ao backend.</p>
                 <div class="fx-hero-actions">
-                  <a class="fx-button" href="#fx-landing-categories">Fazer pedido</a>
+                  <a class="fx-button" href="./stores.html">Fazer pedido</a>
                 </div>
               </article>
 

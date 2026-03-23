@@ -7,6 +7,8 @@
     "dev:api": "php -S 127.0.0.1:8099 -t apps/api/public apps/api/public/router.php",
     "serve:static": "node scripts/serve-static.js . 3000 fox-platform",
     "dev:stack": "node scripts/dev-stack.js",
-    "smoke": "php scripts/smoke-test.php"
+    "smoke": "php scripts/smoke-test.php",
+    "activate": "powershell -ExecutionPolicy Bypass -File .\\scripts\\activate-local.ps1",
+    "activate:no-smoke": "powershell -ExecutionPolicy Bypass -File .\\scripts\\activate-local.ps1 -SkipSmoke"
   }
 }

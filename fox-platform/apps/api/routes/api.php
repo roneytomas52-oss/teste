@@ -26,6 +26,9 @@ return static function (Router $router, Container $container): void {
 
     $router->get('/api/v1/public/categories', [PublicLandingController::class, 'categories'], ['cors']);
     $router->get('/api/v1/public/platform-metrics', [PublicLandingController::class, 'metrics'], ['cors']);
+    $router->get('/api/v1/public/stores', [PublicLandingController::class, 'stores'], ['cors']);
+    $router->get('/api/v1/public/stores/{store_id}', [PublicLandingController::class, 'storeDetail'], ['cors']);
+    $router->post('/api/v1/public/orders', [PublicLandingController::class, 'createOrder'], ['cors', 'json']);
     $router->post('/api/v1/public/partner-leads', [PublicLandingController::class, 'createPartnerLeadAction'], ['cors', 'json']);
     $router->post('/api/v1/public/driver-leads', [PublicLandingController::class, 'createDriverLeadAction'], ['cors', 'json']);
 

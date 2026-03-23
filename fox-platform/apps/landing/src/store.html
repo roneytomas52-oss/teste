@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery | Loja</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <link rel="stylesheet" href="./landing.css" />
+  </head>
+  <body data-fx-screen="landing-store">
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Plataforma nacional de entregas</div>
+            </div>
+          </div>
+          <nav class="fx-landing-nav">
+            <a href="./index.html">Home</a>
+            <a href="./stores.html">Lojas</a>
+          </nav>
+          <div class="fx-landing-actions">
+            <a class="fx-button-secondary" href="./stores.html">Voltar para lojas</a>
+          </div>
+        </div>
+      </header>
+      <main class="fx-section">
+        <div class="fx-container">
+          <section class="fx-page-header">
+            <div class="fx-page-header-copy">
+              <div class="fx-eyebrow">Loja</div>
+              <h1 class="fx-title-lg" id="fx-public-store-name">Loja</h1>
+              <p class="fx-copy" id="fx-public-store-lead">Catálogo ativo da Fox Delivery.</p>
+            </div>
+          </section>
+          <section class="fx-store-detail-layout">
+            <div class="fx-product-list" id="fx-public-store-products"></div>
+            <aside class="fx-card">
+              <div class="fx-card-header">
+                <div>
+                  <h2 class="fx-title-sm">Iniciar pedido</h2>
+                  <p class="fx-copy-sm">Escolha os itens, informe os dados e envie para a loja.</p>
+                </div>
+              </div>
+              <form class="fx-order-form" id="fx-public-order-form">
+                <div class="fx-field">
+                  <label for="fx-public-order-customer-name">Nome</label>
+                  <input id="fx-public-order-customer-name" type="text" placeholder="Seu nome" />
+                </div>
+                <div class="fx-field">
+                  <label for="fx-public-order-customer-phone">Telefone</label>
+                  <input id="fx-public-order-customer-phone" type="text" placeholder="11999999999" />
+                </div>
+                <div class="fx-field">
+                  <label for="fx-public-order-customer-address">Endereço</label>
+                  <textarea id="fx-public-order-customer-address" placeholder="Rua, número e complemento"></textarea>
+                </div>
+                <div class="fx-field">
+                  <label for="fx-public-order-payment-method">Pagamento</label>
+                  <select id="fx-public-order-payment-method">
+                    <option value="online_card">Cartão online</option>
+                    <option value="pix">Pix</option>
+                    <option value="cash">Dinheiro</option>
+                  </select>
+                </div>
+                <p class="fx-note" id="fx-public-order-summary">Nenhum item selecionado.</p>
+                <p class="fx-landing-feedback" id="fx-public-order-feedback" hidden></p>
+                <div class="fx-inline-actions">
+                  <button class="fx-button" type="submit">Enviar pedido</button>
+                </div>
+              </form>
+            </aside>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/landing-app.js"></script>
+  </body>
+</html>

@@ -1,4 +1,10 @@
-# Landing src
+﻿# Landing src
 
-Espaço reservado para a camada pública da Fox Delivery na Fase 2.
+Camada publica da Fox Delivery.
 
+Paginas entregues:
+
+- `index.html` - home institucional e comercial
+- `stores.html` - descoberta publica de lojas
+- `store.html` - detalhe da loja com catalogo ativo e inicio do pedido
+- `landing.css` - base visual compartilhada da jornada publica

@@ -10,6 +10,12 @@ interface PublicLandingRepository
 
     public function getPlatformMetrics(): array;
 
+    public function getStores(array $filters = []): array;
+
+    public function getStoreDetail(string $storeId): array;
+
+    public function createPublicOrder(array $data): array;
+
     public function createPartnerLead(array $data): array;
 
     public function createDriverLead(array $data): array;

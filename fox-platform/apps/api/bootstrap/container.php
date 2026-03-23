@@ -77,8 +77,11 @@ use FoxPlatform\Api\Application\Partner\UpdatePartnerTeamMember;
 use FoxPlatform\Api\Application\Partner\UpdatePartnerTeamMemberStatus;
 use FoxPlatform\Api\Application\Public\CreateDriverLead;
 use FoxPlatform\Api\Application\Public\CreatePartnerLead;
+use FoxPlatform\Api\Application\Public\CreatePublicOrder;
 use FoxPlatform\Api\Application\Public\GetPlatformMetrics;
 use FoxPlatform\Api\Application\Public\GetPublicCategories;
+use FoxPlatform\Api\Application\Public\GetPublicStoreDetail;
+use FoxPlatform\Api\Application\Public\GetPublicStores;
 use FoxPlatform\Api\Infrastructure\Auth\BearerTokenParser;
 use FoxPlatform\Api\Infrastructure\Auth\BcryptPasswordHasher;
 use FoxPlatform\Api\Infrastructure\Auth\HmacTokenIssuer;
@@ -121,6 +124,7 @@ use FoxPlatform\Api\Interfaces\Http\Requests\ForgotPasswordRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\DriverProfileUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\LoginRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerLeadCreateRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\PublicOrderCreateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerProfileUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerTeamMemberStatusRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerTeamMemberUpsertRequest;
@@ -405,6 +409,15 @@ return static function (string $apiRoot): Container {
     $container->set(GetPlatformMetrics::class, static fn (Container $c) => new GetPlatformMetrics(
         $c->get(PdoPublicLandingRepository::class)
     ));
+    $container->set(GetPublicStores::class, static fn (Container $c) => new GetPublicStores(
+        $c->get(PdoPublicLandingRepository::class)
+    ));
+    $container->set(GetPublicStoreDetail::class, static fn (Container $c) => new GetPublicStoreDetail(
+        $c->get(PdoPublicLandingRepository::class)
+    ));
+    $container->set(CreatePublicOrder::class, static fn (Container $c) => new CreatePublicOrder(
+        $c->get(PdoPublicLandingRepository::class)
+    ));
     $container->set(CreatePartnerLead::class, static fn (Container $c) => new CreatePartnerLead(
         $c->get(PdoPublicLandingRepository::class)
     ));
@@ -418,6 +431,7 @@ return static function (string $apiRoot): Container {
     $container->set(DriverProfileUpdateRequest::class, static fn () => new DriverProfileUpdateRequest());
     $container->set(ResetPasswordRequest::class, static fn () => new ResetPasswordRequest());
     $container->set(PartnerLeadCreateRequest::class, static fn () => new PartnerLeadCreateRequest());
+    $container->set(PublicOrderCreateRequest::class, static fn () => new PublicOrderCreateRequest());
     $container->set(PartnerProfileUpdateRequest::class, static fn () => new PartnerProfileUpdateRequest());
     $container->set(PartnerInventoryUpdateRequest::class, static fn () => new PartnerInventoryUpdateRequest());
     $container->set(PartnerOrderStatusUpdateRequest::class, static fn () => new PartnerOrderStatusUpdateRequest());
@@ -553,10 +567,14 @@ return static function (string $apiRoot): Container {
     $container->set(PublicLandingController::class, static fn (Container $c) => new PublicLandingController(
         $c->get(GetPublicCategories::class),
         $c->get(GetPlatformMetrics::class),
+        $c->get(GetPublicStores::class),
+        $c->get(GetPublicStoreDetail::class),
+        $c->get(CreatePublicOrder::class),
         $c->get(CreatePartnerLead::class),
         $c->get(CreateDriverLead::class),
         $c->get(PartnerLeadCreateRequest::class),
-        $c->get(DriverLeadCreateRequest::class)
+        $c->get(DriverLeadCreateRequest::class),
+        $c->get(PublicOrderCreateRequest::class)
     ));
 
     $container->set('middleware.json', static fn () => new JsonOnly());

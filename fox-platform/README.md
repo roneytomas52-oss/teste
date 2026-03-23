@@ -173,7 +173,44 @@ Ja definido e materializado:
 - nova tela de relatorios administrativos integrada ao painel interno
 - fallback do admin ajustado ao contrato final de analytics e relatorios
 - smoke test expandido para cobrir `admin.analytics` e `admin.reports`
+- descoberta publica de lojas conectada ao backend
+- detalhe publico de loja com catalogo ativo
+- criacao de pedido guest pela API publica
+- novas paginas `stores.html` e `store.html` na landing
+- smoke test expandido para cobrir `public.stores`, `public.store-detail` e `public.order.create`
 
 Proxima etapa recomendada:
 
 - endurecer RBAC do admin por perfil funcional nas rotas ja existentes
+- consolidar checkout, status publico do pedido e trilha de cliente
+
+## Ativacao local hoje
+
+Com Laragon/MySQL ligados, rode a partir da raiz de `fox-platform`:
+
+- `npm run activate`
+
+Ou no Windows:
+
+- `activate-local.cmd`
+
+O script faz:
+
+- migrations
+- seeds
+- smoke test
+- subida da API em `http://127.0.0.1:8099`
+- subida do servidor estatico em `http://127.0.0.1:3000`
+
+Entradas principais:
+
+- Landing: `http://127.0.0.1:3000/apps/landing/src/index.html`
+- Admin: `http://127.0.0.1:3000/apps/admin/src/login.html`
+- Partner Portal: `http://127.0.0.1:3000/apps/partner-portal/src/login.html`
+- Driver Portal: `http://127.0.0.1:3000/apps/driver-portal/src/login.html`
+
+Credenciais demo:
+
+- Admin: `admin@foxplatform.com / password`
+- Parceiro: `parceiro@foxdelivery.com.br / password`
+- Entregador: `entregador@foxdelivery.com.br / password`
