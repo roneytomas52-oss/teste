@@ -4,7 +4,8 @@ const SESSION_KEY = "fox-platform-session";
 const LOGIN_ROUTES = {
   partner: "../../../apps/partner-portal/src/login.html",
   admin: "../../../apps/admin/src/login.html",
-  driver: "../../../apps/driver-portal/src/login.html"
+  driver: "../../../apps/driver-portal/src/login.html",
+  customer: "../../../apps/landing/src/customer-login.html"
 };
 
 function normalizeBase(base) {
@@ -2313,8 +2314,70 @@ export async function createPublicOrder(body) {
     status: "recebido",
     status_key: "pending_acceptance",
     total: "R$ 0,00",
-    next_step: "A loja recebeu o pedido e vai iniciar a analise para aceite e preparo."
+    next_step: "A loja recebeu o pedido e vai iniciar a análise para aceite e preparo."
   };
+}
+
+export async function getPublicOrderTracking(orderNumber) {
+  const payload = await requestApi(`api/v1/public/orders/${encodeURIComponent(orderNumber)}`, {
+    allowFallback: true
+  });
+
+  if (payload) {
+    return unwrapPayload(payload);
+  }
+
+  const data = await loadJson("landing.json");
+  const tracking = data.order_tracking?.[orderNumber] || null;
+
+  if (!tracking) {
+    throw new Error("Pedido não encontrado.");
+  }
+
+  return tracking;
+}
+
+export async function registerCustomer(body) {
+  const payload = await requestApi("api/v1/public/customer-register", {
+    method: "POST",
+    body,
+    auth: false
+  });
+
+  return unwrapPayload(payload);
+}
+
+export async function getCustomerProfile() {
+  const payload = await requestApi("api/v1/customer/profile");
+  return unwrapPayload(payload);
+}
+
+export async function updateCustomerProfile(body) {
+  const payload = await requestApi("api/v1/customer/profile", {
+    method: "PUT",
+    body
+  });
+
+  return unwrapPayload(payload);
+}
+
+export async function getCustomerOrders() {
+  const payload = await requestApi("api/v1/customer/orders");
+  return unwrapPayload(payload);
+}
+
+export async function getCustomerOrderDetail(orderId) {
+  const payload = await requestApi(`api/v1/customer/orders/${encodeURIComponent(orderId)}`);
+  return unwrapPayload(payload);
+}
+
+export async function createCustomerOrder(body) {
+  const payload = await requestApi("api/v1/customer/orders", {
+    method: "POST",
+    body
+  });
+
+  return unwrapPayload(payload);
 }
 
 export async function createPublicPartnerLead(body) {
@@ -2331,7 +2394,7 @@ export async function createPublicPartnerLead(body) {
   return {
     protocol: `PAR-${String(Date.now()).slice(-8)}`,
     status: "recebido",
-    next_step: "Nossa equipe comercial vai retornar com os proximos passos do cadastro."
+    next_step: "Nossa equipe comercial vai retornar com os próximos passos do cadastro."
   };
 }
 
@@ -2349,7 +2412,7 @@ export async function createPublicDriverLead(body) {
   return {
     protocol: `DRV-${String(Date.now()).slice(-8)}`,
     status: "recebido",
-    next_step: "O time operacional vai revisar seus dados e orientar a proxima etapa."
+    next_step: "O time operacional vai revisar seus dados e orientar a próxima etapa."
   };
 }
 

@@ -8,6 +8,12 @@ use FoxPlatform\Api\Application\Auth\LogoutUser;
 use FoxPlatform\Api\Application\Auth\RefreshToken;
 use FoxPlatform\Api\Application\Auth\RequestPasswordReset;
 use FoxPlatform\Api\Application\Auth\ResetPassword;
+use FoxPlatform\Api\Application\Customer\CreateCustomerOrder;
+use FoxPlatform\Api\Application\Customer\GetCustomerOrderDetail;
+use FoxPlatform\Api\Application\Customer\GetCustomerOrders;
+use FoxPlatform\Api\Application\Customer\GetCustomerProfile;
+use FoxPlatform\Api\Application\Customer\RegisterCustomer;
+use FoxPlatform\Api\Application\Customer\UpdateCustomerProfile;
 use FoxPlatform\Api\Application\Admin\GetAdminDashboard;
 use FoxPlatform\Api\Application\Admin\GetAdminAnalytics;
 use FoxPlatform\Api\Application\Admin\GetAdminAccess;
@@ -80,6 +86,7 @@ use FoxPlatform\Api\Application\Public\CreatePartnerLead;
 use FoxPlatform\Api\Application\Public\CreatePublicOrder;
 use FoxPlatform\Api\Application\Public\GetPlatformMetrics;
 use FoxPlatform\Api\Application\Public\GetPublicCategories;
+use FoxPlatform\Api\Application\Public\GetPublicOrderTracking;
 use FoxPlatform\Api\Application\Public\GetPublicStoreDetail;
 use FoxPlatform\Api\Application\Public\GetPublicStores;
 use FoxPlatform\Api\Infrastructure\Auth\BearerTokenParser;
@@ -90,6 +97,7 @@ use FoxPlatform\Api\Infrastructure\Persistence\PdoAdminOperationsRepository;
 use FoxPlatform\Api\Infrastructure\Persistence\PdoPartnerCatalogRepository;
 use FoxPlatform\Api\Infrastructure\Persistence\DatabaseConnection;
 use FoxPlatform\Api\Infrastructure\Persistence\PdoDriverPortalRepository;
+use FoxPlatform\Api\Infrastructure\Persistence\PdoCustomerPortalRepository;
 use FoxPlatform\Api\Infrastructure\Persistence\PdoPartnerOperationsRepository;
 use FoxPlatform\Api\Infrastructure\Persistence\PdoPasswordResetTokenRepository;
 use FoxPlatform\Api\Infrastructure\Persistence\PdoPartnerPortalRepository;
@@ -101,6 +109,7 @@ use FoxPlatform\Api\Infrastructure\Support\Container;
 use FoxPlatform\Api\Infrastructure\Support\UuidGenerator;
 use FoxPlatform\Api\Interfaces\Http\Controllers\AdminController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\AuthController;
+use FoxPlatform\Api\Interfaces\Http\Controllers\CustomerController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\DriverController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\HealthController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\MeController;
@@ -121,6 +130,9 @@ use FoxPlatform\Api\Interfaces\Http\Requests\AdminOrderNoteCreateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\AdminOrderStatusUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\DriverLeadCreateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\ForgotPasswordRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\CustomerOrderCreateRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\CustomerProfileUpdateRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\CustomerRegisterRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\DriverProfileUpdateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\LoginRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerLeadCreateRequest;
@@ -164,6 +176,7 @@ return static function (string $apiRoot): Container {
     $container->set(PdoPartnerOperationsRepository::class, static fn (Container $c) => new PdoPartnerOperationsRepository($c->get(DatabaseConnection::class)->pdo()));
     $container->set(PdoAdminOperationsRepository::class, static fn (Container $c) => new PdoAdminOperationsRepository($c->get(DatabaseConnection::class)->pdo()));
     $container->set(PdoDriverPortalRepository::class, static fn (Container $c) => new PdoDriverPortalRepository($c->get(DatabaseConnection::class)->pdo()));
+    $container->set(PdoCustomerPortalRepository::class, static fn (Container $c) => new PdoCustomerPortalRepository($c->get(DatabaseConnection::class)->pdo()));
     $container->set(PdoPublicLandingRepository::class, static fn (Container $c) => new PdoPublicLandingRepository($c->get(DatabaseConnection::class)->pdo()));
 
     $container->set(LoginUser::class, static fn (Container $c) => new LoginUser(
@@ -201,6 +214,25 @@ return static function (string $apiRoot): Container {
         $c->get(PdoPasswordResetTokenRepository::class),
         $c->get(PdoRefreshSessionRepository::class),
         $c->get(BcryptPasswordHasher::class)
+    ));
+    $container->set(RegisterCustomer::class, static fn (Container $c) => new RegisterCustomer(
+        $c->get(PdoCustomerPortalRepository::class),
+        $c->get(BcryptPasswordHasher::class)
+    ));
+    $container->set(GetCustomerProfile::class, static fn (Container $c) => new GetCustomerProfile(
+        $c->get(PdoCustomerPortalRepository::class)
+    ));
+    $container->set(UpdateCustomerProfile::class, static fn (Container $c) => new UpdateCustomerProfile(
+        $c->get(PdoCustomerPortalRepository::class)
+    ));
+    $container->set(GetCustomerOrders::class, static fn (Container $c) => new GetCustomerOrders(
+        $c->get(PdoCustomerPortalRepository::class)
+    ));
+    $container->set(GetCustomerOrderDetail::class, static fn (Container $c) => new GetCustomerOrderDetail(
+        $c->get(PdoCustomerPortalRepository::class)
+    ));
+    $container->set(CreateCustomerOrder::class, static fn (Container $c) => new CreateCustomerOrder(
+        $c->get(PdoCustomerPortalRepository::class)
     ));
     $container->set(GetPartnerProfile::class, static fn (Container $c) => new GetPartnerProfile(
         $c->get(PdoPartnerPortalRepository::class)
@@ -415,6 +447,9 @@ return static function (string $apiRoot): Container {
     $container->set(GetPublicStoreDetail::class, static fn (Container $c) => new GetPublicStoreDetail(
         $c->get(PdoPublicLandingRepository::class)
     ));
+    $container->set(GetPublicOrderTracking::class, static fn (Container $c) => new GetPublicOrderTracking(
+        $c->get(PdoPublicLandingRepository::class)
+    ));
     $container->set(CreatePublicOrder::class, static fn (Container $c) => new CreatePublicOrder(
         $c->get(PdoPublicLandingRepository::class)
     ));
@@ -427,6 +462,9 @@ return static function (string $apiRoot): Container {
 
     $container->set(LoginRequest::class, static fn () => new LoginRequest());
     $container->set(ForgotPasswordRequest::class, static fn () => new ForgotPasswordRequest());
+    $container->set(CustomerRegisterRequest::class, static fn () => new CustomerRegisterRequest());
+    $container->set(CustomerProfileUpdateRequest::class, static fn () => new CustomerProfileUpdateRequest());
+    $container->set(CustomerOrderCreateRequest::class, static fn () => new CustomerOrderCreateRequest());
     $container->set(DriverLeadCreateRequest::class, static fn () => new DriverLeadCreateRequest());
     $container->set(DriverProfileUpdateRequest::class, static fn () => new DriverProfileUpdateRequest());
     $container->set(ResetPasswordRequest::class, static fn () => new ResetPasswordRequest());
@@ -464,6 +502,15 @@ return static function (string $apiRoot): Container {
     ));
     $container->set(MeController::class, static fn (Container $c) => new MeController(
         $c->get(GetAuthenticatedUser::class)
+    ));
+    $container->set(CustomerController::class, static fn (Container $c) => new CustomerController(
+        $c->get(GetCustomerProfile::class),
+        $c->get(UpdateCustomerProfile::class),
+        $c->get(GetCustomerOrders::class),
+        $c->get(GetCustomerOrderDetail::class),
+        $c->get(CreateCustomerOrder::class),
+        $c->get(CustomerProfileUpdateRequest::class),
+        $c->get(CustomerOrderCreateRequest::class)
     ));
     $container->set(PartnerController::class, static fn (Container $c) => new PartnerController(
         $c->get(GetPartnerProfile::class),
@@ -569,12 +616,15 @@ return static function (string $apiRoot): Container {
         $c->get(GetPlatformMetrics::class),
         $c->get(GetPublicStores::class),
         $c->get(GetPublicStoreDetail::class),
+        $c->get(GetPublicOrderTracking::class),
         $c->get(CreatePublicOrder::class),
+        $c->get(RegisterCustomer::class),
         $c->get(CreatePartnerLead::class),
         $c->get(CreateDriverLead::class),
         $c->get(PartnerLeadCreateRequest::class),
         $c->get(DriverLeadCreateRequest::class),
-        $c->get(PublicOrderCreateRequest::class)
+        $c->get(PublicOrderCreateRequest::class),
+        $c->get(CustomerRegisterRequest::class)
     ));
 
     $container->set('middleware.json', static fn () => new JsonOnly());

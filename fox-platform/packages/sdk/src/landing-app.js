@@ -1,12 +1,73 @@
 import {
-  createPublicOrder,
+  createCustomerOrder,
   createPublicDriverLead,
+  createPublicOrder,
   createPublicPartnerLead,
+  getCustomerProfile,
   getPublicCategories,
+  getPublicOrderTracking,
   getPublicPlatformMetrics,
   getPublicStoreDetail,
-  getPublicStores
+  getPublicStores,
+  getSession,
+  logout
 } from "./fox-platform-sdk.js";
+
+function currency(value) {
+  return Number(value || 0).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+}
+
+function showFeedback(selector, message, tone = "success", useHtml = false) {
+  const target = document.querySelector(selector);
+  if (!target) return;
+
+  target.hidden = false;
+  target.dataset.tone = tone;
+
+  if (useHtml) {
+    target.innerHTML = message;
+    return;
+  }
+
+  target.textContent = message;
+}
+
+function getCustomerSession() {
+  const session = getSession();
+  if (!session) return null;
+  const guard = session.guard || session.role;
+  return guard === "customer" ? session : null;
+}
+
+function renderPublicAuthActions() {
+  const target = document.querySelector("#fx-public-auth-actions");
+  if (!target) return;
+
+  const session = getCustomerSession();
+  if (session) {
+    target.innerHTML = `
+      <a class="fx-button-ghost" href="./my-orders.html">Meus pedidos</a>
+      <a class="fx-button-secondary" href="./account.html">Minha conta</a>
+      <button class="fx-button" type="button" id="fx-customer-logout">Sair</button>
+    `;
+
+    const logoutButton = document.querySelector("#fx-customer-logout");
+    logoutButton?.addEventListener("click", async () => {
+      await logout();
+      window.location.href = "./index.html";
+    });
+    return;
+  }
+
+  target.innerHTML = `
+    <a class="fx-button-ghost" href="./customer-login.html">Entrar</a>
+    <a class="fx-button-secondary" href="./customer-register.html">Criar conta</a>
+    <a class="fx-button" href="../../admin/src/login.html">Entrar no painel</a>
+  `;
+}
 
 function renderCategories(payload) {
   const container = document.querySelector("#fx-landing-categories");
@@ -14,7 +75,11 @@ function renderCategories(payload) {
 
   const items = payload?.items || [];
   if (!items.length) {
-    container.innerHTML = `<div class="fx-card"><p class="fx-copy">Nenhuma categoria publica disponivel no momento.</p></div>`;
+    container.innerHTML = `
+      <div class="fx-card">
+        <p class="fx-copy">Nenhuma categoria pública disponível no momento.</p>
+      </div>
+    `;
     return;
   }
 
@@ -36,13 +101,33 @@ function renderCategories(payload) {
     .join("");
 }
 
+function renderMetrics(payload) {
+  const container = document.querySelector("#fx-landing-proof");
+  if (!container) return;
+
+  container.innerHTML = (payload?.items || [])
+    .map(
+      (item) => `
+        <article class="fx-stat">
+          <div class="fx-stat-value">${item.value}</div>
+          <div class="fx-stat-label">${item.label}</div>
+        </article>
+      `
+    )
+    .join("");
+}
+
 function renderPublicStores(payload) {
   const container = document.querySelector("#fx-public-stores");
   if (!container) return;
 
   const items = payload?.items || [];
   if (!items.length) {
-    container.innerHTML = `<article class="fx-card fx-store-empty"><p class="fx-copy">Nenhuma loja encontrada para este filtro.</p></article>`;
+    container.innerHTML = `
+      <article class="fx-card fx-store-empty">
+        <p class="fx-copy">Nenhuma loja encontrada para este filtro.</p>
+      </article>
+    `;
     return;
   }
 
@@ -60,7 +145,7 @@ function renderPublicStores(payload) {
           <div class="fx-store-meta">
             <span class="fx-tag">${item.city} - ${item.state}</span>
             <span class="fx-tag">${item.product_count} itens</span>
-            <span class="fx-tag">${item.completed_orders} concluidos</span>
+            <span class="fx-tag">${item.completed_orders} concluídos</span>
           </div>
           <div class="fx-hero-actions">
             <a class="fx-button" href="./store.html?store=${item.id}">Abrir loja</a>
@@ -74,21 +159,24 @@ function renderPublicStores(payload) {
 function renderPublicStoreDetail(payload) {
   const store = payload?.store || null;
   const products = payload?.products || [];
-
-  if (!store) {
-    return;
-  }
+  if (!store) return;
 
   const title = document.querySelector("#fx-public-store-name");
   const lead = document.querySelector("#fx-public-store-lead");
   if (title) title.textContent = store.trade_name;
-  if (lead) lead.textContent = `${store.lead} ${store.product_count} itens ativos e ${store.completed_orders} pedidos concluidos.`;
+  if (lead) {
+    lead.textContent = `${store.lead} ${store.product_count} itens ativos e ${store.completed_orders} pedidos concluídos.`;
+  }
 
   const container = document.querySelector("#fx-public-store-products");
   if (!container) return;
 
   if (!products.length) {
-    container.innerHTML = `<article class="fx-card"><p class="fx-copy">Esta loja ainda nao possui itens ativos no catalogo publico.</p></article>`;
+    container.innerHTML = `
+      <article class="fx-card">
+        <p class="fx-copy">Esta loja ainda não possui itens ativos no catálogo público.</p>
+      </article>
+    `;
     return;
   }
 
@@ -121,28 +209,93 @@ function renderPublicStoreDetail(payload) {
     .join("");
 }
 
-function renderMetrics(payload) {
-  const container = document.querySelector("#fx-landing-proof");
-  if (!container) return;
+function renderPublicOrderTracking(payload) {
+  const order = payload?.order || null;
+  const items = payload?.items || [];
+  const timeline = payload?.timeline || [];
 
-  container.innerHTML = (payload?.items || [])
-    .map(
-      (item) => `
-        <article class="fx-stat">
-          <div class="fx-stat-value">${item.value}</div>
-          <div class="fx-stat-label">${item.label}</div>
-        </article>
-      `
-    )
-    .join("");
-}
+  const emptyState = document.querySelector("#fx-public-track-empty");
+  const content = document.querySelector("#fx-public-track-content");
+  if (!order || !content) {
+    if (emptyState) emptyState.hidden = false;
+    if (content) content.hidden = true;
+    return;
+  }
 
-function showFeedback(selector, message, tone = "success") {
-  const target = document.querySelector(selector);
-  if (!target) return;
-  target.hidden = false;
-  target.dataset.tone = tone;
-  target.textContent = message;
+  if (emptyState) emptyState.hidden = true;
+  content.hidden = false;
+
+  const summary = document.querySelector("#fx-public-track-summary");
+  if (summary) {
+    summary.innerHTML = `
+      <div class="fx-card-header">
+        <div>
+          <h2 class="fx-title-sm">Pedido ${order.order_number}</h2>
+          <p class="fx-copy-sm">${order.store_name} · ${order.store_region}</p>
+        </div>
+        <span class="fx-pill">${order.status}</span>
+      </div>
+      <div class="fx-track-grid">
+        <div class="fx-track-stat">
+          <span class="fx-tag">Cliente</span>
+          <strong>${order.customer_name}</strong>
+          <small>${order.customer_phone}</small>
+        </div>
+        <div class="fx-track-stat">
+          <span class="fx-tag">Pagamento</span>
+          <strong>${order.payment_method}</strong>
+          <small>${order.payment_status}</small>
+        </div>
+        <div class="fx-track-stat">
+          <span class="fx-tag">Total</span>
+          <strong>${order.total}</strong>
+          <small>Entrega ${order.delivery_fee}</small>
+        </div>
+      </div>
+      <p class="fx-copy">${order.progress_label}</p>
+      <p class="fx-copy-sm">Endereço: ${order.customer_address}</p>
+    `;
+  }
+
+  const itemsContainer = document.querySelector("#fx-public-track-items");
+  if (itemsContainer) {
+    itemsContainer.innerHTML = items
+      .map(
+        (item) => `
+          <article class="fx-card fx-track-item">
+            <div class="fx-card-header">
+              <h3 class="fx-title-sm">${item.name}</h3>
+              <span class="fx-pill">${item.quantity} un.</span>
+            </div>
+            <div class="fx-store-meta">
+              <span class="fx-tag">${item.unit_price}</span>
+              <span class="fx-tag">${item.total_price}</span>
+            </div>
+            <p class="fx-copy-sm">Observações: ${item.notes}</p>
+          </article>
+        `
+      )
+      .join("");
+  }
+
+  const timelineContainer = document.querySelector("#fx-public-track-timeline");
+  if (timelineContainer) {
+    timelineContainer.innerHTML = timeline.length
+      ? timeline
+          .map(
+            (item) => `
+              <article class="fx-track-timeline-item">
+                <div class="fx-track-timeline-head">
+                  <strong>${item.title}</strong>
+                  <span>${item.created_at}</span>
+                </div>
+                <p class="fx-copy-sm">${item.description}</p>
+              </article>
+            `
+          )
+          .join("")
+      : `<article class="fx-card"><p class="fx-copy">Ainda não há atualizações registradas para este pedido.</p></article>`;
+  }
 }
 
 function bindPartnerLeadForm() {
@@ -166,12 +319,12 @@ function bindPartnerLeadForm() {
       form.reset();
       showFeedback(
         "#fx-partner-lead-feedback",
-        `Solicitacao recebida. Protocolo ${response.protocol}. ${response.next_step}`
+        `Solicitação recebida. Protocolo ${response.protocol}. ${response.next_step}`
       );
     } catch (error) {
       showFeedback(
         "#fx-partner-lead-feedback",
-        error?.message || "Nao foi possivel registrar o interesse do parceiro.",
+        error?.message || "Não foi possível registrar o interesse do parceiro.",
         "danger"
       );
     }
@@ -198,12 +351,12 @@ function bindDriverLeadForm() {
       form.reset();
       showFeedback(
         "#fx-driver-lead-feedback",
-        `Solicitacao recebida. Protocolo ${response.protocol}. ${response.next_step}`
+        `Solicitação recebida. Protocolo ${response.protocol}. ${response.next_step}`
       );
     } catch (error) {
       showFeedback(
         "#fx-driver-lead-feedback",
-        error?.message || "Nao foi possivel registrar o interesse do entregador.",
+        error?.message || "Não foi possível registrar o interesse do entregador.",
         "danger"
       );
     }
@@ -232,15 +385,18 @@ async function bootStoresScreen() {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
     const nextFilters = {
       search: searchInput?.value?.trim() || "",
       city: cityInput?.value?.trim() || "",
       category: categoryInput?.value || ""
     };
+
     const query = new URLSearchParams();
     Object.entries(nextFilters).forEach(([key, value]) => {
       if (value) query.set(key, value);
     });
+
     window.history.replaceState({}, "", `./stores.html${query.toString() ? `?${query.toString()}` : ""}`);
     renderPublicStores(await getPublicStores(nextFilters));
   });
@@ -251,6 +407,7 @@ function selectedOrderItems() {
     .map((input) => {
       const quantity = Number(input.value || 0);
       const card = input.closest("[data-product-id]");
+
       return {
         product_id: card?.dataset.productId || "",
         quantity,
@@ -275,16 +432,21 @@ function refreshOrderSummary() {
     return carry + Number(card?.dataset.productPrice || 0) * item.quantity;
   }, 0);
 
-  summary.textContent = `${items.length} item(ns) selecionado(s) - Subtotal ${total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`;
+  summary.textContent = `${items.length} item(ns) selecionado(s) · Subtotal ${currency(total)}`;
 }
 
 async function bootStoreDetailScreen() {
   const params = new URLSearchParams(window.location.search);
   const storeId = params.get("store") || "";
+
   if (!storeId) {
     const container = document.querySelector("#fx-public-store-products");
     if (container) {
-      container.innerHTML = `<article class="fx-card"><p class="fx-copy">Loja nao informada.</p></article>`;
+      container.innerHTML = `
+        <article class="fx-card">
+          <p class="fx-copy">Loja não informada.</p>
+        </article>
+      `;
     }
     return;
   }
@@ -292,6 +454,42 @@ async function bootStoreDetailScreen() {
   const detail = await getPublicStoreDetail(storeId);
   renderPublicStoreDetail(detail);
   refreshOrderSummary();
+
+  const accountState = document.querySelector("#fx-public-order-account-state");
+  const customerSession = getCustomerSession();
+  if (customerSession) {
+    try {
+      const profile = await getCustomerProfile();
+      const nameInput = document.querySelector("#fx-public-order-customer-name");
+      const phoneInput = document.querySelector("#fx-public-order-customer-phone");
+
+      if (nameInput) {
+        nameInput.value = profile.full_name || "";
+        nameInput.disabled = true;
+      }
+
+      if (phoneInput) {
+        phoneInput.value = profile.phone || "";
+        phoneInput.disabled = true;
+      }
+
+      if (accountState) {
+        accountState.hidden = false;
+        accountState.dataset.tone = "success";
+        accountState.innerHTML = `Pedido vinculado a <strong>${profile.full_name}</strong>. O historico ficara disponivel na sua conta.`;
+      }
+    } catch (error) {
+      if (accountState) {
+        accountState.hidden = false;
+        accountState.dataset.tone = "danger";
+        accountState.textContent = error?.message || "Nao foi possivel carregar a conta do cliente.";
+      }
+    }
+  } else if (accountState) {
+    accountState.hidden = false;
+    accountState.dataset.tone = "warning";
+    accountState.innerHTML = `Voce pode pedir como visitante ou <a href="./customer-login.html">entrar na sua conta</a> para guardar historico e dados.`;
+  }
 
   document.querySelectorAll(".js-public-order-qty").forEach((input) => {
     input.addEventListener("input", refreshOrderSummary);
@@ -310,18 +508,27 @@ async function bootStoreDetailScreen() {
     }
 
     try {
-      const order = await createPublicOrder({
+      const payload = {
         store_id: storeId,
-        customer_name: document.querySelector("#fx-public-order-customer-name")?.value ?? "",
-        customer_phone: document.querySelector("#fx-public-order-customer-phone")?.value ?? "",
         customer_address: document.querySelector("#fx-public-order-customer-address")?.value ?? "",
         payment_method: document.querySelector("#fx-public-order-payment-method")?.value ?? "online_card",
         items
-      });
+      };
+      const order = customerSession
+        ? await createCustomerOrder(payload)
+        : await createPublicOrder({
+            ...payload,
+            customer_name: document.querySelector("#fx-public-order-customer-name")?.value ?? "",
+            customer_phone: document.querySelector("#fx-public-order-customer-phone")?.value ?? ""
+          });
 
       showFeedback(
         "#fx-public-order-feedback",
-        `Pedido ${order.order_number} criado com sucesso. Total ${order.total}. ${order.next_step}`
+        customerSession
+          ? `Pedido <strong>${order.order_number}</strong> criado com sucesso. Total ${order.total}. ${order.next_step} <a href="./customer-order.html?order=${order.order_id}">Ver pedido</a>.`
+          : `Pedido <strong>${order.order_number}</strong> criado com sucesso. Total ${order.total}. ${order.next_step} <a href="./track.html?order=${order.order_number}">Acompanhar pedido</a>.`,
+        "success",
+        true
       );
       form.reset();
       document.querySelectorAll(".js-public-order-qty").forEach((input) => {
@@ -331,15 +538,69 @@ async function bootStoreDetailScreen() {
     } catch (error) {
       showFeedback(
         "#fx-public-order-feedback",
-        error?.message || "Nao foi possivel criar o pedido.",
+        error?.message || "Não foi possível criar o pedido.",
         "danger"
       );
     }
   });
 }
 
+async function loadTracking(orderNumber) {
+  const payload = await getPublicOrderTracking(orderNumber);
+  renderPublicOrderTracking(payload);
+}
+
+async function bootTrackScreen() {
+  const params = new URLSearchParams(window.location.search);
+  const orderInput = document.querySelector("#fx-public-track-order");
+  const form = document.querySelector("#fx-public-track-form");
+  const initialOrderNumber = params.get("order") || "";
+
+  if (orderInput) {
+    orderInput.value = initialOrderNumber;
+  }
+
+  if (initialOrderNumber) {
+    try {
+      await loadTracking(initialOrderNumber);
+    } catch (error) {
+      showFeedback(
+        "#fx-public-track-feedback",
+        error?.message || "Não foi possível localizar o pedido informado.",
+        "danger"
+      );
+    }
+  }
+
+  if (!form) return;
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const orderNumber = orderInput?.value?.trim() || "";
+    if (!orderNumber) {
+      showFeedback("#fx-public-track-feedback", "Informe o número do pedido.", "danger");
+      return;
+    }
+
+    try {
+      window.history.replaceState({}, "", `./track.html?order=${encodeURIComponent(orderNumber)}`);
+      showFeedback("#fx-public-track-feedback", "Consulta realizada com sucesso.");
+      await loadTracking(orderNumber);
+    } catch (error) {
+      showFeedback(
+        "#fx-public-track-feedback",
+        error?.message || "Não foi possível localizar o pedido informado.",
+        "danger"
+      );
+      renderPublicOrderTracking(null);
+    }
+  });
+}
+
 async function boot() {
-  const screen = document.body.dataset.fxScreen;
+  const screen = document.body.dataset.fxScreen || document.querySelector("main")?.dataset.fxScreen;
+  renderPublicAuthActions();
 
   if (screen === "landing-home") {
     renderCategories(await getPublicCategories());
@@ -356,6 +617,11 @@ async function boot() {
 
   if (screen === "landing-store") {
     await bootStoreDetailScreen();
+    return;
+  }
+
+  if (screen === "landing-track") {
+    await bootTrackScreen();
   }
 }
 

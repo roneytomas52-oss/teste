@@ -151,6 +151,53 @@
   gap: var(--fx-space-6);
 }
 
+.fx-track-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--fx-space-4);
+  align-items: end;
+}
+
+.fx-track-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--fx-space-4);
+  margin: var(--fx-space-5) 0;
+}
+
+.fx-track-stat {
+  display: grid;
+  gap: 6px;
+  border: 1px solid rgba(217, 86, 37, 0.12);
+  border-radius: var(--fx-radius-md);
+  padding: var(--fx-space-4);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.fx-track-item {
+  display: grid;
+  gap: var(--fx-space-3);
+}
+
+.fx-track-timeline {
+  display: grid;
+  gap: var(--fx-space-4);
+}
+
+.fx-track-timeline-item {
+  border: 1px solid rgba(217, 86, 37, 0.12);
+  border-radius: var(--fx-radius-md);
+  padding: var(--fx-space-4);
+  background: #fff;
+}
+
+.fx-track-timeline-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--fx-space-3);
+  margin-bottom: 8px;
+}
+
 .fx-product-list {
   display: grid;
   gap: var(--fx-space-4);
@@ -196,6 +243,8 @@
   .fx-landing-categories,
   .fx-landing-leads,
   .fx-landing-form-grid,
+  .fx-track-form,
+  .fx-track-grid,
   .fx-store-filters,
   .fx-store-grid,
   .fx-store-detail-layout,

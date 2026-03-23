@@ -359,7 +359,103 @@ class PdoPublicLandingRepository implements PublicLandingRepository
             'status' => 'recebido',
             'status_key' => 'pending_acceptance',
             'total' => $this->formatCurrency($total),
-            'next_step' => 'A loja recebeu o pedido e vai iniciar a analise para aceite e preparo.',
+            'next_step' => 'A loja recebeu o pedido e vai iniciar a análise para aceite e preparo.',
+        ];
+    }
+
+    public function getPublicOrderTracking(string $orderNumber): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT
+                o.id,
+                o.order_number,
+                o.customer_name,
+                o.customer_phone,
+                o.customer_address,
+                o.status,
+                o.payment_method,
+                o.payment_status,
+                o.subtotal,
+                o.delivery_fee,
+                o.total,
+                o.placed_at,
+                o.accepted_at,
+                o.completed_at,
+                o.cancelled_at,
+                s.trade_name,
+                s.city,
+                s.state,
+                dp.modal AS driver_modal
+             FROM orders o
+             INNER JOIN stores s ON s.id = o.store_id
+             LEFT JOIN driver_profiles dp ON dp.id = o.driver_profile_id
+             WHERE o.order_number = :order_number
+             LIMIT 1"
+        );
+        $statement->execute(['order_number' => $orderNumber]);
+        $order = $statement->fetch();
+
+        if (!$order) {
+            throw new \FoxPlatform\Api\Infrastructure\Support\ApiException(404, 'ORDER_NOT_FOUND', 'Pedido nao encontrado.');
+        }
+
+        $itemsStatement = $this->pdo->prepare(
+            "SELECT product_name, quantity, unit_price, total_price, notes
+             FROM order_items
+             WHERE order_id = :order_id
+             ORDER BY created_at ASC"
+        );
+        $itemsStatement->execute(['order_id' => $order['id']]);
+
+        $timelineStatement = $this->pdo->prepare(
+            "SELECT previous_status, next_status, note, created_at
+             FROM order_status_logs
+             WHERE order_id = :order_id
+             ORDER BY created_at ASC"
+        );
+        $timelineStatement->execute(['order_id' => $order['id']]);
+
+        return [
+            'order' => [
+                'id' => $order['id'],
+                'order_number' => $order['order_number'],
+                'store_name' => $order['trade_name'],
+                'store_region' => trim(($order['city'] ?: '-') . ' - ' . ($order['state'] ?: '-')),
+                'customer_name' => $order['customer_name'],
+                'customer_phone' => $order['customer_phone'] ?: '-',
+                'customer_address' => $order['customer_address'] ?: '-',
+                'status' => $this->mapPublicOrderStatusLabel((string) $order['status']),
+                'status_key' => $order['status'],
+                'payment_method' => $this->mapPaymentMethodLabel((string) $order['payment_method']),
+                'payment_status' => $this->mapPaymentStatusLabel((string) $order['payment_status']),
+                'subtotal' => $this->formatCurrency((float) ($order['subtotal'] ?? 0)),
+                'delivery_fee' => $this->formatCurrency((float) ($order['delivery_fee'] ?? 0)),
+                'total' => $this->formatCurrency((float) ($order['total'] ?? 0)),
+                'placed_at' => $order['placed_at'],
+                'accepted_at' => $order['accepted_at'],
+                'completed_at' => $order['completed_at'],
+                'cancelled_at' => $order['cancelled_at'],
+                'driver_modal' => $order['driver_modal'] ?: '-',
+                'progress_label' => $this->resolvePublicOrderProgress((string) $order['status']),
+            ],
+            'items' => array_map(
+                fn (array $row) => [
+                    'name' => $row['product_name'],
+                    'quantity' => (int) $row['quantity'],
+                    'unit_price' => $this->formatCurrency((float) ($row['unit_price'] ?? 0)),
+                    'total_price' => $this->formatCurrency((float) ($row['total_price'] ?? 0)),
+                    'notes' => $row['notes'] ?: '-',
+                ],
+                $itemsStatement->fetchAll() ?: []
+            ),
+            'timeline' => array_map(
+                fn (array $row) => [
+                    'title' => $this->mapPublicOrderStatusLabel((string) $row['next_status']),
+                    'description' => $row['note'] ?: 'Atualizacao registrada na operacao da Fox Delivery.',
+                    'created_at' => $row['created_at'],
+                ],
+                $timelineStatement->fetchAll() ?: []
+            ),
         ];
     }
 
@@ -386,7 +482,7 @@ class PdoPublicLandingRepository implements PublicLandingRepository
         return [
             'protocol' => 'PAR-' . strtoupper(substr(str_replace('-', '', $leadId), 0, 8)),
             'status' => 'recebido',
-            'next_step' => 'Nossa equipe comercial vai analisar o perfil da operacao e retornar com os proximos passos.',
+            'next_step' => 'Nossa equipe comercial vai analisar o perfil da operação e retornar com os próximos passos.',
         ];
     }
 
@@ -412,7 +508,7 @@ class PdoPublicLandingRepository implements PublicLandingRepository
         return [
             'protocol' => 'DRV-' . strtoupper(substr(str_replace('-', '', $leadId), 0, 8)),
             'status' => 'recebido',
-            'next_step' => 'O time operacional vai revisar seus dados e orientar a proxima etapa do cadastro.',
+            'next_step' => 'O time operacional vai revisar seus dados e orientar a próxima etapa do cadastro.',
         ];
     }
 
@@ -420,14 +516,14 @@ class PdoPublicLandingRepository implements PublicLandingRepository
     {
         return match ($slug) {
             'restaurantes',
-            'restaurant' => 'Refeicoes, lanches e pratos prontos com jornada de pedido objetiva.',
+            'restaurant' => 'Refeições, lanches e pratos prontos com jornada de pedido objetiva.',
             'mercado',
-            'market' => 'Compras do dia a dia com abastecimento mais pratico para a rotina.',
+            'market' => 'Compras do dia a dia com abastecimento mais prático para a rotina.',
             'farmacia',
-            'pharmacy' => 'Itens de saude, higiene e conveniencia com acesso rapido pela plataforma.',
+            'pharmacy' => 'Itens de saúde, higiene e conveniência com acesso rápido pela plataforma.',
             'conveniencia',
-            'convenience' => 'Produtos essenciais para reposicao imediata e pedidos recorrentes.',
-            default => sprintf('Operacao de %s disponivel na jornada publica da Fox Delivery.', strtolower($name)),
+            'convenience' => 'Produtos essenciais para reposição imediata e pedidos recorrentes.',
+            default => sprintf('Operação de %s disponível na jornada pública da Fox Delivery.', strtolower($name)),
         };
     }
 
@@ -435,13 +531,13 @@ class PdoPublicLandingRepository implements PublicLandingRepository
     {
         return match ($slug) {
             'restaurantes',
-            'restaurant' => 'Explorar refeicoes',
+            'restaurant' => 'Explorar refeições',
             'mercado',
             'market' => 'Ver mercado',
             'farmacia',
-            'pharmacy' => 'Ver farmacia',
+            'pharmacy' => 'Ver farmácia',
             'conveniencia',
-            'convenience' => 'Ver conveniencia',
+            'convenience' => 'Ver conveniência',
             default => 'Explorar categoria',
         };
     }
@@ -449,6 +545,54 @@ class PdoPublicLandingRepository implements PublicLandingRepository
     private function formatCurrency(float $amount): string
     {
         return 'R$ ' . number_format($amount, 2, ',', '.');
+    }
+
+    private function mapPublicOrderStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'pending_acceptance' => 'Aguardando aceite',
+            'accepted' => 'Aceito pela loja',
+            'preparing' => 'Em preparo',
+            'ready_for_pickup' => 'Pronto para retirada',
+            'on_route' => 'Em rota',
+            'completed' => 'Concluído',
+            'cancelled' => 'Cancelado',
+            default => 'Em processamento',
+        };
+    }
+
+    private function mapPaymentMethodLabel(string $method): string
+    {
+        return match ($method) {
+            'online_card' => 'Cartão online',
+            'pix' => 'Pix',
+            'cash' => 'Dinheiro',
+            default => 'Não informado',
+        };
+    }
+
+    private function mapPaymentStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'paid' => 'Pago',
+            'pending' => 'Pendente',
+            'refunded' => 'Estornado',
+            default => 'Não informado',
+        };
+    }
+
+    private function resolvePublicOrderProgress(string $status): string
+    {
+        return match ($status) {
+            'pending_acceptance' => 'A loja recebeu o pedido e está analisando o aceite.',
+            'accepted' => 'Pedido aceito. A loja vai iniciar o preparo.',
+            'preparing' => 'A loja está preparando o pedido.',
+            'ready_for_pickup' => 'Pedido pronto para retirada pela operação.',
+            'on_route' => 'Pedido saiu para entrega.',
+            'completed' => 'Pedido concluído com sucesso.',
+            'cancelled' => 'Pedido cancelado pela operação.',
+            default => 'Pedido em processamento.'
+        };
     }
 
     private function notFoundStore(): \FoxPlatform\Api\Infrastructure\Support\ApiException

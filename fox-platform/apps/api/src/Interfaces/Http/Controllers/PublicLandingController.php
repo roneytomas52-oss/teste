@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace FoxPlatform\Api\Interfaces\Http\Controllers;
 
+use FoxPlatform\Api\Application\Customer\RegisterCustomer;
 use FoxPlatform\Api\Application\Public\CreateDriverLead;
 use FoxPlatform\Api\Application\Public\CreatePartnerLead;
 use FoxPlatform\Api\Application\Public\CreatePublicOrder;
 use FoxPlatform\Api\Application\Public\GetPlatformMetrics;
 use FoxPlatform\Api\Application\Public\GetPublicCategories;
+use FoxPlatform\Api\Application\Public\GetPublicOrderTracking;
 use FoxPlatform\Api\Application\Public\GetPublicStoreDetail;
 use FoxPlatform\Api\Application\Public\GetPublicStores;
 use FoxPlatform\Api\Infrastructure\Http\Request;
 use FoxPlatform\Api\Interfaces\Http\Requests\DriverLeadCreateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PartnerLeadCreateRequest;
 use FoxPlatform\Api\Interfaces\Http\Requests\PublicOrderCreateRequest;
+use FoxPlatform\Api\Interfaces\Http\Requests\CustomerRegisterRequest;
 use FoxPlatform\Api\Interfaces\Http\Responses\ApiResponse;
 
 class PublicLandingController
@@ -24,12 +27,15 @@ class PublicLandingController
         private readonly GetPlatformMetrics $getPlatformMetrics,
         private readonly GetPublicStores $getPublicStores,
         private readonly GetPublicStoreDetail $getPublicStoreDetail,
+        private readonly GetPublicOrderTracking $getPublicOrderTracking,
         private readonly CreatePublicOrder $createPublicOrder,
+        private readonly RegisterCustomer $registerCustomer,
         private readonly CreatePartnerLead $createPartnerLead,
         private readonly CreateDriverLead $createDriverLead,
         private readonly PartnerLeadCreateRequest $partnerLeadCreateRequest,
         private readonly DriverLeadCreateRequest $driverLeadCreateRequest,
-        private readonly PublicOrderCreateRequest $publicOrderCreateRequest
+        private readonly PublicOrderCreateRequest $publicOrderCreateRequest,
+        private readonly CustomerRegisterRequest $customerRegisterRequest
     ) {
     }
 
@@ -69,6 +75,13 @@ class PublicLandingController
         );
     }
 
+    public function orderTracking(Request $request)
+    {
+        return ApiResponse::success(
+            ($this->getPublicOrderTracking)((string) $request->attribute('order_number'))
+        );
+    }
+
     public function createPartnerLeadAction(Request $request)
     {
         $validated = $this->partnerLeadCreateRequest->validate($request);
@@ -76,6 +89,16 @@ class PublicLandingController
         return ApiResponse::success(
             ($this->createPartnerLead)($validated),
             'Lead de parceiro registrado com sucesso.'
+        );
+    }
+
+    public function createCustomerRegistration(Request $request)
+    {
+        $validated = $this->customerRegisterRequest->validate($request);
+
+        return ApiResponse::success(
+            ($this->registerCustomer)($validated),
+            'Cadastro do cliente concluido com sucesso.'
         );
     }
 

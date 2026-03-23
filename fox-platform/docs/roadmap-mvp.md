@@ -66,7 +66,7 @@
 - login funcional no navegador
 - hidratacao das telas principais
 
-## Fase 9 - Backend executavel [em andamento]
+## Fase 9 - Backend executavel [concluida para operacao local]
 
 - Sprint 1 concluida:
   - bootstrap HTTP do backend
@@ -170,10 +170,37 @@
    - criacao de pedido guest pela API publica
    - novas telas `stores.html` e `store.html` na landing
    - smoke test expandido e validado contra `public.stores`, `public.store-detail` e `public.order.create`
-- Proximo foco:
-  - endurecer RBAC do admin por perfil funcional nas rotas ja existentes
-  - exportacao e filtros operacionais mais profundos para relatorios administrativos
-  - consolidar checkout, status publico do pedido e trilha de cliente
+- Sprint 20 concluida:
+  - rastreio publico de pedido pela API
+  - nova tela `track.html` na landing
+  - criacao e consulta do pedido cobertas no fluxo publico do cliente
+  - smoke test expandido e validado contra `public.order.tracking`
+
+## Estado do MVP
+
+- operacao local concluida para:
+  - landing publica
+  - descoberta de lojas
+  - detalhe de loja
+  - criacao de pedido guest
+  - acompanhamento publico do pedido
+  - portal do parceiro
+  - portal do entregador
+  - painel admin
+  - API propria
+- validacao tecnica executada com:
+  - `php -l`
+  - `node --check`
+  - smoke test completo
+  - subida HTTP local da API e do servidor estatico
+
+## Proximo bloco fora do MVP local
+
+- pagamento real
+- dispatch/logistica ao vivo
+- tracking em tempo real
+- deploy com dominio, SSL e observabilidade
+- filtros/exportacoes administrativas mais profundas
 
 ## Entregavel minimo para primeira versao
 
@@ -187,6 +214,7 @@
 - painel admin basico
 - descoberta publica de lojas
 - detalhe de loja e criacao de pedido guest
+- rastreio publico do pedido
 
 ## O que fica para depois
 

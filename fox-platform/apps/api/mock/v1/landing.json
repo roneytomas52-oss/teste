@@ -137,5 +137,57 @@
         { "id": "product-pharmacy-2", "name": "Vitaminas Fox", "description": "Suplemento para apoio da rotina diaria.", "price": "R$ 19,90", "price_value": 19.9, "stock_quantity": 30, "category_name": "Farmacia", "category_slug": "pharmacy" }
       ]
     }
+  },
+  "order_tracking": {
+    "FD-DEMO1234": {
+      "order": {
+        "id": "mock-order-demo",
+        "order_number": "FD-DEMO1234",
+        "store_name": "Fox Burgers Centro",
+        "store_region": "Sao Paulo - SP",
+        "customer_name": "Cliente Demo",
+        "customer_phone": "11999999999",
+        "customer_address": "Rua Demo, 100",
+        "status": "Em preparo",
+        "status_key": "preparing",
+        "payment_method": "Pix",
+        "payment_status": "Pago",
+        "subtotal": "R$ 32,90",
+        "delivery_fee": "R$ 7,90",
+        "total": "R$ 40,80",
+        "placed_at": "2026-03-22 12:30:00",
+        "accepted_at": "2026-03-22 12:33:00",
+        "completed_at": null,
+        "cancelled_at": null,
+        "driver_modal": "Moto",
+        "progress_label": "A loja esta preparando o pedido."
+      },
+      "items": [
+        {
+          "name": "Fox Burger Classic",
+          "quantity": 1,
+          "unit_price": "R$ 32,90",
+          "total_price": "R$ 32,90",
+          "notes": "-"
+        }
+      ],
+      "timeline": [
+        {
+          "title": "Aguardando aceite",
+          "description": "Pedido criado pela jornada publica da Fox Delivery.",
+          "created_at": "2026-03-22 12:30:00"
+        },
+        {
+          "title": "Aceito pela loja",
+          "description": "Pedido aceito pela operacao da loja.",
+          "created_at": "2026-03-22 12:33:00"
+        },
+        {
+          "title": "Em preparo",
+          "description": "A loja esta preparando o pedido.",
+          "created_at": "2026-03-22 12:36:00"
+        }
+      ]
+    }
   }
 }

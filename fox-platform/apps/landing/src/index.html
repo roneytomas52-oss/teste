@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
     <link rel="stylesheet" href="./landing.css" />
   </head>
-  <body>
+  <body data-fx-screen="landing-home">
     <div class="fx-landing-page">
       <header class="fx-landing-header">
         <div class="fx-container">
@@ -22,9 +22,9 @@
           <nav class="fx-landing-nav">
             <a href="#fx-landing-categories">Categorias</a>
             <a href="./stores.html">Lojas</a>
+            <a href="./track.html">Acompanhar pedido</a>
             <a href="#fx-partner-lead-form">Para parceiros</a>
             <a href="#fx-driver-lead-form">Para entregadores</a>
-            <a href="#">Ajuda</a>
           </nav>
 
           <div class="fx-landing-actions">
@@ -34,7 +34,7 @@
         </div>
       </header>
 
-      <main data-fx-screen="landing-home">
+      <main>
         <section class="fx-landing-hero">
           <div class="fx-container">
             <div class="fx-hero-banner">
@@ -57,7 +57,7 @@
                   </div>
                   <div class="fx-mini-kpi">
                     <strong>Parceiro</strong>
-                    <span>opera pedidos, catalogo, equipe e repasses</span>
+                    <span>opera pedidos, catálogo, equipe e repasses</span>
                   </div>
                   <div class="fx-mini-kpi">
                     <strong>Entregador</strong>
@@ -73,7 +73,7 @@
           <div class="fx-container">
             <div class="fx-section-header">
               <div class="fx-eyebrow">Jornadas</div>
-              <h2 class="fx-title-md">Entradas claras para cada perfil da operacao Fox Delivery.</h2>
+              <h2 class="fx-title-md">Entradas claras para cada perfil da operação Fox Delivery.</h2>
             </div>
 
             <div class="fx-grid fx-grid-3">
@@ -85,15 +85,16 @@
                 <p class="fx-copy">Descobre lojas ativas, entra no catálogo e inicia o pedido em uma jornada pública conectada ao backend.</p>
                 <div class="fx-hero-actions">
                   <a class="fx-button" href="./stores.html">Fazer pedido</a>
+                  <a class="fx-button-ghost" href="./track.html">Acompanhar pedido</a>
                 </div>
               </article>
 
               <article class="fx-card">
                 <div class="fx-card-header">
                   <h3 class="fx-title-sm">Parceiro</h3>
-                  <span class="fx-pill">Operacao</span>
+                  <span class="fx-pill">Operação</span>
                 </div>
-                <p class="fx-copy">Entra no portal da loja para gerir pedidos, catalogo, equipe, financeiro e desempenho.</p>
+                <p class="fx-copy">Entra no portal da loja para gerir pedidos, catálogo, equipe, financeiro e desempenho.</p>
                 <div class="fx-hero-actions">
                   <a class="fx-button-secondary" href="#fx-partner-lead-form">Quero vender</a>
                 </div>
@@ -104,7 +105,7 @@
                   <h3 class="fx-title-sm">Entregador</h3>
                   <span class="fx-pill">Mobilidade</span>
                 </div>
-                <p class="fx-copy">Acompanha ganhos, disponibilidade, documentos e historico de corridas em um painel proprio.</p>
+                <p class="fx-copy">Acompanha ganhos, disponibilidade, documentos e histórico de corridas em um painel próprio.</p>
                 <div class="fx-hero-actions">
                   <a class="fx-button-ghost" href="#fx-driver-lead-form">Quero entregar</a>
                 </div>
@@ -117,7 +118,7 @@
           <div class="fx-container">
             <div class="fx-section-header">
               <div class="fx-eyebrow">Categorias</div>
-              <h2 class="fx-title-md">Categorias publicas conectadas ao catalogo da plataforma.</h2>
+              <h2 class="fx-title-md">Categorias públicas conectadas ao catálogo da plataforma.</h2>
             </div>
             <div class="fx-landing-categories" id="fx-landing-categories"></div>
           </div>
@@ -126,8 +127,8 @@
         <section class="fx-section">
           <div class="fx-container">
             <div class="fx-section-header">
-              <div class="fx-eyebrow">Prova de confianca</div>
-              <h2 class="fx-title-md">Indicadores reais da operacao publica da Fox Delivery.</h2>
+              <div class="fx-eyebrow">Prova de confiança</div>
+              <h2 class="fx-title-md">Indicadores reais da operação pública da Fox Delivery.</h2>
             </div>
             <div class="fx-landing-proof" id="fx-landing-proof"></div>
           </div>
@@ -136,7 +137,7 @@
         <section class="fx-section">
           <div class="fx-container">
             <div class="fx-section-header">
-              <div class="fx-eyebrow">Leads publicos</div>
+              <div class="fx-eyebrow">Leads públicos</div>
               <h2 class="fx-title-md">Capte interesse comercial e operacional direto da landing.</h2>
             </div>
 
@@ -153,11 +154,11 @@
                       <input id="fx-partner-company-name" type="text" value="Mercado Nova Rota" />
                     </div>
                     <div class="fx-field">
-                      <label for="fx-partner-contact-name">Responsavel</label>
+                      <label for="fx-partner-contact-name">Responsável</label>
                       <input id="fx-partner-contact-name" type="text" value="Mariana Costa" />
                     </div>
                     <div class="fx-field">
-                      <label for="fx-partner-email">Email</label>
+                      <label for="fx-partner-email">E-mail</label>
                       <input id="fx-partner-email" type="email" value="parceiro@foxdelivery.com.br" />
                     </div>
                     <div class="fx-field">
@@ -166,15 +167,15 @@
                     </div>
                     <div class="fx-field">
                       <label for="fx-partner-city">Cidade</label>
-                      <input id="fx-partner-city" type="text" value="Sao Paulo" />
+                      <input id="fx-partner-city" type="text" value="São Paulo" />
                     </div>
                     <div class="fx-field">
-                      <label for="fx-partner-business-type">Tipo de operacao</label>
+                      <label for="fx-partner-business-type">Tipo de operação</label>
                       <select id="fx-partner-business-type">
                         <option value="restaurant">Restaurante</option>
                         <option value="market">Mercado</option>
-                        <option value="pharmacy">Farmacia</option>
-                        <option value="convenience">Conveniencia</option>
+                        <option value="pharmacy">Farmácia</option>
+                        <option value="convenience">Conveniência</option>
                       </select>
                     </div>
                   </div>
@@ -197,7 +198,7 @@
                       <input id="fx-driver-full-name" type="text" value="Lucas Ferreira" />
                     </div>
                     <div class="fx-field">
-                      <label for="fx-driver-email">Email</label>
+                      <label for="fx-driver-email">E-mail</label>
                       <input id="fx-driver-email" type="email" value="entregador@foxdelivery.com.br" />
                     </div>
                     <div class="fx-field">
@@ -206,7 +207,7 @@
                     </div>
                     <div class="fx-field">
                       <label for="fx-driver-city">Cidade</label>
-                      <input id="fx-driver-city" type="text" value="Sao Paulo" />
+                      <input id="fx-driver-city" type="text" value="São Paulo" />
                     </div>
                     <div class="fx-field" style="grid-column: 1 / -1;">
                       <label for="fx-driver-modal">Modalidade</label>

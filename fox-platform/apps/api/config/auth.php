@@ -12,6 +12,7 @@ return [
         'admin',
         'partner',
         'driver',
+        'customer',
     ],
     'roles' => [
         'super_admin',
@@ -23,6 +24,7 @@ return [
         'partner_manager',
         'partner_staff',
         'driver',
+        'customer',
     ],
     'permission_modules' => [
         'dashboard',

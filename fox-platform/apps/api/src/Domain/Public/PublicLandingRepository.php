@@ -16,6 +16,8 @@ interface PublicLandingRepository
 
     public function createPublicOrder(array $data): array;
 
+    public function getPublicOrderTracking(string $orderNumber): array;
+
     public function createPartnerLead(array $data): array;
 
     public function createDriverLead(array $data): array;

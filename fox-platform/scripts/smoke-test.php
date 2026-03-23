@@ -396,11 +396,12 @@ try {
     $publicStores = expectSuccess('public.stores', request('GET', $baseUrl . '/api/v1/public/stores'));
     $firstPublicStoreId = $publicStores['items'][0]['id'] ?? null;
     $publicStoreDetail = null;
+    $createdPublicOrder = null;
     if ($firstPublicStoreId) {
         $publicStoreDetail = expectSuccess('public.store-detail', request('GET', $baseUrl . '/api/v1/public/stores/' . $firstPublicStoreId));
     }
     if ($firstPublicStoreId && !empty($publicStoreDetail['products'][0]['id'] ?? null)) {
-        expectSuccess(
+        $createdPublicOrder = expectSuccess(
             'public.order.create',
             request('POST', $baseUrl . '/api/v1/public/orders', [
                 'store_id' => $firstPublicStoreId,
@@ -416,6 +417,12 @@ try {
                     ]
                 ]
             ])
+        );
+    }
+    if (!empty($createdPublicOrder['order_number'] ?? null)) {
+        expectSuccess(
+            'public.order.tracking',
+            request('GET', $baseUrl . '/api/v1/public/orders/' . urlencode($createdPublicOrder['order_number']))
         );
     }
     expectSuccess(

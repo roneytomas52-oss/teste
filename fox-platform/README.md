@@ -75,13 +75,16 @@ fox-platform/
 - [Entrega da Fase 9 - Sprint 15](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-15-admin-order-actions.md)
 - [Entrega da Fase 9 - Sprint 16](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-16-admin-approval-resolution.md)
 - [Entrega da Fase 9 - Sprint 17](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-17-admin-access-and-notifications.md)
+- [Entrega da Fase 9 - Sprint 18](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-18-admin-reports-and-analytics.md)
+- [Entrega da Fase 9 - Sprint 19](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-19-public-customer-core.md)
+- [Entrega da Fase 9 - Sprint 20](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-20-public-order-tracking.md)
 - [Mapa do portal do parceiro](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/partner-portal-sitemap.md)
 - [Superficie de APIs](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/api-surface.md)
 - [Roadmap do MVP](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/roadmap-mvp.md)
 
 ## Estado atual
 
-Fase atual: Fase 9 em andamento.
+Fase atual: Fase 9 concluida para operacao local do MVP.
 
 Ja definido e materializado:
 
@@ -178,11 +181,17 @@ Ja definido e materializado:
 - criacao de pedido guest pela API publica
 - novas paginas `stores.html` e `store.html` na landing
 - smoke test expandido para cobrir `public.stores`, `public.store-detail` e `public.order.create`
+- rastreio publico do pedido pela API
+- nova pagina `track.html` na landing
+- smoke test expandido para cobrir `public.order.tracking`
 
-Proxima etapa recomendada:
+Proximo bloco de produto fora do MVP local:
 
-- endurecer RBAC do admin por perfil funcional nas rotas ja existentes
-- consolidar checkout, status publico do pedido e trilha de cliente
+- pagamento real
+- dispatch/logistica ao vivo
+- tracking em tempo real
+- deploy com dominio, SSL e observabilidade
+- exportacoes e filtros administrativos mais profundos
 
 ## Ativacao local hoje
 
@@ -205,6 +214,8 @@ O script faz:
 Entradas principais:
 
 - Landing: `http://127.0.0.1:3000/apps/landing/src/index.html`
+- Lojas: `http://127.0.0.1:3000/apps/landing/src/stores.html`
+- Rastreio publico: `http://127.0.0.1:3000/apps/landing/src/track.html`
 - Admin: `http://127.0.0.1:3000/apps/admin/src/login.html`
 - Partner Portal: `http://127.0.0.1:3000/apps/partner-portal/src/login.html`
 - Driver Portal: `http://127.0.0.1:3000/apps/driver-portal/src/login.html`

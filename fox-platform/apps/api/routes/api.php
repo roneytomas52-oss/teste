@@ -9,6 +9,7 @@ use FoxPlatform\Api\Interfaces\Http\Controllers\AuthController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\DriverController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\HealthController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\MeController;
+use FoxPlatform\Api\Interfaces\Http\Controllers\CustomerController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\PartnerCatalogController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\PartnerController;
 use FoxPlatform\Api\Interfaces\Http\Controllers\PartnerOperationsController;
@@ -28,9 +29,17 @@ return static function (Router $router, Container $container): void {
     $router->get('/api/v1/public/platform-metrics', [PublicLandingController::class, 'metrics'], ['cors']);
     $router->get('/api/v1/public/stores', [PublicLandingController::class, 'stores'], ['cors']);
     $router->get('/api/v1/public/stores/{store_id}', [PublicLandingController::class, 'storeDetail'], ['cors']);
+    $router->get('/api/v1/public/orders/{order_number}', [PublicLandingController::class, 'orderTracking'], ['cors']);
     $router->post('/api/v1/public/orders', [PublicLandingController::class, 'createOrder'], ['cors', 'json']);
+    $router->post('/api/v1/public/customer-register', [PublicLandingController::class, 'createCustomerRegistration'], ['cors', 'json']);
     $router->post('/api/v1/public/partner-leads', [PublicLandingController::class, 'createPartnerLeadAction'], ['cors', 'json']);
     $router->post('/api/v1/public/driver-leads', [PublicLandingController::class, 'createDriverLeadAction'], ['cors', 'json']);
+
+    $router->get('/api/v1/customer/profile', [CustomerController::class, 'profile'], ['cors', 'auth', 'role:customer']);
+    $router->put('/api/v1/customer/profile', [CustomerController::class, 'updateProfile'], ['cors', 'auth', 'json', 'role:customer']);
+    $router->get('/api/v1/customer/orders', [CustomerController::class, 'orders'], ['cors', 'auth', 'role:customer']);
+    $router->get('/api/v1/customer/orders/{order_id}', [CustomerController::class, 'orderDetail'], ['cors', 'auth', 'role:customer']);
+    $router->post('/api/v1/customer/orders', [CustomerController::class, 'createOrder'], ['cors', 'auth', 'json', 'role:customer']);
 
     $router->get('/api/v1/partner/profile', [PartnerController::class, 'profile'], ['cors', 'auth', 'role:partner_owner,partner_manager,partner_staff', 'permission:dashboard.view']);
     $router->put('/api/v1/partner/profile', [PartnerController::class, 'updateProfile'], ['cors', 'auth', 'json', 'role:partner_owner,partner_manager', 'permission:store.manage']);

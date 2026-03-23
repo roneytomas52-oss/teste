@@ -17,7 +17,7 @@ class LoginRequest extends FormRequest
             'input' => new LoginInput(
                 $this->requireEmail($data),
                 $this->requireString($data, 'password', 'Senha', 6),
-                $this->requireEnum($data, 'guard', ['admin', 'partner', 'driver'], 'Portal')
+                $this->requireEnum($data, 'guard', ['admin', 'partner', 'driver', 'customer'], 'Portal')
             ),
         ];
     }

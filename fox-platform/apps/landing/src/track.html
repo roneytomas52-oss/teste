@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery | Acompanhar pedido</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <link rel="stylesheet" href="./landing.css" />
+  </head>
+  <body data-fx-screen="landing-track">
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Plataforma nacional de entregas</div>
+            </div>
+          </div>
+          <nav class="fx-landing-nav">
+            <a href="./index.html">Home</a>
+            <a href="./stores.html">Lojas</a>
+            <a href="./track.html">Acompanhar pedido</a>
+          </nav>
+          <div class="fx-landing-actions">
+            <a class="fx-button" href="./stores.html">Pedir agora</a>
+          </div>
+        </div>
+      </header>
+      <main class="fx-section">
+        <div class="fx-container">
+          <section class="fx-page-header">
+            <div class="fx-page-header-copy">
+              <div class="fx-eyebrow">Acompanhar pedido</div>
+              <h1 class="fx-title-lg">Consulte o status do seu pedido Fox Delivery.</h1>
+              <p class="fx-copy">Informe o número do pedido para acompanhar status, itens e linha do tempo da operação.</p>
+            </div>
+          </section>
+
+          <section class="fx-card" style="margin-bottom: var(--fx-space-6);">
+            <form class="fx-track-form" id="fx-public-track-form">
+              <div class="fx-field">
+                <label for="fx-public-track-order">Número do pedido</label>
+                <input id="fx-public-track-order" type="text" placeholder="FD-1234ABCD" />
+              </div>
+              <div class="fx-inline-actions">
+                <button class="fx-button" type="submit">Consultar</button>
+              </div>
+            </form>
+            <p class="fx-landing-feedback" id="fx-public-track-feedback" hidden></p>
+          </section>
+
+          <section id="fx-public-track-empty" class="fx-card">
+            <p class="fx-copy">Nenhum pedido consultado ainda. Informe o número do pedido para carregar o acompanhamento.</p>
+          </section>
+
+          <section id="fx-public-track-content" hidden>
+            <div class="fx-card" id="fx-public-track-summary" style="margin-bottom: var(--fx-space-6);"></div>
+            <div class="fx-store-detail-layout">
+              <div>
+                <div class="fx-section-header" style="margin-bottom: var(--fx-space-4);">
+                  <div class="fx-eyebrow">Itens</div>
+                  <h2 class="fx-title-md">Resumo do pedido</h2>
+                </div>
+                <div class="fx-product-list" id="fx-public-track-items"></div>
+              </div>
+              <aside>
+                <div class="fx-section-header" style="margin-bottom: var(--fx-space-4);">
+                  <div class="fx-eyebrow">Linha do tempo</div>
+                  <h2 class="fx-title-md">Atualizações da operação</h2>
+                </div>
+                <div class="fx-track-timeline" id="fx-public-track-timeline"></div>
+              </aside>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/landing-app.js"></script>
+  </body>
+</html>
