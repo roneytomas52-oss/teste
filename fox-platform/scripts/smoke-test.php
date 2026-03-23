@@ -146,10 +146,32 @@ try {
             'guard' => 'driver',
         ])
     );
+    $customerEmail = sprintf('cliente-smoke-%s@foxdelivery.com.br', $timestamp);
+    expectSuccess(
+        'public.customer-register',
+        request('POST', $baseUrl . '/api/v1/public/customer-register', [
+            'full_name' => 'Cliente Smoke ' . $timestamp,
+            'email' => $customerEmail,
+            'phone' => '+55 11 94444-0000',
+            'password' => 'password',
+            'city' => 'Sao Paulo',
+            'state' => 'SP',
+            'marketing_opt_in' => true,
+        ])
+    );
+    $customerLogin = expectSuccess(
+        'auth.login.customer',
+        request('POST', $baseUrl . '/api/v1/auth/login', [
+            'email' => $customerEmail,
+            'password' => 'password',
+            'guard' => 'customer',
+        ])
+    );
 
     expectSuccess('auth.me.admin', request('GET', $baseUrl . '/api/v1/auth/me', null, bearer($adminLogin['access_token'])));
     expectSuccess('auth.me.partner', request('GET', $baseUrl . '/api/v1/auth/me', null, bearer($partnerLogin['access_token'])));
     expectSuccess('auth.me.driver', request('GET', $baseUrl . '/api/v1/auth/me', null, bearer($driverLogin['access_token'])));
+    expectSuccess('auth.me.customer', request('GET', $baseUrl . '/api/v1/auth/me', null, bearer($customerLogin['access_token'])));
 
     $partnerProfile = expectSuccess('partner.profile', request('GET', $baseUrl . '/api/v1/partner/profile', null, bearer($partnerLogin['access_token'])));
     $partnerStore = expectSuccess('partner.store', request('GET', $baseUrl . '/api/v1/partner/store', null, bearer($partnerLogin['access_token'])));
@@ -447,16 +469,58 @@ try {
         ])
     );
 
+    $customerProfile = expectSuccess('customer.profile', request('GET', $baseUrl . '/api/v1/customer/profile', null, bearer($customerLogin['access_token'])));
+    expectSuccess(
+        'customer.profile.update',
+        request('PUT', $baseUrl . '/api/v1/customer/profile', [
+            'full_name' => 'Cliente Smoke Atualizado ' . $timestamp,
+            'email' => $customerEmail,
+            'phone' => '+55 11 94444-1111',
+            'city' => 'Campinas',
+            'state' => 'SP',
+            'marketing_opt_in' => false,
+        ], bearer($customerLogin['access_token']))
+    );
+    $customerOrdersBefore = expectSuccess('customer.orders.before', request('GET', $baseUrl . '/api/v1/customer/orders', null, bearer($customerLogin['access_token'])));
+
+    $customerOrder = null;
+    if ($firstPublicStoreId && !empty($publicStoreDetail['products'][0]['id'] ?? null)) {
+      $customerOrder = expectSuccess(
+          'customer.order.create',
+          request('POST', $baseUrl . '/api/v1/customer/orders', [
+              'store_id' => $firstPublicStoreId,
+              'customer_address' => 'Avenida Cliente Logado, 789',
+              'payment_method' => 'online_card',
+              'items' => [
+                  [
+                      'product_id' => $publicStoreDetail['products'][0]['id'],
+                      'quantity' => 1,
+                      'notes' => 'Pedido autenticado do smoke test.'
+                  ]
+              ]
+          ], bearer($customerLogin['access_token']))
+      );
+    }
+
+    $customerOrdersAfter = expectSuccess('customer.orders.after', request('GET', $baseUrl . '/api/v1/customer/orders', null, bearer($customerLogin['access_token'])));
+    if (!empty($customerOrder['order_id'] ?? null)) {
+        expectSuccess(
+            'customer.order.detail',
+            request('GET', $baseUrl . '/api/v1/customer/orders/' . $customerOrder['order_id'], null, bearer($customerLogin['access_token']))
+        );
+    }
+
     writeLine('');
     writeLine('Smoke test concluido com sucesso.');
     writeLine(sprintf(
-        'Resumo: health=%s, partner_store=%s, partner_orders=%d, admin_alerts=%d, partner_products=%d, driver_guard=%s',
+        'Resumo: health=%s, partner_store=%s, partner_orders=%d, admin_alerts=%d, partner_products=%d, driver_guard=%s, customer_orders=%d',
         $health['status'] ?? 'ok',
         $partnerStore['store']['trade_name'] ?? '-',
         count($partnerOrders['orders'] ?? []),
         count($adminDashboard['alerts'] ?? []),
         count($partnerCatalog['products'] ?? []),
-        $driverLogin['user']['guard'] ?? 'driver'
+        $driverLogin['user']['guard'] ?? 'driver',
+        count($customerOrdersAfter['items'] ?? $customerOrdersBefore['items'] ?? [])
     ));
     exit(0);
 } catch (Throwable $exception) {

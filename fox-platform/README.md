@@ -78,6 +78,7 @@ fox-platform/
 - [Entrega da Fase 9 - Sprint 18](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-18-admin-reports-and-analytics.md)
 - [Entrega da Fase 9 - Sprint 19](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-19-public-customer-core.md)
 - [Entrega da Fase 9 - Sprint 20](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-20-public-order-tracking.md)
+- [Entrega da Fase 9 - Sprint 21](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/phase-9/phase-9-sprint-21-customer-account-core.md)
 - [Mapa do portal do parceiro](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/partner-portal-sitemap.md)
 - [Superficie de APIs](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/api-surface.md)
 - [Roadmap do MVP](C:/Users/roney/Documents/GitHub/Usuario/teste/fox-platform/docs/roadmap-mvp.md)
@@ -184,6 +185,14 @@ Ja definido e materializado:
 - rastreio publico do pedido pela API
 - nova pagina `track.html` na landing
 - smoke test expandido para cobrir `public.order.tracking`
+- cadastro publico de cliente pela API
+- login do cliente e conta autenticada na camada publica
+- atualizacao de perfil do cliente pela API
+- historico de pedidos autenticados do cliente
+- detalhe do pedido autenticado do cliente
+- criacao de pedido autenticado vinculada a conta do cliente
+- novas paginas `customer-login.html`, `customer-register.html`, `account.html`, `my-orders.html` e `customer-order.html`
+- smoke test expandido para cobrir `customer.profile`, `customer.profile.update`, `customer.orders.*` e `customer.order.create`
 
 Proximo bloco de produto fora do MVP local:
 
@@ -216,6 +225,9 @@ Entradas principais:
 - Landing: `http://127.0.0.1:3000/apps/landing/src/index.html`
 - Lojas: `http://127.0.0.1:3000/apps/landing/src/stores.html`
 - Rastreio publico: `http://127.0.0.1:3000/apps/landing/src/track.html`
+- Login do cliente: `http://127.0.0.1:3000/apps/landing/src/customer-login.html`
+- Conta do cliente: `http://127.0.0.1:3000/apps/landing/src/account.html`
+- Pedidos do cliente: `http://127.0.0.1:3000/apps/landing/src/my-orders.html`
 - Admin: `http://127.0.0.1:3000/apps/admin/src/login.html`
 - Partner Portal: `http://127.0.0.1:3000/apps/partner-portal/src/login.html`
 - Driver Portal: `http://127.0.0.1:3000/apps/driver-portal/src/login.html`
@@ -225,3 +237,4 @@ Credenciais demo:
 - Admin: `admin@foxplatform.com / password`
 - Parceiro: `parceiro@foxdelivery.com.br / password`
 - Entregador: `entregador@foxdelivery.com.br / password`
+- Cliente: `cliente@foxdelivery.com.br / password`

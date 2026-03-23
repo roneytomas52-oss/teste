@@ -457,9 +457,11 @@ async function bootStoreDetailScreen() {
 
   const accountState = document.querySelector("#fx-public-order-account-state");
   const customerSession = getCustomerSession();
+  let currentCustomerProfile = null;
   if (customerSession) {
     try {
       const profile = await getCustomerProfile();
+      currentCustomerProfile = profile;
       const nameInput = document.querySelector("#fx-public-order-customer-name");
       const phoneInput = document.querySelector("#fx-public-order-customer-phone");
 
@@ -531,6 +533,18 @@ async function bootStoreDetailScreen() {
         true
       );
       form.reset();
+      if (currentCustomerProfile) {
+        const nameInput = document.querySelector("#fx-public-order-customer-name");
+        const phoneInput = document.querySelector("#fx-public-order-customer-phone");
+        if (nameInput) {
+          nameInput.value = currentCustomerProfile.full_name || "";
+          nameInput.disabled = true;
+        }
+        if (phoneInput) {
+          phoneInput.value = currentCustomerProfile.phone || "";
+          phoneInput.disabled = true;
+        }
+      }
       document.querySelectorAll(".js-public-order-qty").forEach((input) => {
         input.value = "0";
       });

@@ -175,6 +175,14 @@
   - nova tela `track.html` na landing
   - criacao e consulta do pedido cobertas no fluxo publico do cliente
   - smoke test expandido e validado contra `public.order.tracking`
+- Sprint 21 concluida:
+  - cadastro publico de cliente pela API
+  - login do cliente e conta autenticada na landing
+  - atualizacao de perfil do cliente pela API
+  - historico e detalhe de pedidos autenticados do cliente
+  - criacao de pedido autenticado vinculada a conta do cliente
+  - novas telas `customer-login.html`, `customer-register.html`, `account.html`, `my-orders.html` e `customer-order.html`
+  - smoke test expandido e validado contra `customer.profile`, `customer.profile.update`, `customer.orders.*` e `customer.order.create`
 
 ## Estado do MVP
 
@@ -183,6 +191,10 @@
   - descoberta de lojas
   - detalhe de loja
   - criacao de pedido guest
+  - cadastro e login do cliente
+  - conta autenticada do cliente
+  - historico e detalhe de pedidos do cliente
+  - criacao de pedido autenticado
   - acompanhamento publico do pedido
   - portal do parceiro
   - portal do entregador
@@ -214,6 +226,8 @@
 - painel admin basico
 - descoberta publica de lojas
 - detalhe de loja e criacao de pedido guest
+- cadastro, login e conta do cliente
+- pedidos autenticados do cliente
 - rastreio publico do pedido
 
 ## O que fica para depois
