@@ -30,6 +30,7 @@
 .fx-landing-nav,
 .fx-landing-actions {
   gap: var(--fx-space-5);
+  flex-wrap: wrap;
 }
 
 .fx-landing-hero {
@@ -228,6 +229,56 @@
   padding: 0 12px;
 }
 
+.fx-account-shell {
+  max-width: 760px;
+}
+
+.fx-auth-card {
+  display: grid;
+  gap: var(--fx-space-5);
+}
+
+.fx-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9375rem;
+  color: var(--fx-color-ink);
+}
+
+.fx-checkbox-row input {
+  width: 18px;
+  height: 18px;
+}
+
+.fx-account-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: var(--fx-space-6);
+}
+
+.fx-account-sidebar {
+  display: grid;
+  gap: var(--fx-space-5);
+}
+
+.fx-account-summary,
+.fx-order-history-list {
+  display: grid;
+  gap: var(--fx-space-4);
+}
+
+.fx-account-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--fx-space-4);
+}
+
+.fx-order-history-card {
+  display: grid;
+  gap: var(--fx-space-4);
+}
+
 @media (max-width: 900px) {
   .fx-landing-header .fx-container {
     flex-direction: column;
@@ -242,6 +293,8 @@
   .fx-landing-proof,
   .fx-landing-categories,
   .fx-landing-leads,
+  .fx-account-layout,
+  .fx-account-summary-grid,
   .fx-landing-form-grid,
   .fx-track-form,
   .fx-track-grid,

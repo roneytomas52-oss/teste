@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery | Meus pedidos</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <link rel="stylesheet" href="./landing.css" />
+  </head>
+  <body data-fx-screen="customer-orders">
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Meus pedidos</div>
+            </div>
+          </div>
+          <nav class="fx-landing-nav">
+            <a href="./stores.html">Lojas</a>
+            <a href="./account.html">Minha conta</a>
+            <a href="./track.html">Rastrear</a>
+          </nav>
+          <div class="fx-landing-actions" id="fx-public-auth-actions"></div>
+        </div>
+      </header>
+      <main class="fx-section">
+        <div class="fx-container">
+          <section class="fx-page-header">
+            <div class="fx-page-header-copy">
+              <div class="fx-eyebrow">Histórico</div>
+              <h1 class="fx-title-lg">Pedidos vinculados à sua conta Fox Delivery.</h1>
+              <p class="fx-copy">Acompanhe status, total e acesso rápido para o detalhe de cada pedido.</p>
+            </div>
+          </section>
+          <section id="fx-customer-orders-summary" class="fx-account-summary-grid" style="margin-bottom: var(--fx-space-6);"></section>
+          <section id="fx-customer-orders-list" class="fx-order-history-list"></section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/customer-app.js"></script>
+  </body>
+</html>

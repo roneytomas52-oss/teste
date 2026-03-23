@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery | Entrar</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <link rel="stylesheet" href="./landing.css" />
+  </head>
+  <body data-fx-screen="customer-login">
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Conta do cliente</div>
+            </div>
+          </div>
+          <nav class="fx-landing-nav">
+            <a href="./index.html">Home</a>
+            <a href="./stores.html">Lojas</a>
+            <a href="./track.html">Acompanhar pedido</a>
+          </nav>
+          <div class="fx-landing-actions" id="fx-public-auth-actions">
+            <a class="fx-button-ghost" href="./customer-register.html">Criar conta</a>
+            <a class="fx-button" href="./stores.html">Pedir agora</a>
+          </div>
+        </div>
+      </header>
+      <main class="fx-section">
+        <div class="fx-container fx-account-shell">
+          <section class="fx-card fx-auth-card">
+            <div class="fx-section-header">
+              <div class="fx-eyebrow">Entrar</div>
+              <h1 class="fx-title-md">Acesse sua conta para acompanhar pedidos e salvar seus dados.</h1>
+            </div>
+            <form class="fx-landing-form" id="fx-customer-login-form">
+              <div class="fx-field">
+                <label for="fx-customer-login-email">E-mail</label>
+                <input id="fx-customer-login-email" type="email" value="cliente@foxdelivery.com.br" />
+              </div>
+              <div class="fx-field">
+                <label for="fx-customer-login-password">Senha</label>
+                <input id="fx-customer-login-password" type="password" value="password" />
+              </div>
+              <p class="fx-landing-feedback" id="fx-customer-login-feedback" hidden></p>
+              <div class="fx-hero-actions">
+                <button class="fx-button" type="submit">Entrar na conta</button>
+                <a class="fx-button-secondary" href="./customer-register.html">Criar conta</a>
+              </div>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/customer-app.js"></script>
+  </body>
+</html>

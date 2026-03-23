@@ -42,6 +42,15 @@
       "password": "password",
       "name": "Lucas Ferreira",
       "accountLabel": "Lucas Ferreira"
+    },
+    {
+      "id": "customer-001",
+      "role": "customer",
+      "email": "cliente@foxdelivery.com.br",
+      "password": "password",
+      "name": "Cliente Fox Delivery",
+      "accountLabel": "Cliente Fox Delivery",
+      "permissions": ["dashboard.view"]
     }
   ]
 }

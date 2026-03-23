@@ -23,8 +23,10 @@
             <a href="./stores.html">Lojas</a>
             <a href="./track.html">Acompanhar pedido</a>
           </nav>
-          <div class="fx-landing-actions">
-            <a class="fx-button-secondary" href="./stores.html">Voltar para lojas</a>
+          <div class="fx-landing-actions" id="fx-public-auth-actions">
+            <a class="fx-button-ghost" href="./customer-login.html">Entrar</a>
+            <a class="fx-button-secondary" href="./customer-register.html">Criar conta</a>
+            <a class="fx-button" href="./stores.html">Voltar para lojas</a>
           </div>
         </div>
       </header>
@@ -47,6 +49,7 @@
                 </div>
               </div>
               <form class="fx-order-form" id="fx-public-order-form">
+                <p class="fx-landing-feedback" id="fx-public-order-account-state" hidden></p>
                 <div class="fx-field">
                   <label for="fx-public-order-customer-name">Nome</label>
                   <input id="fx-public-order-customer-name" type="text" placeholder="Seu nome" />

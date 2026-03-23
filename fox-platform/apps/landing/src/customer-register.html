@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery | Criar conta</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <link rel="stylesheet" href="./landing.css" />
+  </head>
+  <body data-fx-screen="customer-register">
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Cadastro do cliente</div>
+            </div>
+          </div>
+          <nav class="fx-landing-nav">
+            <a href="./index.html">Home</a>
+            <a href="./stores.html">Lojas</a>
+            <a href="./track.html">Acompanhar pedido</a>
+          </nav>
+          <div class="fx-landing-actions" id="fx-public-auth-actions">
+            <a class="fx-button-ghost" href="./customer-login.html">Entrar</a>
+            <a class="fx-button" href="./stores.html">Pedir agora</a>
+          </div>
+        </div>
+      </header>
+      <main class="fx-section">
+        <div class="fx-container fx-account-shell">
+          <section class="fx-card fx-auth-card">
+            <div class="fx-section-header">
+              <div class="fx-eyebrow">Criar conta</div>
+              <h1 class="fx-title-md">Cadastre sua conta e centralize pedidos, histórico e dados de entrega.</h1>
+            </div>
+            <form class="fx-landing-form" id="fx-customer-register-form">
+              <div class="fx-landing-form-grid">
+                <div class="fx-field">
+                  <label for="fx-customer-register-full-name">Nome completo</label>
+                  <input id="fx-customer-register-full-name" type="text" placeholder="Seu nome completo" />
+                </div>
+                <div class="fx-field">
+                  <label for="fx-customer-register-email">E-mail</label>
+                  <input id="fx-customer-register-email" type="email" placeholder="voce@exemplo.com" />
+                </div>
+                <div class="fx-field">
+                  <label for="fx-customer-register-phone">Telefone</label>
+                  <input id="fx-customer-register-phone" type="text" placeholder="11999999999" />
+                </div>
+                <div class="fx-field">
+                  <label for="fx-customer-register-password">Senha</label>
+                  <input id="fx-customer-register-password" type="password" placeholder="Minimo de 6 caracteres" />
+                </div>
+                <div class="fx-field">
+                  <label for="fx-customer-register-city">Cidade</label>
+                  <input id="fx-customer-register-city" type="text" placeholder="São Paulo" />
+                </div>
+                <div class="fx-field">
+                  <label for="fx-customer-register-state">Estado</label>
+                  <input id="fx-customer-register-state" type="text" placeholder="SP" />
+                </div>
+              </div>
+              <label class="fx-checkbox-row">
+                <input id="fx-customer-register-marketing" type="checkbox" />
+                <span>Quero receber atualizações e ofertas da Fox Delivery.</span>
+              </label>
+              <p class="fx-landing-feedback" id="fx-customer-register-feedback" hidden></p>
+              <div class="fx-hero-actions">
+                <button class="fx-button" type="submit">Criar conta</button>
+                <a class="fx-button-secondary" href="./customer-login.html">Já tenho conta</a>
+              </div>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/customer-app.js"></script>
+  </body>
+</html>

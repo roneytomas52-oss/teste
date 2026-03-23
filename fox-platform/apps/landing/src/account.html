@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery | Minha conta</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <link rel="stylesheet" href="./landing.css" />
+  </head>
+  <body data-fx-screen="customer-account">
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Minha conta</div>
+            </div>
+          </div>
+          <nav class="fx-landing-nav">
+            <a href="./stores.html">Lojas</a>
+            <a href="./my-orders.html">Meus pedidos</a>
+            <a href="./track.html">Rastrear</a>
+          </nav>
+          <div class="fx-landing-actions" id="fx-public-auth-actions"></div>
+        </div>
+      </header>
+      <main class="fx-section">
+        <div class="fx-container">
+          <section class="fx-page-header">
+            <div class="fx-page-header-copy">
+              <div class="fx-eyebrow">Conta do cliente</div>
+              <h1 class="fx-title-lg" id="fx-customer-account-name">Minha conta</h1>
+              <p class="fx-copy">Atualize seus dados e acompanhe o resumo da sua operação na Fox Delivery.</p>
+            </div>
+          </section>
+
+          <div class="fx-account-layout">
+            <section class="fx-card">
+              <div class="fx-card-header">
+                <div>
+                  <h2 class="fx-title-sm">Dados da conta</h2>
+                  <p class="fx-copy-sm">Informações usadas para pedidos e acompanhamento.</p>
+                </div>
+              </div>
+              <form class="fx-landing-form" id="fx-customer-account-form">
+                <div class="fx-landing-form-grid">
+                  <div class="fx-field">
+                    <label for="fx-customer-account-full-name">Nome completo</label>
+                    <input id="fx-customer-account-full-name" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-customer-account-email">E-mail</label>
+                    <input id="fx-customer-account-email" type="email" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-customer-account-phone">Telefone</label>
+                    <input id="fx-customer-account-phone" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-customer-account-city">Cidade</label>
+                    <input id="fx-customer-account-city" type="text" />
+                  </div>
+                  <div class="fx-field">
+                    <label for="fx-customer-account-state">Estado</label>
+                    <input id="fx-customer-account-state" type="text" />
+                  </div>
+                </div>
+                <label class="fx-checkbox-row">
+                  <input id="fx-customer-account-marketing" type="checkbox" />
+                  <span>Receber atualizações comerciais da Fox Delivery.</span>
+                </label>
+                <p class="fx-landing-feedback" id="fx-customer-account-feedback" hidden></p>
+                <div class="fx-hero-actions">
+                  <button class="fx-button" type="submit">Salvar conta</button>
+                  <a class="fx-button-secondary" href="./my-orders.html">Ver meus pedidos</a>
+                </div>
+              </form>
+            </section>
+
+            <aside class="fx-account-sidebar">
+              <section class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <h2 class="fx-title-sm">Resumo</h2>
+                    <p class="fx-copy-sm">Dados principais desta conta.</p>
+                  </div>
+                </div>
+                <div class="fx-account-summary">
+                  <div class="fx-info-row"><strong>E-mail</strong><span id="fx-customer-account-email">-</span></div>
+                  <div class="fx-info-row"><strong>Telefone</strong><span id="fx-customer-account-phone">-</span></div>
+                  <div class="fx-info-row"><strong>Localidade</strong><span id="fx-customer-account-location">-</span></div>
+                </div>
+              </section>
+
+              <section class="fx-card">
+                <div class="fx-card-header">
+                  <div>
+                    <h2 class="fx-title-sm">Pedidos recentes</h2>
+                    <p class="fx-copy-sm">Últimas movimentações da sua conta.</p>
+                  </div>
+                </div>
+                <div id="fx-customer-account-recent-orders" class="fx-account-summary"></div>
+              </section>
+
+              <section id="fx-customer-account-summary" class="fx-account-summary-grid"></section>
+            </aside>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/customer-app.js"></script>
+  </body>
+</html>

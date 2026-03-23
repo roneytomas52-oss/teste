@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox Delivery | Pedido</title>
+    <link rel="stylesheet" href="../../../packages/ui/src/shell.css" />
+    <link rel="stylesheet" href="./landing.css" />
+  </head>
+  <body data-fx-screen="customer-order-detail">
+    <div class="fx-landing-page">
+      <header class="fx-landing-header">
+        <div class="fx-container">
+          <div class="fx-brand-chip">
+            <div class="fx-brand-mark"></div>
+            <div>
+              <strong>Fox Delivery</strong>
+              <div class="fx-copy-sm">Detalhe do pedido</div>
+            </div>
+          </div>
+          <nav class="fx-landing-nav">
+            <a href="./stores.html">Lojas</a>
+            <a href="./my-orders.html">Meus pedidos</a>
+            <a href="./track.html">Rastrear</a>
+          </nav>
+          <div class="fx-landing-actions" id="fx-public-auth-actions"></div>
+        </div>
+      </header>
+      <main class="fx-section">
+        <div class="fx-container">
+          <section class="fx-page-header">
+            <div class="fx-page-header-copy">
+              <div class="fx-eyebrow">Pedido</div>
+              <h1 class="fx-title-lg" id="fx-customer-order-number">Pedido</h1>
+              <p class="fx-copy" id="fx-customer-order-progress">Carregando status do pedido.</p>
+            </div>
+          </section>
+          <p class="fx-landing-feedback" id="fx-customer-order-feedback" hidden></p>
+          <section class="fx-card" style="margin-bottom: var(--fx-space-6);">
+            <div class="fx-card-header">
+              <div>
+                <h2 class="fx-title-sm" id="fx-customer-order-store">Loja</h2>
+                <p class="fx-copy-sm" id="fx-customer-order-region">-</p>
+              </div>
+              <span class="fx-pill" id="fx-customer-order-status">-</span>
+            </div>
+            <div class="fx-track-grid">
+              <div class="fx-track-stat"><span class="fx-tag">Cliente</span><strong id="fx-customer-order-customer">-</strong><small id="fx-customer-order-phone">-</small></div>
+              <div class="fx-track-stat"><span class="fx-tag">E-mail</span><strong id="fx-customer-order-email">-</strong><small id="fx-customer-order-address">-</small></div>
+              <div class="fx-track-stat"><span class="fx-tag">Pagamento</span><strong id="fx-customer-order-payment-method">-</strong><small id="fx-customer-order-payment-status">-</small></div>
+            </div>
+            <div class="fx-track-grid">
+              <div class="fx-track-stat"><span class="fx-tag">Subtotal</span><strong id="fx-customer-order-subtotal">-</strong></div>
+              <div class="fx-track-stat"><span class="fx-tag">Entrega</span><strong id="fx-customer-order-delivery-fee">-</strong></div>
+              <div class="fx-track-stat"><span class="fx-tag">Total</span><strong id="fx-customer-order-total">-</strong><small id="fx-customer-order-placed-at">-</small></div>
+            </div>
+            <div class="fx-hero-actions">
+              <a class="fx-button-secondary" id="fx-customer-order-track-link" href="./track.html">Rastrear pedido</a>
+            </div>
+          </section>
+          <section class="fx-store-detail-layout">
+            <div>
+              <div class="fx-section-header" style="margin-bottom: var(--fx-space-4);">
+                <div class="fx-eyebrow">Itens</div>
+                <h2 class="fx-title-md">Resumo do pedido</h2>
+              </div>
+              <div class="fx-product-list" id="fx-customer-order-items"></div>
+            </div>
+            <aside>
+              <div class="fx-section-header" style="margin-bottom: var(--fx-space-4);">
+                <div class="fx-eyebrow">Linha do tempo</div>
+                <h2 class="fx-title-md">Atualizações</h2>
+              </div>
+              <div class="fx-track-timeline" id="fx-customer-order-timeline"></div>
+            </aside>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="../../../packages/sdk/src/customer-app.js"></script>
+  </body>
+</html>
